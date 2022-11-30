@@ -1,0 +1,9 @@
+const Role = {
+  USER: "USER",
+  ADMIN: "ADMIN",
+  DEVELOPER: "DEVELOPER",
+  INTERNAL_CLIENT: "INTERNAL_CLIENT",
+  EXTERNAL_CLIENT: "EXTERNAL_CLIENT",
+};
+
+export default Role;

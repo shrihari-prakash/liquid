@@ -1,0 +1,13 @@
+{
+  "oauth": {
+    "clientId": "your_client_id",
+    "redirectUri": "your_redirect_uri"
+  },
+  "content": {
+    "intro": {
+      "title1": "We are",
+      "title2": "Invite only right now.",
+      "description": "This system helps us scale gradually and also ensures a quality community with lesser bots."
+    }
+  }
+}

@@ -1,0 +1,50 @@
+import Options from "./options.json";
+
+interface Option {
+  name: string;
+  envName: string;
+  default: string | number | boolean | undefined;
+  type:
+    | "number"
+    | "boolean"
+    | "string"
+    | "stringArray"
+    | "booleanArray"
+    | "numberArray";
+  description: string;
+}
+
+export class Configuration {
+  options: any;
+
+  constructor() {
+    this.options = Options.reduce(
+      (obj, item) => Object.assign(obj, { [item.name]: item }),
+      {}
+    );
+  }
+
+  public get(
+    name: string,
+    defaultValue?: any,
+    delim = ","
+  ): number | boolean | string | undefined {
+    const option: Option = this.options[name];
+    if (!option) return defaultValue || undefined;
+    const value =
+      process.env[option.envName] ||
+      option.default ||
+      defaultValue ||
+      undefined;
+    switch (option.type) {
+      case "numberArray":
+        return value.split(delim).map((elem: string) => parseInt(elem));
+      case "stringArray":
+        return value.split(delim);
+      case "booleanArray":
+        return value.split(delim).map((elem: string) => elem === "true");
+      default:
+        return value;
+    }
+  }
+}

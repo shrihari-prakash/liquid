@@ -1,0 +1,36 @@
+[
+  {
+    "name": "logLevel",
+    "envName": "LOG_LEVEL",
+    "description": "Log level for the application. Possible values are debug, info, warn, error",
+    "type": "string",
+    "default": "debug"
+  },
+  {
+    "name": "appPort",
+    "envName": "APP_PORT",
+    "description": "Port to listen on.",
+    "type": "number",
+    "default": 3000
+  },
+  {
+    "name": "cookieSessionSecret",
+    "envName": "COOKIE_SESSION_SECRET",
+    "description": "A random 64+ bit string to use as the session secret.",
+    "type": "string",
+    "default": "00000000-0000-0000-0000-000000000000"
+  },
+  {
+    "name": "mongoDBConnectionString",
+    "envName": "MONGO_DB_CONNECTION_STRING",
+    "description": "Connection string to connect to MongoDB.",
+    "type": "string",
+    "default": "mongodb://localhost:27017/oauth"
+  },
+  {
+    "name": "sendgridApiKey",
+    "envName": "SENDGRID_API_KEY",
+    "description": "API key for sendgrid.",
+    "type": "string"
+  }
+]
