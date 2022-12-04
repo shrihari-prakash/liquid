@@ -4,10 +4,12 @@
     "redirectUri": "your_redirect_uri"
   },
   "content": {
+    "appName": "My App",
+    "appTagline": "App Tagline." ,
     "intro": {
-      "title1": "We are",
-      "title2": "Invite only right now.",
-      "description": "This system helps us scale gradually and also ensures a quality community with lesser bots."
+      "title1": "Title 1",
+      "title2": "Title 2",
+      "description": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
     }
   }
 }
