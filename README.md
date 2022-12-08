@@ -2,6 +2,7 @@
 
 Open source TypeScript implementation of [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) using Mongo DB with user sign up and login✨
 
+![Login](images/screenshot-1.png)
 ### Setup
 
 1. Run `npm i`.
@@ -26,7 +27,7 @@ Open source TypeScript implementation of [oauthjs/node-oauth2-server](https://gi
   "secret": "your_secret"
 }
 ```
-5. Start the server using command `npm run dev`. Your service should be running on https://localhost:3000.
+5. Start the server using command `npm run start:dev`. Your service should be running on https://localhost:3000.
 
 ### User Sign Up:
 
