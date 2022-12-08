@@ -26,7 +26,7 @@ Open source TypeScript implementation of [oauthjs/node-oauth2-server](https://gi
   "secret": "your_secret"
 }
 ```
-5. Start the server using command `npm run dev`.
+5. Start the server using command `npm run dev`. Your service should be running on https://localhost:3000.
 
 ### User Sign Up:
 
