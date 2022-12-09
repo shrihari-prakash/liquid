@@ -33,7 +33,7 @@ Open source TypeScript implementation of [oauthjs/node-oauth2-server](https://gi
 
 ### User Sign Up:
 
-1. To login, visit `/signup` and fill the form.
+1. To create an account, visit `/signup` and fill the details.
 2. Click on Create Account.
 3. If you are running this on dev mode, a code is printed in your console. Enter this code on the verification page.
 
