@@ -1,5 +1,8 @@
+import { Logger } from "../../../singleton/logger";
+const log = Logger.getLogger().child({ from: "user/verify-email" });
+
 import { Request, Response } from "express";
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 
 import UserModel from "../../../model/mongo/user";
 import verificationCodeModel from "../../../model/mongo/verification-code";
@@ -33,7 +36,7 @@ const VerifyEmail = async (req: Request, res: Response) => {
         )
       );
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return res
       .status(statusCodes.internalError)
       .json(new ErrorResponse(errorMessages.internalError));

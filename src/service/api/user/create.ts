@@ -1,3 +1,6 @@
+import { Logger } from "../../../singleton/logger";
+const log = Logger.getLogger().child({ from: "user/create" });
+
 import { Request, Response } from "express";
 import sgMail from "@sendgrid/mail";
 import bcrypt from "bcrypt";
@@ -36,7 +39,7 @@ const generateVerificationCode = async function (user: IUser) {
   if (app.get("env") === "production") {
     await sgMail.send(msg);
   } else {
-    console.log(code);
+    log.debug(code);
   }
   return code;
 };
@@ -117,7 +120,7 @@ const Create = async (req: Request, res: Response) => {
     };
     return res.status(statusCodes.created).json(new SuccessResponse(response));
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return res
       .status(statusCodes.internalError)
       .json(new ErrorResponse(errorMessages.internalError));

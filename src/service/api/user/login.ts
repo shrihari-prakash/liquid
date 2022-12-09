@@ -1,5 +1,8 @@
+import { Logger } from "../../../singleton/logger";
+const log = Logger.getLogger().child({ from: "user/login" });
+
 import bcrypt from "bcrypt";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 const { body, validationResult } = require("express-validator");
 
 import UserModel from "../../../model/mongo/user";
@@ -64,7 +67,7 @@ const Login = async (req: Request, res: Response) => {
     req.session.user = user;
     return res.status(statusCodes.success).json(new SuccessResponse(response));
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return res
       .status(statusCodes.internalError)
       .json(new ErrorResponse(errorMessages.internalError));
