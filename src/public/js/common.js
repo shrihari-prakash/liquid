@@ -31,6 +31,7 @@ function onSubmitError(params) {
     STORE.buttonAnimationTimeout = setTimeout(function () {
         submit.classList.remove("shake");
         submit.value = params.buttonText;
+        submit.disabled = false;
     }, 2000);
 }
 

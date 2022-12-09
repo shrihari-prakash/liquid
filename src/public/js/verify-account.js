@@ -6,6 +6,8 @@ $(function () {
 function verifyAccount(event) {
     event.preventDefault();
     const code = document.getElementById('code').value;
+    const submit = document.getElementById("submit");
+	submit.disabled = true;
     $.get('/user/verify-email', {
         code
     }).done(function () {

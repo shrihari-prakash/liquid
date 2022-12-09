@@ -7,6 +7,8 @@ function verifyAccount(event) {
 	event.preventDefault();
 	const username = document.getElementById('username').value;
 	const password = document.getElementById('password').value;
+	const submit = document.getElementById("submit");
+	submit.disabled = true;
 	$.post('/user/login', {
 		username, password
 	}).done(async function () {

@@ -10,6 +10,8 @@ function verifyAccount(event) {
     const lastName = document.getElementById('lastName').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const submit = document.getElementById("submit");
+	submit.disabled = true;
     $.post('/user/create', {
         username, password, firstName, lastName, email
     }).done(function () {
