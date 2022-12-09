@@ -1,6 +1,9 @@
 import { Logger } from "../singleton/logger";
 const log = Logger.getLogger().child({ from: "oauth-model" });
 
+import { Redis } from "../singleton/redis";
+import { Configuration } from "../singleton/configuration";
+
 import AuthorizationCodeModel from "./mongo/authorization-code";
 import ClientModel from "./mongo/client";
 import TokenModel from "./mongo/token";
@@ -47,6 +50,8 @@ interface AuthorizationCode {
 
 type Scope = string | string[] | undefined;
 
+const useTokenCache = Configuration.get("canUseCacheForToken");
+
 const OAuthModel = {
   getClient: async function (clientId: string, clientSecret: string) {
     try {
@@ -77,8 +82,27 @@ const OAuthModel = {
         grants: [],
       };
       token.user = user;
+      if (useTokenCache) {
+        const serialized = JSON.stringify(token);
+        await Redis.client.set(
+          token.accessToken,
+          serialized,
+          "EX",
+          Configuration.get("accessTokenLifetime") as number
+        );
+        if (token.refreshToken)
+          await Redis.client.set(
+            token.refreshToken,
+            serialized,
+            "EX",
+            Configuration.get("refreshTokenLifetime") as number
+          );
+        log.debug("Token saved to cache.");
+        return token;
+      }
       const dbToken = new TokenModel(token);
       await dbToken.save();
+      log.debug("Token saved to cache.");
       return dbToken.toObject() as unknown as Token;
     } catch (err) {
       log.error(err);
@@ -86,17 +110,45 @@ const OAuthModel = {
     }
   },
 
-  getAccessToken: async (token: string) => {
-    const dbTokenObject = await TokenModel.findOne({
-      accessToken: token,
-    }).lean();
-    return dbTokenObject as unknown as Token;
+  getAccessToken: async (accessToken: string) => {
+    try {
+      if (useTokenCache) {
+        log.debug("Get access token.");
+        let cacheToken: any = await Redis.client.get(accessToken);
+        cacheToken = JSON.parse(cacheToken);
+        if (!cacheToken) return null;
+        cacheToken.accessTokenExpiresAt = new Date(
+          cacheToken.accessTokenExpiresAt
+        );
+        log.debug("Access token retrieved from cache.");
+        return cacheToken;
+      }
+      const dbTokenObject = await TokenModel.findOne({
+        accessToken,
+      }).lean();
+      return dbTokenObject as unknown as Token;
+    } catch (err) {
+      log.error("Error retrieving access token.");
+      log.error(err);
+      throw err;
+    }
   },
 
-  getRefreshToken: async (token: string) => {
+  getRefreshToken: async (refreshToken: string) => {
+    if (useTokenCache) {
+      let cacheToken: any = await Redis.client.get(refreshToken);
+      cacheToken = JSON.parse(cacheToken);
+      if (!cacheToken) return null;
+      cacheToken.refreshTokenExpiresAt = new Date(
+        cacheToken.refreshTokenExpiresAt
+      );
+      log.debug("Refresh token retrieved from cache.");
+      return cacheToken;
+    }
     const dbTokenObject = await TokenModel.findOne({
-      refreshToken: token,
+      refreshToken,
     }).lean();
+    log.debug("Refresh token retrieved from database.");
     return dbTokenObject as unknown as Token;
   },
 
@@ -107,15 +159,23 @@ const OAuthModel = {
 
   saveAuthorizationCode: async (code: Code, client: Client, user: User) => {
     try {
-      const authorizationCodeInstance = new AuthorizationCodeModel({
+      const authorizationCode = {
         authorizationCode: code.authorizationCode,
         expiresAt: code.expiresAt,
         client: client || {},
         user: user || {},
-      });
-      const dbAuthorizationCode = (
-        await authorizationCodeInstance.save()
-      ).toObject();
+      };
+      if (useTokenCache) {
+        await Redis.client.set(
+          authorizationCode.authorizationCode,
+          JSON.stringify(authorizationCode),
+          "EX",
+          Configuration.get("authorizationCodeLifetime") as number
+        );
+        return authorizationCode;
+      }
+      const mongoInstance = new AuthorizationCodeModel(authorizationCode);
+      const dbAuthorizationCode = (await mongoInstance.save()).toObject();
       log.debug("AuthorizationCode saved.");
       return dbAuthorizationCode as unknown as AuthorizationCode;
     } catch (err) {
@@ -126,14 +186,22 @@ const OAuthModel = {
 
   getAuthorizationCode: async (authorizationCode: any) => {
     try {
-      log.debug("Retrieving AuthorizationCode...");
-      const dbAuthorizationCode = await AuthorizationCodeModel.findOne({
+      if (useTokenCache) {
+        let cacheCode: any = (await Redis.client.get(
+          authorizationCode
+        )) as string;
+        log.debug("Auth code retrieved from cache.");
+        cacheCode = JSON.parse(cacheCode) as AuthorizationCode;
+        cacheCode.expiresAt = new Date(cacheCode.expiresAt);
+        return cacheCode;
+      }
+      const dbResult = await AuthorizationCodeModel.findOne({
         authorizationCode,
       }).lean();
-      log.debug("AuthorizationCode retrieved: %o", dbAuthorizationCode);
-      return dbAuthorizationCode as unknown as AuthorizationCode;
+      log.debug("Auth code retrieved from database.");
+      return dbResult as unknown as AuthorizationCode;
     } catch (err) {
-      log.debug("Error retrieving AuthorizationCode.");
+      log.error("Error retrieving auth code.");
       log.error(err);
       throw err;
     }
@@ -141,9 +209,16 @@ const OAuthModel = {
 
   revokeAuthorizationCode: async (authorizationCode: any): Promise<boolean> => {
     try {
+      const code = authorizationCode.authorizationCode;
+      if (useTokenCache) {
+        await Redis.client.del(code);
+        log.debug("Auth code deleted from cache.");
+        return true;
+      }
       await AuthorizationCodeModel.deleteOne({
-        authorizationCode: authorizationCode.authorizationCode,
+        authorizationCode: code,
       }).exec();
+      log.debug("Auth code deleted from database.");
       return true;
     } catch (err) {
       log.error(err);

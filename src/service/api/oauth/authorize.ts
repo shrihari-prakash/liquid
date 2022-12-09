@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { Configuration } from "../../../singleton/configuration";
 import { OAuthServer } from "../../../singleton/oauth-server";
 
 function Authorize() {

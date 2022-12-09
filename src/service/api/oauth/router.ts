@@ -1,6 +1,5 @@
 import express, { Request } from "express";
 import { OAuthServer } from "../../../singleton/oauth-server";
-import Login from "../user/login";
 import Authorize from "./authorize";
 
 const OAuthRouter = express.Router();

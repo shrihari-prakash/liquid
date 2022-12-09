@@ -28,9 +28,70 @@
     "default": "mongodb://localhost:27017/oauth"
   },
   {
+    "name": "authorizationCodeLifetime",
+    "envName": "AUTHORIZATION_CODE_LIFETIME",
+    "description": "Expiry time in seconds for authorization codes.",
+    "type": "number",
+    "default": 300
+  },
+  {
+    "name": "accessTokenLifetime",
+    "envName": "ACCESS_TOKEN_LIFETIME",
+    "description": "Expiry time in seconds for access tokens.",
+    "type": "number",
+    "default": 3600
+  },
+  {
+    "name": "refreshTokenLifetime",
+    "envName": "REFRESH_TOKEN_LIFETIME",
+    "description": "Expiry time in seconds for refresh tokens.",
+    "type": "number",
+    "default": 1209600
+  },
+  {
     "name": "sendgridApiKey",
     "envName": "SENDGRID_API_KEY",
     "description": "API key for sendgrid.",
     "type": "string"
+  },
+  {
+    "name": "canUseCacheForToken",
+    "envName": "CAN_USE_CACHE_FOR_TOKEN",
+    "description": "Specifies whether to use cache for saving and retrieving OAuth tokens.",
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "name": "redisPort",
+    "envName": "REDIS_PORT",
+    "description": "Port for the Redis connection.",
+    "type": "number",
+    "default": 6379
+  },
+  {
+    "name": "redisHost",
+    "envName": "REDIS_HOST",
+    "description": "Host for the Redis connection.",
+    "type": "string",
+    "default": "127.0.0.1"
+  },
+  {
+    "name": "redisUsername",
+    "envName": "REDIS_USERNAME",
+    "description": "Username for the Redis connection.",
+    "type": "string"
+  },
+  {
+    "name": "redisPassword",
+    "envName": "REDIS_PASSWORD",
+    "description": "Password for the Redis connection.",
+    "type": "string"
+  },
+  {
+    "name": "redisDB",
+    "envName": "REDIS_DB",
+    "description": "Password for the Redis connection.",
+    "type": "number",
+    "default": 0
   }
 ]
