@@ -4,6 +4,8 @@ Open source TypeScript implementation of [oauthjs/node-oauth2-server](https://gi
 
 ![Login](images/screenshot-1.png)
 
+You will require Redis to run this service. However, you could force the service into using MongoDB as a replacement by changing the option `canUseCacheForToken` to false. However, disabling this option is highly discouraged due to data persistence on database.
+
 ### Setup
 
 1. Run `npm i`.
