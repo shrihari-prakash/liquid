@@ -12,6 +12,7 @@ import verificationCodeModel from "../../../model/mongo/verification-code";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import Role from "../../../enum/role";
+import { Configuration } from "../../../singleton/configuration";
 
 const bcryptConfig = {
   salt: 10,
@@ -25,21 +26,21 @@ const generateVerificationCode = async function (user: IUser) {
     code: require("crypto").randomBytes(18).toString("hex"),
   };
   await new verificationCodeModel(code).save();
+  const appName = Configuration.get("appName") as string;
   const msg = {
     to: user.email,
     from: {
-      email: "systems@the-social-network.com",
-      name: "The Social Network",
-    }, // Use the email address or domain you verified above
-    subject: "Verify your TSN account",
-    text: "Here's your TSN verification code: " + code.code,
-    html:
-      "Here's your TSN verification code: <strong>" + code.code + "</strong>",
+      email: Configuration.get("appOutboundEmailAddress") as string,
+      name: appName,
+    },
+    subject: "Verify your account",
+    text: `Here's your ${appName} verification code: ${code.code}`,
+    html: `Here's your ${appName} verification code: <strong>${code.code}</strong>`,
   };
   if (app.get("env") === "production") {
     await sgMail.send(msg);
   } else {
-    log.debug(code);
+    log.info(code);
   }
   return code;
 };

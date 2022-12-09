@@ -14,6 +14,20 @@
     "default": 3000
   },
   {
+    "name": "appName",
+    "envName": "APP_NAME",
+    "description": "Name of the application.",
+    "type": "string",
+    "default": "My App"
+  },
+  {
+    "name": "appOutboundEmailAddress",
+    "envName": "APP_OUTBOUND_EMAIL_ADDRESS",
+    "description": "Email address to be used for outgoing emails from the application.",
+    "type": "string",
+    "default": "myapp@example.com"
+  },
+  {
     "name": "cookieSessionSecret",
     "envName": "COOKIE_SESSION_SECRET",
     "description": "A random 64+ bit string to use as the session secret.",
