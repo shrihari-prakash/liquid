@@ -1,11 +1,9 @@
-let buttonAnimationTimeout = null;
-
 $(function () {
     let form = document.getElementById("verify-form");
-    form.addEventListener("submit", signUp, true);
+    form.addEventListener("submit", verifyAccount, true);
 });
 
-async function signUp(event) {
+function verifyAccount(event) {
     event.preventDefault();
     const code = document.getElementById('code').value;
     $.get('/user/verify-email', {
@@ -13,15 +11,6 @@ async function signUp(event) {
     }).done(function () {
         window.location = `/login`
     }).fail(function () {
-        if (buttonAnimationTimeout) {
-            clearTimeout(buttonAnimationTimeout);
-        }
-        const submit = document.getElementById("submit");
-        submit.classList.add("shake");
-        submit.value = "Invalid Code";
-        buttonAnimationTimeout = setTimeout(function () {
-            submit.classList.remove("shake");
-            submit.value = "Verify";
-        }, 2000);
+        onSubmitError({ errorText: "Invalid Code", buttonText: "Verify" });
     });
 }
