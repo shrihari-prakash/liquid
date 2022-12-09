@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf ./build && tsc",
+    "build": "rimraf ./build && tsc && npm run copy-files",
+    "copy-files": "copyfiles -u 1 src/**/*.html src/**/*.css src/**/*.json src/**/*.jpg src/**/*.png build/",
     "start:dev": "nodemon --inspect",
     "start": "npm run build && node build/index.js"
   },
@@ -18,6 +19,7 @@
     "@types/express-oauth-server": "^2.0.4",
     "@types/express-session": "^1.17.5",
     "@types/node": "^18.7.23",
+    "copyfiles": "^2.4.1",
     "nodemon": "^2.0.20",
     "pino-pretty": "^9.1.1",
     "rimraf": "^3.0.2",
