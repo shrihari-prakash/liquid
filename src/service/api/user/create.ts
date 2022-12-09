@@ -77,7 +77,7 @@ const Create = async (req: Request, res: Response) => {
         .json(new ErrorResponse(errorMessages.clientInputError));
 
     const existingUser = (await UserModel.findOne({
-      or: { email, username },
+      $or: [{ email: email.toLowerCase() }, { username }],
     }).exec()) as unknown as IUser;
 
     if (existingUser) {
@@ -106,7 +106,7 @@ const Create = async (req: Request, res: Response) => {
       username,
       firstName,
       lastName,
-      email: email,
+      email: email.toLowerCase(),
       role,
       password,
     }).save()) as unknown as IUser;

@@ -19,6 +19,9 @@ app.use(
     extensions: ["html"],
   })
 );
+app.get("/", function (_, res) {
+  res.sendFile(__dirname + "/public/login.html");
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 var sessionOptions: any = {

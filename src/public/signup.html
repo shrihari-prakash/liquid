@@ -39,10 +39,10 @@
           <div class="row align-items-center justify-content-center">
             <div class="col-md-6">
               <div class="noselect">
-                <h3>Login to <strong class="app-name"></strong></h3>
+                <h3>Sign Up <strong class="app-name"></strong></h3>
                 <p class="mb-4 app-tagline"></p>
               </div>
-              <form method="post" id="login-form">
+              <form method="post" id="signup-form">
                 <div class="form-group first">
                   <label class="noselect" for="username">Username</label>
                   <input
@@ -58,6 +58,45 @@
                     required
                   />
                 </div>
+                <div class="form-group">
+                  <label class="noselect" for="firstName">First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Rick"
+                    minlength="3"
+                    autocorrect="off"
+                    autocapitalize="on"
+                    spellcheck="false"
+                    id="firstName"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="noselect" for="lastName">Last Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Astley"
+                    minlength="3"
+                    autocorrect="off"
+                    autocapitalize="on"
+                    spellcheck="false"
+                    id="lastName"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="noselect" for="email">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    placeholder="rickastley@example.com"
+                    spellcheck="false"
+                    id="email"
+                    required
+                  />
+                </div>
                 <div class="form-group last mb-3">
                   <label for="password">Password</label>
                   <input
@@ -70,21 +109,18 @@
                   />
                 </div>
 
-                <div class="d-flex flex-row-reverse mb-5">
-                  <span class="me-auto float-end"
-                    ><a href="/signup" class="forgot-pass"
-                      >Create Account
-                    </a></span
+                <div class="d-flex mb-5 align-items-center">
+                  <span class="ml-auto">
+                    <a href="/login" class="forgot-pass"
+                      >Have an account? Login</a
+                    ></span
                   >
-                  <!-- <span class="me-auto float-end"
-                    ><a href="#" class="forgot-pass">Reset Password</a></span
-                  > -->
                 </div>
 
                 <input
                   type="submit"
                   id="submit"
-                  value="Login"
+                  value="Create Account"
                   class="btn btn-block btn-primary"
                 />
               </form>
@@ -97,6 +133,6 @@
     <script src="./js/jquery-3.3.1.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/common.js"></script>
-    <script src="./js/login.js"></script>
+    <script src="./js/signup.js"></script>
   </body>
 </html>

@@ -1,17 +1,8 @@
 let buttonAnimationTimeout = null;
 
 $(function () {
-
-	$('.btn-link[aria-expanded="true"]').closest('.accordion-item').addClass('active');
-	$('.collapse').on('show.bs.collapse', function () {
-		$(this).closest('.accordion-item').addClass('active');
-	});
-	$('.collapse').on('hidden.bs.collapse', function () {
-		$(this).closest('.accordion-item').removeClass('active');
-	});
-	renderContent();
 	let form = document.getElementById("login-form");
-	form.addEventListener("submit", login, true);
+	form.addEventListener("submit", signUp, true);
 });
 
 function uuidv4() {
@@ -20,22 +11,7 @@ function uuidv4() {
 	);
 }
 
-let config;
-function getConfig() {
-	return new Promise((resolve, reject) => {
-		if (config) {
-			resolve(config);
-		}
-		return $.get("/app-config.json").done(function (data) {
-			config = data;
-			resolve(config);
-		}).fail(function () {
-			reject();
-		})
-	})
-}
-
-async function login(event) {
+async function signUp(event) {
 	event.preventDefault();
 	const configuration = await getConfig();
 	const username = document.getElementById('username').value;
@@ -62,13 +38,4 @@ async function login(event) {
 			submit.value = "Login";
 		}, 2000);
 	});
-}
-
-async function renderContent() {
-	const configuration = await getConfig();
-	$(".app-name").text(configuration.content.appName)
-	$(".app-tagline").text(configuration.content.appTagline)
-	$(".title1").text(configuration.content.intro.title1)
-	$(".title2").text(configuration.content.intro.title2)
-	$(".description").text(configuration.content.intro.description)
 }

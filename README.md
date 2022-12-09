@@ -3,6 +3,7 @@
 Open source TypeScript implementation of [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) using Mongo DB with user sign up and login✨
 
 ![Login](images/screenshot-1.png)
+
 ### Setup
 
 1. Run `npm i`.
@@ -27,23 +28,14 @@ Open source TypeScript implementation of [oauthjs/node-oauth2-server](https://gi
   "secret": "your_secret"
 }
 ```
+
 5. Start the server using command `npm run start:dev`. Your service should be running on https://localhost:3000.
 
 ### User Sign Up:
 
-1. POST `/user/create`
-
-```
-{
-    "username": "your_username",
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "johndoe@example.com",
-    "password": "password"
-}
-```
-2. If you are running this on dev mode, a code is printed in your console. Copy this.
-3. GET `/user/verify-email?code=code_from_step3`. Now the user should be active.
+1. To login, visit `/signup` and fill the form.
+2. Click on Create Account.
+3. If you are running this on dev mode, a code is printed in your console. Enter this code on the verification page.
 
 ### User Login:
 

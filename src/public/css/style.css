@@ -163,6 +163,7 @@ input[data-autocompleted] {
 }
 
 .half .forgot-pass {
+  margin-right: 8px;
   position: relative;
   top: 2px;
   font-size: 14px;

@@ -16,7 +16,7 @@ export const LoginValidator = [
   body("password").exists().isString().isLength({ min: 8, max: 128 }),
 ];
 
-const Login = async (req: Request, res: Response, next: NextFunction) => {
+const Login = async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -34,9 +34,9 @@ const Login = async (req: Request, res: Response, next: NextFunction) => {
         .json(new ErrorResponse(errorMessages.unauthorized));
 
     const select = ["+password"];
-    const query: any = { or: {} };
+    const query: any = {};
     if (email) {
-      query.email = email;
+      query.email = email.toLowerCase();
     } else {
       query.username = username;
     }

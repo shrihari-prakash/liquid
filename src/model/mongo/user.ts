@@ -43,6 +43,7 @@ const userSchema = {
   secondaryEmail: {
     type: String,
     unique: true,
+    sparse: true,
   },
   secondaryEmailVerified: Boolean,
   secondaryPhone: String,

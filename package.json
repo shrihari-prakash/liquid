@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.14",
     "@types/express-oauth-server": "^2.0.4",
     "@types/express-session": "^1.17.5",
