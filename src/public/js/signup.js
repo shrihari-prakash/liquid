@@ -1,9 +1,9 @@
 $(function () {
     let form = document.getElementById("signup-form");
-    form.addEventListener("submit", verifyAccount, true);
+    form.addEventListener("submit", signup, true);
 });
 
-function verifyAccount(event) {
+function signup(event) {
     event.preventDefault();
     const username = document.getElementById('username').value;
     const firstName = document.getElementById('firstName').value;
@@ -11,7 +11,7 @@ function verifyAccount(event) {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const submit = document.getElementById("submit");
-	submit.disabled = true;
+    submit.disabled = true;
     $.post('/user/create', {
         username, password, firstName, lastName, email
     }).done(function () {

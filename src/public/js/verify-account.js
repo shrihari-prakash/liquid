@@ -1,9 +1,9 @@
 $(function () {
     let form = document.getElementById("verify-form");
-    form.addEventListener("submit", verifyAccount, true);
+    form.addEventListener("submit", verify, true);
 });
 
-function verifyAccount(event) {
+function verify(event) {
     event.preventDefault();
     const code = document.getElementById('code').value;
     const submit = document.getElementById("submit");
