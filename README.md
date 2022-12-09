@@ -31,7 +31,7 @@ You will require Redis to run this service. If you don't want a Redis dep, it is
 }
 ```
 
-5. Start the server using command `npm run start:dev`. Your service should be running on https://localhost:3000.
+5. Start the server using command `npm run start:dev`. Your service should be running on http://localhost:3000.
 6. Run `npm run build` to output production ready code.
 
 ### Sign Up:
