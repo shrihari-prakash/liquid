@@ -152,9 +152,23 @@ const OAuthModel = {
     return dbTokenObject as unknown as Token;
   },
 
-  revokeToken: (token: Token) => {
+  revokeToken: async (token: Token) => {
     if (!token) return false;
-    return new Promise((resolve) => resolve(true));
+    if (useTokenCache) {
+      if (token.refreshToken) {
+        await Redis.client.del(token.refreshToken);
+      }
+      if (token.accessToken) {
+        await Redis.client.del(token.accessToken);
+      }
+      return true;
+    }
+    if (token.refreshToken) {
+      await TokenModel.deleteOne({
+        refreshToken: token.refreshToken,
+      }).exec();
+    }
+    return true;
   },
 
   saveAuthorizationCode: async (code: Code, client: Client, user: User) => {
