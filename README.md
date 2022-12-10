@@ -34,6 +34,10 @@ You will require Redis to run this service. If you don't want a Redis dep, it is
 5. Start the server using command `npm run start:dev`. Your service should be running on http://localhost:3000.
 6. Run `npm run build` to output production ready code.
 
+### API Documentation:
+
+Swagger is available at http://localhost:3000/docs
+
 ### Sign Up:
 
 1. To create an account, visit `/signup` and fill the details.

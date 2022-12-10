@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  title: Node.js OAuth 2.0 Server
+  version: 0.1
+paths:
+  /user/client-api/get-user-info:
+    post:
+      summary: Returns details about the given array of user IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targets:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Returns an array of objects with user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ...:
+                    type: string
+  /user/create:
+    post:
+      summary: Returns a list of users.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+      responses:
+        "200":
+          description: Returns the user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ...:
+                    type: string
+  /user/login:
+    post:
+      summary: Logs in the user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Returns the user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ...:
+                    type: string
+  /user/verify-email:
+    post:
+      summary: Marks the user's account associated with the auto generated code as a verified.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ...:
+                    type: string
+  /user/me:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieves the user data associated with the API token.
+      responses:
+        "200": # status code
+          description: Returns the user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ...:
+                    type: string
+  /user/:userId:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieves the user data of the given id.
+      responses:
+        "200":
+          description: Returns the user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ...:
+                    type: string
+  /user/follow:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Follows the given user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ...:
+                    type: string
+  /user/unfollow:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Unfollows the given user.
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ...:
+                    type: string
+  /user/following:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Lists the users that the current user is following.
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: array
+  /user/followers:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Lists the users that are following the current user.
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: array
