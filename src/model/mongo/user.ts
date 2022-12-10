@@ -126,6 +126,9 @@ export type IUser = {
   lastName: string;
   role: string;
   profilePictureUrl: string;
+  followingCount: string;
+  followerCount: string;
+  isPrivate: boolean;
   email: string;
   emailVerified: boolean;
   phone: string;
