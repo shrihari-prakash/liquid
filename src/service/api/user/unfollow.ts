@@ -21,24 +21,10 @@ const Unfollow = async (req: Request, res: Response) => {
     }
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
-    let bulk = FollowModel.collection.initializeUnorderedBulkOp();
-    bulk
-      .find({ user: new mongo.ObjectId(sourceId) })
-      .upsert()
-      .updateOne({
-        $pull: {
-          following: new mongo.ObjectId(targetId),
-        },
-      });
-    bulk
-      .find({ user: new mongo.ObjectId(targetId) })
-      .upsert()
-      .updateOne({
-        $pull: {
-          followers: new mongo.ObjectId(sourceId),
-        },
-      });
-    await bulk.execute();
+    await FollowModel.deleteOne({
+      targetId,
+      sourceId,
+    });
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);

@@ -25,24 +25,10 @@ const Follow = async (req: Request, res: Response) => {
     }
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
-    let bulk = FollowModel.collection.initializeUnorderedBulkOp();
-    bulk
-      .find({ user: new mongo.ObjectId(sourceId) })
-      .upsert()
-      .updateOne({
-        $addToSet: {
-          following: new mongo.ObjectId(targetId),
-        },
-      });
-    bulk
-      .find({ user: new mongo.ObjectId(targetId) })
-      .upsert()
-      .updateOne({
-        $addToSet: {
-          followers: new mongo.ObjectId(sourceId),
-        },
-      });
-    await bulk.execute();
+    await new FollowModel({
+      targetId,
+      sourceId,
+    }).save();
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);

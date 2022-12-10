@@ -8,19 +8,19 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 
-const Followers = async (req: Request, res: Response) => {
+const Following = async (req: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
     FollowModel.aggregate([
       {
         $match: {
-          targetId: new mongo.ObjectId(userId),
+          sourceId: new mongo.ObjectId(userId),
         },
       },
       {
         $lookup: {
           from: "users",
-          localField: "sourceId",
+          localField: "targetId",
           foreignField: "_id",
           as: "target",
         },
@@ -47,4 +47,4 @@ const Followers = async (req: Request, res: Response) => {
   }
 };
 
-export default Followers;
+export default Following;

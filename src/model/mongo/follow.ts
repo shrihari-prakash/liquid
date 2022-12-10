@@ -1,25 +1,21 @@
 import mongoose, { Schema } from "mongoose";
 
-const sollowSchema = {
-  user: {
+const followerSchema = {
+  sourceId: {
     type: Schema.Types.ObjectId,
     ref: "user",
+    required: true,
   },
-  followers: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
-  ],
-  following: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
-  ],
+  targetId: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
 };
 
-const schemaInstance = new mongoose.Schema(sollowSchema),
+const schemaInstance = new mongoose.Schema(followerSchema),
   FollowModel = mongoose.model("follow", schemaInstance);
+
+schemaInstance.index({ sourceId: 1, targetId: 1 }, { unique: true });
 
 export default FollowModel;
