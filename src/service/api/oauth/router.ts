@@ -1,4 +1,4 @@
-import express, { Request } from "express";
+import express from "express";
 import { OAuthServer } from "../../../singleton/oauth-server";
 import Authorize from "./authorize";
 

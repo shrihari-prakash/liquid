@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 import OAuthRouter from "./oauth/router";
 import UserRouter from "./user/router";
 
