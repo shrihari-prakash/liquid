@@ -11,6 +11,11 @@ const followerSchema = {
     ref: "user",
     required: true,
   },
+  approved: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
 };
 
 const schemaInstance = new mongoose.Schema(followerSchema),
