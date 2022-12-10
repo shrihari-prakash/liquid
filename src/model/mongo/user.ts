@@ -27,6 +27,16 @@ const userSchema = {
     required: true,
   },
   profilePictureUrl: String,
+  followingCount: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  followerCount: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   isPrivate: {
     type: Boolean,
     required: true,
