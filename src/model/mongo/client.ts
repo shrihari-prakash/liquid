@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const clientSchema = {
-  clientId: String,
-  clientSecret: String,
-  clientName: String,
+  id: String,
+  secret: String,
+  displayName: String,
   role: String,
   grants: [String],
   redirectUris: [String],

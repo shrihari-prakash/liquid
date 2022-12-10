@@ -29,6 +29,8 @@ interface Client {
   id: string;
   redirectUris?: Scope;
   grants: string | string[];
+  displayName: string;
+  role: string;
   accessTokenLifetime?: number | undefined;
   refreshTokenLifetime?: number | undefined;
   [key: string]: any;
@@ -71,16 +73,13 @@ const OAuthModel = {
 
   getUserFromClient: (client: Client) => {
     return new Promise<User>((resolve) => {
-      resolve({ username: "api-client" });
+      resolve({ username: "api-client", role: client.role });
     });
   },
 
   saveToken: async (token: Token, client: Client, user: User) => {
     try {
-      token.client = {
-        id: client.id,
-        grants: [],
-      };
+      token.client = client;
       token.user = user;
       if (useTokenCache) {
         const serialized = JSON.stringify(token);

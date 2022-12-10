@@ -76,6 +76,13 @@
     "default": true
   },
   {
+    "name": "getUserMaxItems",
+    "envName": "GET_USER_MAX_ITEMS",
+    "description": "Specifies the maximum number of users for which details can be retrieved in a single API call.",
+    "type": "number",
+    "default": 650
+  },
+  {
     "name": "redisPort",
     "envName": "REDIS_PORT",
     "description": "Port for the Redis connection.",

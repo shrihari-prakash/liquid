@@ -9,6 +9,7 @@ import Login, { LoginValidator } from "./login";
 import Me from "./me";
 import Unfollow from "./unfollow";
 import VerifyEmail, { VerifyEmailValidator } from "./verify-email";
+import ClientApiRouter from "./client-api/routes";
 
 const UserRouter = express.Router();
 
@@ -26,5 +27,7 @@ UserRouter.post("/follow", ...AuthFlow, ...FollowValidator, Follow);
 UserRouter.post("/unfollow", ...AuthFlow, ...FollowValidator, Unfollow);
 UserRouter.get("/following", ...AuthFlow, Following);
 UserRouter.get("/followers", ...AuthFlow, Followers);
+
+UserRouter.use("/client-api", ClientApiRouter);
 
 export default UserRouter;
