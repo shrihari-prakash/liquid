@@ -31,7 +31,7 @@ if (app.get("env") !== "production") {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 var sessionOptions: any = {
-  secret: Configuration.get("cookieSessionSecret"),
+  secret: Configuration.get("cookie-session-secret"),
   resave: false,
   saveUninitialized: false,
   cookie: {},
@@ -39,15 +39,15 @@ var sessionOptions: any = {
 if (app.get("env") === "production") {
   app.set("trust proxy", 1); // trust first proxy
   sessionOptions.cookie.secure = true; // serve secure cookies
-  sgMail.setApiKey(Configuration.get("sendgridApiKey") as string);
+  sgMail.setApiKey(Configuration.get("sendgrid-api-key") as string);
 }
 app.use(session(sessionOptions));
 
 MongoDB.connect();
 Api.initialize(app);
 
-app.listen(Configuration.get("appPort"), () => {
-  log.info(`Auth service listening on port ${Configuration.get("appPort")}.`);
+app.listen(Configuration.get("app-port"), () => {
+  log.info(`Auth service listening on port ${Configuration.get("app-port")}.`);
 });
 
 export default app;

@@ -12,10 +12,12 @@ class OAuthServer {
     this.server = new ExpressOAuthServer({
       model: OAuthModel,
       authorizationCodeLifetime: Configuration.get(
-        "authorizationCodeLifetime"
+        "authorization-code-lifetime"
       ) as number,
-      accessTokenLifetime: Configuration.get("accessTokenLifetime") as number,
-      refreshTokenLifetime: Configuration.get("refreshTokenLifetime") as number,
+      accessTokenLifetime: Configuration.get("access-token-lifetime") as number,
+      refreshTokenLifetime: Configuration.get(
+        "refresh-token-lifetime"
+      ) as number,
     });
   }
 }

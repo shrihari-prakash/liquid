@@ -26,11 +26,11 @@ const generateVerificationCode = async function (user: IUser) {
     code: require("crypto").randomBytes(18).toString("hex"),
   };
   await new verificationCodeModel(code).save();
-  const appName = Configuration.get("appName") as string;
+  const appName = Configuration.get("app-name") as string;
   const msg = {
     to: user.email,
     from: {
-      email: Configuration.get("appOutboundEmailAddress") as string,
+      email: Configuration.get("app-outbound-email-address") as string,
       name: appName,
     },
     subject: "Verify your account",

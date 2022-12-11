@@ -1,118 +1,118 @@
 [
   {
-    "name": "logLevel",
+    "name": "log-level",
     "envName": "LOG_LEVEL",
     "description": "Log level for the application. Possible values are debug, info, warn, error",
     "type": "string",
     "default": "debug"
   },
   {
-    "name": "appPort",
+    "name": "app-port",
     "envName": "APP_PORT",
     "description": "Port to listen on.",
     "type": "number",
     "default": 3000
   },
   {
-    "name": "appName",
+    "name": "app-name",
     "envName": "APP_NAME",
     "description": "Name of the application.",
     "type": "string",
     "default": "My App"
   },
   {
-    "name": "appOutboundEmailAddress",
+    "name": "app-outbound-email-address",
     "envName": "APP_OUTBOUND_EMAIL_ADDRESS",
     "description": "Email address to be used for outgoing emails from the application.",
     "type": "string",
     "default": "myapp@example.com"
   },
   {
-    "name": "cookieSessionSecret",
+    "name": "cookie-session-secret",
     "envName": "COOKIE_SESSION_SECRET",
     "description": "A random 64+ bit string to use as the session secret.",
     "type": "string",
     "default": "00000000-0000-0000-0000-000000000000"
   },
   {
-    "name": "mongoDBConnectionString",
+    "name": "mongo-db-connection-string",
     "envName": "MONGO_DB_CONNECTION_STRING",
     "description": "Connection string to connect to MongoDB.",
     "type": "string",
     "default": "mongodb://localhost:27017/oauth"
   },
   {
-    "name": "authorizationCodeLifetime",
+    "name": "authorization-code-lifetime",
     "envName": "AUTHORIZATION_CODE_LIFETIME",
     "description": "Expiry time in seconds for authorization codes.",
     "type": "number",
     "default": 300
   },
   {
-    "name": "accessTokenLifetime",
+    "name": "access-token-lifetime",
     "envName": "ACCESS_TOKEN_LIFETIME",
     "description": "Expiry time in seconds for access tokens.",
     "type": "number",
     "default": 3600
   },
   {
-    "name": "refreshTokenLifetime",
+    "name": "refresh-token-lifetime",
     "envName": "REFRESH_TOKEN_LIFETIME",
     "description": "Expiry time in seconds for refresh tokens.",
     "type": "number",
     "default": 1209600
   },
   {
-    "name": "sendgridApiKey",
+    "name": "sendgrid-api-key",
     "envName": "SENDGRID_API_KEY",
     "description": "API key for sendgrid.",
     "type": "string"
   },
   {
-    "name": "canUseCacheForToken",
-    "envName": "CAN_USE_CACHE_FOR_TOKEN",
-    "description": "Specifies whether to use cache for saving and retrieving OAuth tokens.",
-    "type": "boolean",
-    "default": true
-  },
-  {
-    "name": "getUserMaxItems",
+    "name": "get-user-max-items",
     "envName": "GET_USER_MAX_ITEMS",
     "description": "Specifies the maximum number of users for which details can be retrieved in a single API call.",
     "type": "number",
     "default": 650
   },
   {
-    "name": "redisPort",
+    "name": "redis-port",
     "envName": "REDIS_PORT",
     "description": "Port for the Redis connection.",
     "type": "number",
     "default": 6379
   },
   {
-    "name": "redisHost",
+    "name": "redis-host",
     "envName": "REDIS_HOST",
     "description": "Host for the Redis connection.",
     "type": "string",
     "default": "127.0.0.1"
   },
   {
-    "name": "redisUsername",
+    "name": "redis-username",
     "envName": "REDIS_USERNAME",
     "description": "Username for the Redis connection.",
     "type": "string"
   },
   {
-    "name": "redisPassword",
+    "name": "redis-password",
     "envName": "REDIS_PASSWORD",
     "description": "Password for the Redis connection.",
     "type": "string"
   },
   {
-    "name": "redisDB",
+    "name": "redis-db",
     "envName": "REDIS_DB",
     "description": "Password for the Redis connection.",
     "type": "number",
     "default": 0
+  },
+  {
+    "name": "privilege.can-use-cache-for-token",
+    "envName": "CAN_USE_CACHE_FOR_TOKEN",
+    "description": "Specifies whether to use cache for saving and retrieving OAuth tokens.",
+    "type": "boolean",
+    "default": true
   }
 ]

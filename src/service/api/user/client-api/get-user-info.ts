@@ -11,7 +11,7 @@ import { Configuration } from "../../../../singleton/configuration";
 const GetUserInfo = async (req: Request, res: Response) => {
   try {
     const targets = req.body.targets;
-    if (targets.length > (Configuration.get("getUserMaxItems") as number)) {
+    if (targets.length > (Configuration.get("get-user-max-items") as number)) {
       return res
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError));

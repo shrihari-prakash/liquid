@@ -52,7 +52,7 @@ interface AuthorizationCode {
 
 type Scope = string | string[] | undefined;
 
-const useTokenCache = Configuration.get("canUseCacheForToken");
+const useTokenCache = Configuration.get("privilege.can-use-cache-for-token");
 
 const OAuthModel = {
   getClient: async function (clientId: string, clientSecret: string) {
@@ -87,14 +87,14 @@ const OAuthModel = {
           token.accessToken,
           serialized,
           "EX",
-          Configuration.get("accessTokenLifetime") as number
+          Configuration.get("access-token-lifetime") as number
         );
         if (token.refreshToken)
           await Redis.client.set(
             token.refreshToken,
             serialized,
             "EX",
-            Configuration.get("refreshTokenLifetime") as number
+            Configuration.get("refresh-token-lifetime") as number
           );
         log.debug("Token saved to cache.");
         return token;
@@ -183,7 +183,7 @@ const OAuthModel = {
           authorizationCode.authorizationCode,
           JSON.stringify(authorizationCode),
           "EX",
-          Configuration.get("authorizationCodeLifetime") as number
+          Configuration.get("authorization-code-lifetime") as number
         );
         return authorizationCode;
       }

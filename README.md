@@ -8,7 +8,7 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 
 ![Login](images/screenshot-1.png)
 
-You will require Redis to run this service. This is because the service needs to store access and refresh tokens. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `canUseCacheForToken` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database.
+You will require Redis to run this service. This is because the service needs to store access and refresh tokens. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `privilege.can-use-cache-for-token` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database.
 
 ### Setup
 
