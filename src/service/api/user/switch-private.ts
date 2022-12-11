@@ -1,25 +1,19 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/follow" });
+const log = Logger.getLogger().child({ from: "user/switch-private" });
 
 import { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel from "../../../model/mongo/user";
+import { validateErrors } from "../../../utils/api";
 
 export const SwitchPrivateValidator = [body("state").exists().isBoolean()];
 
 const SwitchPrivate = async (req: Request, res: Response) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(statusCodes.clientInputError).json(
-        new ErrorResponse(errorMessages.clientInputError, {
-          fields: errors.array({ onlyFirstError: true }),
-        })
-      );
-    }
+    validateErrors(req, res);
     const userId = res.locals.oauth.token.user._id;
     const state = req.body.state;
     await UserModel.updateOne({ _id: userId }, { $set: { isPrivate: state } });

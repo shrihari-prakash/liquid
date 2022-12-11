@@ -2,13 +2,14 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/follow" });
 
 import { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import UserModel, { IUser } from "../../../model/mongo/user";
 import { updateFollowCount } from "../../../utils/follow";
+import { validateErrors } from "../../../utils/api";
 
 export const FollowValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
@@ -20,14 +21,7 @@ function sendSuccess(res: Response, status: string) {
 
 const Follow = async (req: Request, res: Response) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(statusCodes.clientInputError).json(
-        new ErrorResponse(errorMessages.clientInputError, {
-          errors: errors.array(),
-        })
-      );
-    }
+    validateErrors(req, res);
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
     const query: any = {

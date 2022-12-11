@@ -4,7 +4,7 @@ const log = Logger.getLogger().child({ from: "user/create" });
 import { Request, Response } from "express";
 import sgMail from "@sendgrid/mail";
 import bcrypt from "bcrypt";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 
 import app from "../../..";
 import UserModel, { IUser } from "../../../model/mongo/user";
@@ -13,6 +13,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import Role from "../../../enum/role";
 import { Configuration } from "../../../singleton/configuration";
+import { validateErrors } from "../../../utils/api";
 
 const bcryptConfig = {
   salt: 10,
@@ -66,15 +67,7 @@ const Create = async (req: Request, res: Response) => {
       email,
       password: passwordBody,
     } = req.body;
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(statusCodes.clientInputError).json(
-        new ErrorResponse(errorMessages.clientInputError, {
-          fields: errors.array({ onlyFirstError: true }),
-        })
-      );
-    }
-
+    validateErrors(req, res);
     if (!username || !firstName || !lastName || !email || !passwordBody)
       return res
         .status(statusCodes.clientInputError)

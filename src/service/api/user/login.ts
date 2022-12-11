@@ -3,11 +3,12 @@ const log = Logger.getLogger().child({ from: "user/login" });
 
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 
 import UserModel from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
+import { validateErrors } from "../../../utils/api";
 
 export const LoginValidator = [
   body("username")
@@ -21,15 +22,7 @@ export const LoginValidator = [
 
 const Login = async (req: Request, res: Response) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(statusCodes.clientInputError).json(
-        new ErrorResponse(errorMessages.clientInputError, {
-          errors: errors.array(),
-        })
-      );
-    }
-
+    validateErrors(req, res);
     const { username, email, password } = req.body;
     if ((!email && !username) || !password)
       return res
