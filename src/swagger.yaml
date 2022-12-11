@@ -105,6 +105,28 @@ paths:
                 properties:
                   ...:
                     type: string
+  /user/private:
+    post:
+      summary: Changes an user account's type to private/public.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: boolean
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ...:
+                    type: string
   /user/me:
     get:
       security:

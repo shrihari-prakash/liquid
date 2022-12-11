@@ -10,6 +10,7 @@ import Me from "./me";
 import Unfollow from "./unfollow";
 import VerifyEmail, { VerifyEmailValidator } from "./verify-email";
 import ClientApiRouter from "./client-api/routes";
+import SwitchPrivate, { SwitchPrivateValidator } from "./switch-private";
 
 const UserRouter = express.Router();
 
@@ -17,6 +18,12 @@ const UserRouter = express.Router();
 UserRouter.post("/create", ...CreateValidator, Create);
 UserRouter.post("/login", ...LoginValidator, Login);
 UserRouter.get("/verify-email", ...VerifyEmailValidator, VerifyEmail);
+UserRouter.post(
+  "/private",
+  ...AuthFlow,
+  ...SwitchPrivateValidator,
+  SwitchPrivate
+);
 
 //User info
 UserRouter.get("/me", ...AuthFlow, Me);
