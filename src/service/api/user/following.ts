@@ -14,7 +14,7 @@ const Following = async (req: Request, res: Response) => {
     FollowModel.aggregate([
       {
         $match: {
-          sourceId: new mongo.ObjectId(userId),
+          $and: [{ sourceId: new mongo.ObjectId(userId) }, { approved: true }],
         },
       },
       {

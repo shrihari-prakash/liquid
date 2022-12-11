@@ -11,6 +11,10 @@ import Unfollow from "./unfollow";
 import VerifyEmail, { VerifyEmailValidator } from "./verify-email";
 import ClientApiRouter from "./client-api/routes";
 import SwitchPrivate, { SwitchPrivateValidator } from "./switch-private";
+import FollowRequests from "./follow-requests";
+import AcceptFollowRequest, {
+  AcceptFollowRequestValidator,
+} from "./accept-follow-request";
 
 const UserRouter = express.Router();
 
@@ -25,15 +29,22 @@ UserRouter.post(
   SwitchPrivate
 );
 
-//User info
-UserRouter.get("/me", ...AuthFlow, Me);
-UserRouter.get("/:userId", ...AuthFlow, _userId);
-
 //Friends
 UserRouter.post("/follow", ...AuthFlow, ...FollowValidator, Follow);
 UserRouter.post("/unfollow", ...AuthFlow, ...FollowValidator, Unfollow);
 UserRouter.get("/following", ...AuthFlow, Following);
 UserRouter.get("/followers", ...AuthFlow, Followers);
+UserRouter.get("/follow-requests", ...AuthFlow, FollowRequests);
+UserRouter.patch(
+  "/accept-follow-request",
+  ...AuthFlow,
+  ...AcceptFollowRequestValidator,
+  AcceptFollowRequest
+);
+
+//User info
+UserRouter.get("/me", ...AuthFlow, Me);
+UserRouter.get("/:userId", ...AuthFlow, _userId);
 
 UserRouter.use("/client-api", ClientApiRouter);
 

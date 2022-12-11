@@ -8,13 +8,13 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 
-const Followers = async (req: Request, res: Response) => {
+const FollowRequests = async (req: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
     FollowModel.aggregate([
       {
         $match: {
-          $and: [{ targetId: new mongo.ObjectId(userId) }, { approved: true }],
+          $and: [{ targetId: new mongo.ObjectId(userId) }, { approved: false }],
         },
       },
       {
@@ -27,7 +27,6 @@ const Followers = async (req: Request, res: Response) => {
       },
       {
         $project: {
-          _id: 0,
           "source.password": 0,
           "source.isRestricted": 0,
           "source.emailVerified": 0,
@@ -47,4 +46,4 @@ const Followers = async (req: Request, res: Response) => {
   }
 };
 
-export default Followers;
+export default FollowRequests;

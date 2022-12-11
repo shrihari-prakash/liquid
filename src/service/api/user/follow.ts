@@ -8,7 +8,7 @@ import { body, validationResult } from "express-validator";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
-import UserModel from "../../../model/mongo/user";
+import UserModel, { IUser } from "../../../model/mongo/user";
 
 export const FollowValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
@@ -26,21 +26,35 @@ const Follow = async (req: Request, res: Response) => {
     }
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
-    await new FollowModel({
+    const query: any = {
       targetId,
       sourceId,
-    }).save();
-    const p1 = UserModel.updateOne(
-      { _id: sourceId },
-      { $inc: { followingCount: 1 } }
-    );
-    const p2 = UserModel.updateOne(
-      { _id: targetId },
-      { $inc: { followerCount: 1 } }
-    );
-    Promise.all([p1, p2]).then(() =>
-      res.status(statusCodes.success).json(new SuccessResponse())
-    );
+    };
+    const target = (await UserModel.findOne({
+      _id: targetId,
+    }).exec()) as unknown as IUser;
+    if (target.isPrivate) {
+      query.approved = false;
+      await new FollowModel(query).save();
+      res
+        .status(statusCodes.success)
+        .json(new SuccessResponse({ status: "requested" }));
+    } else {
+      await new FollowModel(query).save();
+      const p1 = UserModel.updateOne(
+        { _id: sourceId },
+        { $inc: { followingCount: 1 } }
+      );
+      const p2 = UserModel.updateOne(
+        { _id: targetId },
+        { $inc: { followerCount: 1 } }
+      );
+      Promise.all([p1, p2]).then(() =>
+        res
+          .status(statusCodes.success)
+          .json(new SuccessResponse({ status: "followed" }))
+      );
+    }
   } catch (err) {
     log.error(err);
     return res
