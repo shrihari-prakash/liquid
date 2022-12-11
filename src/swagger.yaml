@@ -196,7 +196,39 @@ paths:
       security:
         - bearerAuth: []
       summary: Unfollows the user with the given ID from the account associated with the API token.
-
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /user/accept-follow-request:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Accept a follow request by ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: string
       responses:
         "200":
           description: Returns OK.
@@ -246,6 +278,30 @@ paths:
                       users:
                         type: array
                         items:
+                          $ref: "#/definitions/user"
+  /user/follow-requests:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns an array of users that have requested to follow the user associated with the API token.
+      responses:
+        "200":
+          description: Returns list of follow requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        approved:
+                          type: boolean
+                        source:
                           $ref: "#/definitions/user"
 
 definitions:

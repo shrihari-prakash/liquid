@@ -27,6 +27,9 @@ const FollowRequests = async (req: Request, res: Response) => {
       },
       {
         $project: {
+          sourceId: 0,
+          targetId: 0,
+          __v: 0,
           "source.password": 0,
           "source.isRestricted": 0,
           "source.emailVerified": 0,
