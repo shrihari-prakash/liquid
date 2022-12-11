@@ -11,7 +11,7 @@ import Me from "./me";
 import Unfollow from "./unfollow";
 import VerifyEmail, { VerifyEmailValidator } from "./verify-email";
 import ClientApiRouter from "./client-api/routes";
-import SwitchPrivate, { SwitchPrivateValidator } from "./switch-private";
+import SwitchPrivate, { SwitchPrivateValidator } from "./private";
 import FollowRequests from "./follow-requests";
 import AcceptFollowRequest, {
   AcceptFollowRequestValidator,
