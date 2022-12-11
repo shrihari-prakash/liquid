@@ -46,8 +46,10 @@ const AuthenticateClient = async (
   }
 };
 
-const AuthFlow = [OAuthServer.server.authenticate(), AuthenticateUser];
-export default AuthFlow;
+export const DelegatedAuthFlow = [
+  OAuthServer.server.authenticate(),
+  AuthenticateUser,
+];
 export const ClientAuthFlow = [
   OAuthServer.server.authenticate(),
   AuthenticateClient,

@@ -1,6 +1,6 @@
 import express from "express";
 
-import AuthFlow from "../middleware/authenticate";
+import { DelegatedAuthFlow } from "../middleware/authenticate";
 import Create, { CreateValidator } from "./create";
 import Follow, { FollowValidator } from "./follow";
 import Followers from "./followers";
@@ -25,28 +25,34 @@ UserRouter.post("/login", ...LoginValidator, Login);
 UserRouter.get("/verify-email", ...VerifyEmailValidator, VerifyEmail);
 UserRouter.post(
   "/private",
-  ...AuthFlow,
+  ...DelegatedAuthFlow,
   ...SwitchPrivateValidator,
   SwitchPrivate
 );
 
 //Friends
-UserRouter.post("/follow", ...AuthFlow, ...FollowValidator, Follow);
-UserRouter.post("/unfollow", ...AuthFlow, ...FollowValidator, Unfollow);
-UserRouter.get("/following", ...AuthFlow, Following);
-UserRouter.get("/followers", ...AuthFlow, Followers);
-UserRouter.get("/follow-requests", ...AuthFlow, FollowRequests);
+UserRouter.post("/follow", ...DelegatedAuthFlow, ...FollowValidator, Follow);
+UserRouter.post(
+  "/unfollow",
+  ...DelegatedAuthFlow,
+  ...FollowValidator,
+  Unfollow
+);
+UserRouter.get("/following", ...DelegatedAuthFlow, Following);
+UserRouter.get("/followers", ...DelegatedAuthFlow, Followers);
+UserRouter.get("/follow-requests", ...DelegatedAuthFlow, FollowRequests);
 UserRouter.patch(
   "/accept-follow-request",
-  ...AuthFlow,
+  ...DelegatedAuthFlow,
   ...AcceptFollowRequestValidator,
   AcceptFollowRequest
 );
 
-//User info
-UserRouter.get("/me", ...AuthFlow, Me);
-UserRouter.get("/:userId", ...AuthFlow, _UserId);
-
+// Application client APIs
 UserRouter.use("/client-api", ClientApiRouter);
+
+//User info
+UserRouter.get("/me", ...DelegatedAuthFlow, Me);
+UserRouter.get("/:userId", ...DelegatedAuthFlow, _UserId);
 
 export default UserRouter;
