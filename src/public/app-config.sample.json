@@ -1,15 +1,20 @@
 {
   "oauth": {
-    "clientId": "your_client_id",
-    "redirectUri": "your_redirect_uri"
+    "clientId": "{{your_client_id}}",
+    "redirectUri": "{{your_redirect_uri}}"
   },
   "content": {
-    "appName": "My App",
-    "appTagline": "App Tagline." ,
-    "intro": {
-      "title1": "Title 1",
-      "title2": "Title 2",
-      "description": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+    "appName": "Liquid",
+    "appTagline": "Your tagline here.",
+    "sidebar": {
+      "enabled": true,
+      "contentEnabled": true,
+      "backdropImage": null,
+      "intro": {
+        "title1": "Plug & Play",
+        "title2": "with any project.",
+        "description": "Focus writing your app logic rather than the same old authentication logic 🔒"
+      }
     }
   }
 }

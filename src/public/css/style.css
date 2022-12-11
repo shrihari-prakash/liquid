@@ -174,25 +174,26 @@ input[data-autocompleted] {
 }
 
 .half .intro {
-  padding: 32px;
-  display: flex;
+  padding: 72px 32px;
   flex-direction: column;
   justify-content: center;
   background-color: #00000040;
   backdrop-filter: blur(10px);
-  height: 50%;
-  width: 100%;
+  width: 90%;
+  border-radius: 8px;
   user-select: none;
+  display: none;
 }
 
 .half .title1,
 .half .title2 {
-  font-size: xx-large;
+  font-size: x-large;
   color: #fff;
 }
 
 .half .description {
   color: #fff;
+  margin-top: 10px;
 }
 
 .half .title1 {

@@ -37,11 +37,30 @@ function onSubmitError(params) {
 
 async function renderContent() {
     const configuration = await getConfig();
-    $(".app-name").text(configuration.content.appName)
-    $(".app-tagline").text(configuration.content.appTagline)
-    $(".title1").text(configuration.content.intro.title1)
-    $(".title2").text(configuration.content.intro.title2)
-    $(".description").text(configuration.content.intro.description)
+    $(".app-name").text(configuration.content.appName);
+    $(".app-tagline").text(configuration.content.appTagline);
+    $(".title1").text(configuration.content.sidebar.intro.title1);
+    $(".title2").text(configuration.content.sidebar.intro.title2);
+    $(".description").text(configuration.content.sidebar.intro.description);
+    if (configuration.content.sidebar.enabled === false) {
+        $(".sidebar").css({
+            display: "none",
+            visibility: "hidden"
+        });
+        $(".half .contents, .half .bg").css({
+            width: "100%"
+        });
+        return;
+    }
+    const sidebarSrc = configuration.content.sidebar.backdropImage;
+    if (configuration.content.sidebar.contentEnabled === true) {
+        $(".intro").css({
+            display: "flex"
+        });
+    }
+    if (sidebarSrc) {
+        $(".sidebar").css('background-image', 'url(' + sidebarSrc + ')');
+    }
 }
 
 function uuidv4() {
