@@ -8,7 +8,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { IUser } from "../../../model/mongo/user";
 import FollowModel from "../../../model/mongo/follow";
 
-const GetUser = async (req: Request, res: Response) => {
+const _UserId = async (req: Request, res: Response) => {
   try {
     const targetId = req.params.userId;
     const sourceId = res.locals.oauth.token.user._id;
@@ -34,4 +34,4 @@ const GetUser = async (req: Request, res: Response) => {
   }
 };
 
-export default GetUser;
+export default _UserId;

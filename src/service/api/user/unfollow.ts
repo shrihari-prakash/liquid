@@ -2,13 +2,12 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/follow" });
 
 import { Request, Response } from "express";
-import { mongo } from "mongoose";
-import { body, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
-import UserModel from "../../../model/mongo/user";
+import { updateFollowCount } from "../../../utils/follow";
 
 const Unfollow = async (req: Request, res: Response) => {
   try {
@@ -29,17 +28,8 @@ const Unfollow = async (req: Request, res: Response) => {
     if (!result.deletedCount) {
       return res.status(statusCodes.success).json(new SuccessResponse());
     }
-    const p1 = UserModel.updateOne(
-      { _id: sourceId },
-      { $inc: { followingCount: -1 } }
-    );
-    const p2 = UserModel.updateOne(
-      { _id: targetId },
-      { $inc: { followerCount: -1 } }
-    );
-    Promise.all([p1, p2]).then(() =>
-      res.status(statusCodes.success).json(new SuccessResponse())
-    );
+    await updateFollowCount(sourceId, targetId, -1);
+    res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
     return res

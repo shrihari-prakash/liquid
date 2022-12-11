@@ -2,17 +2,21 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/follow" });
 
 import { Request, Response } from "express";
-import { mongo } from "mongoose";
 import { body, validationResult } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import UserModel, { IUser } from "../../../model/mongo/user";
+import { updateFollowCount } from "../../../utils/follow";
 
 export const FollowValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
 ];
+
+function sendSuccess(res: Response, status: string) {
+  res.status(statusCodes.success).json(new SuccessResponse({ status }));
+}
 
 const Follow = async (req: Request, res: Response) => {
   try {
@@ -36,26 +40,16 @@ const Follow = async (req: Request, res: Response) => {
     if (target.isPrivate) {
       query.approved = false;
       await new FollowModel(query).save();
-      res
-        .status(statusCodes.success)
-        .json(new SuccessResponse({ status: "requested" }));
+      sendSuccess(res, "requested");
     } else {
       await new FollowModel(query).save();
-      const p1 = UserModel.updateOne(
-        { _id: sourceId },
-        { $inc: { followingCount: 1 } }
-      );
-      const p2 = UserModel.updateOne(
-        { _id: targetId },
-        { $inc: { followerCount: 1 } }
-      );
-      Promise.all([p1, p2]).then(() =>
-        res
-          .status(statusCodes.success)
-          .json(new SuccessResponse({ status: "followed" }))
-      );
+      await updateFollowCount(sourceId, targetId, 1);
+      sendSuccess(res, "followed");
     }
-  } catch (err) {
+  } catch (err: any) {
+    if (err.message.includes("E11000")) {
+      sendSuccess(res, "duplicate");
+    }
     log.error(err);
     return res
       .status(statusCodes.internalError)

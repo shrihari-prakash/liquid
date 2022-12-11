@@ -1,10 +1,11 @@
 import express from "express";
+
 import AuthFlow from "../middleware/authenticate";
 import Create, { CreateValidator } from "./create";
 import Follow, { FollowValidator } from "./follow";
 import Followers from "./followers";
 import Following from "./following";
-import _userId from "./_userId";
+import _UserId from "./_userId";
 import Login, { LoginValidator } from "./login";
 import Me from "./me";
 import Unfollow from "./unfollow";
@@ -44,7 +45,7 @@ UserRouter.patch(
 
 //User info
 UserRouter.get("/me", ...AuthFlow, Me);
-UserRouter.get("/:userId", ...AuthFlow, _userId);
+UserRouter.get("/:userId", ...AuthFlow, _UserId);
 
 UserRouter.use("/client-api", ClientApiRouter);
 
