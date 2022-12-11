@@ -8,7 +8,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 
-const Followers = async (req: Request, res: Response) => {
+const Followers = async (_: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
     FollowModel.aggregate([
@@ -25,19 +25,26 @@ const Followers = async (req: Request, res: Response) => {
           as: "source",
         },
       },
+      { $unwind: "$source" },
+      {
+        $replaceRoot: {
+          newRoot: "$source",
+        },
+      },
       {
         $project: {
           _id: 0,
-          "source.password": 0,
-          "source.isRestricted": 0,
-          "source.emailVerified": 0,
+          __v: 0,
+          password: 0,
+          isRestricted: 0,
+          emailVerified: 0,
         },
       },
-    ]).exec(function (up, doc) {
+    ]).exec(function (up, users) {
       if (up) {
         throw up;
       }
-      res.status(statusCodes.success).json(new SuccessResponse(doc));
+      res.status(statusCodes.success).json(new SuccessResponse({ users }));
     });
   } catch (err) {
     log.error(err);
