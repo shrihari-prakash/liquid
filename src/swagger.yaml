@@ -5,7 +5,9 @@ info:
 paths:
   /user/client-api/get-user-info:
     post:
-      summary: Returns details about the given array of user IDs.
+      security:
+        - bearerAuth: []
+      summary: Accepts an array of user IDs and returns their profile details.
       requestBody:
         required: true
         content:
@@ -25,11 +27,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  ...:
-                    type: string
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: "#/definitions/user"
   /user/create:
     post:
-      summary: Returns a list of users.
+      summary: Creates an user.
       requestBody:
         required: true
         content:
@@ -37,16 +44,11 @@ paths:
             schema:
               type: object
               properties:
-                username:
-                  type: string
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                password:
-                  type: string
-                email:
-                  type: string
+                data:
+                  type: object
+                  properties:
+                    user:
+                      $ref: "#/definitions/user"
       responses:
         "200":
           description: Returns the user details.
@@ -59,7 +61,7 @@ paths:
                     type: string
   /user/login:
     post:
-      summary: Logs in the user.
+      summary: Creates a cookie session and returns the user profile.
       requestBody:
         required: true
         content:
@@ -75,14 +77,17 @@ paths:
                   type: string
       responses:
         "200":
-          description: Returns the user details.
+          description: Returns the user profile.
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  ...:
-                    type: string
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: "#/definitions/user"
   /user/verify-email:
     post:
       summary: Marks the user's account associated with the auto generated code as a verified.
@@ -103,10 +108,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  ...:
-                    type: string
+                  ok:
+                    type: boolean
   /user/private:
     post:
+      security:
+        - bearerAuth: []
       summary: Changes an user account's type to private/public.
       requestBody:
         required: true
@@ -125,13 +132,13 @@ paths:
               schema:
                 type: object
                 properties:
-                  ...:
-                    type: string
+                  ok:
+                    type: boolean
   /user/me:
     get:
       security:
         - bearerAuth: []
-      summary: Retrieves the user data associated with the API token.
+      summary: Retrieves the user profile associated with the API token.
       responses:
         "200": # status code
           description: Returns the user details.
@@ -140,13 +147,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  ...:
-                    type: string
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: "#/definitions/user"
   /user/:userId:
     get:
       security:
         - bearerAuth: []
-      summary: Retrieves the user data of the given id.
+      summary: Retrieves the user data for a given user ID.
       responses:
         "200":
           description: Returns the user details.
@@ -155,13 +165,13 @@ paths:
               schema:
                 type: object
                 properties:
-                  ...:
-                    type: string
+                  user:
+                    $ref: "#/definitions/user"
   /user/follow:
     post:
       security:
         - bearerAuth: []
-      summary: Follows the given user.
+      summary: Follows the user with the provided ID from the account associated with the API token.
       requestBody:
         required: true
         content:
@@ -179,13 +189,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  ...:
-                    type: string
+                  ok:
+                    type: boolean
   /user/unfollow:
     post:
       security:
         - bearerAuth: []
-      summary: Unfollows the given user.
+      summary: Unfollows the user with the given ID from the account associated with the API token.
+
       responses:
         "200":
           description: Returns OK.
@@ -194,29 +205,72 @@ paths:
               schema:
                 type: object
                 properties:
-                  ...:
-                    type: string
+                  ok:
+                    type: boolean
   /user/following:
     get:
       security:
         - bearerAuth: []
-      summary: Lists the users that the current user is following.
+      summary: Returns an array of users that the user associated with the API token is following.
       responses:
         "200":
           description: Returns list of users.
           content:
             application/json:
               schema:
-                type: array
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: "#/definitions/user"
   /user/followers:
     get:
       security:
         - bearerAuth: []
-      summary: Lists the users that are following the current user.
+      summary: Returns an array of users that are following the user associated with the API token.
       responses:
         "200":
           description: Returns list of users.
           content:
             application/json:
               schema:
-                type: array
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: "#/definitions/user"
+
+definitions:
+  user:
+    type: object
+    properties:
+      firstName:
+        type: string
+      middleName:
+        type: string
+      lastName:
+        type: string
+      username:
+        type: string
+      role:
+        type: string
+      profilePictureUrl:
+        type: string
+      followingCount:
+        type: string
+      followerCount:
+        type: string
+      isPrivate:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
