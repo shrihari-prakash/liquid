@@ -24,11 +24,6 @@ const Login = async (req: Request, res: Response) => {
   try {
     validateErrors(req, res);
     const { username, email, password } = req.body;
-    if ((!email && !username) || !password)
-      return res
-        .status(statusCodes.unauthorized)
-        .json(new ErrorResponse(errorMessages.unauthorized));
-
     const select = ["+password"];
     const query: any = {};
     if (email) {
@@ -41,18 +36,15 @@ const Login = async (req: Request, res: Response) => {
       return res
         .status(statusCodes.unauthorized)
         .json(new ErrorResponse(errorMessages.unauthorized));
-
     if (!user.emailVerified)
       return res
         .status(statusCodes.resourceNotActive)
         .json(new ErrorResponse(errorMessages.resourceNotActive));
-
     const isPasswordValid = await bcrypt.compare(password, user.password || "");
     if (!isPasswordValid)
       return res
         .status(statusCodes.unauthorized)
         .json(new ErrorResponse(errorMessages.unauthorized));
-
     user.password = undefined;
     const response = {
       userInfo: user,

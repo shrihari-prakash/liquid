@@ -68,15 +68,9 @@ const Create = async (req: Request, res: Response) => {
       password: passwordBody,
     } = req.body;
     validateErrors(req, res);
-    if (!username || !firstName || !lastName || !email || !passwordBody)
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError));
-
     const existingUser = (await UserModel.findOne({
       $or: [{ email: email.toLowerCase() }, { username }],
     }).exec()) as unknown as IUser;
-
     if (existingUser) {
       const duplicateFields = [];
       if (username === existingUser.username) duplicateFields.push("username");
@@ -95,10 +89,8 @@ const Create = async (req: Request, res: Response) => {
           .json(new SuccessResponse(response));
       }
     }
-
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
     const role = Role.USER;
-
     const newUser = (await new UserModel({
       username,
       firstName,
