@@ -57,12 +57,15 @@ const useTokenCache = Configuration.get("privilege.can-use-cache-for-token");
 const OAuthModel = {
   getClient: async function (clientId: string, clientSecret: string) {
     try {
-      const query: any = {
-        id: clientId,
-      };
+      let query: any = {};
       if (clientSecret) {
-        query.secret = clientSecret;
+        query = {
+          $and: [{ id: clientId }, { secret: clientSecret }],
+        };
+      } else {
+        query = { id: clientId };
       }
+      console.log(query);
       const dbClient = await ClientModel.findOne(query).lean();
       return dbClient as unknown as Client;
     } catch (err) {

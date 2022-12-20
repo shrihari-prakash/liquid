@@ -34,6 +34,58 @@ paths:
                         type: array
                         items:
                           $ref: "#/definitions/user"
+  /user/client-api/user-following:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns an array of users that the user with the given user ID is following.
+      parameters:
+        - in: query
+          name: target
+          schema:
+            type: integer
+          description: ID of the user.
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: "#/definitions/user"
+  /user/client-api/user-followers:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns an array of users that are following a given user ID.
+      parameters:
+        - in: query
+          name: target
+          schema:
+            type: integer
+          description: ID of the user.
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: "#/definitions/user"
   /user/create:
     post:
       summary: Creates an user.
