@@ -41,6 +41,9 @@ const SwitchPrivate = async (req: Request, res: Response) => {
           { $inc: { followingCount: 1 } }
         );
       }
+      res
+        .status(statusCodes.success)
+        .json(new SuccessResponse({ acceptedCount: requestsToApprove.length }));
     }
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
