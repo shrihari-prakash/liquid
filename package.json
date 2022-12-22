@@ -11,7 +11,7 @@
     "start": "npm run build && node build/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Shrihari Prakash",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
