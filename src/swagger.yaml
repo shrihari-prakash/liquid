@@ -34,6 +34,35 @@ paths:
                         type: array
                         items:
                           $ref: "#/definitions/user"
+  /user/client-api/follow-status:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns if a given source user is following the given target user.
+      parameters:
+        - in: query
+          name: source
+          schema:
+            type: integer
+          description: ID of the source user.
+        - in: query
+          name: target
+          schema:
+            type: integer
+          description: ID of the target user.
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      following:
+                        type: boolean
   /user/client-api/user-following:
     get:
       security:
