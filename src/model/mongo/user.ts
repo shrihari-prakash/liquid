@@ -158,4 +158,22 @@ export type IUser = {
   deletedDate: Date;
 };
 
+export const IUserProjection = {
+  _id: 1,
+  username: 1,
+  firstName: 1,
+  middleName: 1,
+  lastName: 1,
+  profilePictureUrl: 1,
+  followingCount: 1,
+  followerCount: 1,
+  isPrivate: 1,
+  email: 1,
+  phone: 1,
+  secondaryEmail: 1,
+  secondaryPhone: 1,
+  isBanned: 1,
+  isRestricted: 1,
+};
+
 export default UserModel;
