@@ -320,6 +320,30 @@ paths:
                 properties:
                   ok:
                     type: boolean
+  /user/delete-follow-request:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Delete a follow request by ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
   /user/following:
     get:
       security:

@@ -16,6 +16,9 @@ import FollowRequests from "./follow-requests";
 import AcceptFollowRequest, {
   AcceptFollowRequestValidator,
 } from "./accept-follow-request";
+import DeleteFollowEntry, {
+  DeleteFollowRequestValidator as DeleteFollowEntryValidator,
+} from "./delete-follow-entry";
 
 const UserRouter = express.Router();
 
@@ -46,6 +49,12 @@ UserRouter.patch(
   ...DelegatedAuthFlow,
   ...AcceptFollowRequestValidator,
   AcceptFollowRequest
+);
+UserRouter.delete(
+  "/delete-follow-entry",
+  ...DelegatedAuthFlow,
+  ...DeleteFollowEntryValidator,
+  DeleteFollowEntry
 );
 
 // Application client APIs
