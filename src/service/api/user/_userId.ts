@@ -3,6 +3,7 @@ const log = Logger.getLogger().child({ from: "user/follow" });
 
 import { Request, Response } from "express";
 
+import { Configuration } from "../../../singleton/configuration";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { IUser, IUserProjection } from "../../../model/mongo/user";
@@ -16,7 +17,7 @@ const _UserId = async (req: Request, res: Response) => {
       { _id: targetId },
       IUserProjection
     ).exec()) as unknown as IUser;
-    if (user.isPrivate) {
+    if (user.isPrivate && Configuration.get("privilege.can-use-follow-apis")) {
       const isFollowing = (await FollowModel.findOne({
         $and: [{ targetId }, { sourceId }],
       }).exec()) as unknown as IUser;
