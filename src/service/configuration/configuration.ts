@@ -24,11 +24,7 @@ export class Configuration {
     );
   }
 
-  public get(
-    name: string,
-    defaultValue?: any,
-    delim = ","
-  ): number | boolean | string | undefined {
+  public get(name: string, defaultValue?: any, delim = ",") {
     const option: Option = this.options[name];
     if (!option) return defaultValue || undefined;
     const value =

@@ -114,5 +114,12 @@
     "description": "Specifies whether to use cache for saving and retrieving OAuth tokens.",
     "type": "boolean",
     "default": true
+  },
+  {
+    "name": "privilege.can-use-follow-apis",
+    "envName": "CAN_USE_FOLLOW_APIS",
+    "description": "Specifies whether the application will allow users to use follow and unfollow mechanisms",
+    "type": "boolean",
+    "default": true
   }
 ]

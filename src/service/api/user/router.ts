@@ -1,5 +1,6 @@
 import express from "express";
 
+import { Configuration } from "../../../singleton/configuration";
 import { DelegatedAuthFlow } from "../middleware/authenticate";
 import Create, { CreateValidator } from "./create";
 import Follow, { FollowValidator } from "./follow";
@@ -33,29 +34,32 @@ UserRouter.post(
   SwitchPrivate
 );
 
-//Friends
-UserRouter.post("/follow", ...DelegatedAuthFlow, ...FollowValidator, Follow);
-UserRouter.post(
-  "/unfollow",
-  ...DelegatedAuthFlow,
-  ...FollowValidator,
-  Unfollow
-);
-UserRouter.get("/following", ...DelegatedAuthFlow, Following);
-UserRouter.get("/followers", ...DelegatedAuthFlow, Followers);
-UserRouter.get("/follow-requests", ...DelegatedAuthFlow, FollowRequests);
-UserRouter.patch(
-  "/accept-follow-request",
-  ...DelegatedAuthFlow,
-  ...AcceptFollowRequestValidator,
-  AcceptFollowRequest
-);
-UserRouter.delete(
-  "/delete-follow-entry",
-  ...DelegatedAuthFlow,
-  ...DeleteFollowEntryValidator,
-  DeleteFollowEntry
-);
+const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
+if (canUseFollowAPIs) {
+  //Friends
+  UserRouter.post("/follow", ...DelegatedAuthFlow, ...FollowValidator, Follow);
+  UserRouter.post(
+    "/unfollow",
+    ...DelegatedAuthFlow,
+    ...FollowValidator,
+    Unfollow
+  );
+  UserRouter.get("/following", ...DelegatedAuthFlow, Following);
+  UserRouter.get("/followers", ...DelegatedAuthFlow, Followers);
+  UserRouter.get("/follow-requests", ...DelegatedAuthFlow, FollowRequests);
+  UserRouter.patch(
+    "/accept-follow-request",
+    ...DelegatedAuthFlow,
+    ...AcceptFollowRequestValidator,
+    AcceptFollowRequest
+  );
+  UserRouter.delete(
+    "/delete-follow-entry",
+    ...DelegatedAuthFlow,
+    ...DeleteFollowEntryValidator,
+    DeleteFollowEntry
+  );
+}
 
 // Application client APIs
 UserRouter.use("/client-api", ClientApiRouter);
