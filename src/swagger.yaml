@@ -115,6 +115,32 @@ paths:
                         type: array
                         items:
                           $ref: "#/definitions/user"
+  /user/client-api/banned:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Marks the user with given ID as banned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                state:
+                  type: string
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
   /user/create:
     post:
       summary: Creates an user.

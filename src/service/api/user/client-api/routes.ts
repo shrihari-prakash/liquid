@@ -2,6 +2,7 @@ import express from "express";
 
 import { Configuration } from "../../../../singleton/configuration";
 import { ClientAuthFlow } from "../../middleware/authenticate";
+import Banned from "./banned";
 import FollowStatus from "./follow-status";
 import UserInfo from "./get-user-info";
 import UserFollowers from "./user-followers";
@@ -10,6 +11,7 @@ import UserFollowing from "./user-following";
 const ClientApiRouter = express.Router();
 
 ClientApiRouter.post("/get-user-info", ...ClientAuthFlow, UserInfo);
+ClientApiRouter.post("/banned", ...ClientAuthFlow, Banned);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {
