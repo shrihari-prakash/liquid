@@ -1,6 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Node.js OAuth 2.0 Server
+  title: Liquid
+  description: Seamless authentication and user management APIs for your projects based on TypeScript, MongoDB and Redis.
   version: 0.1
 paths:
   /user/client-api/get-user-info:
