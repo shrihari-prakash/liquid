@@ -9,9 +9,9 @@ import verificationCodeModel from "../../../model/mongo/verification-code";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 
-export const VerifyEmailValidator = [body("code").exists().isString()];
+export const GET_VerifyEmailValidator = [body("code").exists().isString()];
 
-const VerifyEmail = async (req: Request, res: Response) => {
+const GET_VerifyEmail = async (req: Request, res: Response) => {
   try {
     const code: string = req.query.code as string;
     const dbCode = await verificationCodeModel.findOne({ code }).exec();
@@ -43,4 +43,4 @@ const VerifyEmail = async (req: Request, res: Response) => {
   }
 };
 
-export default VerifyEmail;
+export default GET_VerifyEmail;

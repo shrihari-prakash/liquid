@@ -9,11 +9,11 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import { validateErrors } from "../../../utils/api";
 
-export const DeleteFollowRequestValidator = [
+export const DELETE_FollowEntryValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
 ];
 
-const DeleteFollowEntry = async (req: Request, res: Response) => {
+const DELETE_FollowEntry = async (req: Request, res: Response) => {
   try {
     validateErrors(req, res);
     const userId = res.locals.oauth.token.user._id;
@@ -39,4 +39,4 @@ const DeleteFollowEntry = async (req: Request, res: Response) => {
   }
 };
 
-export default DeleteFollowEntry;
+export default DELETE_FollowEntry;

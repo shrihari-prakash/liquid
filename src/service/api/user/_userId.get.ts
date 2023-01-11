@@ -9,7 +9,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { IUser, IUserProjection } from "../../../model/mongo/user";
 import FollowModel from "../../../model/mongo/follow";
 
-const _UserId = async (req: Request, res: Response) => {
+const GET__UserId = async (req: Request, res: Response) => {
   try {
     const targetId = req.params.userId;
     const sourceId = res.locals.oauth.token.user._id;
@@ -41,4 +41,4 @@ const _UserId = async (req: Request, res: Response) => {
   }
 };
 
-export default _UserId;
+export default GET__UserId;

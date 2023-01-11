@@ -8,7 +8,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 
-const FollowRequests = async (req: Request, res: Response) => {
+const GET_FollowRequests = async (req: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
     FollowModel.aggregate([
@@ -49,4 +49,4 @@ const FollowRequests = async (req: Request, res: Response) => {
   }
 };
 
-export default FollowRequests;
+export default GET_FollowRequests;

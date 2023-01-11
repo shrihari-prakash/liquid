@@ -7,16 +7,18 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
 import { useFollowingQuery } from "../../../../model/query/following";
+import { IUser } from "../../../../model/mongo/user";
 
-const UserFollowing = async (req: Request, res: Response) => {
+const GET_FollowStatus = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.target as string;
-    FollowModel.aggregate(useFollowingQuery(userId)).exec(function (up, users) {
-      if (up) {
-        throw up;
-      }
-      res.status(statusCodes.success).json(new SuccessResponse({ users }));
-    });
+    const sourceId = req.query.source as string;
+    const targetId = req.query.target as string;
+    const isFollowing = (await FollowModel.findOne({
+      $and: [{ targetId }, { sourceId }],
+    }).exec()) as unknown as IUser;
+    res
+      .status(statusCodes.success)
+      .json(new SuccessResponse({ following: isFollowing ? true : false }));
   } catch (err) {
     log.error(err);
     return res
@@ -25,4 +27,4 @@ const UserFollowing = async (req: Request, res: Response) => {
   }
 };
 
-export default UserFollowing;
+export default GET_FollowStatus;

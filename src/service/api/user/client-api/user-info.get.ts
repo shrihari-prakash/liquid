@@ -8,9 +8,9 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel, { IUser } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 
-const GetUserInfo = async (req: Request, res: Response) => {
+const GET_UserInfo = async (req: Request, res: Response) => {
   try {
-    const targets = req.body.targets;
+    const targets = (req.query.targets as string).split(",");
     if (targets.length > (Configuration.get("get-user-max-items") as number)) {
       return res
         .status(statusCodes.clientInputError)
@@ -28,4 +28,4 @@ const GetUserInfo = async (req: Request, res: Response) => {
   }
 };
 
-export default GetUserInfo;
+export default GET_UserInfo;

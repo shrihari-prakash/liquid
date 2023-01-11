@@ -9,7 +9,7 @@ import FollowModel from "../../../model/mongo/follow";
 import { updateFollowCount } from "../../../utils/follow";
 import { validateErrors } from "../../../utils/api";
 
-const Unfollow = async (req: Request, res: Response) => {
+const POST_Unfollow = async (req: Request, res: Response) => {
   try {
     validateErrors(req, res);
     const sourceId = res.locals.oauth.token.user._id;
@@ -31,4 +31,4 @@ const Unfollow = async (req: Request, res: Response) => {
   }
 };
 
-export default Unfollow;
+export default POST_Unfollow;

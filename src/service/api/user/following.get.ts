@@ -1,17 +1,17 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/followers" });
+const log = Logger.getLogger().child({ from: "user/following" });
 
 import { Request, Response } from "express";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
-import { useFollowersQuery } from "../../../model/query/followers";
+import { useFollowingQuery } from "../../../model/query/following";
 
-const Followers = async (_: Request, res: Response) => {
+const GET_Following = async (_: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
-    FollowModel.aggregate(useFollowersQuery(userId)).exec(function (up, users) {
+    FollowModel.aggregate(useFollowingQuery(userId)).exec(function (up, users) {
       if (up) {
         throw up;
       }
@@ -25,4 +25,4 @@ const Followers = async (_: Request, res: Response) => {
   }
 };
 
-export default Followers;
+export default GET_Following;

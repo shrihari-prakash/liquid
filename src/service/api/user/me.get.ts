@@ -7,7 +7,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel from "../../../model/mongo/user";
 
-const Me = async (req: Request, res: Response) => {
+const GET_Me = async (req: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
     const user = await UserModel.findOne({ _id: userId }).exec();
@@ -20,4 +20,4 @@ const Me = async (req: Request, res: Response) => {
   }
 };
 
-export default Me;
+export default GET_Me;

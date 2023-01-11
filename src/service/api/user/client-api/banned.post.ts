@@ -7,7 +7,7 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel, { IUser } from "../../../../model/mongo/user";
 
-const Banned = async (req: Request, res: Response) => {
+const POST_Banned = async (req: Request, res: Response) => {
   try {
     const target = req.body.target;
     const state = req.body.state;
@@ -21,4 +21,4 @@ const Banned = async (req: Request, res: Response) => {
   }
 };
 
-export default Banned;
+export default POST_Banned;

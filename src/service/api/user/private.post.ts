@@ -6,13 +6,13 @@ import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel from "../../../model/mongo/user";
 import { validateErrors } from "../../../utils/api";
+import UserModel from "../../../model/mongo/user";
 import FollowModel from "../../../model/mongo/follow";
 
-export const SwitchPrivateValidator = [body("state").exists().isBoolean()];
+export const POST_PrivateValidator = [body("state").exists().isBoolean()];
 
-const SwitchPrivate = async (req: Request, res: Response) => {
+const POST_Private = async (req: Request, res: Response) => {
   try {
     validateErrors(req, res);
     const userId = res.locals.oauth.token.user._id;
@@ -54,4 +54,4 @@ const SwitchPrivate = async (req: Request, res: Response) => {
   }
 };
 
-export default SwitchPrivate;
+export default POST_Private;

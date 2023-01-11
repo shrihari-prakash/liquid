@@ -46,7 +46,7 @@ const generateVerificationCode = async function (user: IUser) {
   return code;
 };
 
-export const CreateValidator = [
+export const POST_CreateValidator = [
   body("username")
     .exists()
     .isString()
@@ -58,7 +58,7 @@ export const CreateValidator = [
   body("lastName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
 ];
 
-const Create = async (req: Request, res: Response) => {
+const POST_Create = async (req: Request, res: Response) => {
   try {
     const {
       username,
@@ -113,4 +113,4 @@ const Create = async (req: Request, res: Response) => {
   }
 };
 
-export default Create;
+export default POST_Create;

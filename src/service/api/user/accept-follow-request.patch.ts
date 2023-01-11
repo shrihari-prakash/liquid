@@ -14,7 +14,7 @@ export const AcceptFollowRequestValidator = [
   body("request").exists().isString().isLength({ min: 8, max: 64 }),
 ];
 
-const AcceptFollowRequest = async (req: Request, res: Response) => {
+const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
   try {
     validateErrors(req, res);
     const targetId = res.locals.oauth.token.user._id;
@@ -35,4 +35,4 @@ const AcceptFollowRequest = async (req: Request, res: Response) => {
   }
 };
 
-export default AcceptFollowRequest;
+export default PATCH_AcceptFollowRequest;

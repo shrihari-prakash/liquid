@@ -10,7 +10,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { validateErrors } from "../../../utils/api";
 
-export const LoginValidator = [
+export const POST_LoginValidator = [
   body("username")
     .optional()
     .isString()
@@ -20,7 +20,7 @@ export const LoginValidator = [
   body("password").exists().isString().isLength({ min: 8, max: 128 }),
 ];
 
-const Login = async (req: Request, res: Response) => {
+const POST_Login = async (req: Request, res: Response) => {
   try {
     validateErrors(req, res);
     const { username, email, password } = req.body;
@@ -59,4 +59,4 @@ const Login = async (req: Request, res: Response) => {
   }
 };
 
-export default Login;
+export default POST_Login;

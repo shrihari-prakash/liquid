@@ -8,7 +8,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
 import { useFollowersQuery } from "../../../../model/query/followers";
 
-const UserFollowers = async (req: Request, res: Response) => {
+const GET_UserFollowers = async (req: Request, res: Response) => {
   try {
     const userId = req.query.target as string;
     FollowModel.aggregate(useFollowersQuery(userId)).exec(function (up, users) {
@@ -25,4 +25,4 @@ const UserFollowers = async (req: Request, res: Response) => {
   }
 };
 
-export default UserFollowers;
+export default GET_UserFollowers;

@@ -11,7 +11,7 @@ import UserModel, { IUser } from "../../../model/mongo/user";
 import { updateFollowCount } from "../../../utils/follow";
 import { validateErrors } from "../../../utils/api";
 
-export const FollowValidator = [
+export const POST_FollowValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
 ];
 
@@ -19,7 +19,7 @@ function sendSuccess(res: Response, status: string) {
   res.status(statusCodes.success).json(new SuccessResponse({ status }));
 }
 
-const Follow = async (req: Request, res: Response) => {
+const POST_Follow = async (req: Request, res: Response) => {
   try {
     validateErrors(req, res);
     const sourceId = res.locals.oauth.token.user._id;
@@ -51,4 +51,4 @@ const Follow = async (req: Request, res: Response) => {
   }
 };
 
-export default Follow;
+export default POST_Follow;

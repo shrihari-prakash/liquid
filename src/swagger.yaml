@@ -4,22 +4,17 @@ info:
   description: Seamless authentication and user management APIs for your projects based on TypeScript, MongoDB and Redis.
   version: 0.1
 paths:
-  /user/client-api/get-user-info:
-    post:
+  /user/client-api/user-info:
+    get:
       security:
         - bearerAuth: []
       summary: Accepts an array of user IDs and returns their profile details.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                targets:
-                  type: array
-                  items:
-                    type: string
+      parameters:
+        - in: query
+          name: targets
+          schema:
+            type: string
+          description: Comma seperated list of user IDs for which info has to be retrieved.
       responses:
         "200":
           description: Returns an array of objects with user details.
@@ -347,11 +342,11 @@ paths:
                 properties:
                   ok:
                     type: boolean
-  /user/delete-follow-request:
-    post:
+  /user/follow-entry:
+    delete:
       security:
         - bearerAuth: []
-      summary: Delete a follow request by ID.
+      summary: Delete a follow entry by ID.
       requestBody:
         required: true
         content:
