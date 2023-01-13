@@ -16,6 +16,7 @@ export const errorMessages = {
   conflict: "ResourceConflict",
   banned: "Banned",
   unauthorized: "Unauthorized",
+  forbidden: "Forbidden",
   accessDenied: "AccessDenied",
   resourceDoesNotBelongToUser: "ResourceDoesNotBelongToUser",
   unprocessableEntity: "UnprocessableEntity",

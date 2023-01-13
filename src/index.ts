@@ -2,6 +2,7 @@ import { Logger } from "./singleton/logger";
 const log = Logger.getLogger().child({ from: "main" });
 
 import express from "express";
+require('dotenv').config()
 const path = require("path");
 import session from "express-session";
 import bodyParser from "body-parser";

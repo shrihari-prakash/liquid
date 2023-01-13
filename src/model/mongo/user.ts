@@ -112,6 +112,11 @@ const userSchema = {
     default: false,
   },
   deletedDate: Date,
+  allowedAdminAPIs: {
+    type: Array,
+    required: true,
+    default: [],
+  },
 };
 
 const schemaInstance = new mongoose.Schema(userSchema),

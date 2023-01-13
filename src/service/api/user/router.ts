@@ -21,6 +21,7 @@ import PATCH_Me from "./me.patch";
 import DELETE_FollowEntry, {
   DELETE_FollowEntryValidator as DELETE_FollowEntryValidator,
 } from "./follow-entry.delete";
+import AdminApiRouter from "./admin-api/routes";
 
 const UserRouter = express.Router();
 
@@ -69,6 +70,9 @@ if (canUseFollowAPIs) {
 
 // Application client APIs
 UserRouter.use("/client-api", ClientApiRouter);
+
+// Admin APIs
+UserRouter.use("/admin-api", AdminApiRouter);
 
 //User info
 UserRouter.get("/me", ...DelegatedAuthFlow, GET_Me);
