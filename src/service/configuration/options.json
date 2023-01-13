@@ -39,7 +39,7 @@
     "envName": "MONGO_DB_CONNECTION_STRING",
     "description": "Connection string to connect to MongoDB.",
     "type": "string",
-    "default": "mongodb://localhost:27017/oauth"
+    "default": "mongodb://localhost:27017/accounts"
   },
   {
     "name": "authorization-code-lifetime",
@@ -127,6 +127,6 @@
     "envName": "PROFILE_EDITABLE_FIELDS",
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
-    "default": "firstName,lastName,middleName,email"
+    "default": "firstName,lastName,middleName"
   }
 ]

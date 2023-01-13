@@ -255,6 +255,36 @@ paths:
                     properties:
                       user:
                         $ref: "#/definitions/user"
+    patch:
+      security:
+        - bearerAuth: []
+      summary: Updates the specified fields of the user profile associated with the API token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                middleName:
+                  type: string
+                lastName:
+                  type: string
+      responses:
+        "200": # status code
+          description: Returns the user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      ok:
+                        type: boolean
   /user/:userId:
     get:
       security:

@@ -17,6 +17,7 @@ import GET_FollowRequests from "./follow-requests.get";
 import PATCH_AcceptFollowRequest, {
   AcceptFollowRequestValidator as PATCH_AcceptFollowRequestValidator,
 } from "./accept-follow-request.patch";
+import PATCH_Me from "./me.patch";
 import DELETE_FollowEntry, {
   DELETE_FollowEntryValidator as DELETE_FollowEntryValidator,
 } from "./follow-entry.delete";
@@ -71,6 +72,7 @@ UserRouter.use("/client-api", ClientApiRouter);
 
 //User info
 UserRouter.get("/me", ...DelegatedAuthFlow, GET_Me);
+UserRouter.patch("/me", ...DelegatedAuthFlow, PATCH_Me);
 UserRouter.get("/:userId", ...DelegatedAuthFlow, GET__UserId);
 
 export default UserRouter;
