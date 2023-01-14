@@ -11,13 +11,32 @@ import UserModel from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import Role from "../../../../enum/role";
 import { bcryptConfig } from "../create.post";
+import { validateErrors } from "../../../../utils/api";
 
 export const PATCH_UserValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
+  body("username")
+    .optional()
+    .isString()
+    .isLength({ min: 8, max: 16 })
+    .matches(/^[a-z_][a-z0-9._]*$/i),
+  body("email").optional().isEmail(),
+  body("password").optional().isString().isLength({ min: 8, max: 128 }),
+  body("firstName")
+    .optional()
+    .isString()
+    .isAlpha()
+    .isLength({ min: 3, max: 32 }),
+  body("lastName")
+    .optional()
+    .isString()
+    .isAlpha()
+    .isLength({ min: 3, max: 32 }),
 ];
 
 const PATCH_User = async (req: Request, res: Response) => {
   try {
+    validateErrors(req, res);
     const userId = req.body.target;
     delete req.body.target;
     const errors: any[] = [];

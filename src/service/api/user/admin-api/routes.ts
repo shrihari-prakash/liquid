@@ -19,8 +19,8 @@ AdminApiRouter.patch(
   "/user",
   ...DelegatedAuthFlow,
   AuthorizeAdmin,
-  PATCH_User,
-  PATCH_UserValidator
+  PATCH_UserValidator,
+  PATCH_User
 );
 
 export default AdminApiRouter;
