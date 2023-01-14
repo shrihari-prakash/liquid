@@ -128,5 +128,12 @@
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
     "default": "firstName,lastName,middleName"
+  },
+  {
+    "name": "admin-api.profile.editable-fields",
+    "envName": "ADMIN_API_PROFILE_EDITABLE_FIELDS",
+    "description": "Comma specified list of fields that are editable by edit profile API.",
+    "type": "stringArray",
+    "default": "username, email, isBanned, isRestricted, deleted, role, firstName,lastName,middleName"
   }
 ]

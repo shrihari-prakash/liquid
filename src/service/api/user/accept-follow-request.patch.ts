@@ -10,7 +10,7 @@ import FollowModel from "../../../model/mongo/follow";
 import { updateFollowCount } from "../../../utils/follow";
 import { validateErrors } from "../../../utils/api";
 
-export const AcceptFollowRequestValidator = [
+export const PATCH_AcceptFollowRequestValidator = [
   body("request").exists().isString().isLength({ min: 8, max: 64 }),
 ];
 

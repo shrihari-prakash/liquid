@@ -15,11 +15,11 @@ import GET_Me from "./me.get";
 import GET_VerifyEmail, { GET_VerifyEmailValidator } from "./verify-email.get";
 import GET_FollowRequests from "./follow-requests.get";
 import PATCH_AcceptFollowRequest, {
-  AcceptFollowRequestValidator as PATCH_AcceptFollowRequestValidator,
+  PATCH_AcceptFollowRequestValidator,
 } from "./accept-follow-request.patch";
 import PATCH_Me from "./me.patch";
 import DELETE_FollowEntry, {
-  DELETE_FollowEntryValidator as DELETE_FollowEntryValidator,
+  DELETE_FollowEntryValidator,
 } from "./follow-entry.delete";
 import AdminApiRouter from "./admin-api/routes";
 
