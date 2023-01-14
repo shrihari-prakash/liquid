@@ -81,12 +81,6 @@ input[data-autocompleted] {
   height: 100vh;
 }
 
-@media (max-width: 991.98px) {
-  .half .bg .intro {
-    display: none;
-  }
-}
-
 .half .bg {
   box-shadow: inset 5px 0px 6px 1px #00000035;
 }
@@ -103,6 +97,9 @@ input[data-autocompleted] {
   .half .contents,
   .half .bg {
     width: 100%;
+  }
+  .half .bg:first-child {
+    display: none;
   }
 }
 .half .contents .form-group,
