@@ -3,12 +3,14 @@ const log = Logger.getLogger().child({ from: "user/me" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
+import bcrypt from "bcrypt";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import Role from "../../../../enum/role";
+import { bcryptConfig } from "../create.post";
 
 export const PATCH_UserValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
@@ -39,6 +41,10 @@ const PATCH_User = async (req: Request, res: Response) => {
       return res
         .status(statusCodes.forbidden)
         .json(new ErrorResponse(errorMessages.forbidden));
+    }
+    const password = req.body.password;
+    if (password) {
+      req.body.password = await bcrypt.hash(password, bcryptConfig.salt);
     }
     if (errors.length) {
       return res

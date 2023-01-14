@@ -15,7 +15,7 @@ import Role from "../../../enum/role";
 import { Configuration } from "../../../singleton/configuration";
 import { validateErrors } from "../../../utils/api";
 
-const bcryptConfig = {
+export const bcryptConfig = {
   salt: 10,
 };
 
