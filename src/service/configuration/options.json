@@ -109,6 +109,13 @@
     "default": 0
   },
   {
+    "name": "privilege.can-use-cache",
+    "envName": "CAN_USE_CACHE",
+    "description": "Specifies whether to use cache for optimizing API response time.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "privilege.can-use-cache-for-token",
     "envName": "CAN_USE_CACHE_FOR_TOKEN",
     "description": "Specifies whether to use cache for saving and retrieving OAuth tokens.",
@@ -135,5 +142,12 @@
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
     "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName"
+  },
+  {
+    "name": "user.search-results.cache-lifetime",
+    "envName": "USER_SEARCH_RESULTS_CACHE_LIFETIME",
+    "description": "Specifies in seconds the amount of time for which results for a search query will be cached",
+    "type": "number",
+    "default": 30
   }
 ]
