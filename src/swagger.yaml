@@ -300,6 +300,35 @@ paths:
                 properties:
                   user:
                     $ref: "#/definitions/user"
+  /user/search:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Search for users using a query string.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: "#/definitions/user"
   /user/follow:
     post:
       security:

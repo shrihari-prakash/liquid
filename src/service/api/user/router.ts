@@ -22,6 +22,7 @@ import DELETE_FollowEntry, {
   DELETE_FollowEntryValidator,
 } from "./follow-entry.delete";
 import AdminApiRouter from "./admin-api/routes";
+import POST_Search, { POST_SearchValidator } from "./search.post";
 
 const UserRouter = express.Router();
 
@@ -34,6 +35,12 @@ UserRouter.post(
   ...DelegatedAuthFlow,
   ...POST_PrivateValidator,
   POST_Private
+);
+UserRouter.post(
+  "/search",
+  ...DelegatedAuthFlow,
+  ...POST_SearchValidator,
+  POST_Search
 );
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
