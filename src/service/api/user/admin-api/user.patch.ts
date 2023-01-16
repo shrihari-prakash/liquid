@@ -52,14 +52,36 @@ const PATCH_User = async (req: Request, res: Response) => {
         });
       }
     });
-    if (
-      req.body.role &&
-      res.locals.user.role !== Role.SUPER_ADMIN &&
-      res.locals.user.role !== Role.ADMIN
-    ) {
-      return res
-        .status(statusCodes.forbidden)
-        .json(new ErrorResponse(errorMessages.forbidden));
+    const role = req.body.role;
+    if (role) {
+      const roles = Object.values(Role);
+      if (
+        Configuration.get("system.role.editor-roles").includes(
+          res.locals.user.role
+        ) &&
+        !roles.includes(role)
+      ) {
+        return res
+          .status(statusCodes.forbidden)
+          .json(new ErrorResponse(errorMessages.forbidden));
+      }
+      const roleOrder = Configuration.get("system.role.order");
+      const inputRoleIndex = roleOrder.indexOf(role);
+      const userRoleIndex = roleOrder.indexOf(res.locals.user.role);
+      // Allow changing roles only upto the level of the current user's role.
+      if (inputRoleIndex < userRoleIndex) {
+        return res
+          .status(statusCodes.forbidden)
+          .json(new ErrorResponse(errorMessages.forbidden));
+      }
+      if (
+        res.locals.user.role !== Role.SUPER_ADMIN &&
+        res.locals.user.role !== Role.ADMIN &&
+        !Object.values(Role).includes(role)
+      )
+        return res
+          .status(statusCodes.forbidden)
+          .json(new ErrorResponse(errorMessages.forbidden));
     }
     const password = req.body.password;
     if (password) {

@@ -149,5 +149,26 @@
     "description": "Specifies in seconds the amount of time for which results for a search query will be cached",
     "type": "number",
     "default": 30
+  },
+  {
+    "name": "system.role.extended-roles",
+    "envName": "SYSTEM_ROLE_EXTENDED_ROLES",
+    "description": "Additional roles to be considered in the system. `system.role.order` SHOULD be updated along with this option to specify hierarchy of roles.",
+    "type": "stringArray",
+    "default": ""
+  },
+  {
+    "name": "system.role.order",
+    "envName": "SYSTEM_ROLE_ORDER",
+    "description": "Comma separated list of role names specifying the order of priorities for roles. Priority lowers from left to right.",
+    "type": "stringArray",
+    "default": "SUPER_ADMIN,ADMIN,INTERNAL_CLIENT,EXTERNAL_CLIENT,USER"
+  },
+  {
+    "name": "system.role.editor-roles",
+    "envName": "SYSTEM_ROLE_EDITOR_ROLES",
+    "description": "Comma specified list of roles which can edit roles of other users.",
+    "type": "stringArray",
+    "default": "SUPER_ADMIN,ADMIN,INTERNAL_CLIENT"
   }
 ]

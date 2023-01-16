@@ -27,16 +27,13 @@ export class Configuration {
   public get(name: string, defaultValue?: any, delim = ",") {
     const option: Option = this.options[name];
     if (!option) return defaultValue || undefined;
-    const value =
-      process.env[option.envName] ||
-      option.default ||
-      defaultValue ||
-      undefined;
+    const value = process.env[option.envName] || defaultValue || option.default;
     switch (option.type) {
       case "numberArray":
         return value.split(delim).map((elem: string) => parseInt(elem));
       case "stringArray":
-        return value.split(delim);
+        const parsed = value.split(delim);
+        return parsed[0] !== "" ? parsed : [];
       case "booleanArray":
         return value.split(delim).map((elem: string) => elem === "true");
       default:
