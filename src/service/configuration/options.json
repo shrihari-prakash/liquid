@@ -134,14 +134,14 @@
     "envName": "PROFILE_EDITABLE_FIELDS",
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
-    "default": "firstName,lastName,middleName"
+    "default": "firstName,lastName,middleName,password,bio"
   },
   {
     "name": "admin-api.profile.editable-fields",
     "envName": "ADMIN_API_PROFILE_EDITABLE_FIELDS",
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
-    "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName"
+    "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName,bio"
   },
   {
     "name": "user.search-results.cache-lifetime",

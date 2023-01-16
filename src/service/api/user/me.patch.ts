@@ -2,11 +2,35 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/me" });
 
 import { Request, Response } from "express";
+import { body } from "express-validator";
+import bcrypt from "bcrypt";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel from "../../../model/mongo/user";
 import { Configuration } from "../../../singleton/configuration";
+import { bcryptConfig } from "./create.post";
+
+export const PATCH_MeValidator = [
+  body("username")
+    .optional()
+    .isString()
+    .isLength({ min: 8, max: 16 })
+    .matches(/^[a-z_][a-z0-9._]*$/i),
+  body("email").optional().isEmail(),
+  body("password").optional().isString().isLength({ min: 8, max: 128 }),
+  body("firstName")
+    .optional()
+    .isString()
+    .isAlpha()
+    .isLength({ min: 3, max: 32 }),
+  body("lastName")
+    .optional()
+    .isString()
+    .isAlpha()
+    .isLength({ min: 3, max: 32 }),
+  body("bio").optional().isString().isAlpha().isLength({ min: 3, max: 256 }),
+];
 
 const PATCH_Me = async (req: Request, res: Response) => {
   try {
@@ -24,6 +48,10 @@ const PATCH_Me = async (req: Request, res: Response) => {
         });
       }
     });
+    const password = req.body.password;
+    if (password) {
+      req.body.password = await bcrypt.hash(password, bcryptConfig.salt);
+    }
     if (errors.length) {
       return res
         .status(statusCodes.clientInputError)

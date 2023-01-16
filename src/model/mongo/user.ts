@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId, Schema } from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 
 const userSchema = {
   username: {
@@ -27,6 +27,7 @@ const userSchema = {
     required: true,
   },
   profilePictureUrl: String,
+  bio: String,
   followingCount: {
     type: Number,
     required: true,
@@ -130,6 +131,7 @@ export type IUser = {
   middleName?: string;
   lastName: string;
   role: string;
+  bio: string;
   profilePictureUrl: string;
   followingCount: string;
   followerCount: string;
@@ -161,6 +163,7 @@ export type IUser = {
   restrictedReason: string;
   deleted: boolean;
   deletedDate: Date;
+  allowedAdminAPIs: string[];
 };
 
 export const IUserProjection = {
@@ -169,6 +172,7 @@ export const IUserProjection = {
   firstName: 1,
   middleName: 1,
   lastName: 1,
+  bio: 1,
   profilePictureUrl: 1,
   followingCount: 1,
   followerCount: 1,

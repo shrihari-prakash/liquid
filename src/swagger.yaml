@@ -272,6 +272,10 @@ paths:
                   type: string
                 lastName:
                   type: string
+                password:
+                  type: string
+                bio:
+                  type: string
       responses:
         "200": # status code
           description: Returns the user details.
