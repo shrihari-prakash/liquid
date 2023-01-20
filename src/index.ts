@@ -2,12 +2,13 @@ import { Logger } from "./singleton/logger";
 const log = Logger.getLogger().child({ from: "main" });
 
 import express from "express";
-require('dotenv').config()
+require("dotenv").config();
 const path = require("path");
 import session from "express-session";
 import bodyParser from "body-parser";
 import sgMail from "@sendgrid/mail";
 const swaggerUi = require("swagger-ui-express");
+var cors = require("cors");
 
 import { Configuration } from "./singleton/configuration";
 import { MongoDB } from "./singleton/mongo-db";
@@ -43,6 +44,12 @@ if (app.get("env") === "production") {
   sgMail.setApiKey(Configuration.get("sendgrid-api-key") as string);
 }
 app.use(session(sessionOptions));
+app.use(
+  cors({
+    credentials: true,
+    origin: Configuration.get("cors.allowed-origins"),
+  })
+);
 
 MongoDB.connect();
 Api.initialize(app);

@@ -36,12 +36,12 @@ You will require Redis to run this service. This is because the service needs to
 }
 ```
 
-5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:3000.
+5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
 6. Run `npm run build` to output production ready code.
 
 ### API Documentation:
 
-In development environment, swagger is available at http://localhost:3000/docs. This has the documentation for all the additional functionalities that the service offers apart from OAuth. For OAuth itself, any regular OAuth documentation should work with this. OAuth related functionalities are available at `/oauth`.
+In development environment, swagger is available at http://localhost:2000/docs. This has the documentation for all the additional functionalities that the service offers apart from OAuth. For OAuth itself, any regular OAuth documentation should work with this. OAuth related functionalities are available at `/oauth`.
 
 ### Sign Up:
 

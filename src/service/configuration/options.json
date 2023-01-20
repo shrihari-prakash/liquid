@@ -11,7 +11,7 @@
     "envName": "APP_PORT",
     "description": "Port to listen on.",
     "type": "number",
-    "default": 3000
+    "default": 2000
   },
   {
     "name": "app-name",
@@ -107,6 +107,13 @@
     "description": "Password for the Redis connection.",
     "type": "number",
     "default": 0
+  },
+  {
+    "name": "cors.allowed-origins",
+    "envName": "CORS_ALLOWED_ORIGINS",
+    "description": "Allowed origins for CORS requests.",
+    "type": "stringArray",
+    "default": "http://localhost:3000"
   },
   {
     "name": "privilege.can-use-cache",
