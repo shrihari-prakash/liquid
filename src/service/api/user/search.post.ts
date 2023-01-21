@@ -36,6 +36,15 @@ const POST_Search = async (req: Request, res: Response) => {
           { username: queryRegex },
           { firstName: queryRegex },
           { lastName: queryRegex },
+          {
+            $expr: {
+              $regexMatch: {
+                input: { $concat: ["$firstName", " ", "$lastName"] },
+                regex: query,
+                options: "i",
+              },
+            },
+          },
         ],
       },
       IUserProjection
