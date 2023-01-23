@@ -4,6 +4,81 @@ info:
   description: Seamless authentication and user management APIs for your projects based on TypeScript, MongoDB and Redis.
   version: 0.1
 paths:
+  /user/admin-api/access:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Provide access to an admin API for the given users.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targets:
+                  type: array
+                  items:
+                    type: string
+                permissions:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /user/admin-api/user:
+    patch:
+      security:
+        - bearerAuth: []
+      summary: Updates the specified fields of the user profile specified as target.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                username:
+                  type: string
+                firstName:
+                  type: string
+                middleName:
+                  type: string
+                lastName:
+                  type: string
+                password:
+                  type: string
+                isBanned:
+                  type: boolean
+                isRestricted:
+                  type: boolean
+                deleted:
+                  type: boolean
+                role:
+                  type: string
+      responses:
+        "200": # status code
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      ok:
+                        type: boolean
   /user/client-api/user-info:
     get:
       security:
@@ -129,7 +204,7 @@ paths:
                   type: string
       responses:
         "200":
-          description: Returns list of users.
+          description: Returns OK.
           content:
             application/json:
               schema:
