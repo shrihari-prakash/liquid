@@ -20,12 +20,13 @@ function login(event) {
 		const url = new URL(urlString);
 		const clientId = url.searchParams.get("clientId");
 		const redirect = url.searchParams.get("redirect");
+		const state = url.searchParams.get("state");
 		const configuration = await getConfig();
 		const params = new URLSearchParams({
 			response_type: "code",
 			client_id: clientId || configuration.oauth.clientId,
 			redirect_uri: redirect || configuration.oauth.redirectUri,
-			state: uuidv4()
+			state: state || uuidv4()
 		});
 		window.location = `/oauth/authorize?${params.toString()}`;
 	}).fail(function () {
