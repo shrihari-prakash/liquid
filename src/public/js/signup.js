@@ -15,7 +15,7 @@ function signup(event) {
     $.post('/user/create', {
         username, password, firstName, lastName, email
     }).done(function () {
-        window.location = `/verify-account`;
+        window.location = `/verify-account${window.location.search}`;
     }).fail(function () {
         onSubmitError({ errorText: "Signup error", buttonText: "Create Account" });
     });

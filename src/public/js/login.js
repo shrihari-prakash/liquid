@@ -16,11 +16,14 @@ function login(event) {
 		data.username = username;
 	}
 	$.post('/user/login', data).done(async function () {
+		const urlString = window.location;
+		const url = new URL(urlString);
+		const redirect = url.searchParams.get("redirect");
 		const configuration = await getConfig();
 		const params = new URLSearchParams({
 			response_type: "code",
 			client_id: configuration.oauth.clientId,
-			redirect_uri: configuration.oauth.redirectUri,
+			redirect_uri: redirect || configuration.oauth.redirectUri,
 			state: uuidv4()
 		});
 		window.location = `/oauth/authorize?${params.toString()}`;

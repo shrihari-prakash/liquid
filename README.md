@@ -29,15 +29,16 @@ You will require Redis to run this service. This is because the service needs to
     "refresh_token"
   ],
   "redirectUris": [
-    "your_frontend_uri"
+    "{{frontend_uri_1}}",
+    "{{frontend_uri_2}}"
   ],
   "secret": "your_secret",
   "role": "INTERNAL_CLIENT"
 }
 ```
 
-5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
-6. Run `npm run build` to output production ready code.
+1. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
+2. Run `npm run build` to output production ready code.
 
 ### API Documentation:
 
@@ -51,6 +52,6 @@ In development environment, swagger is available at http://localhost:2000/docs. 
 
 ### Login:
 
-1. To login, visit `/login` and enter your credentials.
-2. If the credentials are correct, the application redirects to your client's reditect URI (Configured in Setup(2)) with the state and authorization code.
+1. To login, visit `/login?redirect={{your_target_uri}}` and enter your credentials. Note that the value of redirect parameter must be one of the urls configured in in Setup(2)
+2. If the credentials are correct, the application redirects the control to the url specified in `redirect` parameter with the state and authorization code.
 3. In your application logic, you can use this code in exchange for an access and refresh token using the `authorization_code` grant.
