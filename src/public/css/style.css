@@ -4,13 +4,18 @@
   --text-color__light: #2b2b2b;
   --text-lighter-color__light: #808080;
   --border-color__light: #e1e1e1;
-  --glass-color__light: #ffffff70;
+  --glass-color__light: #ffffff40;
   /* Dark Theme */
   --background-color: #16181c;
   --text-color: #e2e2e2;
   --text-lighter-color: #b3b3b3;
   --border-color: #555555;
   --glass-color: #00000040;
+}
+
+.btn-light {
+  background-color: #f2f2f2;
+  border-color: #f2f2f2;
 }
 
 .noselect {
