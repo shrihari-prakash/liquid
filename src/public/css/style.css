@@ -1,8 +1,16 @@
 :root {
+  /* Light Theme */
+  --background-color__light: #ffffff;
+  --text-color__light: #2b2b2b;
+  --text-lighter-color__light: #808080;
+  --border-color__light: #e1e1e1;
+  --glass-color__light: #ffffff70;
+  /* Dark Theme */
   --background-color: #16181c;
   --text-color: #e2e2e2;
   --text-lighter-color: #b3b3b3;
   --border-color: #555555;
+  --glass-color: #00000040;
 }
 
 .noselect {
@@ -174,7 +182,7 @@ input[data-autocompleted] {
   padding: 72px 32px;
   flex-direction: column;
   justify-content: center;
-  background-color: #00000040;
+  background-color: var(--glass-color);
   backdrop-filter: blur(10px);
   width: 90%;
   border-radius: 8px;
@@ -185,11 +193,11 @@ input[data-autocompleted] {
 .half .title1,
 .half .title2 {
   font-size: x-large;
-  color: #fff;
+  color: var(--text-color);
 }
 
 .half .description {
-  color: #fff;
+  color: var(--text-color);
   margin-top: 10px;
 }
 

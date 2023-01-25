@@ -1,11 +1,32 @@
 $(function () {
+    useTheme();
     renderContent();
 });
 
 const STORE = {
     config: null,
-    buttonAnimationTimeout: null
+    buttonAnimationTimeout: null,
+    theme: "dark"
 };
+
+function useTheme() {
+    const urlString = window.location;
+    const url = new URL(urlString);
+    const theme = url.searchParams.get("theme");
+    if (theme === "light") {
+        STORE.theme = "light";
+        document.documentElement.style.setProperty("--background-color", "var(--background-color__light)");
+        document.documentElement.style.setProperty("--text-color", "var(--text-color__light");
+        document.documentElement.style.setProperty("--text-lighter-color", "var(--text-lighter-color__light)");
+        document.documentElement.style.setProperty("--border-color", "var(--border-color__light)");
+        document.documentElement.style.setProperty("--glass-color", "var(--glass-color__light)");
+        $(".btn-primary").addClass("btn-light");
+        $(".btn-primary").removeClass("btn-primary");
+    } else {
+        $(".btn-primary").addClass("btn-dark");
+        $(".btn-primary").removeClass("btn-primary");
+    }
+}
 
 function getConfig() {
     return new Promise((resolve, reject) => {
@@ -52,12 +73,14 @@ async function renderContent() {
         });
         return;
     }
-    const sidebarSrc = configuration.content.sidebar.backdropImage;
+    const sidebarSrcDark = configuration.content.sidebar.backdropImageDark;
+    const sidebarSrcLight = configuration.content.sidebar.backdropImageLight;
     if (configuration.content.sidebar.contentEnabled === true) {
         $(".intro").css({
             display: "flex"
         });
     }
+    const sidebarSrc = STORE.theme === "light" ? sidebarSrcLight : sidebarSrcDark;
     if (sidebarSrc) {
         $(".sidebar").css('background-image', 'url(' + sidebarSrc + ')');
     }

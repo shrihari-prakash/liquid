@@ -9,7 +9,8 @@
     "sidebar": {
       "enabled": true,
       "contentEnabled": true,
-      "backdropImage": null,
+      "backdropImageDark": "images/bg.jpg",
+      "backdropImageLight": "images/bg-light.jpg",
       "intro": {
         "title1": "Plug & Play",
         "title2": "with any project.",
