@@ -20,11 +20,9 @@ function useTheme() {
         document.documentElement.style.setProperty("--text-lighter-color", "var(--text-lighter-color__light)");
         document.documentElement.style.setProperty("--border-color", "var(--border-color__light)");
         document.documentElement.style.setProperty("--glass-color", "var(--glass-color__light)");
-        $(".btn-primary").addClass("btn-light");
-        $(".btn-primary").removeClass("btn-primary");
+        $(".action-button").addClass("btn-light");
     } else {
-        $(".btn-primary").addClass("btn-dark");
-        $(".btn-primary").removeClass("btn-primary");
+        $(".action-button").addClass("btn-dark");
     }
 }
 
