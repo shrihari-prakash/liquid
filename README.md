@@ -52,6 +52,6 @@ In development environment, swagger is available at http://localhost:2000/docs. 
 
 ### Login:
 
-1. To authenticate, redirect to `/login?redirect={{your_target_uri}}` and enter your credentials. Note that the value of redirect parameter must be one of the values configured in `redirectUris` of Setup(2).
+1. To authenticate, redirect to `/login?redirect={{your_target_uri}}&theme={{light | dark}}` and enter your credentials. Note that the value of redirect parameter must be one of the values configured in `redirectUris` of Setup(2).
 2. If the credentials are correct, the application redirects the control to the url specified in `redirect` parameter with the state and authorization code.
 3. In your application logic, you can use this code in exchange for an access and refresh token using the `authorization_code` grant.
