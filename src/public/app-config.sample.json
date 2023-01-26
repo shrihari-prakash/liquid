@@ -17,5 +17,13 @@
         "description": "Focus on writing your app logic while liquid handles the same old authentication logic 🔒"
       }
     }
+  },
+  "theme": {
+    "usePrimaryButton": false,
+    "primaryButtonColor": "#007bff",
+    "primaryButtonActiveColor": "#0069d9",
+    "primaryButtonActiveBorderColor": "#0062cc",
+    "primaryButtonTextColor": "#ffffff",
+    "primaryButtonFocusBoxShadow": "0 0 0 6px rgba(0, 123, 255, 0.5)"
   }
 }

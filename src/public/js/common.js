@@ -9,7 +9,7 @@ const STORE = {
     theme: "dark"
 };
 
-function useTheme() {
+async function useTheme() {
     const urlString = window.location;
     const url = new URL(urlString);
     const theme = url.searchParams.get("theme");
@@ -20,9 +20,20 @@ function useTheme() {
         document.documentElement.style.setProperty("--text-lighter-color", "var(--text-lighter-color__light)");
         document.documentElement.style.setProperty("--border-color", "var(--border-color__light)");
         document.documentElement.style.setProperty("--glass-color", "var(--glass-color__light)");
-        $(".action-button").addClass("btn-light");
+    }
+    const configuration = await getConfig();
+    if (configuration.theme.usePrimaryButton) {
+        $(".action-button").addClass("btn-primary");
+        document.documentElement.style.setProperty("--primary-button-text-color", configuration.theme.primaryButtonTextColor);
+        document.documentElement.style.setProperty("--primary-button-color", configuration.theme.primaryButtonColor);
+        document.documentElement.style.setProperty("--primary-button-active-color", configuration.theme.primaryButtonActiveColor);
+        document.documentElement.style.setProperty("--primary-button-focus-box-shadow", configuration.theme.primaryButtonFocusBoxShadow);
     } else {
-        $(".action-button").addClass("btn-dark");
+        if (theme === "light") {
+            $(".action-button").addClass("btn-light");
+        } else {
+            $(".action-button").addClass("btn-dark");
+        }
     }
 }
 
