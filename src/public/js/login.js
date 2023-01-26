@@ -1,6 +1,7 @@
 $(function () {
 	let form = document.getElementById("login-form");
 	form.addEventListener("submit", login, true);
+	$('#username').focus();
 });
 
 function login(event) {
