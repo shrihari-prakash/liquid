@@ -19,7 +19,7 @@
     }
   },
   "theme": {
-    "usePrimaryButton": false,
+    "usePrimaryButton": true,
     "primaryButtonColor": "#007bff",
     "primaryButtonActiveColor": "#0069d9",
     "primaryButtonActiveBorderColor": "#0062cc",
