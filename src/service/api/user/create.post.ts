@@ -19,7 +19,7 @@ export const bcryptConfig = {
   salt: 10,
 };
 
-const generateVerificationCode = async function (user: IUser) {
+export const generateVerificationCode = async function (user: IUser) {
   await verificationCodeModel.deleteMany({ belongsTo: user._id });
   const code = {
     belongsTo: user._id,

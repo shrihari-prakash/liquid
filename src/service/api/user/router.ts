@@ -8,6 +8,11 @@ import POST_Follow, { POST_FollowValidator } from "./follow.post";
 import POST_Login, { POST_LoginValidator } from "./login.post";
 import POST_Unfollow from "./unfollow.post";
 import POST_Private, { POST_PrivateValidator } from "./private.post";
+import POST_Search, { POST_SearchValidator } from "./search.post";
+import GET_Code, { GET_CodeValidator } from "./code.get";
+import POST_ResetPassword, {
+  POST_ResetPasswordValidator,
+} from "./reset-password.post";
 import GET_Followers from "./followers.get";
 import GET_Following from "./following.get";
 import GET__UserId from "./_userId.get";
@@ -22,7 +27,6 @@ import DELETE_FollowEntry, {
   DELETE_FollowEntryValidator,
 } from "./follow-entry.delete";
 import AdminApiRouter from "./admin-api/routes";
-import POST_Search, { POST_SearchValidator } from "./search.post";
 
 const UserRouter = express.Router();
 
@@ -35,6 +39,12 @@ UserRouter.post(
   ...DelegatedAuthFlow,
   ...POST_PrivateValidator,
   POST_Private
+);
+UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
+UserRouter.post(
+  "/reset-password",
+  ...POST_ResetPasswordValidator,
+  POST_ResetPassword
 );
 UserRouter.post(
   "/search",

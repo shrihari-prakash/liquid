@@ -24,7 +24,7 @@
   </head>
   <body>
     <div class="d-lg-flex half">
-      <div class="bg order-1 order-md-2 sidebar sidebar-container">
+      <div class="bg order-1 order-md-2 sidebar">
         <div class="intro">
           <div class="title1"></div>
           <div class="title2"></div>
@@ -36,34 +36,39 @@
           <div class="row align-items-center justify-content-center">
             <div class="col-md-6">
               <div class="noselect">
-                <h3>Verify your account</h3>
-                <p class="mb-4">
-                  A verification code was sent to your email address.
-                </p>
+                <h3>Verify your identity</h3>
               </div>
-              <form method="post" id="verify-form">
+              <p class="mb-4"></p>
+              <form method="post" id="get-code-form">
                 <div class="form-group first last">
-                  <label class="noselect" for="username"
-                    >Verification Code</label
-                  >
+                  <label class="noselect" for="email">Email</label>
                   <input
-                    type="text"
+                    type="email"
                     class="form-control"
-                    placeholder="your verification code"
-                    minlength="4"
+                    placeholder="rickastley@example.com"
+                    minlength="8"
                     autocomplete="off"
                     autocorrect="off"
                     autocapitalize="off"
                     spellcheck="false"
-                    id="code"
+                    id="email"
                     required
                   />
                 </div>
-                <div class="d-flex flex-row-reverse mb-5"></div>
+                <div class="d-flex mb-5 align-items-center">
+                  <span class="ml-auto">
+                    <a
+                      href="#"
+                      onclick="window.location = '/login' + window.location.search;"
+                      class="forgot-pass"
+                      >Login</a
+                    ></span
+                  >
+                </div>
                 <input
                   type="submit"
                   id="submit"
-                  value="Verify"
+                  value="Get Code"
                   class="btn btn-block action-button"
                 />
               </form>
@@ -76,6 +81,6 @@
     <script src="./js/jquery-3.3.1.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/common.js"></script>
-    <script src="./js/verify-account.js"></script>
+    <script src="./js/get-code.js"></script>
   </body>
 </html>
