@@ -15,28 +15,38 @@ const STORE = {
     theme: "dark"
 };
 
-async function useTheme() {
-    if (STORE.theme === "light") {
-        document.documentElement.style.setProperty("--background-color", "var(--background-color__light)");
-        document.documentElement.style.setProperty("--text-color", "var(--text-color__light");
-        document.documentElement.style.setProperty("--text-lighter-color", "var(--text-lighter-color__light)");
-        document.documentElement.style.setProperty("--border-color", "var(--border-color__light)");
-        document.documentElement.style.setProperty("--glass-color", "var(--glass-color__light)");
-    }
+function setLightVariable(variable) {
+    document.documentElement.style.setProperty(variable, `var(${variable}__light)`);
+}
+
+async function usePrimaryButton() {
     const configuration = await getConfig();
-    if (configuration.theme.usePrimaryButton) {
+    const configTheme = configuration.theme;
+    if (configTheme.usePrimaryButton) {
+        const documentStyle = document.documentElement.style;
         $(".action-button").addClass("btn-primary");
-        document.documentElement.style.setProperty("--primary-button-text-color", configuration.theme.primaryButtonTextColor);
-        document.documentElement.style.setProperty("--primary-button-color", configuration.theme.primaryButtonColor);
-        document.documentElement.style.setProperty("--primary-button-active-color", configuration.theme.primaryButtonActiveColor);
-        document.documentElement.style.setProperty("--primary-button-focus-box-shadow", configuration.theme.primaryButtonFocusBoxShadow);
+        documentStyle.setProperty("--primary-button-text-color", configTheme.primaryButtonTextColor);
+        documentStyle.setProperty("--primary-button-color", configTheme.primaryButtonColor);
+        documentStyle.setProperty("--primary-button-active-color", configTheme.primaryButtonActiveColor);
+        documentStyle.setProperty("--primary-button-focus-box-shadow", configTheme.primaryButtonFocusBoxShadow);
     } else {
-        if (theme === "light") {
+        if (STORE.theme === "light") {
             $(".action-button").addClass("btn-light");
         } else {
             $(".action-button").addClass("btn-dark");
         }
     }
+}
+
+function useTheme() {
+    if (STORE.theme === "light") {
+        setLightVariable("--background-color");
+        setLightVariable("--text-color");
+        setLightVariable("--text-lighter-color");
+        setLightVariable("--border-color");
+        setLightVariable("--glass-color");
+    }
+    usePrimaryButton();
 }
 
 function getConfig() {
@@ -67,6 +77,10 @@ function onSubmitError(params) {
     }, 2000);
 }
 
+function makeImage(src, alt) {
+    return `<img alt="${alt}" src="${src}" />`
+}
+
 async function renderContent() {
     const configuration = await getConfig();
     $(".app-name, .app-name-titlebar").text(configuration.content.appName);
@@ -95,16 +109,22 @@ async function renderContent() {
     if (sidebarSrc) {
         $(".sidebar").css('background-image', 'url(' + sidebarSrc + ')');
     }
+    useImages(configuration);
+}
+
+function useImages(configuration) {
+    const miniIcon = $(".app-icon-mini");
+    const headerIcon = $(".app-name");
     if (STORE.theme === "light") {
-        if (configuration.images.miniIconLight)
-            $(".app-icon-mini").html(`<img src="${configuration.images.miniIconLight}" />`);
-        if (configuration.images.headerIconLight)
-            $(".app-name").html(`<img src="${configuration.images.headerIconLight}" />`);
+        const miniIconLight = configuration.images.miniIconLight;
+        const headerIconLight = configuration.images.headerIconLight;
+        if (miniIconLight) miniIcon.html(makeImage(miniIconLight, "App Icon"));
+        if (headerIconLight) headerIcon.html(makeImage(headerIconLight), "App Icon");
     } else if (STORE.theme === "dark") {
-        if (configuration.images.miniIconDark)
-            $(".app-icon-mini").html(`<img src="${configuration.images.miniIconDark}" />`);
-        if (configuration.images.headerIconDark)
-            $(".app-name").html(`<img src="${configuration.images.headerIconDark}" />`);
+        const miniIconDark = configuration.images.miniIconDark;
+        const headerIconDark = configuration.images.headerIconDark;
+        if (miniIconDark) miniIcon.html(makeImage(miniIconDark, "App Icon"));
+        if (headerIconDark) headerIcon.html(makeImage(headerIconDark, "App Icon"));
     }
 }
 
