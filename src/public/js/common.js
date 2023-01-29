@@ -1,4 +1,10 @@
 $(function () {
+    const urlString = window.location;
+    const url = new URL(urlString);
+    const theme = url.searchParams.get("theme");
+    if (theme === "light") {
+        STORE.theme = "light";
+    }
     useTheme();
     renderContent();
 });
@@ -10,11 +16,7 @@ const STORE = {
 };
 
 async function useTheme() {
-    const urlString = window.location;
-    const url = new URL(urlString);
-    const theme = url.searchParams.get("theme");
-    if (theme === "light") {
-        STORE.theme = "light";
+    if (STORE.theme === "light") {
         document.documentElement.style.setProperty("--background-color", "var(--background-color__light)");
         document.documentElement.style.setProperty("--text-color", "var(--text-color__light");
         document.documentElement.style.setProperty("--text-lighter-color", "var(--text-lighter-color__light)");
@@ -67,7 +69,7 @@ function onSubmitError(params) {
 
 async function renderContent() {
     const configuration = await getConfig();
-    $(".app-name").text(configuration.content.appName);
+    $(".app-name, .app-name-titlebar").text(configuration.content.appName);
     $(".app-tagline") && $(".app-tagline").text(configuration.content.appTagline);
     $(".title1").text(configuration.content.sidebar.intro.title1);
     $(".title2").text(configuration.content.sidebar.intro.title2);
@@ -92,6 +94,17 @@ async function renderContent() {
     const sidebarSrc = STORE.theme === "light" ? sidebarSrcLight : sidebarSrcDark;
     if (sidebarSrc) {
         $(".sidebar").css('background-image', 'url(' + sidebarSrc + ')');
+    }
+    if (STORE.theme === "light") {
+        if (configuration.images.miniIconLight)
+            $(".app-icon-mini").html(`<img src="${configuration.images.miniIconLight}" />`);
+        if (configuration.images.headerIconLight)
+            $(".app-name").html(`<img src="${configuration.images.headerIconLight}" />`);
+    } else if (STORE.theme === "dark") {
+        if (configuration.images.miniIconDark)
+            $(".app-icon-mini").html(`<img src="${configuration.images.miniIconDark}" />`);
+        if (configuration.images.headerIconDark)
+            $(".app-name").html(`<img src="${configuration.images.headerIconDark}" />`);
     }
 }
 

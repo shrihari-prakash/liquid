@@ -3,6 +3,12 @@
     "clientId": "{{your_client_id}}",
     "redirectUri": "{{your_redirect_uri}}"
   },
+  "images": {
+    "miniIconLight": "images/app-icon-mini.png",
+    "miniIconDark": "images/app-icon-mini.png",
+    "headerIconLight": "images/app-icon-header-light.png",
+    "headerIconDark": "images/app-icon-header-dark.png"
+  },
   "content": {
     "appName": "Liquid",
     "appTagline": "Your tagline here.",

@@ -122,6 +122,20 @@ input[data-autocompleted] {
   background-color: transparent !important;
 }
 
+.app-icon-mini {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+}
+
+.app-icon-mini > img {
+  height: 32px;
+}
+
+.app-name > img {
+  height: 1em;
+}
+
 .half,
 .half .container > .row {
   height: 100vh;
@@ -146,6 +160,11 @@ input[data-autocompleted] {
   }
   .half .bg:first-child {
     display: none;
+  }
+  .app-icon-mini {
+    position: static;
+    margin-left: 16px;
+    margin-top: 16px;
   }
 }
 .half .contents .form-group,
