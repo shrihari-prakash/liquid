@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import UserModel, { IUser } from "../../../../model/mongo/user";
+import UserModel from "../../../../model/mongo/user";
 
 const POST_Banned = async (req: Request, res: Response) => {
   try {

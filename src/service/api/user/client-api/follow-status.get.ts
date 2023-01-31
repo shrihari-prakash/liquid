@@ -6,7 +6,6 @@ import { Request, Response } from "express";
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
-import { useFollowingQuery } from "../../../../model/query/following";
 import { IUser } from "../../../../model/mongo/user";
 
 const GET_FollowStatus = async (req: Request, res: Response) => {
