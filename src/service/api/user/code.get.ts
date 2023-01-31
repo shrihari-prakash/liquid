@@ -1,3 +1,6 @@
+import { Logger } from "../../../singleton/logger";
+const log = Logger.getLogger().child({ from: "user/code" });
+
 import { Request, Response } from "express";
 import { query } from "express-validator";
 
@@ -25,7 +28,7 @@ const GET_Code = async (req: Request, res: Response) => {
       return res.status(statusCodes.created).json(new SuccessResponse());
     }
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return res
       .status(statusCodes.internalError)
       .json(new ErrorResponse(errorMessages.internalError));

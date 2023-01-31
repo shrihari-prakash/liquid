@@ -65,7 +65,6 @@ const OAuthModel = {
       } else {
         query = { id: clientId };
       }
-      console.log(query);
       const dbClient = await ClientModel.findOne(query).lean();
       return dbClient as unknown as Client;
     } catch (err) {

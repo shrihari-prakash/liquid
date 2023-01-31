@@ -1,3 +1,6 @@
+import { Logger } from "../../../singleton/logger";
+const log = Logger.getLogger().child({ from: "user/reset-password" });
+
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { body } from "express-validator";
@@ -32,7 +35,7 @@ const POST_ResetPassword = async (req: Request, res: Response) => {
     verificationCodeModel.deleteOne({ code }).exec();
     return res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return res
       .status(statusCodes.internalError)
       .json(new ErrorResponse(errorMessages.internalError));
