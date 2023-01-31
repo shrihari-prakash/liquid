@@ -288,6 +288,51 @@ paths:
                 properties:
                   ok:
                     type: boolean
+  /user/code:
+    get:
+      summary: Generates a code to initiate a password reset.
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: Email ID of the user.
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /user/reset-password:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Change the password of the user who initiated password reset in GET /user/code.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
   /user/private:
     post:
       security:
