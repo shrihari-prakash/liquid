@@ -13,15 +13,17 @@ const GET__UserId = async (req: Request, res: Response) => {
   try {
     const targetId = req.params.userId;
     const sourceId = res.locals.oauth.token.user._id;
-    const user = (await UserModel.findOne(
+    let user = (await UserModel.findOne(
       { _id: targetId },
       IUserProjection
     ).exec()) as unknown as IUser;
-    if (user.isPrivate && Configuration.get("privilege.can-use-follow-apis")) {
+    if (Configuration.get("privilege.can-use-follow-apis")) {
       const isFollowing = (await FollowModel.findOne({
-        $and: [{ targetId }, { sourceId }],
+        $and: [{ targetId }, { sourceId }, { approved: true }],
       }).exec()) as unknown as IUser;
-      if (!isFollowing) {
+      user = JSON.parse(JSON.stringify(user));
+      user.isFollowing = !!isFollowing;
+      if (user.isPrivate && !isFollowing) {
         // @ts-expect-error
         delete user.email;
         // @ts-expect-error

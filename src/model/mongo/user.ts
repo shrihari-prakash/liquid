@@ -164,6 +164,7 @@ export type IUser = {
   deleted: boolean;
   deletedDate: Date;
   allowedAdminAPIs: string[];
+  isFollowing?: boolean;
 };
 
 export const IUserProjection = {

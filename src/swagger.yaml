@@ -123,7 +123,7 @@ paths:
           description: ID of the target user.
       responses:
         "200":
-          description: Returns list of users.
+          description: Returns the follow status.
           content:
             application/json:
               schema:
@@ -613,6 +613,30 @@ paths:
                           type: boolean
                         source:
                           $ref: "#/definitions/user"
+  /user/follow-status:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns if the current user is following the given target user.
+      parameters:
+        - in: query
+          name: target
+          schema:
+            type: integer
+          description: ID of the target user.
+      responses:
+        "200":
+          description: Returns the follow status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      following:
+                        type: boolean
 
 definitions:
   user:

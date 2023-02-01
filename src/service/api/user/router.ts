@@ -27,6 +27,7 @@ import DELETE_FollowEntry, {
   DELETE_FollowEntryValidator,
 } from "./follow-entry.delete";
 import AdminApiRouter from "./admin-api/routes";
+import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 
 const UserRouter = express.Router();
 
@@ -71,6 +72,7 @@ if (canUseFollowAPIs) {
   UserRouter.get("/following", ...DelegatedAuthFlow, GET_Following);
   UserRouter.get("/followers", ...DelegatedAuthFlow, GET_Followers);
   UserRouter.get("/follow-requests", ...DelegatedAuthFlow, GET_FollowRequests);
+  UserRouter.get("/follow-status", ...DelegatedAuthFlow, GET_FollowStatusValidator, GET_FollowStatus);
   UserRouter.patch(
     "/accept-follow-request",
     ...DelegatedAuthFlow,
