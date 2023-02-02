@@ -48,7 +48,7 @@ const POST_Search = async (req: Request, res: Response) => {
         ],
       },
       IUserProjection
-    );
+    ).limit(Configuration.get("user.search-results.limit"));
     if (Configuration.get("privilege.can-use-cache")) {
       await Redis.client.set(
         `${redisPrefix}${query}`,

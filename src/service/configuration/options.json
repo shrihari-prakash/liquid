@@ -158,6 +158,13 @@
     "default": 30
   },
   {
+    "name": "user.search-results.limit",
+    "envName": "USER_SEARCH_RESULTS_LIMIT",
+    "description": "Specifies the maximum number of results to be returned in user search API.",
+    "type": "number",
+    "default": 10
+  },
+  {
     "name": "system.role.extended-roles",
     "envName": "SYSTEM_ROLE_EXTENDED_ROLES",
     "description": "Additional roles to be considered in the system. `system.role.order` SHOULD be updated along with this option to specify hierarchy of roles.",
