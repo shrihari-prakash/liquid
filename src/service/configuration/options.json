@@ -1,6 +1,7 @@
 [
   {
     "name": "log-level",
+    "displayName": "Log Level",
     "envName": "LOG_LEVEL",
     "description": "Log level for the application. Possible values are debug, info, warn, error",
     "type": "string",
@@ -8,6 +9,7 @@
   },
   {
     "name": "app-port",
+    "displayName": "Application Port",
     "envName": "APP_PORT",
     "description": "Port to listen on.",
     "type": "number",
@@ -15,6 +17,7 @@
   },
   {
     "name": "app-name",
+    "displayName": "Application Name",
     "envName": "APP_NAME",
     "description": "Name of the application.",
     "type": "string",
@@ -22,6 +25,7 @@
   },
   {
     "name": "app-outbound-email-address",
+    "displayName": "Application Outbound Email Address",
     "envName": "APP_OUTBOUND_EMAIL_ADDRESS",
     "description": "Email address to be used for outgoing emails from the application.",
     "type": "string",
@@ -29,6 +33,7 @@
   },
   {
     "name": "cookie-session-secret",
+    "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",
     "description": "A random 64+ bit string to use as the session secret.",
     "type": "string",
@@ -36,6 +41,7 @@
   },
   {
     "name": "mongo-db-connection-string",
+    "displayName": "MongoDB Connection String",
     "envName": "MONGO_DB_CONNECTION_STRING",
     "description": "Connection string to connect to MongoDB.",
     "type": "string",
@@ -43,6 +49,7 @@
   },
   {
     "name": "authorization-code-lifetime",
+    "displayName": "Authorization Code Lifetime",
     "envName": "AUTHORIZATION_CODE_LIFETIME",
     "description": "Expiry time in seconds for authorization codes.",
     "type": "number",
@@ -50,6 +57,7 @@
   },
   {
     "name": "access-token-lifetime",
+    "displayName": "Access Token Lifetime",
     "envName": "ACCESS_TOKEN_LIFETIME",
     "description": "Expiry time in seconds for access tokens.",
     "type": "number",
@@ -57,6 +65,7 @@
   },
   {
     "name": "refresh-token-lifetime",
+    "displayName": "Refresh Token Lifetime",
     "envName": "REFRESH_TOKEN_LIFETIME",
     "description": "Expiry time in seconds for refresh tokens.",
     "type": "number",
@@ -64,12 +73,14 @@
   },
   {
     "name": "sendgrid-api-key",
+    "displayName": "Sendgrid API Key",
     "envName": "SENDGRID_API_KEY",
     "description": "API key for sendgrid.",
     "type": "string"
   },
   {
     "name": "get-user-max-items",
+    "displayName": "Get User API Max Items",
     "envName": "GET_USER_MAX_ITEMS",
     "description": "Specifies the maximum number of users for which details can be retrieved in a single API call.",
     "type": "number",
@@ -77,6 +88,7 @@
   },
   {
     "name": "redis-port",
+    "displayName": "Redis Port",
     "envName": "REDIS_PORT",
     "description": "Port for the Redis connection.",
     "type": "number",
@@ -84,6 +96,7 @@
   },
   {
     "name": "redis-host",
+    "displayName": "Redis Host",
     "envName": "REDIS_HOST",
     "description": "Host for the Redis connection.",
     "type": "string",
@@ -91,18 +104,21 @@
   },
   {
     "name": "redis-username",
+    "displayName": "Redis Username",
     "envName": "REDIS_USERNAME",
     "description": "Username for the Redis connection.",
     "type": "string"
   },
   {
     "name": "redis-password",
+    "displayName": "Redis Password",
     "envName": "REDIS_PASSWORD",
     "description": "Password for the Redis connection.",
     "type": "string"
   },
   {
     "name": "redis-db",
+    "displayName": "Redis Database Number",
     "envName": "REDIS_DB",
     "description": "Password for the Redis connection.",
     "type": "number",
@@ -110,6 +126,7 @@
   },
   {
     "name": "cors.allowed-origins",
+    "displayName": "Allowed Origins for CORS requests",
     "envName": "CORS_ALLOWED_ORIGINS",
     "description": "Allowed origins for CORS requests.",
     "type": "stringArray",
@@ -117,6 +134,7 @@
   },
   {
     "name": "privilege.can-use-cache",
+    "displayName": "Can Use Cache",
     "envName": "CAN_USE_CACHE",
     "description": "Specifies whether to use cache for optimizing API response time.",
     "type": "boolean",
@@ -124,6 +142,7 @@
   },
   {
     "name": "privilege.can-use-cache-for-token",
+    "displayName": "Can Use Cache for Token",
     "envName": "CAN_USE_CACHE_FOR_TOKEN",
     "description": "Specifies whether to use cache for saving and retrieving OAuth tokens.",
     "type": "boolean",
@@ -131,6 +150,7 @@
   },
   {
     "name": "privilege.can-use-follow-apis",
+    "displayName": "Can Use Follow APIs",
     "envName": "CAN_USE_FOLLOW_APIS",
     "description": "Specifies whether the application will allow users to use follow and unfollow mechanisms",
     "type": "boolean",
@@ -138,6 +158,7 @@
   },
   {
     "name": "profile.editable-fields",
+    "displayName": "Profile Editable Fields",
     "envName": "PROFILE_EDITABLE_FIELDS",
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
@@ -145,13 +166,31 @@
   },
   {
     "name": "admin-api.profile.editable-fields",
+    "displayName": "Profile Editable Fields (Admin API)",
     "envName": "ADMIN_API_PROFILE_EDITABLE_FIELDS",
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
     "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName,bio"
   },
   {
+    "name": "user.search.search-fields",
+    "displayName": "User Search Fields",
+    "envName": "USER_SEARCH_SEARCH_FIELDS",
+    "description": "Specifies the field names that can be used to search for users",
+    "type": "stringArray",
+    "default": "username,firstName,lastName"
+  },
+  {
+    "name": "privilege.user.search.can-use-fullname",
+    "displayName": "Can Use Fullname for User Search",
+    "envName": "USER_SEARCH_CAN_USE_FULLNAME",
+    "description": "Specifies if firstName and lastName fields can be concatenated and used to search for users",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "user.search-results.cache-lifetime",
+    "displayName": "User Search Results Cache Lifetime",
     "envName": "USER_SEARCH_RESULTS_CACHE_LIFETIME",
     "description": "Specifies in seconds the amount of time for which results for a search query will be cached",
     "type": "number",
@@ -159,6 +198,7 @@
   },
   {
     "name": "user.search-results.limit",
+    "displayName": "User Search Results Limit",
     "envName": "USER_SEARCH_RESULTS_LIMIT",
     "description": "Specifies the maximum number of results to be returned in user search API.",
     "type": "number",
@@ -166,6 +206,7 @@
   },
   {
     "name": "system.role.extended-roles",
+    "displayName": "Extended Roles",
     "envName": "SYSTEM_ROLE_EXTENDED_ROLES",
     "description": "Additional roles to be considered in the system. `system.role.order` SHOULD be updated along with this option to specify hierarchy of roles.",
     "type": "stringArray",
@@ -173,6 +214,7 @@
   },
   {
     "name": "system.role.order",
+    "displayName": "Role Order",
     "envName": "SYSTEM_ROLE_ORDER",
     "description": "Comma separated list of role names specifying the order of priorities for roles. Priority lowers from left to right.",
     "type": "stringArray",
@@ -180,6 +222,7 @@
   },
   {
     "name": "system.role.editor-roles",
+    "displayName": "Editor Roles",
     "envName": "SYSTEM_ROLE_EDITOR_ROLES",
     "description": "Comma specified list of roles which can edit roles of other users.",
     "type": "stringArray",

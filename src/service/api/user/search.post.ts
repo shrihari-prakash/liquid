@@ -30,25 +30,23 @@ const POST_Search = async (req: Request, res: Response) => {
     }
     log.info("Cache miss for query: " + query);
     const queryRegex = new RegExp(query, "i");
-    const results = await UserModel.find(
-      {
-        $or: [
-          { username: queryRegex },
-          { firstName: queryRegex },
-          { lastName: queryRegex },
-          {
-            $expr: {
-              $regexMatch: {
-                input: { $concat: ["$firstName", " ", "$lastName"] },
-                regex: query,
-                options: "i",
-              },
-            },
+    const $or = Configuration.get("user.search.search-fields").map(
+      (field: string) => ({ [field]: queryRegex })
+    );
+    if (Configuration.get("privilege.user.search.can-use-fullname")) {
+      $or.push({
+        $expr: {
+          $regexMatch: {
+            input: { $concat: ["$firstName", " ", "$lastName"] },
+            regex: query,
+            options: "i",
           },
-        ],
-      },
-      IUserProjection
-    ).limit(Configuration.get("user.search-results.limit"));
+        },
+      });
+    }
+    const results = await UserModel.find({ $or }, IUserProjection).limit(
+      Configuration.get("user.search-results.limit")
+    );
     if (Configuration.get("privilege.can-use-cache")) {
       await Redis.client.set(
         `${redisPrefix}${query}`,
