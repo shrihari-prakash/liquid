@@ -7,6 +7,11 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
 import { useFollowersQuery } from "../../../../model/query/followers";
+import { body } from "express-validator";
+
+export const GET_UserFollowersValidator = [
+  body("target").exists().isString().isLength({ min: 8, max: 128 }),
+];
 
 const GET_UserFollowers = async (req: Request, res: Response) => {
   try {

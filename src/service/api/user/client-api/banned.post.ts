@@ -6,8 +6,16 @@ import { Request, Response } from "express";
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
+import { body } from "express-validator";
+import { validateErrors } from "../../../../utils/api";
+
+export const POST_BannedValidator = [
+  body("target").exists().isString().isLength({ min: 8, max: 128 }),
+  body("state").exists().isBoolean(),
+];
 
 const POST_Banned = async (req: Request, res: Response) => {
+  validateErrors(req, res);
   try {
     const target = req.body.target;
     const state = req.body.state;

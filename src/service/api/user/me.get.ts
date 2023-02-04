@@ -7,7 +7,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel from "../../../model/mongo/user";
 
-const GET_Me = async (req: Request, res: Response) => {
+const GET_Me = async (_: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
     const user = await UserModel.findOne({ _id: userId }).exec();

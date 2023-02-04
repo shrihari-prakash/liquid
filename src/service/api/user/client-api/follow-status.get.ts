@@ -7,6 +7,12 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
 import { IUser } from "../../../../model/mongo/user";
+import { body } from "express-validator";
+
+export const GET_FollowStatusValidator = [
+  body("source").exists().isString().isLength({ min: 8, max: 128 }),
+  body("target").exists().isString().isLength({ min: 8, max: 128 }),
+];
 
 const GET_FollowStatus = async (req: Request, res: Response) => {
   try {
