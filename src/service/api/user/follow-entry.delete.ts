@@ -9,9 +9,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import { validateErrors } from "../../../utils/api";
 
-export const DELETE_FollowEntryValidator = [
-  body("target").exists().isString().isLength({ min: 8, max: 64 }),
-];
+export const DELETE_FollowEntryValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
 const DELETE_FollowEntry = async (req: Request, res: Response) => {
   try {
@@ -20,22 +18,15 @@ const DELETE_FollowEntry = async (req: Request, res: Response) => {
     const entryId = req.body.target;
     const query: any = { $and: [{ _id: entryId }] };
     const requestObject = (await FollowModel.findOne(query)) as any;
-    if (
-      !requestObject.sourceId.equals(userId) &&
-      !requestObject.targetId.equals(userId)
-    ) {
-      res
-        .status(statusCodes.unauthorized)
-        .json(new ErrorResponse(errorMessages.unauthorized));
+    if (!requestObject.sourceId.equals(userId) && !requestObject.targetId.equals(userId)) {
+      res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
       return;
     }
     await FollowModel.deleteOne(requestObject._id);
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

@@ -20,18 +20,14 @@ const GET_Code = async (req: Request, res: Response) => {
       email,
     }).exec()) as unknown as IUser;
     if (!existingUser) {
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError));
+      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     } else {
       await generateVerificationCode(existingUser);
       return res.status(statusCodes.created).json(new SuccessResponse());
     }
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

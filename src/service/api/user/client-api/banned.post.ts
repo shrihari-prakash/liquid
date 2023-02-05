@@ -23,9 +23,7 @@ const POST_Banned = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

@@ -19,16 +19,8 @@ export const PATCH_MeValidator = [
     .matches(/^[a-z_][a-z0-9._]*$/i),
   body("email").optional().isEmail(),
   body("password").optional().isString().isLength({ min: 8, max: 128 }),
-  body("firstName")
-    .optional()
-    .isString()
-    .isAlpha()
-    .isLength({ min: 3, max: 32 }),
-  body("lastName")
-    .optional()
-    .isString()
-    .isAlpha()
-    .isLength({ min: 3, max: 32 }),
+  body("firstName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
+  body("lastName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
   body("bio").optional().isString().isAlpha().isLength({ min: 3, max: 256 }),
 ];
 
@@ -37,10 +29,7 @@ const PATCH_Me = async (req: Request, res: Response) => {
     const userId = res.locals.oauth.token.user._id;
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
-      if (
-        !Configuration.get("profile.editable-fields").includes(key) ||
-        typeof req.body[key] !== "string"
-      ) {
+      if (!Configuration.get("profile.editable-fields").includes(key) || typeof req.body[key] !== "string") {
         errors.push({
           msg: "Invalid value",
           param: key,
@@ -57,16 +46,11 @@ const PATCH_Me = async (req: Request, res: Response) => {
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
     }
-    await UserModel.updateOne(
-      { _id: userId },
-      { $set: { ...req.body } }
-    ).exec();
+    await UserModel.updateOne({ _id: userId }, { $set: { ...req.body } }).exec();
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

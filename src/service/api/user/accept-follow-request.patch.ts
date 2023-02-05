@@ -10,9 +10,7 @@ import FollowModel from "../../../model/mongo/follow";
 import { updateFollowCount } from "../../../utils/follow";
 import { validateErrors } from "../../../utils/api";
 
-export const PATCH_AcceptFollowRequestValidator = [
-  body("request").exists().isString().isLength({ min: 8, max: 64 }),
-];
+export const PATCH_AcceptFollowRequestValidator = [body("request").exists().isString().isLength({ min: 8, max: 64 })];
 
 const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
   try {
@@ -29,9 +27,7 @@ const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

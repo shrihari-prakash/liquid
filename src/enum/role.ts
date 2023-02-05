@@ -11,9 +11,7 @@ const Role: any = {
   USER: "USER",
 };
 
-Configuration.get("system.role.extended-roles").forEach(
-  (role: string) => (Role[role] = role)
-);
+Configuration.get("system.role.extended-roles").forEach((role: string) => (Role[role] = role));
 
 log.debug("Roles initialized. Values: %o", Role);
 

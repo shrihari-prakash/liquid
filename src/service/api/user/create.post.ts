@@ -60,13 +60,7 @@ export const POST_CreateValidator = [
 
 const POST_Create = async (req: Request, res: Response) => {
   try {
-    const {
-      username,
-      firstName,
-      lastName,
-      email,
-      password: passwordBody,
-    } = req.body;
+    const { username, firstName, lastName, email, password: passwordBody } = req.body;
     validateErrors(req, res);
     const existingUser = (await UserModel.findOne({
       $or: [{ email: email.toLowerCase() }, { username }],
@@ -76,17 +70,13 @@ const POST_Create = async (req: Request, res: Response) => {
       if (username === existingUser.username) duplicateFields.push("username");
       if (email === existingUser.email) duplicateFields.push("email");
       if (existingUser.emailVerified)
-        return res
-          .status(statusCodes.conflict)
-          .json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
+        return res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
       else {
         await generateVerificationCode(existingUser);
         const response = {
           userInfo: existingUser,
         };
-        return res
-          .status(statusCodes.created)
-          .json(new SuccessResponse(response));
+        return res.status(statusCodes.created).json(new SuccessResponse(response));
       }
     }
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
@@ -107,9 +97,7 @@ const POST_Create = async (req: Request, res: Response) => {
     return res.status(statusCodes.created).json(new SuccessResponse(response));
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

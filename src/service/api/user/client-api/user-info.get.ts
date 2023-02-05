@@ -12,9 +12,7 @@ const GET_UserInfo = async (req: Request, res: Response) => {
   try {
     const targets = (req.query.targets as string).split(",");
     if (targets.length > (Configuration.get("get-user-max-items") as number)) {
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError));
+      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }
     const users = (await UserModel.find({
       _id: { $in: targets },
@@ -22,9 +20,7 @@ const GET_UserInfo = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ users }));
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

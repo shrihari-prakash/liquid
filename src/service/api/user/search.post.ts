@@ -11,9 +11,7 @@ import { validateErrors } from "../../../utils/api";
 import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
 
-export const POST_SearchValidator = [
-  body("query").exists().isString().isLength({ max: 128 }),
-];
+export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
 
 const redisPrefix = "SEARCH_";
 const POST_Search = async (req: Request, res: Response) => {
@@ -23,16 +21,12 @@ const POST_Search = async (req: Request, res: Response) => {
     if (Configuration.get("privilege.can-use-cache")) {
       const cacheResults = await Redis.client.get(`${redisPrefix}${query}`);
       if (cacheResults) {
-        return res
-          .status(statusCodes.success)
-          .json(new SuccessResponse({ results: JSON.parse(cacheResults) }));
+        return res.status(statusCodes.success).json(new SuccessResponse({ results: JSON.parse(cacheResults) }));
       }
     }
     log.info("Cache miss for query: " + query);
     const queryRegex = new RegExp(query, "i");
-    const $or = Configuration.get("user.search.search-fields").map(
-      (field: string) => ({ [field]: queryRegex })
-    );
+    const $or = Configuration.get("user.search.search-fields").map((field: string) => ({ [field]: queryRegex }));
     if (Configuration.get("privilege.user.search.can-use-fullname")) {
       $or.push({
         $expr: {
@@ -58,9 +52,7 @@ const POST_Search = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ results }));
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

@@ -10,22 +10,16 @@ import POST_Unfollow from "./unfollow.post";
 import POST_Private, { POST_PrivateValidator } from "./private.post";
 import POST_Search, { POST_SearchValidator } from "./search.post";
 import GET_Code, { GET_CodeValidator } from "./code.get";
-import POST_ResetPassword, {
-  POST_ResetPasswordValidator,
-} from "./reset-password.post";
+import POST_ResetPassword, { POST_ResetPasswordValidator } from "./reset-password.post";
 import GET_Followers from "./followers.get";
 import GET_Following from "./following.get";
 import GET__UserId from "./_userId.get";
 import GET_Me from "./me.get";
 import GET_VerifyEmail, { GET_VerifyEmailValidator } from "./verify-email.get";
 import GET_FollowRequests from "./follow-requests.get";
-import PATCH_AcceptFollowRequest, {
-  PATCH_AcceptFollowRequestValidator,
-} from "./accept-follow-request.patch";
+import PATCH_AcceptFollowRequest, { PATCH_AcceptFollowRequestValidator } from "./accept-follow-request.patch";
 import PATCH_Me from "./me.patch";
-import DELETE_FollowEntry, {
-  DELETE_FollowEntryValidator,
-} from "./follow-entry.delete";
+import DELETE_FollowEntry, { DELETE_FollowEntryValidator } from "./follow-entry.delete";
 import AdminApiRouter from "./admin-api/routes";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 
@@ -35,40 +29,16 @@ const UserRouter = express.Router();
 UserRouter.post("/create", ...POST_CreateValidator, POST_Create);
 UserRouter.post("/login", ...POST_LoginValidator, POST_Login);
 UserRouter.get("/verify-email", ...GET_VerifyEmailValidator, GET_VerifyEmail);
-UserRouter.post(
-  "/private",
-  ...DelegatedAuthFlow,
-  ...POST_PrivateValidator,
-  POST_Private
-);
+UserRouter.post("/private", ...DelegatedAuthFlow, ...POST_PrivateValidator, POST_Private);
 UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
-UserRouter.post(
-  "/reset-password",
-  ...POST_ResetPasswordValidator,
-  POST_ResetPassword
-);
-UserRouter.post(
-  "/search",
-  ...DelegatedAuthFlow,
-  ...POST_SearchValidator,
-  POST_Search
-);
+UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
+UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {
   //Friends
-  UserRouter.post(
-    "/follow",
-    ...DelegatedAuthFlow,
-    ...POST_FollowValidator,
-    POST_Follow
-  );
-  UserRouter.post(
-    "/unfollow",
-    ...DelegatedAuthFlow,
-    ...POST_FollowValidator,
-    POST_Unfollow
-  );
+  UserRouter.post("/follow", ...DelegatedAuthFlow, ...POST_FollowValidator, POST_Follow);
+  UserRouter.post("/unfollow", ...DelegatedAuthFlow, ...POST_FollowValidator, POST_Unfollow);
   UserRouter.get("/following", ...DelegatedAuthFlow, GET_Following);
   UserRouter.get("/followers", ...DelegatedAuthFlow, GET_Followers);
   UserRouter.get("/follow-requests", ...DelegatedAuthFlow, GET_FollowRequests);
@@ -79,12 +49,7 @@ if (canUseFollowAPIs) {
     ...PATCH_AcceptFollowRequestValidator,
     PATCH_AcceptFollowRequest
   );
-  UserRouter.delete(
-    "/follow-entry",
-    ...DelegatedAuthFlow,
-    ...DELETE_FollowEntryValidator,
-    DELETE_FollowEntry
-  );
+  UserRouter.delete("/follow-entry", ...DelegatedAuthFlow, ...DELETE_FollowEntryValidator, DELETE_FollowEntry);
 }
 
 // Application client APIs

@@ -17,29 +17,18 @@ const GET_VerifyEmail = async (req: Request, res: Response) => {
     const dbCode = await verificationCodeModel.findOne({ code }).exec();
 
     if (!dbCode) {
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError));
+      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }
 
-    await UserModel.updateOne(
-      { _id: dbCode.belongsTo },
-      { $set: { emailVerified: true } }
-    );
+    await UserModel.updateOne({ _id: dbCode.belongsTo }, { $set: { emailVerified: true } });
 
     verificationCodeModel.deleteOne({ code }).exec();
     return res
       .status(statusCodes.success)
-      .json(
-        new SuccessResponse(
-          "Your email has been verified successfully. You can now login."
-        )
-      );
+      .json(new SuccessResponse("Your email has been verified successfully. You can now login."));
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

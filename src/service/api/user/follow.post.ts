@@ -11,9 +11,7 @@ import UserModel, { IUser } from "../../../model/mongo/user";
 import { updateFollowCount } from "../../../utils/follow";
 import { validateErrors } from "../../../utils/api";
 
-export const POST_FollowValidator = [
-  body("target").exists().isString().isLength({ min: 8, max: 64 }),
-];
+export const POST_FollowValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
 function sendSuccess(res: Response, status: string) {
   res.status(statusCodes.success).json(new SuccessResponse({ status }));
@@ -45,9 +43,7 @@ const POST_Follow = async (req: Request, res: Response) => {
       sendSuccess(res, "duplicate");
     }
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

@@ -32,19 +32,12 @@ const POST_Login = async (req: Request, res: Response) => {
       query.username = username;
     }
     const user = await UserModel.findOne(query, select).exec();
-    if (!user)
-      return res
-        .status(statusCodes.unauthorized)
-        .json(new ErrorResponse(errorMessages.unauthorized));
+    if (!user) return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
     if (!user.emailVerified)
-      return res
-        .status(statusCodes.resourceNotActive)
-        .json(new ErrorResponse(errorMessages.resourceNotActive));
+      return res.status(statusCodes.resourceNotActive).json(new ErrorResponse(errorMessages.resourceNotActive));
     const isPasswordValid = await bcrypt.compare(password, user.password || "");
     if (!isPasswordValid)
-      return res
-        .status(statusCodes.unauthorized)
-        .json(new ErrorResponse(errorMessages.unauthorized));
+      return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
     user.password = undefined;
     const response = {
       userInfo: user,
@@ -53,9 +46,7 @@ const POST_Login = async (req: Request, res: Response) => {
     return res.status(statusCodes.success).json(new SuccessResponse(response));
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

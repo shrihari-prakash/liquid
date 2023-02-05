@@ -118,9 +118,7 @@ const OAuthModel = {
         let cacheToken: any = await Redis.client.get(accessToken);
         cacheToken = JSON.parse(cacheToken);
         if (!cacheToken) return null;
-        cacheToken.accessTokenExpiresAt = new Date(
-          cacheToken.accessTokenExpiresAt
-        );
+        cacheToken.accessTokenExpiresAt = new Date(cacheToken.accessTokenExpiresAt);
         log.debug("Access token retrieved from cache.");
         return cacheToken;
       }
@@ -140,9 +138,7 @@ const OAuthModel = {
       let cacheToken: any = await Redis.client.get(refreshToken);
       cacheToken = JSON.parse(cacheToken);
       if (!cacheToken) return null;
-      cacheToken.refreshTokenExpiresAt = new Date(
-        cacheToken.refreshTokenExpiresAt
-      );
+      cacheToken.refreshTokenExpiresAt = new Date(cacheToken.refreshTokenExpiresAt);
       log.debug("Refresh token retrieved from cache.");
       return cacheToken;
     }
@@ -202,9 +198,7 @@ const OAuthModel = {
   getAuthorizationCode: async (authorizationCode: any) => {
     try {
       if (useTokenCache) {
-        let cacheCode: any = (await Redis.client.get(
-          authorizationCode
-        )) as string;
+        let cacheCode: any = (await Redis.client.get(authorizationCode)) as string;
         log.debug("Auth code retrieved from cache.");
         cacheCode = JSON.parse(cacheCode) as AuthorizationCode;
         cacheCode.expiresAt = new Date(cacheCode.expiresAt);

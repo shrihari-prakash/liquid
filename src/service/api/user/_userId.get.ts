@@ -13,10 +13,7 @@ const GET__UserId = async (req: Request, res: Response) => {
   try {
     const targetId = req.params.userId;
     const sourceId = res.locals.oauth.token.user._id;
-    let user = (await UserModel.findOne(
-      { _id: targetId },
-      IUserProjection
-    ).exec()) as unknown as IUser;
+    let user = (await UserModel.findOne({ _id: targetId }, IUserProjection).exec()) as unknown as IUser;
     if (Configuration.get("privilege.can-use-follow-apis")) {
       const isFollowing = (await FollowModel.findOne({
         $and: [{ targetId }, { sourceId }, { approved: true }],
@@ -37,9 +34,7 @@ const GET__UserId = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ user }));
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

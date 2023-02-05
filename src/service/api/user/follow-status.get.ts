@@ -10,9 +10,7 @@ import FollowModel from "../../../model/mongo/follow";
 import { IUser } from "../../../model/mongo/user";
 import { validateErrors } from "../../../utils/api";
 
-export const GET_FollowStatusValidator = [
-  query("target").exists().isString().isLength({ min: 8, max: 64 }),
-];
+export const GET_FollowStatusValidator = [query("target").exists().isString().isLength({ min: 8, max: 64 })];
 
 const GET_FollowStatus = async (req: Request, res: Response) => {
   try {
@@ -22,14 +20,10 @@ const GET_FollowStatus = async (req: Request, res: Response) => {
     const isFollowing = (await FollowModel.findOne({
       $and: [{ targetId }, { sourceId }, { approved: true }],
     }).exec()) as unknown as IUser;
-    res
-      .status(statusCodes.success)
-      .json(new SuccessResponse({ following: isFollowing ? true : false }));
+    res.status(statusCodes.success).json(new SuccessResponse({ following: isFollowing ? true : false }));
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

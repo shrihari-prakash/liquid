@@ -23,22 +23,15 @@ const POST_ResetPassword = async (req: Request, res: Response) => {
     const { code, password: passwordBody } = req.body;
     const dbCode = await verificationCodeModel.findOne({ code }).exec();
     if (!dbCode) {
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError));
+      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
-    await UserModel.updateOne(
-      { _id: dbCode.belongsTo },
-      { $set: { password: password } }
-    );
+    await UserModel.updateOne({ _id: dbCode.belongsTo }, { $set: { password: password } });
     verificationCodeModel.deleteOne({ code }).exec();
     return res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

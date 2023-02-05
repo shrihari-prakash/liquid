@@ -7,19 +7,7 @@ import PATCH_User, { PATCH_UserValidator } from "./user.patch";
 
 const AdminApiRouter = express.Router();
 
-AdminApiRouter.post(
-  "/access",
-  ...DelegatedAuthFlow,
-  AuthorizeAdmin,
-  POST_AccessValidator,
-  POST_Access
-);
-AdminApiRouter.patch(
-  "/user",
-  ...DelegatedAuthFlow,
-  AuthorizeAdmin,
-  PATCH_UserValidator,
-  PATCH_User
-);
+AdminApiRouter.post("/access", ...DelegatedAuthFlow, AuthorizeAdmin, POST_AccessValidator, POST_Access);
+AdminApiRouter.patch("/user", ...DelegatedAuthFlow, AuthorizeAdmin, PATCH_UserValidator, PATCH_User);
 
 export default AdminApiRouter;

@@ -4,13 +4,7 @@ interface Option {
   name: string;
   envName: string;
   default: string | number | boolean | undefined;
-  type:
-    | "number"
-    | "boolean"
-    | "string"
-    | "stringArray"
-    | "booleanArray"
-    | "numberArray";
+  type: "number" | "boolean" | "string" | "stringArray" | "booleanArray" | "numberArray";
   description: string;
 }
 
@@ -18,10 +12,7 @@ export class Configuration {
   options: any;
 
   constructor() {
-    this.options = Options.reduce(
-      (obj, item) => Object.assign(obj, { [item.name]: item }),
-      {}
-    );
+    this.options = Options.reduce((obj, item) => Object.assign(obj, { [item.name]: item }), {});
   }
 
   public get(name: string, defaultValue?: any, delim = ",") {

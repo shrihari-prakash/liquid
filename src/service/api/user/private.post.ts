@@ -24,15 +24,9 @@ const POST_Private = async (req: Request, res: Response) => {
         $and: [{ targetId: userId }, { approved: false }],
       });
       if (requestsToApprove.length) {
-        const result = (await FollowModel.updateMany(
-          { targetId: userId },
-          { $set: { approved: true } }
-        )) as any;
+        const result = (await FollowModel.updateMany({ targetId: userId }, { $set: { approved: true } })) as any;
         // Update follower count for the user going public.
-        await UserModel.updateOne(
-          { _id: userId },
-          { $inc: { followerCount: result.modifiedCount } }
-        );
+        await UserModel.updateOne({ _id: userId }, { $inc: { followerCount: result.modifiedCount } });
         // Update folowing counts of the users whose requests were approved.
         await UserModel.updateMany(
           {
@@ -41,16 +35,12 @@ const POST_Private = async (req: Request, res: Response) => {
           { $inc: { followingCount: 1 } }
         );
       }
-      res
-        .status(statusCodes.success)
-        .json(new SuccessResponse({ acceptedCount: requestsToApprove.length }));
+      res.status(statusCodes.success).json(new SuccessResponse({ acceptedCount: requestsToApprove.length }));
     }
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

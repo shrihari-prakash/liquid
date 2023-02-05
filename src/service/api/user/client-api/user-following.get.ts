@@ -9,9 +9,7 @@ import FollowModel from "../../../../model/mongo/follow";
 import { useFollowingQuery } from "../../../../model/query/following";
 import { body } from "express-validator";
 
-export const GET_UserFollowingValidator = [
-  body("target").exists().isString().isLength({ min: 8, max: 128 }),
-];
+export const GET_UserFollowingValidator = [body("target").exists().isString().isLength({ min: 8, max: 128 })];
 
 const GET_UserFollowing = async (req: Request, res: Response) => {
   try {
@@ -24,9 +22,7 @@ const GET_UserFollowing = async (req: Request, res: Response) => {
     });
   } catch (err) {
     log.error(err);
-    return res
-      .status(statusCodes.internalError)
-      .json(new ErrorResponse(errorMessages.internalError));
+    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
