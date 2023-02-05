@@ -7,7 +7,9 @@ const authorizationCodeSchema = {
   user: Object,
 };
 
-const schemaInstance = new mongoose.Schema(authorizationCodeSchema),
+const schemaInstance = new mongoose.Schema(authorizationCodeSchema, {
+    timestamps: true,
+  }),
   AuthorizationCodeModel = mongoose.model("authorization-code", schemaInstance);
 
 export default AuthorizationCodeModel;

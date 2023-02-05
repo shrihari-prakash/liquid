@@ -205,6 +205,22 @@
     "default": 10
   },
   {
+    "name": "pagination.default-limit",
+    "displayName": "Pagination Default Limit",
+    "envName": "PAGINATION_DEFAULT_LIMIT",
+    "description": "Specifies the default number of results to be returned in paginated APIs",
+    "type": "number",
+    "default": 10
+  },
+  {
+    "name": "pagination.max-limit",
+    "displayName": "Pagination Max Limit",
+    "envName": "PAGINATION_MAX_LIMIT",
+    "description": "Specifies the maximum number of results to be returned in paginated APIs",
+    "type": "number",
+    "default": 1000
+  },
+  {
     "name": "system.role.extended-roles",
     "displayName": "Extended Roles",
     "envName": "SYSTEM_ROLE_EXTENDED_ROLES",

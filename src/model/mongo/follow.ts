@@ -18,7 +18,9 @@ const followerSchema = {
   },
 };
 
-const schemaInstance = new mongoose.Schema(followerSchema),
+const schemaInstance = new mongoose.Schema(followerSchema, {
+    timestamps: true,
+  }),
   FollowModel = mongoose.model("follow", schemaInstance);
 
 schemaInstance.index({ sourceId: 1, targetId: 1 }, { unique: true });

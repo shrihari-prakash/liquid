@@ -120,7 +120,9 @@ const userSchema = {
   },
 };
 
-const schemaInstance = new mongoose.Schema(userSchema),
+const schemaInstance = new mongoose.Schema(userSchema, {
+    timestamps: true,
+  }),
   UserModel = mongoose.model("user", schemaInstance);
 
 export type IUser = {

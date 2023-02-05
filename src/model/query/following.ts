@@ -1,32 +1,18 @@
 import { mongo } from "mongoose";
+import { IUserProjection } from "../mongo/user";
 
-export const useFollowingQuery = (userId: string) => [
-  {
-    $match: {
-      $and: [{ sourceId: new mongo.ObjectId(userId) }, { approved: true }],
-    },
-  },
+export const useFollowingQuery: any = (userId: string, limit: number) => [
+  { $match: { $and: [{ sourceId: new mongo.ObjectId(userId) }, { approved: true }] } },
+  { $sort: { createdAt: -1 } },
+  { $limit: limit },
   {
     $lookup: {
       from: "users",
-      localField: "targetId",
-      foreignField: "_id",
+      let: { targetId: "$targetId" },
       as: "target",
+      pipeline: [{ $match: { $expr: { $eq: ["$$targetId", "$_id"] } } }, { $project: IUserProjection }],
     },
   },
   { $unwind: "$target" },
-  {
-    $replaceRoot: {
-      newRoot: "$target",
-    },
-  },
-  {
-    $project: {
-      _id: 0,
-      __v: 0,
-      password: 0,
-      isRestricted: 0,
-      emailVerified: 0,
-    },
-  },
+  { $project: { __v: 0, sourceId: 0, targetId: 0, approved: 0, updatedAt: 0 } },
 ];
