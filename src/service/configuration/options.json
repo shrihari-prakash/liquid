@@ -21,7 +21,7 @@
     "envName": "APP_NAME",
     "description": "Name of the application.",
     "type": "string",
-    "default": "My App"
+    "default": "Liquid"
   },
   {
     "name": "app-outbound-email-address",
@@ -29,7 +29,7 @@
     "envName": "APP_OUTBOUND_EMAIL_ADDRESS",
     "description": "Email address to be used for outgoing emails from the application.",
     "type": "string",
-    "default": "myapp@example.com"
+    "default": "liquid@example.com"
   },
   {
     "name": "cookie-session-secret",

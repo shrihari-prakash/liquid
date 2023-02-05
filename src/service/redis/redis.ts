@@ -17,7 +17,7 @@ class Redis {
       db: Configuration.get("redis-db") as number,
     });
     this.client.on("connect", function () {
-      log.info("Connected to Redis (%s:%s)", host, port);
+      log.info("Connected to Redis (%s:%s).", host, port);
     });
   }
 }

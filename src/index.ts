@@ -55,7 +55,7 @@ MongoDB.connect();
 Api.initialize(app);
 
 app.listen(Configuration.get("app-port"), () => {
-  log.info(`Auth service listening on port ${Configuration.get("app-port")}.`);
+  log.info(`${Configuration.get("app-name")} auth is listening at http://localhost:${Configuration.get("app-port")}`);
 });
 
 export default app;
