@@ -14,7 +14,7 @@ You will require Redis to run this service. This is because the service needs to
 
 1. Run `npm i`.
 2. Copy and rename file `src/public/app-config.sample.json` to `config.json` and replace with your strings.
-3. You can override parameters like MongoDB connection string by using the env name present in `src/service/configuration/options.json`.
+3. A large part of the service is configurable. You can find the configurable options in file [src/service/configuration/options.json](src/service/configuration/options.json). Parameters like MongoDB connection string and Redis connection settings can be changed. Simply copy the envName of the option youd like to set and put it in your `.env` with your intended value.
 4. Create the following client document in the `clients` colelction:
 
 ```
