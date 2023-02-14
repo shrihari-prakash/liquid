@@ -4,11 +4,20 @@ An open source TypeScript implementation of [oauthjs/node-oauth2-server](https:/
 
 When you start new projects, you typically find that you are writing the login, account creation and authentication logic over and over again. This repository provides a plug and play boiler plate code that acts as an authentication and user management server for your other microservices.
 
-In addition to OAuth, the service provides additional (but usually very needed) functionalities for user accounts management.
-
 ![Login](images/screenshot-1.png)
 
-You will require Redis to run this service. This is because the service needs to store access and refresh tokens. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the options `privilege.can-use-cache` and `privilege.can-use-cache-for-token` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database.
+### Features
+In addition to OAuth, the service provides additional (but usually very needed) functionalities for user accounts management:
+
+⭐ Out of the box support for user sign up and login.
+
+⭐ Includes follow and unfollow mechanisms with support for private accounts.
+
+⭐ Support for admin level and client APIs.
+
+⭐ Highly customizable. Customize and configure every part of the UI and service.
+
+> **_NOTE:_** You will require Redis to run this service. This is because the service needs to store access and refresh tokens with an auto expiry. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the options `privilege.can-use-cache` and `privilege.can-use-cache-for-token` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database.
 
 ### Setup
 
@@ -33,7 +42,8 @@ You will require Redis to run this service. This is because the service needs to
     "{{frontend_uri_2}}"
   ],
   "secret": "your_secret",
-  "role": "INTERNAL_CLIENT"
+  "role": "INTERNAL_CLIENT",
+  "displayName": "Application Client"
 }
 ```
 
