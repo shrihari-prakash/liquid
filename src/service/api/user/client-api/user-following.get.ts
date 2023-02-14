@@ -27,11 +27,11 @@ const GET_UserFollowing = async (req: Request, res: Response) => {
     if (offset) {
       query[0].$match.$and.push({ createdAt: { $lt: new Date(offset) } });
     }
-    FollowModel.aggregate(query).exec(function (up, users) {
+    FollowModel.aggregate(query).exec(function (up, records) {
       if (up) {
         throw up;
       }
-      res.status(statusCodes.success).json(new SuccessResponse({ users }));
+      res.status(statusCodes.success).json(new SuccessResponse({ records }));
     });
   } catch (err) {
     log.error(err);

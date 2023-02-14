@@ -9,10 +9,10 @@ export const useFollowersQuery: any = (userId: string, limit: number) => [
     $lookup: {
       from: "users",
       let: { sourceId: "$sourceId" },
-      as: "target",
+      as: "source",
       pipeline: [{ $match: { $expr: { $eq: ["$$sourceId", "$_id"] } } }, { $project: IUserProjection }],
     },
   },
-  { $unwind: "$target" },
+  { $unwind: "$source" },
   { $project: { __v: 0, sourceId: 0, targetId: 0, approved: 0, updatedAt: 0 } },
 ];

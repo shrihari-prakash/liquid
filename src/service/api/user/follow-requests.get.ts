@@ -25,6 +25,7 @@ const GET_FollowRequests = async (req: Request, res: Response) => {
           as: "source",
         },
       },
+      { $unwind: "$source" },
       {
         $project: {
           sourceId: 0,
@@ -35,11 +36,11 @@ const GET_FollowRequests = async (req: Request, res: Response) => {
           "source.emailVerified": 0,
         },
       },
-    ]).exec(function (up, doc) {
+    ]).exec(function (up, records) {
       if (up) {
         throw up;
       }
-      res.status(statusCodes.success).json(new SuccessResponse(doc));
+      res.status(statusCodes.success).json(new SuccessResponse({ records }));
     });
   } catch (err) {
     log.error(err);
