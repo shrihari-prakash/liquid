@@ -156,10 +156,17 @@ paths:
                   data:
                     type: object
                     properties:
-                      users:
+                      records:
                         type: array
                         items:
-                          $ref: "#/definitions/user"
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            approved:
+                              type: boolean
+                            target:
+                              $ref: "#/definitions/user"
   /user/client-api/user-followers:
     get:
       security:
@@ -182,10 +189,17 @@ paths:
                   data:
                     type: object
                     properties:
-                      users:
+                      records:
                         type: array
                         items:
-                          $ref: "#/definitions/user"
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            approved:
+                              type: boolean
+                            source:
+                              $ref: "#/definitions/user"
   /user/client-api/banned:
     post:
       security:
@@ -565,10 +579,17 @@ paths:
                   data:
                     type: object
                     properties:
-                      users:
+                      records:
                         type: array
                         items:
-                          $ref: "#/definitions/user"
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            approved:
+                              type: boolean
+                            target:
+                              $ref: "#/definitions/user"
   /user/followers:
     get:
       security:
@@ -585,10 +606,17 @@ paths:
                   data:
                     type: object
                     properties:
-                      users:
+                      records:
                         type: array
                         items:
-                          $ref: "#/definitions/user"
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            approved:
+                              type: boolean
+                            source:
+                              $ref: "#/definitions/user"
   /user/follow-requests:
     get:
       security:
@@ -603,16 +631,19 @@ paths:
                 type: object
                 properties:
                   data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        approved:
-                          type: boolean
-                        source:
-                          $ref: "#/definitions/user"
+                    type: object
+                    properties:
+                      records:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            approved:
+                              type: boolean
+                            source:
+                              $ref: "#/definitions/user"
   /user/follow-status:
     get:
       security:
