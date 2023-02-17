@@ -10,6 +10,7 @@ import FollowModel from "../../../model/mongo/follow";
 import UserModel, { IUser } from "../../../model/mongo/user";
 import { updateFollowCount } from "../../../utils/follow";
 import { validateErrors } from "../../../utils/api";
+import { FollowStatus } from "../../../enum/follow-status";
 
 export const POST_FollowValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
@@ -32,15 +33,15 @@ const POST_Follow = async (req: Request, res: Response) => {
     if (target.isPrivate) {
       query.approved = false;
       await new FollowModel(query).save();
-      sendSuccess(res, "requested");
+      sendSuccess(res, FollowStatus.REQUESTED);
     } else {
       await new FollowModel(query).save();
       await updateFollowCount(sourceId, targetId, 1);
-      sendSuccess(res, "followed");
+      sendSuccess(res, FollowStatus.FOLLOWING);
     }
   } catch (err: any) {
     if (err.message.includes("E11000")) {
-      sendSuccess(res, "duplicate");
+      sendSuccess(res, FollowStatus.DUPLICATE);
     }
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
