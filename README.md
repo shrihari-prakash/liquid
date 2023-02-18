@@ -34,9 +34,6 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 
 ```
 {
-  "_id": {
-    "$oid": "633972976aaa0ba6952f86db"
-  },
   "id": "application_client",
   "grants": [
     "client_credentials",
