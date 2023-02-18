@@ -13,6 +13,7 @@ export const statusCodes = {
 export const errorMessages = {
   internalError: "InternalServerError",
   clientInputError: "ClientInputError",
+  rateLimitError: "RateLimitError",
   conflict: "ResourceConflict",
   banned: "Banned",
   unauthorized: "Unauthorized",

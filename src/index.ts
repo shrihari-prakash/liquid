@@ -13,10 +13,12 @@ var cors = require("cors");
 import { Configuration } from "./singleton/configuration";
 import { MongoDB } from "./singleton/mongo-db";
 import { Api } from "./singleton/api/api";
+import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
 const YAML = require("yamljs");
 const swaggerDocument = YAML.load(__dirname + "/swagger.yaml");
 
 const app = express();
+activateRateLimiters(app);
 app.use(
   "/",
   express.static(path.join(__dirname, "public"), {
