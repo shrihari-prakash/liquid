@@ -221,6 +221,46 @@
     "default": 1000
   },
   {
+    "name": "system.rate-limit.window-size",
+    "displayName": "Rate Limit Window Size",
+    "envName": "SYSTEM_RATE_LIMIT_WINDOW_SIZE",
+    "description": "Window size (in seconds) for rate limiting.",
+    "type": "number",
+    "default": 60
+  },
+  {
+    "name": "system.rate-limit.light-api-max-limit",
+    "displayName": "Light API Max Limit",
+    "envName": "SYSTEM_RATE_LIMIT_LIGHT_API_MAX_LIMIT",
+    "description": "Specifies the rate limit for light APIs for the specified window size.",
+    "type": "number",
+    "default": 50
+  },
+  {
+    "name": "system.rate-limit.medium-api-max-limit",
+    "displayName": "Medium API Max Limit",
+    "envName": "SYSTEM_RATE_LIMIT_MEDIUM_API_MAX_LIMIT",
+    "description": "Specifies the rate limit for medium APIs for the specified window size.",
+    "type": "number",
+    "default": 25
+  },
+  {
+    "name": "system.rate-limit.heavy-api-max-limit",
+    "displayName": "Heavy API Max Limit",
+    "envName": "SYSTEM_RATE_LIMIT_HEAVY_API_MAX_LIMIT",
+    "description": "Specifies the rate limit for heavy APIs for the specified window size.",
+    "type": "number",
+    "default": 10
+  },
+  {
+    "name": "system.rate-limit.extreme-api-max-limit",
+    "displayName": "Extreme API Max Limit",
+    "envName": "SYSTEM_RATE_LIMIT_EXTREME_API_MAX_LIMIT",
+    "description": "Specifies the rate limit for extreme APIs for the specified window size.",
+    "type": "number",
+    "default": 3
+  },
+  {
     "name": "system.role.extended-roles",
     "displayName": "Extended Roles",
     "envName": "SYSTEM_ROLE_EXTENDED_ROLES",

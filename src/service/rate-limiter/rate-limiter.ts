@@ -1,36 +1,19 @@
 import rateLimit from "express-rate-limit";
+import { Configuration } from "../../singleton/configuration";
 import { errorMessages } from "../../utils/http-status";
 import { ErrorResponse } from "../../utils/response";
-
-const ONE_MINUTE = 1 * 60 * 1000;
 
 const message = async () => {
   return new ErrorResponse(errorMessages.rateLimitError);
 };
-
-const standardOpts = { standardHeaders: true, legacyHeaders: false, message };
+const windowSize = Configuration.get("system.rate-limit.window-size");
+const standardOpts = { windowMs: windowSize * 1000, standardHeaders: true, legacyHeaders: false, message };
 
 export const RateLimiter = {
-  LIGHT: rateLimit({
-    windowMs: ONE_MINUTE,
-    max: 50,
-    ...standardOpts,
-  }),
-  MEDIUM: rateLimit({
-    windowMs: ONE_MINUTE,
-    max: 25,
-    ...standardOpts,
-  }),
-  HEAVY: rateLimit({
-    windowMs: ONE_MINUTE,
-    max: 10,
-    ...standardOpts,
-  }),
-  EXTREME: rateLimit({
-    windowMs: ONE_MINUTE,
-    max: 3,
-    ...standardOpts,
-  }),
+  LIGHT: rateLimit({ max: Configuration.get("system.rate-limit.light-api-max-limit"), ...standardOpts }),
+  MEDIUM: rateLimit({ max: Configuration.get("system.rate-limit.medium-api-max-limit"), ...standardOpts }),
+  HEAVY: rateLimit({ max: Configuration.get("system.rate-limit.heavy-api-max-limit"), ...standardOpts }),
+  EXTREME: rateLimit({ max: Configuration.get("system.rate-limit.extreme-api-max-limit"), ...standardOpts }),
 };
 
 export function activateRateLimiters(app: any) {
