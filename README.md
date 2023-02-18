@@ -13,6 +13,7 @@ When you start new projects, you typically find that you are writing the login, 
 ![Login](images/screenshot-1.png)
 
 ### Features
+
 In addition to OAuth, the service provides additional (but usually very needed) functionalities for user accounts management:
 
 ⭐ Out of the box support for user sign up and login.
@@ -23,38 +24,18 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 
 ⭐ Highly customizable. Customize and configure every part of the UI and service.
 
-> **_NOTE:_** You will require Redis to run this service. This is because the service needs to store access and refresh tokens with an auto expiry. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the options `privilege.can-use-cache` and `privilege.can-use-cache-for-token` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database.
+⭐ Quick setup.
+
+> **_NOTE:_** You will require Redis to run this service. This is because the service needs to store access and refresh tokens with an auto expiry. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the options `privilege.can-use-cache` and `privilege.can-use-cache-for-token` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database. Then it's upto you to write your own CRON to clean them.
 
 ### Setup
 
 1. Run `npm i`.
-2. Copy and rename file `src/public/app-config.sample.json` to `config.json` and replace with your strings.
-3. A large part of the service is configurable. You can find the configurable options in file [src/service/configuration/options.json](src/service/configuration/options.json). Parameters like MongoDB connection string and Redis connection settings can be changed. Simply copy the envName of the option youd like to set and put it in your `.env` with your intended value.
-4. Create the following client document in the `clients` colelction:
-
-```
-{
-  "_id": {
-    "$oid": "633972976aaa0ba6952f86db"
-  },
-  "id": "application_client",
-  "grants": [
-    "client_credentials",
-    "authorization_code",
-    "refresh_token"
-  ],
-  "redirectUris": [
-    "{{frontend_uri_1}}",
-    "{{frontend_uri_2}}"
-  ],
-  "secret": "your_secret",
-  "role": "INTERNAL_CLIENT",
-  "displayName": "Application Client"
-}
-```
-
-1. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
-2. Run `npm run build` to output production ready code.
+2. Run command `node ./scripts/create-application-client mongodbConenctionString={{mongodb_connection_string}} clientSecret={{client_secret}} redirectUrls={{comma_seperated_list_of_redirect_urls}}` (without brackets).
+3. Copy and rename file `src/public/app-config.sample.json` to `config.json` and replace the variables (most importantly, `oauth.clientId` and `oauth.redirectUri` from previous step).
+4. A large part of the service is configurable. You can find the configurable options in file [src/service/configuration/options.json](src/service/configuration/options.json). Parameters like MongoDB connection string and Redis connection settings can be changed. Simply copy the envName of the option youd like to set and put it in your `.env` with your intended value.
+5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
+6. Run `npm run build` to output production ready code.
 
 ### API Documentation:
 

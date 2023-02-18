@@ -1,0 +1,24 @@
+version: "1"
+services:
+  liquid-dev:
+    container_name: liquid
+    restart: always
+    build: .
+    ports:
+      - "2000:2000"
+    environment:
+      - REDIS_HOST=liquid-redis
+      - MONGO_DB_CONNECTION_STRING=mongodb://liquid-mongo:27017/accounts
+    links:
+      - redis
+      - mongo
+  mongo:
+    container_name: liquid-mongo
+    image: "mongo:4"
+    ports:
+      - "27018:27017"
+  redis:
+    container_name: liquid-redis
+    image: "redis:4.0.11"
+    ports:
+      - "6380:6379"

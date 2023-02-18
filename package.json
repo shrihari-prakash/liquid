@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf ./build && tsc && npm run copy-files",
-    "copy-files": "copyfiles -u 1 src/public/**/*.js src/**/*.html src/**/*.css src/**/*.json src/**/*.jpg src/**/*.png build/",
+    "copy-files": "copyfiles -u 1 src/public/**/*.js src/**/*.yaml src/**/*.html src/**/*.css src/**/*.json src/**/*.jpg src/**/*.png build/",
     "start:dev": "nodemon --inspect",
+    "start:docker": "docker compose -f docker-compose.dev.yml up --build --detach",
     "start": "npm run build && node build/index.js",
     "pretty": "prettier --write \"./**/*.{js,ts,json}\""
   },
@@ -22,7 +23,6 @@
     "@types/node": "^18.7.23",
     "copyfiles": "^2.4.1",
     "nodemon": "^2.0.20",
-    "pino-pretty": "^9.1.1",
     "prettier": "^2.8.3",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
@@ -41,6 +41,7 @@
     "ioredis": "^5.2.4",
     "mongoose": "^6.6.3",
     "pino": "^8.7.0",
+    "pino-pretty": "^9.1.1",
     "swagger-ui-express": "^4.6.0",
     "yamljs": "^0.3.0"
   }

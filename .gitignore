@@ -1,4 +1,5 @@
 node_modules
 app-config.json
+docker-compose.yml
 build
 .env
