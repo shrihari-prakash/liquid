@@ -31,7 +31,10 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 ### Setup
 
 1. Run `npm i`.
-2. Run command `node ./scripts/create-application-client mongodbConenctionString={{mongodb_connection_string}} clientSecret={{client_secret}} redirectUrls={{comma_seperated_list_of_redirect_urls}}` (without brackets).
+2. Run the following command (without brackets):
+```
+ node ./scripts/create-application-client mongodbConenctionString={{mongodb_connection_string}} clientSecret={{client_secret}} redirectUrls={{comma_seperated_list_of_redirect_urls}}
+```
 3. Copy and rename file `src/public/app-config.sample.json` to `app-config.json` and replace the variables (most importantly, `oauth.clientId` and `oauth.redirectUri` from previous step).
 4. A large part of the service is configurable. You can find the configurable options in file [src/service/configuration/options.json](src/service/configuration/options.json). Parameters like MongoDB connection string and Redis connection settings can be changed. Simply copy the envName of the option youd like to set and put it in your `.env` with your intended value.
 5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
