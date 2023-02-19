@@ -11,9 +11,9 @@ class OAuthServer {
     log.info("Initializing OAuth server...");
     this.server = new ExpressOAuthServer({
       model: OAuthModel,
-      authorizationCodeLifetime: Configuration.get("authorization-code-lifetime") as number,
-      accessTokenLifetime: Configuration.get("access-token-lifetime") as number,
-      refreshTokenLifetime: Configuration.get("refresh-token-lifetime") as number,
+      authorizationCodeLifetime: Configuration.get("oauth.authorization-code-lifetime") as number,
+      accessTokenLifetime: Configuration.get("oauth.access-token-lifetime") as number,
+      refreshTokenLifetime: Configuration.get("oauth.refresh-token-lifetime") as number,
     });
   }
 }

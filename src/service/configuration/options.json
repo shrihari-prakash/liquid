@@ -1,24 +1,24 @@
 [
   {
-    "name": "log-level",
+    "name": "system.log-level",
     "displayName": "Log Level",
-    "envName": "LOG_LEVEL",
+    "envName": "SYSTEM_LOG_LEVEL",
     "description": "Log level for the application. Possible values are debug, info, warn, error",
     "type": "string",
     "default": "debug"
   },
   {
-    "name": "app-port",
+    "name": "system.app-port",
     "displayName": "Application Port",
-    "envName": "APP_PORT",
+    "envName": "SYSTEM_APP_PORT",
     "description": "Port to listen on.",
     "type": "number",
     "default": 2000
   },
   {
-    "name": "app-name",
+    "name": "system.app-name",
     "displayName": "Application Name",
-    "envName": "APP_NAME",
+    "envName": "SYSTEM_APP_NAME",
     "description": "Name of the application.",
     "type": "string",
     "default": "Liquid"
@@ -32,7 +32,7 @@
     "default": "00000000-0000-0000-0000-000000000000"
   },
   {
-    "name": "mongo-db-connection-string",
+    "name": "mongo-db.connection-string",
     "displayName": "MongoDB Connection String",
     "envName": "MONGO_DB_CONNECTION_STRING",
     "description": "Connection string to connect to MongoDB.",
@@ -40,25 +40,25 @@
     "default": "mongodb://localhost:27017/accounts"
   },
   {
-    "name": "authorization-code-lifetime",
+    "name": "oauth.authorization-code-lifetime",
     "displayName": "Authorization Code Lifetime",
-    "envName": "AUTHORIZATION_CODE_LIFETIME",
+    "envName": "OAUTH_AUTHORIZATION_CODE_LIFETIME",
     "description": "Expiry time in seconds for authorization codes.",
     "type": "number",
     "default": 300
   },
   {
-    "name": "access-token-lifetime",
+    "name": "oauth.access-token-lifetime",
     "displayName": "Access Token Lifetime",
-    "envName": "ACCESS_TOKEN_LIFETIME",
+    "envName": "OAUTH_ACCESS_TOKEN_LIFETIME",
     "description": "Expiry time in seconds for access tokens.",
     "type": "number",
     "default": 3600
   },
   {
-    "name": "refresh-token-lifetime",
+    "name": "oauth.refresh-token-lifetime",
     "displayName": "Refresh Token Lifetime",
-    "envName": "REFRESH_TOKEN_LIFETIME",
+    "envName": "OAUTH_REFRESH_TOKEN_LIFETIME",
     "description": "Expiry time in seconds for refresh tokens.",
     "type": "number",
     "default": 1209600
@@ -103,7 +103,7 @@
     "default": 650
   },
   {
-    "name": "redis-port",
+    "name": "redis.port",
     "displayName": "Redis Port",
     "envName": "REDIS_PORT",
     "description": "Port for the Redis connection.",
@@ -111,7 +111,7 @@
     "default": 6379
   },
   {
-    "name": "redis-host",
+    "name": "redis.host",
     "displayName": "Redis Host",
     "envName": "REDIS_HOST",
     "description": "Host for the Redis connection.",
@@ -119,21 +119,21 @@
     "default": "127.0.0.1"
   },
   {
-    "name": "redis-username",
+    "name": "redis.username",
     "displayName": "Redis Username",
     "envName": "REDIS_USERNAME",
     "description": "Username for the Redis connection.",
     "type": "string"
   },
   {
-    "name": "redis-password",
+    "name": "redis.password",
     "displayName": "Redis Password",
     "envName": "REDIS_PASSWORD",
     "description": "Password for the Redis connection.",
     "type": "string"
   },
   {
-    "name": "redis-db",
+    "name": "redis.db",
     "displayName": "Redis Database Number",
     "envName": "REDIS_DB",
     "description": "Password for the Redis connection.",

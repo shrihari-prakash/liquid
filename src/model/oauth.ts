@@ -89,14 +89,14 @@ const OAuthModel = {
           token.accessToken,
           serialized,
           "EX",
-          Configuration.get("access-token-lifetime") as number
+          Configuration.get("oauth.access-token-lifetime") as number
         );
         if (token.refreshToken)
           await Redis.client.set(
             token.refreshToken,
             serialized,
             "EX",
-            Configuration.get("refresh-token-lifetime") as number
+            Configuration.get("oauth.refresh-token-lifetime") as number
           );
         log.debug("Token saved to cache.");
         return token;
@@ -181,7 +181,7 @@ const OAuthModel = {
           authorizationCode.authorizationCode,
           JSON.stringify(authorizationCode),
           "EX",
-          Configuration.get("authorization-code-lifetime") as number
+          Configuration.get("oauth.authorization-code-lifetime") as number
         );
         return authorizationCode;
       }

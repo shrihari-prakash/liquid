@@ -58,8 +58,12 @@ Api.initialize(app);
 
 Mailer.initialize(app);
 
-app.listen(Configuration.get("app-port"), () => {
-  log.info(`${Configuration.get("app-name")} auth is listening at http://localhost:${Configuration.get("app-port")}`);
+app.listen(Configuration.get("system.app-port"), () => {
+  log.info(
+    `${Configuration.get("system.app-name")} auth is listening at http://localhost:${Configuration.get(
+      "system.app-port"
+    )}`
+  );
 });
 
 export default app;

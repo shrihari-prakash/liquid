@@ -36,7 +36,7 @@ export class Mailer {
 
   public async send(email: Email) {
     if (!email.from) {
-      const name = Configuration.get("app-name") as string;
+      const name = Configuration.get("system.app-name") as string;
       const emailAddress = Configuration.get("sendgrid.outbound-email-address") as string;
       email.from = { email: emailAddress, name };
     }

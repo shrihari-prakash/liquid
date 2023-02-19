@@ -10,7 +10,7 @@ export class Logger {
       colorize: true,
     });
     this.logger = pino(stream);
-    this.logger.level = Configuration.get("log-level") as string;
+    this.logger.level = Configuration.get("system.log-level") as string;
   }
 
   public getLogger(): any {

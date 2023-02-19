@@ -11,7 +11,7 @@ export const generateVerificationCode = async function (user: IUser) {
     code: require("crypto").randomBytes(18).toString("hex"),
   };
   await new verificationCodeModel(code).save();
-  const appName = Configuration.get("app-name") as string;
+  const appName = Configuration.get("system.app-name") as string;
   const msg: any = {
     to: user.email,
     subject: `${appName}: Verify your account`,
