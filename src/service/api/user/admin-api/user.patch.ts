@@ -69,10 +69,10 @@ const PATCH_User = async (req: Request, res: Response) => {
     if (role) {
       const allRoles = Object.values(Role);
       const editorRoles = Configuration.get("system.role.editor-roles");
-      if (!editorRoles.includes(currentUserRole) || !allRoles.includes(role)) {
-        return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
+      if (!allRoles.includes(role)) {
+        return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
       }
-      if (!isRoleRankHigher(currentUserRole, role)) {
+      if (!editorRoles.includes(currentUserRole) || !isRoleRankHigher(currentUserRole, role)) {
         return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
       }
     }

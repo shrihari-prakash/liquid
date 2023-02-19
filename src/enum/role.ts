@@ -16,8 +16,8 @@ Configuration.get("system.role.extended-roles").forEach((role: string) => (Role[
 log.debug("Roles initialized. Values: %o", Role);
 
 const roleRanking = Configuration.get("system.role.ranking");
-if (roleRanking.some((role: string) => !Object.keys(Role).includes(role.split("(")[0]))) {
-  log.error("Bad configuration for role order.");
+if (Object.keys(Role).some((role) => !roleRanking.find((rank: string) => rank.startsWith(role)))) {
+  log.error("Bad configuration for role ranking.");
 }
 
 export default Role;
