@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import UserModel from "../../../../model/mongo/user";
+import UserModel, { IUser } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import Role from "../../../../enum/role";
 import { bcryptConfig } from "../create.post";
@@ -26,6 +26,21 @@ export const PATCH_UserValidator = [
   body("lastName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
 ];
 
+const exractRank = (roleRank: string) => {
+  return (roleRank.match(/\(([^)]+)\)/) as string[])[1];
+};
+
+const findRoleRank = (role: string) => {
+  const roleRanking = Configuration.get("system.role.ranking");
+  return roleRanking.find((r: string) => r.split("(")[0] === role);
+};
+
+const isRoleRankHigher = (currentRole: string, comparisonRole: string) => {
+  const currentRoleRank = exractRank(findRoleRank(currentRole));
+  const comparisonRoleRank = exractRank(findRoleRank(comparisonRole));
+  return parseInt(currentRoleRank) < parseInt(comparisonRoleRank);
+};
+
 const PATCH_User = async (req: Request, res: Response) => {
   try {
     validateErrors(req, res);
@@ -33,7 +48,10 @@ const PATCH_User = async (req: Request, res: Response) => {
     delete req.body.target;
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
-      if (!Configuration.get("admin-api.user.profile.editable-fields").includes(key) || typeof req.body[key] !== "string") {
+      if (
+        !Configuration.get("admin-api.user.profile.editable-fields").includes(key) ||
+        typeof req.body[key] !== "string"
+      ) {
         errors.push({
           msg: "Invalid value",
           param: key,
@@ -41,19 +59,20 @@ const PATCH_User = async (req: Request, res: Response) => {
         });
       }
     });
+    const currentUserRole = res.locals.user.role;
+    const target = (await UserModel.findOne({ _id: userId })) as unknown as IUser;
+    // Allow changing data only upto the level of the current user's role.
+    if (!isRoleRankHigher(currentUserRole, target.role)) {
+      return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
+    }
     const role = req.body.role;
     if (role) {
-      const currentUserRole = res.locals.user.role;
       const allRoles = Object.values(Role);
       const editorRoles = Configuration.get("system.role.editor-roles");
       if (!editorRoles.includes(currentUserRole) || !allRoles.includes(role)) {
         return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
       }
-      const roleOrder = Configuration.get("system.role.order");
-      const inputRoleIndex = roleOrder.indexOf(role);
-      const userRoleIndex = roleOrder.indexOf(currentUserRole);
-      // Allow changing roles only upto the level of the current user's role.
-      if (inputRoleIndex < userRoleIndex) {
+      if (!isRoleRankHigher(currentUserRole, role)) {
         return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
       }
     }

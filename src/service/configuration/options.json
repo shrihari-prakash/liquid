@@ -285,12 +285,12 @@
     "default": ""
   },
   {
-    "name": "system.role.order",
-    "displayName": "Role Order",
-    "envName": "SYSTEM_ROLE_ORDER",
-    "description": "Comma separated list of role names specifying the order of priorities for roles. Priority lowers from left to right.",
+    "name": "system.role.ranking",
+    "displayName": "Role Rank",
+    "envName": "SYSTEM_ROLE_RANKING",
+    "description": "Comma separated list of role names and their ranks in format ROLE(SCORE) specifying the order of priorities for roles. Lower numbers have higher priorities.",
     "type": "stringArray",
-    "default": "SUPER_ADMIN,ADMIN,INTERNAL_CLIENT,EXTERNAL_CLIENT,USER"
+    "default": "SUPER_ADMIN(1),ADMIN(2),INTERNAL_CLIENT(2),EXTERNAL_CLIENT(3),USER(4)"
   },
   {
     "name": "system.role.editor-roles",
