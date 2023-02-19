@@ -9,7 +9,7 @@ import { Configuration } from "../../../../singleton/configuration";
 
 const GET_EditableFields = async (_: Request, res: Response) => {
   try {
-    const editableFields = Configuration.get("admin-api.profile.editable-fields");
+    const editableFields = Configuration.get("admin-api.user.profile.editable-fields");
     res.status(statusCodes.success).json(new SuccessResponse({ editableFields }));
   } catch (err) {
     log.error(err);

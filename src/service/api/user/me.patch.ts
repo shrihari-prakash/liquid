@@ -29,7 +29,7 @@ const PATCH_Me = async (req: Request, res: Response) => {
     const userId = res.locals.oauth.token.user._id;
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
-      if (!Configuration.get("profile.editable-fields").includes(key) || typeof req.body[key] !== "string") {
+      if (!Configuration.get("user.profile.editable-fields").includes(key) || typeof req.body[key] !== "string") {
         errors.push({
           msg: "Invalid value",
           param: key,

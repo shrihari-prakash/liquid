@@ -12,7 +12,7 @@ const GET_Me = async (_: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
     const user = await UserModel.findOne({ _id: userId }).exec();
-    const editableFields = Configuration.get("profile.editable-fields");
+    const editableFields = Configuration.get("user.profile.editable-fields");
     res.status(statusCodes.success).json(new SuccessResponse({ user, editableFields }));
   } catch (err) {
     log.error(err);

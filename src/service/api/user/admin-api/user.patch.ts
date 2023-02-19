@@ -33,7 +33,7 @@ const PATCH_User = async (req: Request, res: Response) => {
     delete req.body.target;
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
-      if (!Configuration.get("admin-api.profile.editable-fields").includes(key) || typeof req.body[key] !== "string") {
+      if (!Configuration.get("admin-api.user.profile.editable-fields").includes(key) || typeof req.body[key] !== "string") {
         errors.push({
           msg: "Invalid value",
           param: key,
