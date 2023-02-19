@@ -24,14 +24,6 @@
     "default": "Liquid"
   },
   {
-    "name": "app-outbound-email-address",
-    "displayName": "Application Outbound Email Address",
-    "envName": "APP_OUTBOUND_EMAIL_ADDRESS",
-    "description": "Email address to be used for outgoing emails from the application.",
-    "type": "string",
-    "default": "liquid@example.com"
-  },
-  {
     "name": "cookie-session-secret",
     "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",
@@ -72,11 +64,35 @@
     "default": 1209600
   },
   {
-    "name": "sendgrid-api-key",
+    "name": "sendgrid.api-key",
     "displayName": "Sendgrid API Key",
     "envName": "SENDGRID_API_KEY",
     "description": "API key for sendgrid.",
     "type": "string"
+  },
+  {
+    "name": "sendgrid.force-send-emails",
+    "displayName": "Sendgrid Force Send Emails (For Development Mode)",
+    "envName": "SENDGRID_FORCE_SEND_EMAILS",
+    "description": "Specifies if emails have to be sent even in development mode.",
+    "type": "boolean",
+    "default": false
+  },
+  {
+    "name": "sendgrid.verification-email-template-id",
+    "displayName": "Sendgrid Verification Email Template ID",
+    "envName": "SENDGRID_VERIFICATION_EMAIL_TEMPLATE_ID",
+    "description": "Specifies the template ID of verification email template. Leave blank if you want to use plain text. Variables that will be replaced on template: `app_name`, `code`",
+    "type": "string",
+    "default": ""
+  },
+  {
+    "name": "sendgrid.outbound-email-address",
+    "displayName": "Sendgrid Outbound Email Address",
+    "envName": "SENDGRID_OUTBOUND_EMAIL_ADDRESS",
+    "description": "Email address to be used for outgoing emails from Sendgrid.",
+    "type": "string",
+    "default": "liquid@example.com"
   },
   {
     "name": "get-user-max-items",

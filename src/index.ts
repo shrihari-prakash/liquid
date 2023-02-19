@@ -6,7 +6,6 @@ require("dotenv").config();
 const path = require("path");
 import session from "express-session";
 import bodyParser from "body-parser";
-import sgMail from "@sendgrid/mail";
 const swaggerUi = require("swagger-ui-express");
 var cors = require("cors");
 
@@ -14,6 +13,7 @@ import { Configuration } from "./singleton/configuration";
 import { MongoDB } from "./singleton/mongo-db";
 import { Api } from "./singleton/api/api";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
+import { Mailer } from "./singleton/mailer";
 const YAML = require("yamljs");
 const swaggerDocument = YAML.load(__dirname + "/swagger.yaml");
 
@@ -43,7 +43,6 @@ var sessionOptions: any = {
 if (app.get("env") === "production") {
   app.set("trust proxy", 1); // trust first proxy
   sessionOptions.cookie.secure = true; // serve secure cookies
-  sgMail.setApiKey(Configuration.get("sendgrid-api-key") as string);
 }
 app.use(session(sessionOptions));
 app.use(
@@ -54,7 +53,10 @@ app.use(
 );
 
 MongoDB.connect();
+
 Api.initialize(app);
+
+Mailer.initialize(app);
 
 app.listen(Configuration.get("app-port"), () => {
   log.info(`${Configuration.get("app-name")} auth is listening at http://localhost:${Configuration.get("app-port")}`);

@@ -2,48 +2,18 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/create" });
 
 import { Request, Response } from "express";
-import sgMail from "@sendgrid/mail";
 import bcrypt from "bcrypt";
 import { body } from "express-validator";
 
-import app from "../../..";
 import UserModel, { IUser } from "../../../model/mongo/user";
-import verificationCodeModel from "../../../model/mongo/verification-code";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import Role from "../../../enum/role";
-import { Configuration } from "../../../singleton/configuration";
 import { validateErrors } from "../../../utils/api";
+import { generateVerificationCode } from "../../../utils/verification-code";
 
 export const bcryptConfig = {
   salt: 10,
-};
-
-export const generateVerificationCode = async function (user: IUser) {
-  await verificationCodeModel.deleteMany({ belongsTo: user._id });
-  const code = {
-    belongsTo: user._id,
-    verificationMethod: "email",
-    code: require("crypto").randomBytes(18).toString("hex"),
-  };
-  await new verificationCodeModel(code).save();
-  const appName = Configuration.get("app-name") as string;
-  const msg = {
-    to: user.email,
-    from: {
-      email: Configuration.get("app-outbound-email-address") as string,
-      name: appName,
-    },
-    subject: "Verify your account",
-    text: `Here's your ${appName} verification code: ${code.code}`,
-    html: `Here's your ${appName} verification code: <strong>${code.code}</strong>`,
-  };
-  if (app.get("env") === "production") {
-    await sgMail.send(msg);
-  } else {
-    log.info(code);
-  }
-  return code;
 };
 
 export const POST_CreateValidator = [
