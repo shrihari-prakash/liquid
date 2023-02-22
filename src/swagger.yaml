@@ -79,6 +79,26 @@ paths:
                     properties:
                       ok:
                         type: boolean
+  /user/admin-api/editable-fields:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieves the user fields that can be edited by the admin user.
+      responses:
+        "200": # status code
+          description: Returns a list of field names.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      editableFields:
+                        type: array
+                        items:
+                          type: string
   /user/client-api/user-info:
     get:
       security:
@@ -389,6 +409,11 @@ paths:
                     properties:
                       user:
                         $ref: "#/definitions/user"
+                      editableFields:
+                        type: array
+                        items:
+                          type: string
+
     patch:
       security:
         - bearerAuth: []
