@@ -24,6 +24,22 @@
     "default": "Liquid"
   },
   {
+    "name": "system.static-folder",
+    "displayName": "Static Folder",
+    "envName": "SYSTEM_STATIC_FOLDER",
+    "description": "Specifies the name of the folder that contains static HTML files. For example, if you have a file named login.html inside the folder named static in src, navigating to your-domain.com/login will render login.html.",
+    "type": "string",
+    "default": "public"
+  },
+  {
+    "name": "system.static.default-page",
+    "displayName": "Default Static Page",
+    "envName": "SYSTEM_STATIC_DEFAULT_PAGE",
+    "description": "Specifies the name of the HTML file that renders in the application's root URL.",
+    "type": "string",
+    "default": "public/login.html"
+  },
+  {
     "name": "cookie-session-secret",
     "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",

@@ -19,15 +19,17 @@ const swaggerDocument = YAML.load(__dirname + "/swagger.yaml");
 
 const app = express();
 activateRateLimiters(app);
+const staticFolder = path.join(__dirname, Configuration.get("system.static-folder"));
 app.use(
   "/",
-  express.static(path.join(__dirname, "public"), {
+  express.static(staticFolder, {
     index: false,
     extensions: ["html"],
   })
 );
+log.info("Static folder loaded: %s", staticFolder);
 app.get("/", function (_, res) {
-  res.sendFile(__dirname + "/public/login.html");
+  res.sendFile(path.join(__dirname, Configuration.get("system.static.default-page")));
 });
 if (app.get("env") !== "production") {
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
