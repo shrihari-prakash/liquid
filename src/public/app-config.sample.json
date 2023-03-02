@@ -30,6 +30,8 @@
     "primaryButtonActiveColor": "#0069d9",
     "primaryButtonActiveBorderColor": "#0062cc",
     "primaryButtonTextColor": "#ffffff",
-    "primaryButtonFocusBoxShadow": "0 0 0 6px rgba(0, 123, 255, 0.5)"
+    "primaryButtonFocusBoxShadow": "0 0 0 6px rgba(0, 123, 255, 0.5)",
+    "primaryButtonBorderRadius": "30px",
+    "formInputBorderRadius": "7px"
   }
 }

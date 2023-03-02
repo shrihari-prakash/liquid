@@ -11,6 +11,9 @@
   --text-lighter-color: #b3b3b3;
   --border-color: #555555;
   --glass-color: #00000040;
+  /* Other */
+  --primary-button-border-radius: 30px;
+  --form-input-border-radius: 7px;
 }
 
 .btn-light {
@@ -22,6 +25,7 @@
   color: var(--primary-button-text-color);
   background-color: var(--primary-button-color);
   border: none !important;
+  border-radius: var(--primary-button-border-radius) !important;
 }
 
 .btn-primary:hover {
@@ -176,14 +180,14 @@ input[data-autocompleted] {
 }
 .half .contents .form-group.first,
 .half .bg .form-group.first {
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
+  border-top-left-radius: var(--form-input-border-radius);
+  border-top-right-radius: var(--form-input-border-radius);
 }
 .half .contents .form-group.last,
 .half .bg .form-group.last {
   border-bottom: 1px solid var(--border-color);
-  border-bottom-left-radius: 7px;
-  border-bottom-right-radius: 7px;
+  border-bottom-left-radius: var(--form-input-border-radius);
+  border-bottom-right-radius: var(--form-input-border-radius);
 }
 .half .contents .form-group label,
 .half .bg .form-group label {

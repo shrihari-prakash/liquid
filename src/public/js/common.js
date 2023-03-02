@@ -24,6 +24,7 @@ async function usePrimaryButton() {
   const configTheme = configuration.theme;
   if (configTheme.usePrimaryButton) {
     const documentStyle = document.documentElement.style;
+    documentStyle.setProperty("--primary-button-border-radius", configTheme.primaryButtonBorderRadius);
     $(".action-button").addClass("btn-primary");
     documentStyle.setProperty("--primary-button-text-color", configTheme.primaryButtonTextColor);
     documentStyle.setProperty("--primary-button-color", configTheme.primaryButtonColor);
@@ -38,7 +39,10 @@ async function usePrimaryButton() {
   }
 }
 
-function useTheme() {
+async function useTheme() {
+  const configuration = await getConfig();
+  const configTheme = configuration.theme;
+  document.documentElement.style.setProperty('--form-input-border-radius', configTheme.formInputBorderRadius);
   if (STORE.theme === "light") {
     setLightVariable("--background-color");
     setLightVariable("--text-color");
