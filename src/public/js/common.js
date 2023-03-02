@@ -43,6 +43,7 @@ async function useTheme() {
   const configuration = await getConfig();
   const configTheme = configuration.theme;
   document.documentElement.style.setProperty('--form-input-border-radius', configTheme.formInputBorderRadius);
+  document.documentElement.style.setProperty('--surface-border-radius', configTheme.surfaceBorderRadius);
   if (STORE.theme === "light") {
     setLightVariable("--background-color");
     setLightVariable("--text-color");

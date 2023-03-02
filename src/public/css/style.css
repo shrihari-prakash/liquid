@@ -14,6 +14,7 @@
   /* Other */
   --primary-button-border-radius: 30px;
   --form-input-border-radius: 7px;
+  --surface-border-radius: 8px;
 }
 
 .btn-light {
@@ -246,7 +247,7 @@ input[data-autocompleted] {
   background-color: var(--glass-color);
   backdrop-filter: blur(10px);
   width: 90%;
-  border-radius: 8px;
+  border-radius: var(--surface-border-radius);
   user-select: none;
   display: none;
 }
