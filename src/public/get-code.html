@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,6 +14,9 @@
     <title class="app-name-titlebar">Accounts</title>
   </head>
   <body>
+    <div class="spinner-container">
+      <div class="spinner"></div>
+    </div>
     <div class="app-icon-mini"></div>
     <div class="d-lg-flex half">
       <div class="bg order-1 order-md-2 sidebar">
@@ -52,20 +52,12 @@
                 </div>
                 <div class="d-flex mb-5 align-items-center">
                   <span class="ml-auto">
-                    <a
-                      href="#"
-                      onclick="window.location = '/login' + window.location.search;"
-                      class="forgot-pass"
+                    <a href="#" onclick="window.location = '/login' + window.location.search;" class="forgot-pass"
                       >Login</a
                     ></span
                   >
                 </div>
-                <input
-                  type="submit"
-                  id="submit"
-                  value="Get Code"
-                  class="btn btn-block action-button"
-                />
+                <input type="submit" id="submit" value="Get Code" class="btn btn-block action-button" />
               </form>
             </div>
           </div>

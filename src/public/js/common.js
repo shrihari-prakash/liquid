@@ -40,19 +40,22 @@ async function usePrimaryButton() {
 }
 
 async function useTheme() {
-  const configuration = await getConfig();
-  const configTheme = configuration.theme;
-  document.documentElement.style.setProperty('--form-input-border-radius', configTheme.formInputBorderRadius);
-  document.documentElement.style.setProperty('--surface-border-radius', configTheme.surfaceBorderRadius);
-  if(!configTheme.formInputUseBorder) {
-    $(".form-group").addClass("no-border");
-  }
   if (STORE.theme === "light") {
     setLightVariable("--background-color");
     setLightVariable("--text-color");
     setLightVariable("--text-lighter-color");
     setLightVariable("--border-color");
     setLightVariable("--glass-color");
+    setLightVariable("--spinner-background-color");
+    setLightVariable("--spinner-primary-color");
+    setLightVariable("--spinner-secondary-color");
+  }
+  const configuration = await getConfig();
+  const configTheme = configuration.theme;
+  document.documentElement.style.setProperty('--form-input-border-radius', configTheme.formInputBorderRadius);
+  document.documentElement.style.setProperty('--surface-border-radius', configTheme.surfaceBorderRadius);
+  if (!configTheme.formInputUseBorder) {
+    $(".form-group").addClass("no-border");
   }
   usePrimaryButton();
 }
@@ -66,6 +69,7 @@ function getConfig() {
       .done(function (data) {
         STORE.config = data;
         resolve(STORE.config);
+        $(".spinner-container").addClass("hidden");
       })
       .fail(function () {
         reject();

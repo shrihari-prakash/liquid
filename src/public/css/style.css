@@ -5,12 +5,18 @@
   --text-lighter-color__light: #808080;
   --border-color__light: #e1e1e1;
   --glass-color__light: #ffffff40;
+  --spinner-background-color__light: #ffffff;
+  --spinner-primary-color__light: #000000;
+  --spinner-secondary-color__light: #dbf2ff;
   /* Dark Theme */
   --background-color: #16181c;
   --text-color: #e2e2e2;
   --text-lighter-color: #b3b3b3;
   --border-color: #555555;
   --glass-color: #00000040;
+  --spinner-background-color: #16181c;
+  --spinner-primary-color: #ffffff40;
+  --spinner-secondary-color: #2b2b2b;
   /* Other */
   --primary-button-border-radius: 30px;
   --form-input-border-radius: 7px;
@@ -65,6 +71,10 @@
 .no-border {
   border: none !important;
   padding: 15px 0 !important;
+}
+
+.hidden {
+  display: none !important;
 }
 
 body {
@@ -362,6 +372,51 @@ input[data-autocompleted] {
 .control--checkbox input:disabled:checked ~ .control__indicator {
   background-color: #7e0cf5;
   opacity: 0.2;
+}
+
+.spinner-container {
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  text-align: center;
+  background-color: var(--spinner-background-color);
+  position: fixed;
+}
+
+.spinner {
+  margin: auto;
+  border: 2px solid var(--spinner-secondary-color);
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  position: absolute;
+  top: 45%;
+  border-radius: 50%;
+  border-right: 2px solid var(--spinner-primary-color);
+  text-align: center;
+  animation-name: spin;
+  animation-duration: 900ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.53, 0.21, 0.29, 0.67);
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  /*50% {width:24px;height:24px} /*shrinking effect*/
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  /*50% {width:24px;height:24px} /*shrinking effect*/
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 .shake,
