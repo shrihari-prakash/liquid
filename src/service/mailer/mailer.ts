@@ -27,6 +27,7 @@ export class Mailer {
   mode = Modes.PRINT;
 
   public initialize(app: any) {
+    console.log(typeof Configuration.get("get-user-max-items"));
     if (app.get("env") === "production" || Configuration.get("sendgrid.force-send-emails")) {
       this.mode = Modes.EMAIL;
       sgMail.setApiKey(Configuration.get("sendgrid.api-key") as string);
