@@ -32,6 +32,7 @@
     "primaryButtonTextColor": "#ffffff",
     "primaryButtonFocusBoxShadow": "0 0 0 6px rgba(0, 123, 255, 0.5)",
     "primaryButtonBorderRadius": "30px",
+    "formInputUseBorder": true,
     "formInputBorderRadius": "7px",
     "surfaceBorderRadius": "8px"
   }

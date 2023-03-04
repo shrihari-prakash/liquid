@@ -62,6 +62,11 @@
   user-select: none;
 }
 
+.no-border {
+  border: none !important;
+  padding: 15px 0 !important;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   background-color: var(--background-color);
