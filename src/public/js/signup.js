@@ -22,7 +22,11 @@ function signup(event) {
     .done(function () {
       window.location = `/verify-account${window.location.search}`;
     })
-    .fail(function () {
+    .fail(function (response) {
+      if (response.responseJSON.error === "RateLimitError") {
+        onSubmitError({ errorText: "Too Many Requests", buttonText: "Create Account" });
+        return;
+      }
       onSubmitError({ errorText: "Signup error", buttonText: "Create Account" });
     });
 }

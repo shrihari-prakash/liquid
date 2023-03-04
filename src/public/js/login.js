@@ -32,7 +32,11 @@ function login(event) {
       });
       window.location = `/oauth/authorize?${params.toString()}`;
     })
-    .fail(function () {
+    .fail(function (response) {
+      if(response.responseJSON.error === "RateLimitError") {
+        onSubmitError({ errorText: "Too Many Retries", buttonText: "Login" });
+        return;
+      }
       onSubmitError({ errorText: "Invalid Login", buttonText: "Login" });
     });
 }
