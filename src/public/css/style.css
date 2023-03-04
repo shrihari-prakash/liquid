@@ -238,8 +238,12 @@ input[data-autocompleted] {
 }
 
 .half a {
-  color: #888;
-  text-decoration: underline;
+  color: var(--text-lighter-color);
+  text-decoration: none;
+}
+
+.half a:hover {
+  color: var(--text-color);
 }
 
 .half .btn {

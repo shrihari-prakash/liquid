@@ -34,6 +34,8 @@
     "primaryButtonBorderRadius": "30px",
     "formInputUseBorder": true,
     "formInputBorderRadius": "7px",
-    "surfaceBorderRadius": "8px"
+    "surfaceBorderRadius": "8px",
+    "backgroundColor": "#16181c",
+    "backgroundColorLight": "#ffffff"
   }
 }
