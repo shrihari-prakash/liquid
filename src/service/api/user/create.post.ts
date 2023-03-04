@@ -10,7 +10,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import Role from "../../../enum/role";
 import { validateErrors } from "../../../utils/api";
-import { generateVerificationCode } from "../../../utils/verification-code";
+import { generateVerificationCode } from "../../../utils/verification-code/verification-code";
 
 export const bcryptConfig = {
   salt: 10,

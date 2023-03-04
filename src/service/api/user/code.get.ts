@@ -8,7 +8,7 @@ import UserModel, { IUser } from "../../../model/mongo/user";
 import { validateErrors } from "../../../utils/api";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { generateVerificationCode } from "../../../utils/verification-code";
+import { generateVerificationCode } from "../../../utils/verification-code/verification-code";
 
 export const GET_CodeValidator = [query("email").exists().isEmail()];
 
