@@ -114,7 +114,7 @@ async function renderContent() {
       display: "none",
       visibility: "hidden",
     });
-    $(".half .contents, .half .bg").css({
+    $(".page .contents, .page .bg").css({
       width: "100%",
     });
     return;

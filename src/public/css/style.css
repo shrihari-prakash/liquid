@@ -156,29 +156,29 @@ input[data-autocompleted] {
   height: 1em;
 }
 
-.half,
-.half .container > .row {
+.page,
+.page .container > .row {
   height: 100vh;
 }
 
-.half .bg {
+.page .bg {
   box-shadow: inset 5px 0px 6px 1px #00000035;
 }
 
-.half .contents,
-.half .bg {
+.page .contents,
+.page .bg {
   width: 65%;
 }
 
-.half .bg:first-child {
+.page .bg:first-child {
   width: 35%;
 }
 @media (max-width: 1199.98px) {
-  .half .contents,
-  .half .bg {
+  .page .contents,
+  .page .bg {
     width: 100%;
   }
-  .half .bg:first-child {
+  .page .bg:first-child {
     display: none;
   }
   .app-icon-mini {
@@ -187,49 +187,49 @@ input[data-autocompleted] {
     margin-top: 16px;
   }
 }
-.half .contents .form-group,
-.half .bg .form-group {
+.page .contents .form-group,
+.page .bg .form-group {
   margin-bottom: 0;
   border: 1px solid var(--border-color);
   padding: 15px 15px;
   border-bottom: none;
 }
-.half .contents .form-group.first,
-.half .bg .form-group.first {
+.page .contents .form-group.first,
+.page .bg .form-group.first {
   border-top-left-radius: var(--form-input-border-radius);
   border-top-right-radius: var(--form-input-border-radius);
 }
-.half .contents .form-group.last,
-.half .bg .form-group.last {
+.page .contents .form-group.last,
+.page .bg .form-group.last {
   border-bottom: 1px solid var(--border-color);
   border-bottom-left-radius: var(--form-input-border-radius);
   border-bottom-right-radius: var(--form-input-border-radius);
 }
-.half .contents .form-group label,
-.half .bg .form-group label {
+.page .contents .form-group label,
+.page .bg .form-group label {
   font-size: 12px;
   display: block;
   margin-bottom: 0;
   color: var(--text-lighter-color);
   user-select: none;
 }
-.half .contents .form-control,
-.half .bg .form-control {
+.page .contents .form-control,
+.page .bg .form-control {
   border: none;
   padding: 0;
   font-size: 20px;
   border-radius: 0;
 }
-.half .contents .form-control:active,
-.half .contents .form-control:focus,
-.half .bg .form-control:active,
-.half .bg .form-control:focus {
+.page .contents .form-control:active,
+.page .contents .form-control:focus,
+.page .bg .form-control:active,
+.page .bg .form-control:focus {
   outline: none;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 
-.half .bg {
+.page .bg {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -237,29 +237,29 @@ input[data-autocompleted] {
   background-position: center;
 }
 
-.half a {
+.page a {
   color: var(--text-lighter-color);
   text-decoration: none;
 }
 
-.half a:hover {
+.page a:hover {
   color: var(--text-color);
 }
 
-.half .btn {
+.page .btn {
   height: 54px;
   padding-left: 30px;
   padding-right: 30px;
 }
 
-.half .forgot-pass {
+.page .bottom-link {
   margin-right: 8px;
   position: relative;
   top: 2px;
   font-size: 14px;
 }
 
-.half .intro {
+.page .intro {
   padding: 72px 32px;
   flex-direction: column;
   justify-content: center;
@@ -271,18 +271,18 @@ input[data-autocompleted] {
   display: none;
 }
 
-.half .title1,
-.half .title2 {
+.page .title1,
+.page .title2 {
   font-size: x-large;
   color: var(--text-color);
 }
 
-.half .description {
+.page .description {
   color: var(--text-color);
   margin-top: 10px;
 }
 
-.half .title1 {
+.page .title1 {
   font-size: large;
 }
 
