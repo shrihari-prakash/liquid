@@ -19,6 +19,9 @@ class Redis {
     this.client.on("connect", function () {
       log.info("Connected to Redis (%s:%s).", host, port);
     });
+    this.client.on("error", function (error) {
+      log.error("Connected to Redis (%o).", error);
+    });
   }
 }
 

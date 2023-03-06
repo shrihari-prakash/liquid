@@ -8,6 +8,7 @@ export class Logger {
   constructor() {
     const stream = pretty({
       colorize: true,
+      translateTime: "yyyy-dd-mm HH:MM:ss",
     });
     this.logger = pino(stream);
     this.logger.level = Configuration.get("system.log-level") as string;
