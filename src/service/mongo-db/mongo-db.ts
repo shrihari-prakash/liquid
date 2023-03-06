@@ -8,8 +8,9 @@ import { Configuration } from "../../singleton/configuration";
 export class MongoDB {
   public async connect() {
     try {
-      await mongoose.connect(Configuration.get("mongo-db.connection-string") as string);
-      log.info("Connected to MongoDB.");
+      const connectionString = Configuration.get("mongo-db.connection-string");
+      await mongoose.connect(connectionString as string);
+      log.info("Connected to MongoDB (%s).", connectionString.replace(/\/\/([^:]+):(.*)@/, "//***:***@"));
     } catch (error) {
       log.error(error);
     }

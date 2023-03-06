@@ -13,7 +13,7 @@ const Role: any = {
 
 Configuration.get("system.role.extended-roles").forEach((role: string) => (Role[role] = role));
 
-log.debug("Roles initialized. Values: %o", Role);
+log.debug("Roles initialized. Values: %o", Object.keys(Role));
 
 const roleRanking = Configuration.get("system.role.ranking");
 if (Object.keys(Role).some((role) => !roleRanking.find((rank: string) => rank.startsWith(role)))) {
