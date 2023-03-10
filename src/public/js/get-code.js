@@ -1,6 +1,7 @@
 $(function () {
   let form = document.getElementById("get-code-form");
   form.addEventListener("submit", getCode, true);
+  $("#email").focus();
 });
 
 function getCode(event) {

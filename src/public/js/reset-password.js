@@ -1,6 +1,7 @@
 $(function () {
   let form = document.getElementById("reset-password-form");
   form.addEventListener("submit", getCode, true);
+  $("#code").focus();
 });
 
 function getCode(event) {
