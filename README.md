@@ -1,4 +1,4 @@
-# Liquid - Seamless and highly customizable authentication and user APIs for your projects.
+# Liquid - Seamless authentication and user APIs for your projects.
 
 An open source TypeScript implementation of [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) based Mongo DB and Redis with user sign up and login✨
 
@@ -10,8 +10,8 @@ An open source TypeScript implementation of [oauthjs/node-oauth2-server](https:/
 
 When you start new projects, you typically find that you are writing the login, account creation and authentication logic over and over again. This repository provides a plug and play boiler plate code that acts as an authentication and user management server for your other microservices.
 
-![Liquid](images/liquid-banner.png)
 ![Login](images/screenshot-1.png)
+![Liquid](images/liquid-banner.png)
 
 ### Features
 
