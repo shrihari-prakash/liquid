@@ -16,7 +16,7 @@ When you start new projects, you typically find that you are writing the login, 
 
 In addition to OAuth, the service provides additional (but usually very needed) features:
 
-⭐ Highly customizable. Customize and configure every part of the UI and service.
+⭐ High degree customization capabilities. Customize and configure every part of the UI and service.
 
 ⭐ Out of the box support for user sign up and login.
 
