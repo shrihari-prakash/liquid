@@ -14,7 +14,7 @@ When you start new projects, you typically find that you are writing the login, 
 
 ### Features
 
-In addition to OAuth, the service provides additional (but usually very needed) functionalities for user accounts management:
+In addition to OAuth, the service provides additional (but usually very needed) functionalities for customization and user accounts management:
 
 ⭐ Highly customizable. Customize and configure every part of the UI and service.
 
