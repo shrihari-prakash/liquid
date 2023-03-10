@@ -10,20 +10,19 @@ An open source TypeScript implementation of [oauthjs/node-oauth2-server](https:/
 
 When you start new projects, you typically find that you are writing the login, account creation and authentication logic over and over again. This repository provides a plug and play boiler plate code that acts as an authentication and user management server for your other microservices.
 
-![Login](images/screenshot-1.png)
 ![Liquid](images/liquid-banner.png)
 
 ### Features
 
 In addition to OAuth, the service provides additional (but usually very needed) functionalities for user accounts management:
 
+⭐ Highly customizable. Customize and configure every part of the UI and service.
+
 ⭐ Out of the box support for user sign up and login.
 
 ⭐ Includes follow and unfollow mechanisms with support for private accounts.
 
 ⭐ Support for admin level and client APIs.
-
-⭐ Highly customizable. Customize and configure every part of the UI and service.
 
 ⭐ Quick setup.
 
