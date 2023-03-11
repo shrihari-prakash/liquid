@@ -29,5 +29,8 @@ function signup(event) {
         return;
       }
       onSubmitError({ errorText: "Signup error", buttonText: "Create Account" });
+    })
+    .always(function () {
+      submit.disabled = false;
     });
 }

@@ -33,10 +33,13 @@ function login(event) {
       window.location = `/oauth/authorize?${params.toString()}`;
     })
     .fail(function (response) {
-      if(response.responseJSON.error === "RateLimitError") {
+      if (response.responseJSON.error === "RateLimitError") {
         onSubmitError({ errorText: "Too Many Retries", buttonText: "Login" });
         return;
       }
       onSubmitError({ errorText: "Invalid Login", buttonText: "Login" });
+    })
+    .always(function () {
+      submit.disabled = false;
     });
 }

@@ -19,5 +19,8 @@ function getCode(event) {
     })
     .fail(function () {
       onSubmitError({ errorText: "Invalid Code", buttonText: "Verify" });
+    })
+    .always(function () {
+      submit.disabled = false;
     });
 }

@@ -17,5 +17,8 @@ function getCode(event) {
     })
     .fail(function () {
       onSubmitError({ errorText: "Invalid Login", buttonText: "Verify" });
+    })
+    .always(function () {
+      submit.disabled = false;
     });
 }

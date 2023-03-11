@@ -95,7 +95,6 @@ function onSubmitError(params) {
   const submit = document.getElementById("submit");
   submit.classList.add("shake");
   submit.value = params.errorText;
-  submit.disabled = false;
   STORE.buttonAnimationTimeout = setTimeout(function () {
     submit.classList.remove("shake");
     submit.value = params.buttonText;
