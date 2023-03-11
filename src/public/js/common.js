@@ -23,16 +23,23 @@ function changeToLightVariable(variable) {
   setStyleProperty(variable, `var(${variable}__light)`);
 }
 
-async function usePrimaryButton() {
+async function getTheme() {
   const configuration = await getConfig();
-  const configTheme = configuration.theme;
-  if (configTheme.usePrimaryButton) {
+  const themeObject = configuration.theme;
+  return (STORE.theme === "light") ?
+    themeObject.light : themeObject.dark;
+}
+
+async function usePrimaryButton() {
+  const theme = await getTheme();
+  if (theme.usePrimaryButton) {
     $(".action-button").addClass("btn-primary");
-    setStyleProperty("--primary-button-border-radius", configTheme.primaryButtonBorderRadius);
-    setStyleProperty("--primary-button-text-color", configTheme.primaryButtonTextColor);
-    setStyleProperty("--primary-button-color", configTheme.primaryButtonColor);
-    setStyleProperty("--primary-button-active-color", configTheme.primaryButtonActiveColor);
-    setStyleProperty("--primary-button-focus-box-shadow", configTheme.primaryButtonFocusBoxShadow);
+    setStyleProperty("--primary-button-border-radius", theme.primaryButtonBorderRadius);
+    setStyleProperty("--primary-button-text-color", theme.primaryButtonTextColor);
+    setStyleProperty("--primary-button-active-text-color", theme.primaryButtonActiveTextColor);
+    setStyleProperty("--primary-button-color", theme.primaryButtonColor);
+    setStyleProperty("--primary-button-active-color", theme.primaryButtonActiveColor);
+    setStyleProperty("--primary-button-focus-box-shadow", theme.primaryButtonFocusBoxShadow);
   } else {
     if (STORE.theme === "light") {
       $(".action-button").addClass("btn-light");
@@ -48,23 +55,20 @@ async function useTheme() {
     changeToLightVariable("--spinner-primary-color");
     changeToLightVariable("--spinner-secondary-color");
   }
-  const configuration = await getConfig();
-  const configTheme = configuration.theme;
-  setStyleProperty('--form-input-border-radius', configTheme.formInputBorderRadius);
-  setStyleProperty('--surface-border-radius', configTheme.surfaceBorderRadius);
-  setStyleProperty('--background-color', configTheme.backgroundColor);
+  const theme = await getTheme();
+  usePrimaryButton();
+  setStyleProperty('--form-input-border-radius', theme.formInputBorderRadius);
+  setStyleProperty('--surface-border-radius', theme.surfaceBorderRadius);
+  setStyleProperty('--background-color', theme.backgroundColor);
   if (STORE.theme === "light") {
-    setStyleProperty('--background-color__light', configTheme.backgroundColorLight);
-    changeToLightVariable("--background-color");
     changeToLightVariable("--text-color");
     changeToLightVariable("--text-lighter-color");
     changeToLightVariable("--border-color");
     changeToLightVariable("--glass-color");
   }
-  if (!configTheme.formInputUseBorder) {
+  if (!theme.formInputUseBorder) {
     $(".form-group").addClass("no-border");
   }
-  usePrimaryButton();
 }
 
 function getConfig() {
