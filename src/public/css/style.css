@@ -425,6 +425,7 @@ input[data-autocompleted] {
 
 .shake,
 .shake:hover {
+  color: #ffffff;
   background-color: #ed4337 !important;
   border-color: #ed4337 !important;
 }
