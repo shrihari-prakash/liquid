@@ -125,6 +125,35 @@ paths:
                         type: array
                         items:
                           $ref: "#/definitions/user"
+  /user/client-api/block-status:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns if a given source user is has blocked the given target user.
+      parameters:
+        - in: query
+          name: source
+          schema:
+            type: integer
+          description: ID of the source user.
+        - in: query
+          name: target
+          schema:
+            type: integer
+          description: ID of the target user.
+      responses:
+        "200":
+          description: Returns the block status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      following:
+                        type: boolean
   /user/client-api/follow-status:
     get:
       security:
@@ -492,6 +521,54 @@ paths:
                         type: array
                         items:
                           $ref: "#/definitions/user"
+  /user/block:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Blocks the user with the provided ID from the account associated with the API token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /user/unblock:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Unblocks the user with the provided ID from the account associated with the API token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
   /user/follow:
     post:
       security:
