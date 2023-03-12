@@ -1,7 +1,7 @@
 $(function () {
   let form = document.getElementById("signup-form");
   form.addEventListener("submit", signup, true);
-  $("#username").focus();
+  STORE.autoFocusElement = $("#username");
 });
 
 function signup(event) {

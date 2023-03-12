@@ -13,6 +13,7 @@ const STORE = {
   config: null,
   buttonAnimationTimeout: null,
   theme: "dark",
+  autoFocusElement: null
 };
 
 function setStyleProperty(name, value) {
@@ -81,6 +82,9 @@ function getConfig() {
         STORE.config = data;
         resolve(STORE.config);
         $(".spinner-container").addClass("hidden");
+        if (STORE.autoFocusElement) {
+          STORE.autoFocusElement.focus();
+        }
       })
       .fail(function () {
         reject();

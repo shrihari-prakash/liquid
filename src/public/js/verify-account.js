@@ -1,6 +1,7 @@
 $(function () {
   let form = document.getElementById("verify-form");
   form.addEventListener("submit", getCode, true);
+  STORE.autoFocusElement = $("#code");
 });
 
 function getCode(event) {

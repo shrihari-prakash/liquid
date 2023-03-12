@@ -1,7 +1,7 @@
 $(function () {
   let form = document.getElementById("get-code-form");
   form.addEventListener("submit", getCode, true);
-  $("#email").focus();
+  STORE.autoFocusElement = $("#email");
 });
 
 function getCode(event) {

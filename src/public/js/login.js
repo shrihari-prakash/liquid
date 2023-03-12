@@ -1,7 +1,7 @@
 $(function () {
   let form = document.getElementById("login-form");
   form.addEventListener("submit", login, true);
-  $("#username").focus();
+  STORE.autoFocusElement = $("#username");
 });
 
 function login(event) {
