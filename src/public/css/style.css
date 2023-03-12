@@ -77,6 +77,10 @@
   display: none !important;
 }
 
+.scroll-lock {
+  overflow: hidden;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   background-color: var(--background-color);

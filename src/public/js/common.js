@@ -75,13 +75,15 @@ async function useTheme() {
 function getConfig() {
   return new Promise((resolve, reject) => {
     if (STORE.config) {
-      resolve(STORE.config);
+      return resolve(STORE.config);
     }
+    $("html, body").addClass("scroll-lock");
     return $.get("/app-config.json")
       .done(function (data) {
         STORE.config = data;
         resolve(STORE.config);
         $(".spinner-container").addClass("hidden");
+        $("html, body").removeClass("scroll-lock");
         if (STORE.autoFocusElement) {
           STORE.autoFocusElement.focus();
         }
