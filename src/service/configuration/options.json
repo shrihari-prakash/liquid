@@ -237,6 +237,14 @@
     "default": 10
   },
   {
+    "name": "user.block-status.cache-lifetime",
+    "displayName": "User Block Status Cache Lifetime",
+    "envName": "USER_BLOCK_STATUS_CACHE_LIFETIME",
+    "description": "Specifies in seconds the amount of time for which block status will be cached",
+    "type": "number",
+    "default": 60
+  },
+  {
     "name": "pagination.default-limit",
     "displayName": "Pagination Default Limit",
     "envName": "PAGINATION_DEFAULT_LIMIT",

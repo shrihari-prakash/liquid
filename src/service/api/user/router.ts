@@ -22,6 +22,8 @@ import PATCH_Me from "./me.patch";
 import DELETE_FollowEntry, { DELETE_FollowEntryValidator } from "./follow-entry.delete";
 import AdminApiRouter from "./admin-api/routes";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
+import POST_Block, { POST_BlockValidator } from "./block.post";
+import POST_Unblock, { POST_UnblockValidator } from "./unblock.post";
 
 const UserRouter = express.Router();
 
@@ -58,9 +60,13 @@ UserRouter.use("/client-api", ClientApiRouter);
 // Admin APIs
 UserRouter.use("/admin-api", AdminApiRouter);
 
-//User info
+// User info
 UserRouter.get("/me", ...DelegatedAuthFlow, GET_Me);
 UserRouter.patch("/me", ...DelegatedAuthFlow, PATCH_Me);
 UserRouter.get("/:userId", ...DelegatedAuthFlow, GET__UserId);
+
+// Block - Unblock
+UserRouter.post("/block", ...DelegatedAuthFlow, POST_BlockValidator, POST_Block);
+UserRouter.post("/unblock", ...DelegatedAuthFlow, POST_UnblockValidator, POST_Unblock);
 
 export default UserRouter;

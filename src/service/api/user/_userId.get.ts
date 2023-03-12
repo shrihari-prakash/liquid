@@ -8,11 +8,14 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { IUser, IUserProjection } from "../../../model/mongo/user";
 import FollowModel from "../../../model/mongo/follow";
+import { verifyBlockStatus } from "../../../utils/block";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
     const targetId = req.params.userId;
     const sourceId = res.locals.oauth.token.user._id;
+    const isBlocked = await verifyBlockStatus(sourceId, targetId, res);
+    if (isBlocked) return;
     let user = (await UserModel.findOne({ _id: targetId }, IUserProjection).exec()) as unknown as IUser;
     if (Configuration.get("privilege.can-use-follow-apis")) {
       const isFollowing = (await FollowModel.findOne({

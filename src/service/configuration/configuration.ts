@@ -21,7 +21,7 @@ export class Configuration {
     const value = process.env[option.envName] || defaultValue || option.default;
     switch (option.type) {
       case "boolean":
-        return value === "true";
+        return value === "true" || value === true;
       case "numberArray":
         return value.split(delim).map((elem: string) => parseInt(elem));
       case "stringArray":

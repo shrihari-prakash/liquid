@@ -1,0 +1,44 @@
+import { FollowStatus } from "../enum/follow-status";
+import BlockModel from "../model/mongo/block";
+import { Configuration } from "../singleton/configuration";
+import { Redis } from "../singleton/redis";
+import { errorMessages, statusCodes } from "./http-status";
+import { ErrorResponse } from "./response";
+
+const redisPrefix = "BLOCK_";
+export const verifyBlockStatus = async (targetId: string, sourceId: string, res: any, skipCache = false) => {
+  if (Configuration.get("privilege.can-use-cache") && !skipCache) {
+    const cacheResults = await Redis.client.get(`${redisPrefix}${sourceId}_${targetId}`);
+    if (cacheResults) {
+      if (cacheResults === "blocked") {
+        res.status(statusCodes.forbidden).json(
+          new ErrorResponse(errorMessages.forbidden, {
+            reason: FollowStatus.BLOCKED,
+          })
+        );
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+  const isBlocked: boolean = !!(await BlockModel.findOne({
+    $and: [{ targetId }, { sourceId }],
+  }).exec()) as unknown as boolean;
+  if (isBlocked) {
+    res.status(statusCodes.forbidden).json(
+      new ErrorResponse(errorMessages.forbidden, {
+        reason: FollowStatus.BLOCKED,
+      })
+    );
+  }
+  if (Configuration.get("privilege.can-use-cache")) {
+    await Redis.client.set(
+      `${redisPrefix}${sourceId}_${targetId}`,
+      isBlocked ? "blocked" : "unblocked",
+      "EX",
+      Configuration.get("user.block-status.cache-lifetime") as number
+    );
+  }
+  return isBlocked;
+};
