@@ -7,11 +7,13 @@ import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get
 import GET_UserInfo from "./user-info.get";
 import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get";
 import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get";
+import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
 
 const ClientApiRouter = express.Router();
 
 ClientApiRouter.get("/user-info", ...ClientAuthFlow, GET_UserInfo);
 ClientApiRouter.post("/banned", ...ClientAuthFlow, POST_BannedValidator, POST_Banned);
+ClientApiRouter.get("/block-status", ...ClientAuthFlow, GET_BlockStatusValidator, GET_BlockStatus);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {

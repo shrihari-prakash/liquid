@@ -24,7 +24,7 @@ const POST_Follow = async (req: Request, res: Response) => {
     validateErrors(req, res);
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
-    const isBlocked = await verifyBlockStatus(sourceId, targetId, res, true);
+    const isBlocked = await verifyBlockStatus(targetId, sourceId, res, true);
     if (isBlocked) return;
     const query: any = {
       targetId,

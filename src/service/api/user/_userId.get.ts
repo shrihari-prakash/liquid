@@ -14,7 +14,7 @@ const GET__UserId = async (req: Request, res: Response) => {
   try {
     const targetId = req.params.userId;
     const sourceId = res.locals.oauth.token.user._id;
-    const isBlocked = await verifyBlockStatus(sourceId, targetId, res);
+    const isBlocked = await verifyBlockStatus(targetId, sourceId, res);
     if (isBlocked) return;
     let user = (await UserModel.findOne({ _id: targetId }, IUserProjection).exec()) as unknown as IUser;
     if (Configuration.get("privilege.can-use-follow-apis")) {
