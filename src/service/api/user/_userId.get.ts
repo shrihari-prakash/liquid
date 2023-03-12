@@ -18,12 +18,21 @@ const GET__UserId = async (req: Request, res: Response) => {
     if (isBlocked) return;
     let user = (await UserModel.findOne({ _id: targetId }, IUserProjection).exec()) as unknown as IUser;
     if (Configuration.get("privilege.can-use-follow-apis")) {
-      const isFollowing = (await FollowModel.findOne({
-        $and: [{ targetId }, { sourceId }, { approved: true }],
-      }).exec()) as unknown as IUser;
+      const followEntry = (await FollowModel.findOne({
+        $and: [{ targetId }, { sourceId }],
+      }).exec()) as any;
       user = JSON.parse(JSON.stringify(user));
-      user.isFollowing = !!isFollowing;
-      if (user.isPrivate && !isFollowing) {
+      if (!followEntry) {
+        user.isFollowing = false;
+      } else {
+        if (followEntry.approved) {
+          user.isFollowing = true;
+        } else {
+          user.isFollowing = false;
+          user.requested = true;
+        }
+      }
+      if (user.isPrivate && !user.isFollowing) {
         // @ts-expect-error
         delete user.email;
         // @ts-expect-error

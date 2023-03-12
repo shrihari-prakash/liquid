@@ -770,6 +770,8 @@ paths:
                     properties:
                       following:
                         type: boolean
+                      requested:
+                        type: boolean
 
 definitions:
   user:
@@ -797,3 +799,7 @@ definitions:
         type: string
       phone:
         type: string
+      isFollowing:
+        type: boolean
+      requested:
+        type: boolean
