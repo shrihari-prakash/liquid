@@ -6,14 +6,14 @@ import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 import BlockModel from "../../../model/mongo/block";
 
 export const POST_UnblockValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
 const POST_Unblock = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
     const result = await BlockModel.deleteOne({

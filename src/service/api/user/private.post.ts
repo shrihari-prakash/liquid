@@ -6,7 +6,7 @@ import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 import UserModel from "../../../model/mongo/user";
 import FollowModel from "../../../model/mongo/follow";
 
@@ -14,7 +14,7 @@ export const POST_PrivateValidator = [body("state").exists().isBoolean()];
 
 const POST_Private = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const state = req.body.state;
     await UserModel.updateOne({ _id: userId }, { $set: { isPrivate: state } });

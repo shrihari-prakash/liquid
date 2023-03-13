@@ -8,7 +8,7 @@ const { body } = require("express-validator");
 import UserModel from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 
 export const POST_LoginValidator = [
   body("username")
@@ -22,7 +22,7 @@ export const POST_LoginValidator = [
 
 const POST_Login = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const { username, email, password } = req.body;
     const select = ["+password"];
     const query: any = {};

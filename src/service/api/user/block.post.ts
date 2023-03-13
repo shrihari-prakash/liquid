@@ -7,7 +7,7 @@ import { body } from "express-validator";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { IUser } from "../../../model/mongo/user";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 import { FollowStatus } from "../../../enum/follow-status";
 import BlockModel from "../../../model/mongo/block";
 import FollowModel from "../../../model/mongo/follow";
@@ -21,7 +21,7 @@ function sendSuccess(res: Response, status: string) {
 
 const POST_Block = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const sourceAccount = res.locals.oauth.token.user._id;
     const blockedAccount = req.body.target;
     const query: any = {

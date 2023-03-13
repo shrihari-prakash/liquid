@@ -7,11 +7,11 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import { updateFollowCount } from "../../../utils/follow";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 
 const POST_Unfollow = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
     const result = await FollowModel.deleteOne({

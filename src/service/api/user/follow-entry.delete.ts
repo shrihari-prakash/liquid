@@ -7,13 +7,13 @@ import { body } from "express-validator";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 
 export const DELETE_FollowEntryValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
 const DELETE_FollowEntry = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const entryId = req.body.target;
     const query: any = { $and: [{ _id: entryId }] };

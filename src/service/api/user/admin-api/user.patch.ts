@@ -11,19 +11,12 @@ import UserModel, { IUser } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import Role from "../../../../enum/role";
 import { bcryptConfig } from "../create.post";
-import { validateErrors } from "../../../../utils/api";
+import { hasErrors } from "../../../../utils/api";
+import { PATCH_MeValidator } from "../me.patch";
 
 export const PATCH_UserValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
-  body("username")
-    .optional()
-    .isString()
-    .isLength({ min: 8, max: 16 })
-    .matches(/^[a-z_][a-z0-9._]*$/i),
-  body("email").optional().isEmail(),
-  body("password").optional().isString().isLength({ min: 8, max: 128 }),
-  body("firstName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("lastName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
+  ...PATCH_MeValidator,
 ];
 
 const exractRank = (roleRank: string) => {
@@ -43,15 +36,12 @@ const isRoleRankHigher = (currentRole: string, comparisonRole: string) => {
 
 const PATCH_User = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const userId = req.body.target;
     delete req.body.target;
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
-      if (
-        !Configuration.get("admin-api.user.profile.editable-fields").includes(key) ||
-        typeof req.body[key] !== "string"
-      ) {
+      if (!Configuration.get("admin-api.user.profile.editable-fields").includes(key)) {
         errors.push({
           msg: "Invalid value",
           param: key,

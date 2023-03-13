@@ -10,7 +10,7 @@ import verificationCodeModel from "../../../model/mongo/verification-code";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { bcryptConfig } from "./create.post";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 
 export const POST_ResetPasswordValidator = [
   body("code").exists().isString().isLength({ min: 3, max: 128 }),
@@ -19,7 +19,7 @@ export const POST_ResetPasswordValidator = [
 
 const POST_ResetPassword = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const { code, password: passwordBody } = req.body;
     const dbCode = await verificationCodeModel.findOne({ code }).exec();
     if (!dbCode) {

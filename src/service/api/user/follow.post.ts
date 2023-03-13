@@ -9,7 +9,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import UserModel, { IUser } from "../../../model/mongo/user";
 import { updateFollowCount } from "../../../utils/follow";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 import { FollowStatus } from "../../../enum/follow-status";
 import { getBlockStatus } from "../../../utils/block";
 
@@ -21,7 +21,7 @@ function sendSuccess(res: Response, status: string) {
 
 const POST_Follow = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
     const isBlocked = await getBlockStatus(targetId, sourceId, res, true);

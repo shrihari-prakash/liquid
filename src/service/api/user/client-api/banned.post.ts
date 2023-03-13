@@ -7,7 +7,7 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
 import { body } from "express-validator";
-import { validateErrors } from "../../../../utils/api";
+import { hasErrors } from "../../../../utils/api";
 
 export const POST_BannedValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
@@ -15,7 +15,7 @@ export const POST_BannedValidator = [
 ];
 
 const POST_Banned = async (req: Request, res: Response) => {
-  validateErrors(req, res);
+  if (hasErrors(req, res)) return;
   try {
     const target = req.body.target;
     const state = req.body.state;

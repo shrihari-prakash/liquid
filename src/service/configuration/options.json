@@ -194,7 +194,7 @@
     "envName": "USER_PROFILE_EDITABLE_FIELDS",
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
-    "default": "firstName,lastName,middleName,password,bio"
+    "default": "firstName,lastName,middleName,password,bio,pronouns,customLink,organization"
   },
   {
     "name": "admin-api.user.profile.editable-fields",
@@ -202,7 +202,7 @@
     "envName": "ADMIN_API_USER_PROFILE_EDITABLE_FIELDS",
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
-    "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName,bio"
+    "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName,bio,pronouns,customLink,organization"
   },
   {
     "name": "user.search.search-fields",

@@ -7,7 +7,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { IUserProjection } from "../../../model/mongo/user";
 import { body } from "express-validator";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
 
@@ -15,7 +15,7 @@ export const POST_SearchValidator = [body("query").exists().isString().isLength(
 
 const redisPrefix = "SEARCH_";
 const POST_Search = async (req: Request, res: Response) => {
-  validateErrors(req, res);
+  if (hasErrors(req, res)) return;
   try {
     const query = req.body.query;
     if (Configuration.get("privilege.can-use-cache")) {

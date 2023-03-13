@@ -9,7 +9,7 @@ import UserModel, { IUser } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import Role from "../../../enum/role";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 import { generateVerificationCode } from "../../../utils/verification-code/verification-code";
 
 export const bcryptConfig = {
@@ -31,7 +31,7 @@ export const POST_CreateValidator = [
 const POST_Create = async (req: Request, res: Response) => {
   try {
     const { username, firstName, lastName, email, password: passwordBody } = req.body;
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const existingUser = (await UserModel.findOne({
       $or: [{ email: email.toLowerCase() }, { username }],
     }).exec()) as unknown as IUser;

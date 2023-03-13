@@ -28,6 +28,8 @@ const userSchema = {
   },
   profilePictureUrl: String,
   bio: String,
+  customLink: String,
+  pronouns: String,
   followingCount: {
     type: Number,
     required: true,
@@ -70,6 +72,7 @@ const userSchema = {
   city: String,
   country: String,
   pincode: Number,
+  organization: String,
   isSubscribed: {
     type: Boolean,
     required: true,
@@ -136,6 +139,8 @@ export type IUser = {
   bio: string;
   profilePictureUrl: string;
   followingCount: string;
+  pronouns: string;
+  customLink: string;
   followerCount: string;
   isPrivate: boolean;
   email: string;
@@ -153,6 +158,7 @@ export type IUser = {
   city: string;
   country: string;
   pincode: number;
+  organization: string;
   isSubscribed: boolean;
   subscriptionExpiry: Date;
   subscriptionTier: string;
@@ -178,11 +184,14 @@ export const IUserProjection = {
   lastName: 1,
   bio: 1,
   profilePictureUrl: 1,
+  pronouns: 1,
+  customLink: 1,
   followingCount: 1,
   followerCount: 1,
   isPrivate: 1,
   email: 1,
   phone: 1,
+  organization: 1,
   secondaryEmail: 1,
   secondaryPhone: 1,
   isBanned: 1,

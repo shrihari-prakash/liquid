@@ -10,6 +10,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel from "../../../model/mongo/user";
 import { Configuration } from "../../../singleton/configuration";
 import { bcryptConfig } from "./create.post";
+import { hasErrors } from "../../../utils/api";
 
 export const PATCH_MeValidator = [
   body("username")
@@ -21,15 +22,19 @@ export const PATCH_MeValidator = [
   body("password").optional().isString().isLength({ min: 8, max: 128 }),
   body("firstName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
   body("lastName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("bio").optional().isString().isAlpha().isLength({ min: 3, max: 256 }),
+  body("bio").optional().isString().isLength({ min: 3, max: 256 }),
+  body("customLink").optional().isURL().isLength({ min: 3, max: 256 }),
+  body("pronouns").optional().isString().isLength({ min: 3, max: 24 }),
+  body("organization").optional().isString().isAlpha().isLength({ min: 3, max: 128 }),
 ];
 
 const PATCH_Me = async (req: Request, res: Response) => {
   try {
+    if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
-      if (!Configuration.get("user.profile.editable-fields").includes(key) || typeof req.body[key] !== "string") {
+      if (!Configuration.get("user.profile.editable-fields").includes(key)) {
         errors.push({
           msg: "Invalid value",
           param: key,

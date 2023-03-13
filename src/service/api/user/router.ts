@@ -18,7 +18,7 @@ import GET_Me from "./me.get";
 import GET_VerifyEmail, { GET_VerifyEmailValidator } from "./verify-email.get";
 import GET_FollowRequests from "./follow-requests.get";
 import PATCH_AcceptFollowRequest, { PATCH_AcceptFollowRequestValidator } from "./accept-follow-request.patch";
-import PATCH_Me from "./me.patch";
+import PATCH_Me, { PATCH_MeValidator } from "./me.patch";
 import DELETE_FollowEntry, { DELETE_FollowEntryValidator } from "./follow-entry.delete";
 import AdminApiRouter from "./admin-api/routes";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
@@ -62,7 +62,7 @@ UserRouter.use("/admin-api", AdminApiRouter);
 
 // User info
 UserRouter.get("/me", ...DelegatedAuthFlow, GET_Me);
-UserRouter.patch("/me", ...DelegatedAuthFlow, PATCH_Me);
+UserRouter.patch("/me", ...DelegatedAuthFlow, PATCH_MeValidator, PATCH_Me);
 UserRouter.get("/:userId", ...DelegatedAuthFlow, GET__UserId);
 
 // Block - Unblock

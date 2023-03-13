@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import { query } from "express-validator";
 
 import UserModel, { IUser } from "../../../model/mongo/user";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { generateVerificationCode } from "../../../utils/verification-code/verification-code";
@@ -14,7 +14,7 @@ export const GET_CodeValidator = [query("email").exists().isEmail()];
 
 const GET_Code = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const { email } = req.query;
     const existingUser = (await UserModel.findOne({
       email,

@@ -6,7 +6,7 @@ import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { validateErrors } from "../../../../utils/api";
+import { hasErrors } from "../../../../utils/api";
 import UserModel from "../../../../model/mongo/user";
 
 export const POST_AccessValidator = [
@@ -16,7 +16,7 @@ export const POST_AccessValidator = [
 ];
 
 const POST_Access = async (req: Request, res: Response) => {
-  validateErrors(req, res);
+  if (hasErrors(req, res)) return;
   try {
     if (
       req.body.targets.some((t: string) => typeof t !== "string") ||

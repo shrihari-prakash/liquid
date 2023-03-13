@@ -8,13 +8,13 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import { updateFollowCount } from "../../../utils/follow";
-import { validateErrors } from "../../../utils/api";
+import { hasErrors } from "../../../utils/api";
 
 export const PATCH_AcceptFollowRequestValidator = [body("request").exists().isString().isLength({ min: 8, max: 64 })];
 
 const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
   try {
-    validateErrors(req, res);
+    if (hasErrors(req, res)) return;
     const targetId = res.locals.oauth.token.user._id;
     const requestId = req.body.request;
     const query: any = {
