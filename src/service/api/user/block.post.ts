@@ -35,8 +35,8 @@ const POST_Block = async (req: Request, res: Response) => {
       await new BlockModel(query).save();
       // Delete follow entry for the source person following the blocked account.
       const result1 = await FollowModel.deleteOne({
-        targetId: blockedAccount,
         sourceId: sourceAccount,
+        targetId: blockedAccount,
         approved: true,
       });
       if (result1.deletedCount) {
@@ -44,8 +44,8 @@ const POST_Block = async (req: Request, res: Response) => {
       }
       // Delete follow entry for the blocked person following the source account.
       const result2 = await FollowModel.deleteOne({
-        targetId: sourceAccount,
         sourceId: blockedAccount,
+        targetId: sourceAccount,
         approved: true,
       });
       if (result2.deletedCount) {

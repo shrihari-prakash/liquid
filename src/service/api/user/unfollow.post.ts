@@ -15,8 +15,9 @@ const POST_Unfollow = async (req: Request, res: Response) => {
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
     const result = await FollowModel.deleteOne({
-      targetId,
       sourceId,
+      targetId,
+      approved: true,
     });
     if (!result.deletedCount) {
       return res.status(statusCodes.success).json(new SuccessResponse());

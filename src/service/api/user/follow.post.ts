@@ -11,7 +11,7 @@ import UserModel, { IUser } from "../../../model/mongo/user";
 import { updateFollowCount } from "../../../utils/follow";
 import { validateErrors } from "../../../utils/api";
 import { FollowStatus } from "../../../enum/follow-status";
-import { verifyBlockStatus } from "../../../utils/block";
+import { getBlockStatus } from "../../../utils/block";
 
 export const POST_FollowValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
@@ -24,7 +24,7 @@ const POST_Follow = async (req: Request, res: Response) => {
     validateErrors(req, res);
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
-    const isBlocked = await verifyBlockStatus(targetId, sourceId, res, true);
+    const isBlocked = await getBlockStatus(targetId, sourceId, res, true);
     if (isBlocked) return;
     const query: any = {
       targetId,

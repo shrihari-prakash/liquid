@@ -17,8 +17,8 @@ const POST_Unblock = async (req: Request, res: Response) => {
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
     const result = await BlockModel.deleteOne({
-      targetId,
       sourceId,
+      targetId,
     });
     if (!result.deletedCount) {
       return res.status(statusCodes.success).json(new SuccessResponse());

@@ -6,7 +6,7 @@ import { errorMessages, statusCodes } from "./http-status";
 import { ErrorResponse } from "./response";
 
 const redisPrefix = "BLOCK_";
-export const verifyBlockStatus = async (sourceId: string, targetId: string, res: any, skipCache = false) => {
+export const getBlockStatus = async (sourceId: string, targetId: string, res: any, skipCache = false) => {
   if (Configuration.get("privilege.can-use-cache") && !skipCache) {
     const cacheResults = await Redis.client.get(`${redisPrefix}${sourceId}_${targetId}`);
     if (cacheResults) {
@@ -24,7 +24,7 @@ export const verifyBlockStatus = async (sourceId: string, targetId: string, res:
     }
   }
   const isBlocked: boolean = !!(await BlockModel.findOne({
-    $and: [{ targetId }, { sourceId }],
+    $and: [{ sourceId }, { targetId }],
   }).exec()) as unknown as boolean;
   if (isBlocked) {
     res &&

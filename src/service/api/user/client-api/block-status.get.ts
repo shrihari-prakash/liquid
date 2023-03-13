@@ -6,7 +6,7 @@ import { query } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { verifyBlockStatus } from "../../../../utils/block";
+import { getBlockStatus } from "../../../../utils/block";
 
 export const GET_BlockStatusValidator = [
   query("source").exists().isString().isLength({ min: 8, max: 128 }),
@@ -17,7 +17,7 @@ const GET_BlockStatus = async (req: Request, res: Response) => {
   try {
     const sourceId = req.query.source as string;
     const targetId = req.query.target as string;
-    const isBlocked = await verifyBlockStatus(sourceId, targetId, null);
+    const isBlocked = await getBlockStatus(sourceId, targetId, null);
     res.status(statusCodes.success).json(new SuccessResponse({ blocked: isBlocked }));
   } catch (err) {
     log.error(err);
