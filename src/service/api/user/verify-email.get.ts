@@ -2,7 +2,7 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/verify-email" });
 
 import { Request, Response } from "express";
-const { body } = require("express-validator");
+const { query } = require("express-validator");
 
 import UserModel from "../../../model/mongo/user";
 import verificationCodeModel from "../../../model/mongo/verification-code";
@@ -10,7 +10,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
 
-export const GET_VerifyEmailValidator = [body("code").exists().isString()];
+export const GET_VerifyEmailValidator = [query("code").exists().isString()];
 
 const GET_VerifyEmail = async (req: Request, res: Response) => {
   try {
