@@ -177,6 +177,13 @@ input[data-autocompleted] {
 .page .bg:first-child {
   width: 35%;
 }
+
+@media (min-width: 1199.99px) {
+  .page .contents {
+    overflow-y: auto;
+  }
+}
+
 @media (max-width: 1199.98px) {
   .page .contents,
   .page .bg {
