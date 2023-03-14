@@ -18,7 +18,9 @@ const YAML = require("yamljs");
 const swaggerDocument = YAML.load(__dirname + "/swagger.yaml");
 
 const app = express();
-activateRateLimiters(app);
+if (app.get("env") !== "test") {
+  activateRateLimiters(app);
+}
 const staticFolder = path.join(__dirname, Configuration.get("system.static-folder"));
 app.use(
   "/",

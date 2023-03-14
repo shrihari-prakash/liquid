@@ -2,18 +2,18 @@ var fs = require("fs");
 import { v4 as uuidv4 } from "uuid";
 
 import { IUser } from "../../model/mongo/user";
-import verificationCodeModel from "../../model/mongo/verification-code";
+import VerificationCodeModel from "../../model/mongo/verification-code";
 import { Configuration } from "../../singleton/configuration";
 import { Mailer } from "../../singleton/mailer";
 
 export const generateVerificationCode = async function (user: IUser) {
-  await verificationCodeModel.deleteMany({ belongsTo: user._id });
+  await VerificationCodeModel.deleteMany({ belongsTo: user._id });
   const code = {
     belongsTo: user._id,
     verificationMethod: "email",
     code: uuidv4(),
   };
-  await new verificationCodeModel(code).save();
+  await new VerificationCodeModel(code).save();
   const appName = Configuration.get("system.app-name") as string;
   const fullName = `${user.firstName} ${user.lastName}`;
   const msg: any = {
