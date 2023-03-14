@@ -1,7 +1,7 @@
-import app from "../../src/index";
+import app from "../../../src/index";
 import chai, { use } from "chai";
-import UserModel from "../../src/model/mongo/user";
-import VerificationCodeModel from "../../src/model/mongo/verification-code";
+import UserModel from "../../../src/model/mongo/user";
+import VerificationCodeModel from "../../../src/model/mongo/verification-code";
 import MemoryStore from "../store";
 
 before(async () => {

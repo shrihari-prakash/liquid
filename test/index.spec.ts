@@ -25,12 +25,19 @@ describe("Health Check", () => {
   });
 });
 
-describe("User", function () {
-  runTest("Create", "./user/create.post.spec");
-  runTest("Login", "./user/login.post.spec");
-  runTest("Me", "./user/me.get.spec");
-});
+describe("Integration Test", () => {
+  describe("OAuth", function () {
+    runTest("Token", "./integration/oauth/token.spec");
+  });
 
-describe("OAuth", function () {
-  runTest("Token", "./oauth/token.spec");
+  describe("User", function () {
+    runTest("Create", "./integration/user/create.spec");
+    runTest("Login", "./integration/user/login.spec");
+    runTest("Me", "./integration/user/me.spec");
+    runTest("Follow", "./integration/user/follow.spec");
+    runTest("Unfollow", "./integration/user/unfollow.spec");
+    runTest("Private", "./integration/user/private.spec");
+    runTest("Block", "./integration/user/block.spec");
+    runTest("Unblock", "./integration/user/unblock.spec");
+  });
 });

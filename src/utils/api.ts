@@ -7,10 +7,11 @@ const { validationResult } = require("express-validator");
 export function hasErrors(req: Request, res: Response) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(statusCodes.clientInputError).json(
+    res.status(statusCodes.clientInputError).json(
       new ErrorResponse(errorMessages.clientInputError, {
         errors: errors.array(),
       })
     );
+    return true;
   }
 }

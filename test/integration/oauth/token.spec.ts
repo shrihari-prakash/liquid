@@ -1,7 +1,7 @@
-import app from "../../src/index";
+import app from "../../../src/index";
 import chai from "chai";
 import MemoryStore from "../store";
-import ClientModel from "../../src/model/mongo/client";
+import ClientModel from "../../../src/model/mongo/client";
 
 it("test client credentials", async () => {
   await ClientModel.deleteMany({});

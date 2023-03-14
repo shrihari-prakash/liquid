@@ -1,4 +1,4 @@
-import app from "../../src/index";
+import app from "../../../src/index";
 import chai from "chai";
 import MemoryStore from "../store";
 

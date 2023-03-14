@@ -1,7 +1,7 @@
-import app from "../../src/index";
+import app from "../../../src/index";
 import chai from "chai";
 import MemoryStore from "../store";
-import { Redis } from "../../src/singleton/redis";
+import { Redis } from "../../../src/singleton/redis";
 
 after(async () => {
   await Redis.client.set(
