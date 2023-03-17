@@ -24,6 +24,8 @@ paths:
                   type: array
                   items:
                     type: string
+                status:
+                  type: boolean
       responses:
         "200":
           description: Returns OK.
@@ -861,7 +863,7 @@ paths:
 
 tags:
   - name: admin-api
-    description: Restricted to system admins. Super Admin role has access to all these APIs. To provide access to other users, Super Admin needs to explicitly give permissions using POST /access API. Needs an `authorization_code` grant login.
+    description: Restricted to system admins. Super Admin role has access to all these APIs. To provide access to other users, Super Admin needs to explicitly give permissions using `POST user/admin-api/access` API. Needs an `authorization_code` grant login.
   - name: client-api
     description: Accessible by `client_credentials` grant.
   - name: user-api
