@@ -99,6 +99,32 @@ paths:
                         type: array
                         items:
                           type: string
+  /user/admin-api/banned:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Marks the user with given ID as banned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                state:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
   /user/client-api/user-info:
     get:
       security:
