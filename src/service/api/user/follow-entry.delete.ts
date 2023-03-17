@@ -24,7 +24,7 @@ const DELETE_FollowEntry = async (req: Request, res: Response) => {
       return;
     }
     await FollowModel.deleteOne(requestObject._id);
-    if (requestObject.targetId.equals(userId) && requestObject.approved) {
+    if (requestObject.approved) {
       await updateFollowCount(requestObject.sourceId, requestObject.targetId, -1);
     }
     res.status(statusCodes.success).json(new SuccessResponse());
