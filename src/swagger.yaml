@@ -8,7 +8,7 @@ paths:
     post:
       security:
         - bearerAuth: []
-      summary: Provide access to an admin API for the given users.
+      summary: 'Provide access to an admin API for the given users. Permissions array sample: ["PATCH_/user/admin-api/user"]'
       requestBody:
         required: true
         content:
@@ -34,6 +34,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - admin-api
   /user/admin-api/user:
     patch:
       security:
@@ -79,6 +81,8 @@ paths:
                     properties:
                       ok:
                         type: boolean
+      tags:
+        - admin-api
   /user/admin-api/editable-fields:
     get:
       security:
@@ -99,6 +103,8 @@ paths:
                         type: array
                         items:
                           type: string
+      tags:
+        - admin-api
   /user/admin-api/banned:
     post:
       security:
@@ -125,6 +131,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - admin-api
   /user/client-api/user-info:
     get:
       security:
@@ -151,6 +159,8 @@ paths:
                         type: array
                         items:
                           $ref: "#/definitions/user"
+      tags:
+        - client-api
   /user/client-api/block-status:
     get:
       security:
@@ -180,6 +190,8 @@ paths:
                     properties:
                       following:
                         type: boolean
+      tags:
+        - client-api
   /user/client-api/follow-status:
     get:
       security:
@@ -209,6 +221,8 @@ paths:
                     properties:
                       following:
                         type: boolean
+      tags:
+        - client-api
   /user/client-api/user-following:
     get:
       security:
@@ -242,6 +256,8 @@ paths:
                               type: boolean
                             target:
                               $ref: "#/definitions/user"
+      tags:
+        - client-api
   /user/client-api/user-followers:
     get:
       security:
@@ -275,6 +291,8 @@ paths:
                               type: boolean
                             source:
                               $ref: "#/definitions/user"
+      tags:
+        - client-api
   /user/client-api/banned:
     post:
       security:
@@ -301,6 +319,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - client-api
   /user/create:
     post:
       summary: Creates an user.
@@ -326,6 +346,8 @@ paths:
                 properties:
                   ...:
                     type: string
+      tags:
+        - user-api
   /user/login:
     post:
       summary: Creates a cookie session and returns the user profile.
@@ -355,6 +377,8 @@ paths:
                     properties:
                       user:
                         $ref: "#/definitions/user"
+      tags:
+        - user-api
   /user/verify-email:
     post:
       summary: Marks the user's account associated with the auto generated code as a verified.
@@ -377,6 +401,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/code:
     get:
       summary: Generates a code to initiate a password reset.
@@ -396,6 +422,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/reset-password:
     post:
       security:
@@ -422,6 +450,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/private:
     post:
       security:
@@ -446,6 +476,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/me:
     get:
       security:
@@ -468,6 +500,8 @@ paths:
                         type: array
                         items:
                           type: string
+      tags:
+        - user-api
 
     patch:
       security:
@@ -503,6 +537,8 @@ paths:
                     properties:
                       ok:
                         type: boolean
+      tags:
+        - user-api
   /user/:userId:
     get:
       security:
@@ -518,6 +554,8 @@ paths:
                 properties:
                   user:
                     $ref: "#/definitions/user"
+      tags:
+        - user-api
   /user/search:
     post:
       security:
@@ -547,6 +585,8 @@ paths:
                         type: array
                         items:
                           $ref: "#/definitions/user"
+      tags:
+        - user-api
   /user/block:
     post:
       security:
@@ -571,6 +611,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/unblock:
     post:
       security:
@@ -595,6 +637,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/follow:
     post:
       security:
@@ -619,6 +663,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/unfollow:
     post:
       security:
@@ -643,6 +689,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/accept-follow-request:
     post:
       security:
@@ -667,6 +715,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/follow-entry:
     delete:
       security:
@@ -691,6 +741,8 @@ paths:
                 properties:
                   ok:
                     type: boolean
+      tags:
+        - user-api
   /user/following:
     get:
       security:
@@ -718,6 +770,8 @@ paths:
                               type: boolean
                             target:
                               $ref: "#/definitions/user"
+      tags:
+        - user-api
   /user/followers:
     get:
       security:
@@ -745,6 +799,8 @@ paths:
                               type: boolean
                             source:
                               $ref: "#/definitions/user"
+      tags:
+        - user-api
   /user/follow-requests:
     get:
       security:
@@ -772,6 +828,8 @@ paths:
                               type: boolean
                             source:
                               $ref: "#/definitions/user"
+      tags:
+        - user-api
   /user/follow-status:
     get:
       security:
@@ -798,6 +856,16 @@ paths:
                         type: boolean
                       requested:
                         type: boolean
+      tags:
+        - user-api
+
+tags:
+  - name: admin-api
+    description: Restricted to system admins. Super Admin role has access to all these APIs. To provide access to other users, Super Admin needs to explicitly give permissions using POST /access API. Needs an `authorization_code` grant login.
+  - name: client-api
+    description: Accessible by `client_credentials` grant.
+  - name: user-api
+    description: All the user APIs in the system. Accessible only by `authorization_code` grant.
 
 definitions:
   user:
