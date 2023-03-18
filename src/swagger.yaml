@@ -163,6 +163,36 @@ paths:
                     type: boolean
       tags:
         - admin-api
+  /user/admin-api/subscription:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Updates the subscription data for the given user ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                state:
+                  type: string
+                expiry:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - admin-api
   /user/client-api/user-info:
     get:
       security:
@@ -366,6 +396,36 @@ paths:
                 target:
                   type: string
                 state:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - client-api
+  /user/client-api/subscription:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Updates the subscription data for the given user ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                state:
+                  type: string
+                expiry:
                   type: string
       responses:
         "200":
@@ -947,6 +1007,16 @@ definitions:
         type: string
       isPrivate:
         type: string
+      isSubscribed:
+        type: boolean
+      subscriptionTier:
+        type: string
+      subscriptionExpiry:
+        type: string
+      isBanned:
+        type: boolean
+      isRestricted:
+        type: boolean
       email:
         type: string
       phone:

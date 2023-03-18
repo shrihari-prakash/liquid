@@ -9,12 +9,14 @@ import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.
 import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get";
 import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
 import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
+import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
 
 const ClientApiRouter = express.Router();
 
 ClientApiRouter.get("/user-info", ...ClientAuthFlow, GET_UserInfo);
 ClientApiRouter.post("/ban", ...ClientAuthFlow, POST_BanValidator, POST_Ban);
 ClientApiRouter.post("/restrict", ...ClientAuthFlow, POST_RestrictValidator, POST_Restrict);
+ClientApiRouter.post("/subscription", ...ClientAuthFlow, POST_SubscriptionValidator, POST_Subscription);
 ClientApiRouter.get("/block-status", ...ClientAuthFlow, GET_BlockStatusValidator, GET_BlockStatus);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");

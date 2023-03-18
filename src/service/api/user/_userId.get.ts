@@ -2,6 +2,7 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/follow" });
 
 import { Request, Response } from "express";
+import moment from "moment";
 
 import { Configuration } from "../../../singleton/configuration";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
@@ -42,6 +43,9 @@ const GET__UserId = async (req: Request, res: Response) => {
         delete user.secondaryEmail;
         // @ts-expect-error
         delete user.secondaryPhone;
+      }
+      if (user.isSubscribed && moment().isAfter(moment(user.subscriptionExpiry))) {
+        user.isSubscribed = false;
       }
     }
     res.status(statusCodes.success).json(new SuccessResponse({ user }));

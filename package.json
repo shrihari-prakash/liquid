@@ -46,6 +46,7 @@
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "ioredis": "^5.2.4",
+    "moment": "^2.29.4",
     "mongoose": "^6.6.3",
     "pino": "^8.7.0",
     "pino-pretty": "^9.1.1",

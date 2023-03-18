@@ -2,6 +2,7 @@ import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/client-api/get-user-info" });
 
 import { Request, Response } from "express";
+import moment from "moment";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
@@ -16,7 +17,14 @@ const GET_UserInfo = async (req: Request, res: Response) => {
     }
     const users = (await UserModel.find({
       _id: { $in: targets },
-    }).exec()) as unknown as IUser[];
+    })
+      .lean()
+      .exec()) as unknown as IUser[];
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].isSubscribed && moment().isAfter(moment(users[i].subscriptionExpiry))) {
+        users[i].isSubscribed = false;
+      }
+    }
     res.status(statusCodes.success).json(new SuccessResponse({ users }));
   } catch (err) {
     log.error(err);

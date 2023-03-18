@@ -76,20 +76,16 @@ const userSchema = {
   isSubscribed: {
     type: Boolean,
     required: true,
-    select: false,
     default: false,
   },
   subscriptionExpiry: {
     type: Date,
-    required: true,
-    select: false,
+    required: false,
     default: Date.now(),
   },
   subscriptionTier: {
     type: String,
-    required: true,
-    select: false,
-    default: "default",
+    required: false,
   },
   isActive: {
     type: Boolean,
@@ -198,6 +194,9 @@ export const IUserProjection = {
   secondaryPhone: 1,
   isBanned: 1,
   isRestricted: 1,
+  isSubscribed: 1,
+  subscriptionTier: 1,
+  subscriptionExpiry: 1,
 };
 
 export default UserModel;

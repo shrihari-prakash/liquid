@@ -245,6 +245,14 @@
     "default": 60
   },
   {
+    "name": "user.subscription.tier-list",
+    "displayName": "User Subscription Tier List",
+    "envName": "USER_SUBSCRIPTION_TIER_LIST",
+    "description": "Comma separated list of subscription tier names.",
+    "type": "stringArray",
+    "default": "BASIC,PRO"
+  },
+  {
     "name": "pagination.default-limit",
     "displayName": "Pagination Default Limit",
     "envName": "PAGINATION_DEFAULT_LIMIT",
