@@ -9,17 +9,26 @@ import UserModel from "../../../../model/mongo/user";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api";
 
-export const POST_BannedValidator = [
+export const POST_RestrictValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
   body("state").exists().isBoolean(),
+  body("reason").optional().isString().isLength({ min: 8, max: 128 }),
 ];
 
-const POST_Banned = async (req: Request, res: Response) => {
+const POST_Restrict = async (req: Request, res: Response) => {
   if (hasErrors(req, res)) return;
   try {
     const target = req.body.target;
     const state = req.body.state;
-    await UserModel.updateOne({ _id: target }, { $set: { isBanned: state } });
+    const reason = req.body.reason;
+    const query = {
+      $set: {
+        isRestricted: state,
+        restrictedDate: new Date(new Date().toUTCString()),
+        restrictedReason: reason || null,
+      },
+    };
+    await UserModel.updateOne({ _id: target }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
@@ -27,4 +36,4 @@ const POST_Banned = async (req: Request, res: Response) => {
   }
 };
 
-export default POST_Banned;
+export default POST_Restrict;

@@ -109,6 +109,7 @@ const userSchema = {
     required: true,
     default: false,
   },
+  restrictedDate: Date,
   restrictedReason: String,
   deleted: {
     type: Boolean,
@@ -168,6 +169,7 @@ export type IUser = {
   bannedDate: Date;
   bannedReason: string;
   isRestricted: boolean;
+  restrictedDate: Date;
   restrictedReason: string;
   deleted: boolean;
   deletedDate: Date;

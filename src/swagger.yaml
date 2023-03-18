@@ -107,11 +107,39 @@ paths:
                           type: string
       tags:
         - admin-api
-  /user/admin-api/banned:
+  /user/admin-api/ban:
     post:
       security:
         - bearerAuth: []
       summary: Marks the user with given ID as banned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                state:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - admin-api
+  /user/admin-api/restrict:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Marks the user with given ID as restricted.
       requestBody:
         required: true
         content:
@@ -295,11 +323,39 @@ paths:
                               $ref: "#/definitions/user"
       tags:
         - client-api
-  /user/client-api/banned:
+  /user/client-api/ban:
     post:
       security:
         - bearerAuth: []
       summary: Marks the user with given ID as banned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                state:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - client-api
+  /user/client-api/restrict:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Marks the user with given ID as restricted.
       requestBody:
         required: true
         content:

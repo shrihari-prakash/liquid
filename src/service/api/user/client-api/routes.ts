@@ -2,17 +2,19 @@ import express from "express";
 
 import { Configuration } from "../../../../singleton/configuration";
 import { ClientAuthFlow } from "../../middleware/authenticate";
-import POST_Banned, { POST_BannedValidator } from "../shared/banned.post";
+import POST_Ban, { POST_BanValidator } from "../shared/ban.post";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 import GET_UserInfo from "./user-info.get";
 import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get";
 import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get";
 import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
+import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
 
 const ClientApiRouter = express.Router();
 
 ClientApiRouter.get("/user-info", ...ClientAuthFlow, GET_UserInfo);
-ClientApiRouter.post("/banned", ...ClientAuthFlow, POST_BannedValidator, POST_Banned);
+ClientApiRouter.post("/ban", ...ClientAuthFlow, POST_BanValidator, POST_Ban);
+ClientApiRouter.post("/restrict", ...ClientAuthFlow, POST_RestrictValidator, POST_Restrict);
 ClientApiRouter.get("/block-status", ...ClientAuthFlow, GET_BlockStatusValidator, GET_BlockStatus);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
