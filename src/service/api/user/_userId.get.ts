@@ -2,7 +2,6 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/follow" });
 
 import { Request, Response } from "express";
-import moment from "moment";
 
 import { Configuration } from "../../../singleton/configuration";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
@@ -10,6 +9,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { IUser, IUserProjection } from "../../../model/mongo/user";
 import FollowModel from "../../../model/mongo/follow";
 import { getBlockStatus } from "../../../utils/block";
+import { checkSubscription } from "../../../utils/subscription";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
@@ -44,9 +44,7 @@ const GET__UserId = async (req: Request, res: Response) => {
         // @ts-expect-error
         delete user.secondaryPhone;
       }
-      if (user.isSubscribed && moment().isAfter(moment(user.subscriptionExpiry))) {
-        user.isSubscribed = false;
-      }
+      checkSubscription(user);
     }
     res.status(statusCodes.success).json(new SuccessResponse({ user }));
   } catch (err) {

@@ -2,12 +2,12 @@ import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/client-api/get-user-info" });
 
 import { Request, Response } from "express";
-import moment from "moment";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel, { IUser } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
+import { checkSubscription } from "../../../../utils/subscription";
 
 const GET_UserInfo = async (req: Request, res: Response) => {
   try {
@@ -20,11 +20,7 @@ const GET_UserInfo = async (req: Request, res: Response) => {
     })
       .lean()
       .exec()) as unknown as IUser[];
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].isSubscribed && moment().isAfter(moment(users[i].subscriptionExpiry))) {
-        users[i].isSubscribed = false;
-      }
-    }
+    checkSubscription(users);
     res.status(statusCodes.success).json(new SuccessResponse({ users }));
   } catch (err) {
     log.error(err);
