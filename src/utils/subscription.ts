@@ -11,7 +11,6 @@ export const checkSubscription = (input: IUser | IUser[]) => {
         toUpdate.push(users[i]._id);
       }
     }
-    console.log(toUpdate);
     toUpdate.length && UserModel.updateMany({ _id: { $in: toUpdate } }, { $set: { isSubscribed: false } }, () => {});
     return users;
   } else {
