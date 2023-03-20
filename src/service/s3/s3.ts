@@ -7,9 +7,12 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Configuration } from "../../singleton/configuration";
 
 class S3 {
-  client: S3Client;
+  client: S3Client | undefined;
   bucket = Configuration.get("s3.bucket-name");
   constructor() {
+    if (!Configuration.get("privilege.can-use-cloud-storage")) {
+      return;
+    }
     log.info("Initializing S3 engine...");
     this.client = new S3Client({
       region: "auto",
@@ -21,6 +24,9 @@ class S3 {
     });
   }
   async getSignedUrl(command: "GET" | "PUT", fileName: string, options: any = {}, expiry?: number) {
+    if (!this.client) {
+      return null;
+    }
     switch (command) {
       case "GET":
         return await getSignedUrl(
@@ -42,6 +48,9 @@ class S3 {
   }
 
   async delete(fileName: string) {
+    if (!this.client) {
+      return;
+    }
     var params = { Bucket: this.bucket, Key: fileName };
     const command = new DeleteObjectCommand(params);
     return await this.client.send(command);

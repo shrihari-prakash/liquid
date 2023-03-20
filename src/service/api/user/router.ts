@@ -1,3 +1,6 @@
+import { Logger } from "../../../singleton/logger";
+const log = Logger.getLogger().child({ from: "user-router" });
+
 import express from "express";
 
 import { Configuration } from "../../../singleton/configuration";
@@ -37,8 +40,15 @@ UserRouter.post("/private", ...DelegatedAuthFlow, ...POST_PrivateValidator, POST
 UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
 UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
 UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
-UserRouter.patch("/profile-picture", ...DelegatedAuthFlow, PATCH_ProfilePicture);
-UserRouter.delete("/profile-picture", ...DelegatedAuthFlow, DELETE_ProfilePicture);
+
+if (Configuration.get("privilege.can-use-profile-picture-apis")) {
+  UserRouter.patch("/profile-picture", ...DelegatedAuthFlow, PATCH_ProfilePicture);
+  UserRouter.delete("/profile-picture", ...DelegatedAuthFlow, DELETE_ProfilePicture);
+} else {
+  log.warn(
+    "Usage of profile pictures is disabled, if you would like to use the feature, enable options Can Use Profile Picture APIs (privilege.can-use-profile-picture-apis) and Can Use Cloud Storage (privilege.can-use-cloud-storage). This will require S3 or S3-like storage system."
+  );
+}
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {

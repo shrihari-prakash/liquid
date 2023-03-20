@@ -11,30 +11,40 @@ import { Configuration } from "../../../singleton/configuration";
 import { S3 } from "../../../singleton/s3";
 import UserModel from "../../../model/mongo/user";
 
-export const profilePictureMulter = multer({
-  storage: multerS3({
-    s3: S3.client,
-    bucket: Configuration.get("s3.bucket-name"),
-    metadata: function (req: any, _: any, cb: any) {
-      const userId = req.res?.locals.oauth.token.user._id;
-      cb(null, { fieldName: userId });
+let profilePictureMulter;
+
+if (Configuration.get("privilege.can-use-cloud-storage")) {
+  profilePictureMulter = multer({
+    limits: {
+      fileSize: Configuration.get("user.profile-picture.max-file-size"),
     },
-    key: function (req: Request, _: any, cb: any) {
-      const userId = req.res?.locals.oauth.token.user._id;
-      cb(null, `${profilePicturePath}/${userId}.png`);
+    fileFilter: (_: any, file: any, cb: any) => {
+      if (file.mimetype !== "image/png") {
+        return cb(new ErrorResponse(errorMessages.invalidFile));
+      }
+      cb(null, true);
     },
-  }),
-  dest: Configuration.get("storage.cache-path"),
-  limits: {
-    fileSize: Configuration.get("user.profile-picture.max-file-size"),
-  },
-  fileFilter: (_: any, file: any, cb: any) => {
-    if (file.mimetype !== "image/png") {
-      return cb(new ErrorResponse(errorMessages.invalidFile));
-    }
-    cb(null, true);
-  },
-});
+    storage: multerS3({
+      s3: S3.client,
+      bucket: Configuration.get("s3.bucket-name"),
+      metadata: function (req: any, _: any, cb: any) {
+        const userId = req.res?.locals.oauth.token.user._id;
+        cb(null, { fieldName: userId });
+      },
+      key: function (req: Request, _: any, cb: any) {
+        const userId = req.res?.locals.oauth.token.user._id;
+        cb(null, `${profilePicturePath}/${userId}.png`);
+      },
+    }),
+  });
+} else {
+  log.warn(
+    "Usage of profile picture APIs are enabled, however, the option Can Use Cloud Storage (privilege.can-use-cloud-storage) is disabled. This means uploading profile pictures will do nothing until you enable the option and configure S3."
+  );
+  profilePictureMulter = {
+    single: () => (_: unknown, __: unknown, cb: any) => cb(),
+  };
+}
 
 const uploadProfilePicture = profilePictureMulter.single("profile-picture");
 
@@ -44,6 +54,7 @@ const PATCH_ProfilePicture = async (req: Request, res: Response) => {
   try {
     uploadProfilePicture(req, res, async function (err: any) {
       if (err) {
+        console.log(err);
         return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidFile));
       }
       const userId = req.res?.locals.oauth.token.user._id;

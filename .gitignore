@@ -4,3 +4,5 @@ docker-compose.yml
 build
 .env
 uploads
+content
+storage

@@ -111,14 +111,6 @@
     "default": "liquid@example.com"
   },
   {
-    "name": "storage.cache-path",
-    "displayName": "Storage Cache Path",
-    "envName": "STORAGE_CACHE_PATH",
-    "description": "Path to store temporary upload files.",
-    "type": "string",
-    "default": "content"
-  },
-  {
     "name": "storage.cloud-path",
     "displayName": "Storage Cloud Path",
     "envName": "STORAGE_Cloud_PATH",
@@ -248,6 +240,22 @@
     "description": "Specifies whether the application will allow users to use follow and unfollow mechanisms",
     "type": "boolean",
     "default": true
+  },
+  {
+    "name": "privilege.can-use-profile-picture-apis",
+    "displayName": "Can Use Profile Picture APIs",
+    "envName": "CAN_USE_PROFILE_PICTURE_APIS",
+    "description": "Specifies if users can use profile picture features. If enabled, you will require a S3 or S3-like cloud storage. Update options `Can Use Cloud Storage`, `S3 Access Key ID`, `S3 Access Key Secret`, `S3 Endpoint` and `S3 Bucket Name` along with this.",
+    "type": "boolean",
+    "default": false
+  },
+  {
+    "name": "privilege.can-use-cloud-storage",
+    "displayName": "Can Use Cloud Storage",
+    "envName": "CAN_USE_CLOUD_STORAGE",
+    "description": "Specifies if the application can use cloud storage.",
+    "type": "boolean",
+    "default": false
   },
   {
     "name": "user.profile.editable-fields",
