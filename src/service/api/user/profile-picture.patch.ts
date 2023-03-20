@@ -40,7 +40,7 @@ if (Configuration.get("privilege.can-use-cloud-storage")) {
 } else {
   if (Configuration.get("privilege.can-use-profile-picture-apis")) {
     log.warn(
-      "Usage of profile picture APIs are enabled, however, the option `Can Use Cloud Storage (privilege.can-use-cloud-storage)` is disabled. This means uploading profile pictures will do nothing until you enable the option and configure S3."
+      "Usage of profile pictures is enabled, however, the option `Can Use Cloud Storage (privilege.can-use-cloud-storage)` is disabled. This means uploading profile pictures will do nothing until you enable the option and configure S3."
     );
   }
   profilePictureMulter = {
