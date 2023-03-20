@@ -14,6 +14,7 @@ import { MongoDB } from "./singleton/mongo-db";
 import { Api } from "./singleton/api/api";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
 import { Mailer } from "./singleton/mailer";
+import { S3 } from "./singleton/s3";
 const YAML = require("yamljs");
 const swaggerDocument = YAML.load(__dirname + "/swagger.yaml");
 

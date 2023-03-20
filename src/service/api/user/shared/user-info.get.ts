@@ -9,6 +9,7 @@ import UserModel, { IUser } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import { checkSubscription } from "../../../../utils/subscription";
 import { query } from "express-validator";
+import { attachProfilePicture } from "../../../../utils/profile-picture";
 
 export const GET_UserInfoValidator = [query("targets").exists().isString()];
 
@@ -24,6 +25,7 @@ const GET_UserInfo = async (req: Request, res: Response) => {
       .lean()
       .exec()) as unknown as IUser[];
     checkSubscription(users);
+    await attachProfilePicture(users);
     res.status(statusCodes.success).json(new SuccessResponse({ users }));
   } catch (err) {
     log.error(err);

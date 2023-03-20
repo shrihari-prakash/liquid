@@ -10,6 +10,7 @@ import UserModel, { IUser, IUserProjection } from "../../../model/mongo/user";
 import FollowModel from "../../../model/mongo/follow";
 import { getBlockStatus } from "../../../utils/block";
 import { checkSubscription } from "../../../utils/subscription";
+import { attachProfilePicture } from "../../../utils/profile-picture";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
@@ -45,6 +46,7 @@ const GET__UserId = async (req: Request, res: Response) => {
         delete user.secondaryPhone;
       }
       checkSubscription(user);
+      await attachProfilePicture(user);
     }
     res.status(statusCodes.success).json(new SuccessResponse({ user }));
   } catch (err) {

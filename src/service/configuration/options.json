@@ -111,6 +111,67 @@
     "default": "liquid@example.com"
   },
   {
+    "name": "storage.cache-path",
+    "displayName": "Storage Cache Path",
+    "envName": "STORAGE_CACHE_PATH",
+    "description": "Path to store temporary upload files.",
+    "type": "string",
+    "default": "content"
+  },
+  {
+    "name": "storage.cloud-path",
+    "displayName": "Storage Cloud Path",
+    "envName": "STORAGE_Cloud_PATH",
+    "description": "Path to store user uploaded files.",
+    "type": "string",
+    "default": "content"
+  },
+  {
+    "name": "s3.endpoint",
+    "displayName": "S3 Endpoint",
+    "envName": "S3_ENDPOINT",
+    "description": "Endpoint to be used for S3 storage.",
+    "type": "string"
+  },
+  {
+    "name": "s3.access-key-id",
+    "displayName": "S3 Access Key ID",
+    "envName": "S3_ACCESS_KEY_ID",
+    "description": "Access key ID to be used for S3 storage.",
+    "type": "string"
+  },
+  {
+    "name": "s3.access-key-secret",
+    "displayName": "S3 Access Key Secret",
+    "envName": "S3_ACCESS_KEY_SECRET",
+    "description": "Access key secret to be used for S3 storage.",
+    "type": "string"
+  },
+  {
+    "name": "s3.bucket-name",
+    "displayName": "S3 Bucket Name",
+    "envName": "S3_BUCKET_NAME",
+    "description": "Bucket name to be used for S3 storage.",
+    "type": "string",
+    "default": "liquid"
+  },
+  {
+    "name": "s3.get-object-expiry",
+    "displayName": "S3 Get Object Expiry",
+    "envName": "S3_GET_OBJECT_EXPIRY",
+    "description": "Expiry for getObject pre signed URLs.",
+    "type": "number",
+    "default": 3600
+  },
+  {
+    "name": "s3.put-object-expiry",
+    "displayName": "S3 Put Object Expiry",
+    "envName": "S3_PUT_OBJECT_EXPIRY",
+    "description": "Expiry for putObject pre signed URLs.",
+    "type": "number",
+    "default": 3600
+  },
+  {
     "name": "get-user-max-items",
     "displayName": "Get User API Max Items",
     "envName": "GET_USER_MAX_ITEMS",
@@ -251,6 +312,14 @@
     "description": "Comma separated list of subscription tier names.",
     "type": "stringArray",
     "default": "BASIC,PRO"
+  },
+  {
+    "name": "user.profile-picture.max-file-size",
+    "displayName": "User Profile Picture Max File Size",
+    "envName": "USER_PROFILE_PICTURE_MAX_FILE_SIZE",
+    "description": "Specifies in bytes the max file size for user profile pictures.",
+    "type": "number",
+    "default": 500000
   },
   {
     "name": "pagination.default-limit",

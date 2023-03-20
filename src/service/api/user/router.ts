@@ -24,6 +24,8 @@ import AdminApiRouter from "./admin-api/routes";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 import POST_Block, { POST_BlockValidator } from "./block.post";
 import POST_Unblock, { POST_UnblockValidator } from "./unblock.post";
+import PATCH_ProfilePicture from "./profile-picture.patch";
+import DELETE_ProfilePicture from "./profile-picture.delete";
 
 const UserRouter = express.Router();
 
@@ -35,6 +37,8 @@ UserRouter.post("/private", ...DelegatedAuthFlow, ...POST_PrivateValidator, POST
 UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
 UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
 UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
+UserRouter.patch("/profile-picture", ...DelegatedAuthFlow, PATCH_ProfilePicture);
+UserRouter.delete("/profile-picture", ...DelegatedAuthFlow, DELETE_ProfilePicture);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {

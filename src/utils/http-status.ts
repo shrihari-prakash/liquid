@@ -15,6 +15,7 @@ export const errorMessages = {
   clientInputError: "ClientInputError",
   rateLimitError: "RateLimitError",
   conflict: "ResourceConflict",
+  invalidFile: "InvalidFile",
   banned: "Banned",
   unauthorized: "Unauthorized",
   forbidden: "Forbidden",

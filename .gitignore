@@ -3,3 +3,4 @@ app-config.json
 docker-compose.yml
 build
 .env
+uploads
