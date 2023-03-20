@@ -38,9 +38,11 @@ if (Configuration.get("privilege.can-use-cloud-storage")) {
     }),
   });
 } else {
-  log.warn(
-    "Usage of profile picture APIs are enabled, however, the option Can Use Cloud Storage (privilege.can-use-cloud-storage) is disabled. This means uploading profile pictures will do nothing until you enable the option and configure S3."
-  );
+  if (Configuration.get("privilege.can-use-profile-picture-apis")) {
+    log.warn(
+      "Usage of profile picture APIs are enabled, however, the option `Can Use Cloud Storage (privilege.can-use-cloud-storage)` is disabled. This means uploading profile pictures will do nothing until you enable the option and configure S3."
+    );
+  }
   profilePictureMulter = {
     single: () => (_: unknown, __: unknown, cb: any) => cb(),
   };
@@ -54,12 +56,17 @@ const PATCH_ProfilePicture = async (req: Request, res: Response) => {
   try {
     uploadProfilePicture(req, res, async function (err: any) {
       if (err) {
-        console.log(err);
+        log.error(err);
         return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidFile));
       }
       const userId = req.res?.locals.oauth.token.user._id;
       const fileName = `${profilePicturePath}/${userId}.png`;
-      const signedUrl = await S3.getSignedUrl("GET", fileName);
+      const signedUrl = await S3.getSignedUrl(
+        "GET",
+        fileName,
+        {},
+        Configuration.get("user.profile-picture.signed-url.expiry")
+      );
       await UserModel.updateOne({ _id: userId }, { $set: { profilePicturePath: fileName } }).exec();
       res.status(statusCodes.success).json(new SuccessResponse({ signedUrl }));
     });

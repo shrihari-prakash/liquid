@@ -330,6 +330,14 @@
     "default": 500000
   },
   {
+    "name": "user.profile-picture.signed-url.expiry",
+    "displayName": "User Profile Picture Signed URL Expiry",
+    "envName": "USER_PROFILE_PICTURE_SIGNED_URL_EXPIRY",
+    "description": "Specifies in seconds the expiry time for user profile picture links.",
+    "type": "number",
+    "default": 14400
+  },
+  {
     "name": "pagination.default-limit",
     "displayName": "Pagination Default Limit",
     "envName": "PAGINATION_DEFAULT_LIMIT",

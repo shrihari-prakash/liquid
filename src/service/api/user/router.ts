@@ -46,7 +46,7 @@ if (Configuration.get("privilege.can-use-profile-picture-apis")) {
   UserRouter.delete("/profile-picture", ...DelegatedAuthFlow, DELETE_ProfilePicture);
 } else {
   log.warn(
-    "Usage of profile pictures is disabled, if you would like to use the feature, enable options Can Use Profile Picture APIs (privilege.can-use-profile-picture-apis) and Can Use Cloud Storage (privilege.can-use-cloud-storage). This will require S3 or S3-like storage system."
+    "Usage of profile pictures is disabled, if you would like to use the feature, enable options `Can Use Profile Picture APIs (privilege.can-use-profile-picture-apis)` and `Can Use Cloud Storage (privilege.can-use-cloud-storage)`. This will require S3 or S3-like storage system."
   );
 }
 
