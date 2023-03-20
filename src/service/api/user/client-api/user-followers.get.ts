@@ -9,6 +9,8 @@ import FollowModel from "../../../../model/mongo/follow";
 import { useFollowersQuery } from "../../../../model/query/followers";
 import { body } from "express-validator";
 import { Configuration } from "../../../../singleton/configuration";
+import { attachProfilePicture } from "../../../../utils/profile-picture";
+import { checkSubscription } from "../../../../utils/subscription";
 
 export const GET_UserFollowersValidator = [body("target").exists().isString().isLength({ min: 8, max: 128 })];
 
@@ -27,9 +29,13 @@ const GET_UserFollowers = async (req: Request, res: Response) => {
     if (offset) {
       query[0].$match.$and.push({ createdAt: { $lt: new Date(offset) } });
     }
-    FollowModel.aggregate(query).exec(function (up, records) {
+    FollowModel.aggregate(query).exec(async function (up, records) {
       if (up) {
         throw up;
+      }
+      for (let i = 0; i < records.length; i++) {
+        checkSubscription(records[i].source);
+        await attachProfilePicture(records[i].source);
       }
       res.status(statusCodes.success).json(new SuccessResponse({ records }));
     });

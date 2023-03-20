@@ -7,6 +7,8 @@ import { mongo } from "mongoose";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
+import { checkSubscription } from "../../../utils/subscription";
+import { attachProfilePicture } from "../../../utils/profile-picture";
 
 const GET_FollowRequests = async (req: Request, res: Response) => {
   try {
@@ -36,9 +38,13 @@ const GET_FollowRequests = async (req: Request, res: Response) => {
           "source.emailVerified": 0,
         },
       },
-    ]).exec(function (up, records) {
+    ]).exec(async function (up, records) {
       if (up) {
         throw up;
+      }
+      for (let i = 0; i < records.length; i++) {
+        checkSubscription(records[i].source);
+        await attachProfilePicture(records[i].source);
       }
       res.status(statusCodes.success).json(new SuccessResponse({ records }));
     });

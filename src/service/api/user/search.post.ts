@@ -5,11 +5,13 @@ import { Request, Response } from "express";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel, { IUserProjection } from "../../../model/mongo/user";
+import UserModel, { IUser, IUserProjection } from "../../../model/mongo/user";
 import { body } from "express-validator";
 import { hasErrors } from "../../../utils/api";
 import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
+import { checkSubscription } from "../../../utils/subscription";
+import { attachProfilePicture } from "../../../utils/profile-picture";
 
 export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
 
@@ -38,9 +40,11 @@ const POST_Search = async (req: Request, res: Response) => {
         },
       });
     }
-    const results = await UserModel.find({ $or }, IUserProjection).limit(
+    const results = (await UserModel.find({ $or }, IUserProjection).limit(
       Configuration.get("user.search-results.limit")
-    );
+    )) as unknown as IUser[];
+    checkSubscription(results);
+    await attachProfilePicture(results);
     if (Configuration.get("privilege.can-use-cache")) {
       await Redis.client.set(
         `${redisPrefix}${query}`,

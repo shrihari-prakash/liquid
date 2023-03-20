@@ -14,6 +14,8 @@ export const attachProfilePicture = async (input: IUser | IUser[]) => {
       if (users[i].profilePicturePath) {
         const fileName = `${profilePicturePath}/${users[i]._id}.png`;
         users[i].profilePictureUrl = (await S3.getSignedUrl("GET", fileName, {}, expiry)) as string;
+      } else {
+        (users[i] as any).profilePictureUrl = null;
       }
     }
     return users;
@@ -22,6 +24,8 @@ export const attachProfilePicture = async (input: IUser | IUser[]) => {
     if (user.profilePicturePath) {
       const fileName = `${profilePicturePath}/${user._id}.png`;
       user.profilePictureUrl = (await S3.getSignedUrl("GET", fileName, {}, expiry)) as string;
+    } else {
+      (user as any).profilePictureUrl = null;
     }
     return user;
   }
