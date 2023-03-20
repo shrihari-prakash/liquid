@@ -8,6 +8,9 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel, { IUser } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import { checkSubscription } from "../../../../utils/subscription";
+import { query } from "express-validator";
+
+export const GET_UserInfoValidator = [query("targets").exists().isString()];
 
 const GET_UserInfo = async (req: Request, res: Response) => {
   try {

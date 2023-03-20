@@ -4,6 +4,34 @@ info:
   description: Seamless authentication and user management APIs for your projects based on TypeScript, MongoDB and Redis.
   version: 0.1
 paths:
+  /user/admin-api/user-info:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Accepts an array of user IDs and returns their profile details.
+      parameters:
+        - in: query
+          name: targets
+          schema:
+            type: string
+          description: Comma seperated list of user IDs for which info has to be retrieved.
+      responses:
+        "200":
+          description: Returns an array of objects with user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: "#/definitions/user"
+      tags:
+        - admin-api
   /user/admin-api/access:
     post:
       security:

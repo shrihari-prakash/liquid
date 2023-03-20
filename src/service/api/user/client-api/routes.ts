@@ -4,7 +4,7 @@ import { Configuration } from "../../../../singleton/configuration";
 import { ClientAuthFlow } from "../../middleware/authenticate";
 import POST_Ban, { POST_BanValidator } from "../shared/ban.post";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
-import GET_UserInfo from "./user-info.get";
+import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get";
 import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get";
 import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
@@ -13,7 +13,7 @@ import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscri
 
 const ClientApiRouter = express.Router();
 
-ClientApiRouter.get("/user-info", ...ClientAuthFlow, GET_UserInfo);
+ClientApiRouter.get("/user-info", ...ClientAuthFlow, GET_UserInfoValidator, GET_UserInfo);
 ClientApiRouter.post("/ban", ...ClientAuthFlow, POST_BanValidator, POST_Ban);
 ClientApiRouter.post("/restrict", ...ClientAuthFlow, POST_RestrictValidator, POST_Restrict);
 ClientApiRouter.post("/subscription", ...ClientAuthFlow, POST_SubscriptionValidator, POST_Subscription);

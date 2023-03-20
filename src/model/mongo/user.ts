@@ -27,6 +27,7 @@ const userSchema = {
     required: true,
   },
   profilePictureUrl: String,
+  profilePicturePath: String,
   bio: String,
   customLink: String,
   pronouns: String,
@@ -135,6 +136,7 @@ export type IUser = {
   role: string;
   bio: string;
   profilePictureUrl: string;
+  profilePicturePath: string;
   followingCount: string;
   pronouns: string;
   customLink: string;
@@ -182,6 +184,7 @@ export const IUserProjection = {
   lastName: 1,
   bio: 1,
   profilePictureUrl: 1,
+  profilePicturePath: 1,
   pronouns: 1,
   customLink: 1,
   followingCount: 1,
