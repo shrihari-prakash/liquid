@@ -1,5 +1,5 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/common-api/ban" });
+const log = Logger.getLogger().child({ from: "user/admin-api/verify" });
 
 import { Request, Response } from "express";
 
@@ -9,21 +9,17 @@ import UserModel from "../../../../model/mongo/user";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api";
 
-export const POST_BanValidator = [
+export const POST_VerifyValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
   body("state").exists().isBoolean(),
-  body("reason").optional().isString().isLength({ min: 8, max: 128 }),
 ];
 
-const POST_Ban = async (req: Request, res: Response) => {
+const POST_Verify = async (req: Request, res: Response) => {
   if (hasErrors(req, res)) return;
   try {
     const target = req.body.target;
     const state = req.body.state;
-    const reason = req.body.reason;
-    const query = {
-      $set: { isBanned: state, bannedDate: new Date(new Date().toUTCString()), bannedReason: reason || null },
-    };
+    const query = { $set: { verified: state, verifiedDate: new Date(new Date().toUTCString()) } };
     await UserModel.updateOne({ _id: target }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
@@ -32,4 +28,4 @@ const POST_Ban = async (req: Request, res: Response) => {
   }
 };
 
-export default POST_Ban;
+export default POST_Verify;

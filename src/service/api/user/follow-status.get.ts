@@ -16,6 +16,8 @@ const GET_FollowStatus = async (req: Request, res: Response) => {
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.query.target as string;
+    if (sourceId === targetId)
+      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     const followEntry = (await FollowModel.findOne({
       $and: [{ targetId }, { sourceId }],
     }).exec()) as unknown as any;

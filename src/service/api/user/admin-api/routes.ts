@@ -9,6 +9,7 @@ import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import POST_Access, { POST_AccessValidator } from "./access.post";
 import GET_EditableFields from "./editable-fields.get";
 import PATCH_User, { PATCH_UserValidator } from "./user.patch";
+import POST_Verify, { POST_VerifyValidator } from "./verify.post";
 
 const AdminApiRouter = express.Router();
 
@@ -18,6 +19,7 @@ AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, AuthorizeAdmin, GET
 AdminApiRouter.patch("/user", ...DelegatedAuthFlow, AuthorizeAdmin, PATCH_UserValidator, PATCH_User);
 AdminApiRouter.post("/ban", ...DelegatedAuthFlow, AuthorizeAdmin, POST_BanValidator, POST_Ban);
 AdminApiRouter.post("/restrict", ...DelegatedAuthFlow, AuthorizeAdmin, POST_RestrictValidator, POST_Restrict);
+AdminApiRouter.post("/verify", ...DelegatedAuthFlow, AuthorizeAdmin, POST_VerifyValidator, POST_Verify);
 AdminApiRouter.post(
   "/subscription",
   ...DelegatedAuthFlow,

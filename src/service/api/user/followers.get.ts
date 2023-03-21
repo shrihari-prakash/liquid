@@ -7,21 +7,15 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import { useFollowersQuery } from "../../../model/query/followers";
-import { Configuration } from "../../../singleton/configuration";
 import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
+import { getPaginationLimit } from "../../../utils/pagination";
 
 const GET_Followers = async (req: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
-    let limit: any = parseInt(req.query.limit as string);
+    const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;
-    if (!limit) {
-      limit = Configuration.get("pagination.default-limit");
-    }
-    if (limit > Configuration.get("pagination.max-limit")) {
-      limit = Configuration.get("pagination.max-limit");
-    }
     const query = useFollowersQuery(userId, limit);
     if (offset) {
       query[0].$match.$and.push({ createdAt: { $lt: new Date(offset) } });

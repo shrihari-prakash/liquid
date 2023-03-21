@@ -24,6 +24,8 @@ const POST_Block = async (req: Request, res: Response) => {
     if (hasErrors(req, res)) return;
     const sourceAccount = res.locals.oauth.token.user._id;
     const blockedAccount = req.body.target;
+    if (sourceAccount === blockedAccount)
+      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     const query: any = {
       targetId: blockedAccount,
       sourceId: sourceAccount,

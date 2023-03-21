@@ -150,7 +150,7 @@ paths:
                 target:
                   type: string
                 state:
-                  type: string
+                  type: boolean
       responses:
         "200":
           description: Returns OK.
@@ -178,7 +178,7 @@ paths:
                 target:
                   type: string
                 state:
-                  type: string
+                  type: boolean
       responses:
         "200":
           description: Returns OK.
@@ -206,9 +206,37 @@ paths:
                 target:
                   type: string
                 state:
-                  type: string
+                  type: boolean
                 expiry:
                   type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - admin-api
+  /user/admin-api/verify:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Marks the user profile with given ID as verified.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                state:
+                  type: boolean
       responses:
         "200":
           description: Returns OK.
@@ -396,7 +424,7 @@ paths:
                 target:
                   type: string
                 state:
-                  type: string
+                  type: boolean
       responses:
         "200":
           description: Returns OK.
@@ -424,7 +452,7 @@ paths:
                 target:
                   type: string
                 state:
-                  type: string
+                  type: boolean
       responses:
         "200":
           description: Returns OK.
@@ -452,7 +480,7 @@ paths:
                 target:
                   type: string
                 state:
-                  type: string
+                  type: boolean
                 expiry:
                   type: string
       responses:
@@ -1004,6 +1032,60 @@ paths:
                         type: boolean
       tags:
         - user-api
+  /user/profile-picture:
+    patch:
+      consumes:
+        - multipart/form-data
+      security:
+        - bearerAuth: []
+      summary: Updates a user's profile picture.
+      parameters:
+         - in: formData
+           name: profile-picture
+           type: file
+           description: PNG image file.
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      signedUrl:
+                        type: string
+      tags:
+        - user-api
+    delete:
+      security:
+        - bearerAuth: []
+      summary: Deletes a user's profile picture.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: string
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - user-api
 
 tags:
   - name: admin-api
@@ -1029,6 +1111,8 @@ definitions:
         type: string
       profilePictureUrl:
         type: string
+      verified:
+        type: boolean
       followingCount:
         type: string
       followerCount:

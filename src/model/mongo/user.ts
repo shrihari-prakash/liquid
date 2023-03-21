@@ -31,6 +31,12 @@ const userSchema = {
   bio: String,
   customLink: String,
   pronouns: String,
+  verified: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  verifiedDate: Date,
   followingCount: {
     type: Number,
     required: true,
@@ -139,6 +145,8 @@ export type IUser = {
   profilePicturePath: string;
   followingCount: string;
   pronouns: string;
+  verified: boolean;
+  verifiedDate: Date;
   customLink: string;
   followerCount: string;
   isPrivate: boolean;
@@ -186,6 +194,8 @@ export const IUserProjection = {
   profilePictureUrl: 1,
   profilePicturePath: 1,
   pronouns: 1,
+  verified: 1,
+  verifiedDate: 1,
   customLink: 1,
   followingCount: 1,
   followerCount: 1,

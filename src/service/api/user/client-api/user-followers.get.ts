@@ -8,23 +8,17 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
 import { useFollowersQuery } from "../../../../model/query/followers";
 import { body } from "express-validator";
-import { Configuration } from "../../../../singleton/configuration";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { checkSubscription } from "../../../../utils/subscription";
+import { getPaginationLimit } from "../../../../utils/pagination";
 
 export const GET_UserFollowersValidator = [body("target").exists().isString().isLength({ min: 8, max: 128 })];
 
 const GET_UserFollowers = async (req: Request, res: Response) => {
   try {
     const userId = req.query.target as string;
-    let limit: any = parseInt(req.query.limit as string);
+    const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;
-    if (!limit) {
-      limit = Configuration.get("pagination.default-limit");
-    }
-    if (limit > Configuration.get("pagination.max-limit")) {
-      limit = Configuration.get("pagination.max-limit");
-    }
     const query = useFollowersQuery(userId, limit);
     if (offset) {
       query[0].$match.$and.push({ createdAt: { $lt: new Date(offset) } });
