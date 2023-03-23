@@ -2,13 +2,13 @@ import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/common-api/get-user-info" });
 
 import { Request, Response } from "express";
+import { query } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel, { IUser } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import { checkSubscription } from "../../../../utils/subscription";
-import { query } from "express-validator";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
 
 export const GET_UserInfoValidator = [query("targets").exists().isString()];

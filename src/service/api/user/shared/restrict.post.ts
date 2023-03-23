@@ -2,11 +2,11 @@ import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/common-api/restrict" });
 
 import { Request, Response } from "express";
+import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
-import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api";
 
 export const POST_RestrictValidator = [

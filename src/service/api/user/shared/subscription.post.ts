@@ -3,11 +3,11 @@ const log = Logger.getLogger().child({ from: "user/common-api/subscription" });
 
 import { Request, Response } from "express";
 import moment from "moment";
+import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
-import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api";
 import { Configuration } from "../../../../singleton/configuration";
 

@@ -2,12 +2,12 @@ import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "client-api/user-following" });
 
 import { Request, Response } from "express";
+import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
 import { useFollowingQuery } from "../../../../model/query/following";
-import { body } from "express-validator";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { checkSubscription } from "../../../../utils/subscription";
 import { getPaginationLimit } from "../../../../utils/pagination";
