@@ -14,7 +14,7 @@ export const POST_LoginValidator = [
   body("username")
     .optional()
     .isString()
-    .isLength({ min: 8, max: 16 })
+    .isLength({ min: 8, max: 30 })
     .matches(/^[a-z_][a-z0-9._]*$/i),
   body("email").optional().isString().isEmail(),
   body("password").exists().isString().isLength({ min: 8, max: 128 }),

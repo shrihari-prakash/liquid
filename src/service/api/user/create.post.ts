@@ -20,7 +20,7 @@ export const POST_CreateValidator = [
   body("username")
     .exists()
     .isString()
-    .isLength({ min: 8, max: 16 })
+    .isLength({ min: 8, max: 30 })
     .matches(/^[a-z_][a-z0-9._]*$/i),
   body("email").exists().isEmail(),
   body("password").exists().isString().isLength({ min: 8, max: 128 }),
