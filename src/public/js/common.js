@@ -107,6 +107,13 @@ function onSubmitError(params) {
   }, 2000);
 }
 
+function onFieldError({ response, buttonText }) {
+  let errorField = response.responseJSON.additionalInfo.errors[0].param;
+  errorField = errorField.charAt(0).toUpperCase() + errorField.slice(1);
+  onSubmitError({ errorText: "Invalid " + errorField, buttonText });
+  return;
+}
+
 function makeImage(src, alt) {
   return `<img alt="${alt}" src="${src}" />`;
 }

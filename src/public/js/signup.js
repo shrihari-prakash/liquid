@@ -24,11 +24,18 @@ function signup(event) {
       window.location = `/verify-account${window.location.search}`;
     })
     .fail(function (response) {
+      const buttonText = submit.value;
       if (response.responseJSON.error === "RateLimitError") {
-        onSubmitError({ errorText: "Too Many Requests", buttonText: "Create Account" });
+        onSubmitError({ errorText: "Too Many Requests", buttonText });
         return;
       }
-      onSubmitError({ errorText: "Signup error", buttonText: "Create Account" });
+      if (response.status === 400 && response.responseJSON.additionalInfo) {
+        return onFieldError({ response, buttonText });
+      }
+      if (response.status === 409) {
+        return onSubmitError({ errorText: "Account already exists", buttonText });
+      }
+      onSubmitError({ errorText: "Signup error", buttonText });
     })
     .always(function () {
       submit.disabled = false;

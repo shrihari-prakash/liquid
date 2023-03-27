@@ -15,8 +15,12 @@ function getCode(event) {
     .done(function () {
       window.location = `/reset-password${window.location.search}`;
     })
-    .fail(function () {
-      onSubmitError({ errorText: "Invalid Login", buttonText: "Verify" });
+    .fail(function (response) {
+      const buttonText = submit.value;
+      if (response.responseJSON.additionalInfo && response.status === 400) {
+        return onFieldError({ response, buttonText });
+      }
+      onSubmitError({ errorText: "Invalid Login", buttonText });
     })
     .always(function () {
       submit.disabled = false;

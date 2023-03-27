@@ -16,7 +16,8 @@ function getCode(event) {
       window.location = `/login${window.location.search}`;
     })
     .fail(function () {
-      onSubmitError({ errorText: "Invalid Code", buttonText: "Verify" });
+      const buttonText = submit.value;
+      onSubmitError({ errorText: "Invalid Code", buttonText });
     })
     .always(function () {
       submit.disabled = false;

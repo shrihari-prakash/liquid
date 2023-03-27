@@ -391,7 +391,7 @@
     "envName": "SYSTEM_RATE_LIMIT_EXTREME_API_MAX_LIMIT",
     "description": "Specifies the rate limit for extreme APIs for the specified window size.",
     "type": "number",
-    "default": 3
+    "default": 5
   },
   {
     "name": "system.role.extended-roles",
