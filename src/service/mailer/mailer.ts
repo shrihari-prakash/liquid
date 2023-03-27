@@ -6,8 +6,8 @@ import sgMail from "@sendgrid/mail";
 import { Configuration } from "../../singleton/configuration";
 
 const Modes = {
-  PRINT: "PRINT",
-  EMAIL: "EMAIL",
+  PRINT: "print",
+  EMAIL: "email",
 };
 
 interface Email {

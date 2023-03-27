@@ -6,7 +6,7 @@ const MemoryStore = {
     grant_type: "client_credentials",
     client_id: "application_client",
     client_secret: "secret",
-    role: "INTERNAL_CLIENT",
+    role: "internal_client",
   },
   users: {
     user1: {

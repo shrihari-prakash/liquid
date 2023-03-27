@@ -319,7 +319,7 @@
     "envName": "USER_SUBSCRIPTION_TIER_LIST",
     "description": "Comma separated list of subscription tier names.",
     "type": "stringArray",
-    "default": "BASIC,PRO"
+    "default": "basic,pro"
   },
   {
     "name": "user.profile-picture.max-file-size",
@@ -405,9 +405,9 @@
     "name": "system.role.ranking",
     "displayName": "Role Rank",
     "envName": "SYSTEM_ROLE_RANKING",
-    "description": "Comma separated list of role names and their ranks in format ROLE(SCORE) specifying the order of priorities for roles. Lower numbers have higher priorities.",
+    "description": "Comma separated list of role names and their ranks in format `role(score)` specifying the order of priorities for roles. Lower numbers have higher priorities.",
     "type": "stringArray",
-    "default": "SUPER_ADMIN(1),ADMIN(2),INTERNAL_CLIENT(2),EXTERNAL_CLIENT(3),USER(4)"
+    "default": "super_admin(1),admin(2),internal_client(2),external_client(3),user(4)"
   },
   {
     "name": "system.role.editor-roles",
@@ -415,6 +415,6 @@
     "envName": "SYSTEM_ROLE_EDITOR_ROLES",
     "description": "Comma specified list of roles which can edit roles of other users.",
     "type": "stringArray",
-    "default": "SUPER_ADMIN,ADMIN,INTERNAL_CLIENT"
+    "default": "super_admin,admin,internal_client"
   }
 ]
