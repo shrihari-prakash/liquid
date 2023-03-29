@@ -4,6 +4,7 @@
     "redirectUri": "{{your_redirect_uri}}"
   },
   "images": {
+    "favicon": "images/app-icon-mini.png",
     "miniIconLight": "images/app-icon-mini.png",
     "miniIconDark": "images/app-icon-mini.png",
     "headerIconLight": "images/app-icon-header-light.png",

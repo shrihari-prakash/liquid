@@ -7,6 +7,7 @@ $(function () {
   }
   useTheme();
   renderContent();
+  useFavicon();
 });
 
 const STORE = {
@@ -29,6 +30,17 @@ async function getTheme() {
   const themeObject = configuration.theme;
   return (STORE.theme === "light") ?
     themeObject.light : themeObject.dark;
+}
+
+async function useFavicon() {
+  const configuration = await getConfig();
+  const favicon = configuration.images.favicon;
+  if (!favicon) return;
+  var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+  link.type = 'image/png';
+  link.rel = 'shortcut icon';
+  link.href = favicon;
+  document.getElementsByTagName('head')[0].appendChild(link);
 }
 
 async function usePrimaryButton() {
