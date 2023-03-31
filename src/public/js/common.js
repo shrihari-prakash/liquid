@@ -12,6 +12,8 @@ $(function () {
 
 const STORE = {
   config: null,
+  configRetrieveInProgress: false,
+  configCallbacks: [],
   buttonAnimationTimeout: null,
   theme: "dark",
   autoFocusElement: null
@@ -90,18 +92,29 @@ function getConfig() {
       return resolve(STORE.config);
     }
     $("html, body").addClass("scroll-lock");
+    const onDone = (data) => {
+      STORE.config = data;
+      resolve(STORE.config);
+      $(".spinner-container").addClass("hidden");
+      $("html, body").removeClass("scroll-lock");
+      if (STORE.autoFocusElement) {
+        STORE.autoFocusElement.focus();
+      }
+    }
+    if (STORE.configRetrieveInProgress) {
+      return STORE.configCallbacks.push(onDone)
+    }
+    STORE.configRetrieveInProgress = true;
     return $.get("/app-config.json")
-      .done(function (data) {
-        STORE.config = data;
-        resolve(STORE.config);
-        $(".spinner-container").addClass("hidden");
-        $("html, body").removeClass("scroll-lock");
-        if (STORE.autoFocusElement) {
-          STORE.autoFocusElement.focus();
-        }
+      .done((data) => {
+        onDone(data)
+        STORE.configCallbacks.forEach((cb) => cb(data));
       })
       .fail(function () {
         reject();
+      })
+      .always(function () {
+        configRetrieveInProgress = false;
       });
   });
 }
