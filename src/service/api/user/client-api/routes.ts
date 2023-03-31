@@ -3,13 +3,13 @@ import express from "express";
 import { Configuration } from "../../../../singleton/configuration";
 import { ClientAuthFlow } from "../../middleware/authenticate";
 import POST_Ban, { POST_BanValidator } from "../shared/ban.post";
+import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
+import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get";
 import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get";
 import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
-import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
-import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
 
 const ClientApiRouter = express.Router();
 
