@@ -226,14 +226,6 @@
     "default": true
   },
   {
-    "name": "privilege.can-use-cache-for-token",
-    "displayName": "Can Use Cache for Token",
-    "envName": "CAN_USE_CACHE_FOR_TOKEN",
-    "description": "Specifies whether to use cache for saving and retrieving OAuth tokens.",
-    "type": "boolean",
-    "default": true
-  },
-  {
     "name": "privilege.can-use-follow-apis",
     "displayName": "Can Use Follow APIs",
     "envName": "CAN_USE_FOLLOW_APIS",

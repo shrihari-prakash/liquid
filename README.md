@@ -26,15 +26,17 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 
 ⭐ Quick setup.
 
-> **_NOTE:_** You will require Redis to run this service. This is because the service needs to store access and refresh tokens with an auto expiry. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the options `privilege.can-use-cache` and `privilege.can-use-cache-for-token` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database. Then it's upto you to write your own CRON to clean them.
+> **_NOTE:_** You will require Redis to run this service. This is because the service needs to store access and refresh tokens with an auto expiry. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `privilege.can-use-cache` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database. Then it's upto you to write your own CRON to clean them.
 
 ### Setup
 
 1. Run `npm i`.
 2. Run the following command (without brackets):
+
 ```
  node ./scripts/create-application-client mongodbConenctionString={{mongodb_connection_string}} clientSecret={{client_secret}} redirectUrls={{comma_seperated_list_of_redirect_urls}}
 ```
+
 3. Copy and rename file `src/public/app-config.sample.json` to `app-config.json` and replace the variables (most importantly, `oauth.clientId` and `oauth.redirectUri` from previous step).
 4. A large part of the service is configurable. You can find the configurable options in file [src/service/configuration/options.json](src/service/configuration/options.json). Parameters like MongoDB connection string and Redis connection settings can be changed. Simply copy the envName of the option youd like to set and put it in your `.env` with your intended value.
 5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.

@@ -52,7 +52,7 @@ interface AuthorizationCode {
 
 type Scope = string | string[] | undefined;
 
-const useTokenCache = Configuration.get("privilege.can-use-cache-for-token");
+const useTokenCache = Configuration.get("privilege.can-use-cache");
 
 const OAuthModel = {
   getClient: async function (clientId: string, clientSecret: string) {
