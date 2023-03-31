@@ -1,4 +1,5 @@
 $(function () {
+  useTitle("Verify Your Email")
   let form = document.getElementById("verify-form");
   form.addEventListener("submit", getCode, true);
   STORE.autoFocusElement = $("#code");

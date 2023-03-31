@@ -1,4 +1,5 @@
 $(function () {
+  useTitle("Login");
   let form = document.getElementById("login-form");
   form.addEventListener("submit", login, true);
   STORE.autoFocusElement = $("#username");

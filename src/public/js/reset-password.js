@@ -1,4 +1,5 @@
 $(function () {
+  useTitle("Reset Password")
   let form = document.getElementById("reset-password-form");
   form.addEventListener("submit", getCode, true);
   STORE.autoFocusElement = $("#code");
