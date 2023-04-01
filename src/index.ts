@@ -33,6 +33,11 @@ log.info("Static folder loaded: %s", staticFolder);
 app.get("/", function (_, res) {
   res.sendFile(path.join(__dirname, Configuration.get("system.static.default-page")));
 });
+if(Configuration.get("app-config-absolute-path")) {
+  app.get("/app-config.json", function (_, res) {
+    res.sendFile(Configuration.get("app-config-absolute-path"));
+  });
+}
 if (app.get("env") !== "production") {
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
