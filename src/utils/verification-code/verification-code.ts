@@ -1,4 +1,5 @@
-var fs = require("fs");
+const fs = require("fs");
+const path = require("path");
 import { v4 as uuidv4 } from "uuid";
 
 import { IUser } from "../../model/mongo/user";
@@ -30,7 +31,7 @@ export const generateVerificationCode = async function (user: IUser) {
     };
   } else {
     msg.text = `Hello ${fullName}, Here's your ${appName} verification code: ${code.code}`;
-    const template = await fs.promises.readFile(__dirname + "/verification-code.html", "utf8");
+    const template = await fs.promises.readFile(path.join(__dirname, "/verification-code.html"), "utf8");
     let html = template.replace(/{{APP_NAME}}/g, appName);
     html = html.replace(/{{USER_NAME}}/g, fullName);
     html = html.replace(/{{CODE}}/g, code.code);

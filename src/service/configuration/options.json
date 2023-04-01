@@ -43,7 +43,7 @@
     "name": "system.static.app-config-absolute-path",
     "displayName": "Static App Config Absolute Path",
     "envName": "SYSTEM_STATIC_APP_CONFIG_ABSOLUTE_PATH",
-    "description": "Specifies the absolute path for frontend configuration file. If not speficied 'src/public/app-config.json' is used.",
+    "description": "Specifies the absolute path for frontend configuration file. If not speficied 'src/public/app-config.json' is used. You usually don't need to touch this unless your hosting provider limits you from placing custom files inside a sub folder.",
     "type": "string"
   },
   {
