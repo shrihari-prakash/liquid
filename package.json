@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "build": "rimraf ./build && tsc && npm run copy-files",
-    "copy-files": "copyfiles -u 1 src/public/**/*.js src/**/*.yaml src/**/*.html src/**/*.css src/**/*.json src/**/*.jpg src/**/*.png build/",
+    "copy-files": "copyfiles -u 1 \"src/public/**/*.js\" \"src/**/*.yaml\" \"src/**/*.html\" \"src/**/*.css\" \"src/**/*.json\" \"src/**/*.jpg\" \"src/**/*.png\" build/",
     "start:dev": "nodemon --inspect",
     "start:docker": "docker compose -f docker-compose.dev.yml up --build --detach",
     "start": "npm run build && node build/index.js",
