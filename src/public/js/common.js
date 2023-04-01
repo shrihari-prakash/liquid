@@ -96,7 +96,7 @@ function getConfig() {
       $("html, body").removeClass("scroll-lock");
       if (STORE.autoFocusElement) STORE.autoFocusElement.focus();
     }
-    if (STORE.isConfigLoading) return STORE.configQueue.push(onDone)
+    if (STORE.isConfigLoading) return STORE.configQueue.push(resolve)
     STORE.isConfigLoading = true;
     $("html, body").addClass("scroll-lock");
     return $.get("/app-config.json")
@@ -104,7 +104,7 @@ function getConfig() {
         console.log("Configuration acquired.", data);
         onDone(data);
         console.log("Config queue size:", STORE.configQueue.length);
-        STORE.configQueue.forEach((cb) => cb(data));
+        STORE.configQueue.forEach((res) => res(data));
         STORE.configQueue = [];
       })
       .fail(reject)
