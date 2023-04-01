@@ -40,6 +40,13 @@
     "default": "public/login.html"
   },
   {
+    "name": "system.static.app-config-absolute-path",
+    "displayName": "Static App Config Absolute Path",
+    "envName": "SYSTEM_STATIC_APP_CONFIG_ABSOLUTE_PATH",
+    "description": "Specifies the absolute path for frontend configuration file. If not speficied 'src/public/app-config.json' is used.",
+    "type": "string"
+  },
+  {
     "name": "cookie-session-secret",
     "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",
