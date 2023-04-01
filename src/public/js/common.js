@@ -12,8 +12,8 @@ $(function () {
 
 const STORE = {
   config: null,
-  configRetrieveInProgress: false,
-  configCallbacks: [],
+  configQueue: [],
+  isConfigLoading: false,
   buttonAnimationTimeout: null,
   theme: "dark",
   autoFocusElement: null
@@ -88,34 +88,27 @@ async function useTheme() {
 
 function getConfig() {
   return new Promise((resolve, reject) => {
-    if (STORE.config) {
-      return resolve(STORE.config);
-    }
-    $("html, body").addClass("scroll-lock");
+    if (STORE.config) return resolve(STORE.config);
     const onDone = (data) => {
       STORE.config = data;
       resolve(STORE.config);
       $(".spinner-container").addClass("hidden");
       $("html, body").removeClass("scroll-lock");
-      if (STORE.autoFocusElement) {
-        STORE.autoFocusElement.focus();
-      }
+      if (STORE.autoFocusElement) STORE.autoFocusElement.focus();
     }
-    if (STORE.configRetrieveInProgress) {
-      return STORE.configCallbacks.push(onDone)
-    }
-    STORE.configRetrieveInProgress = true;
+    if (STORE.isConfigLoading) return STORE.configQueue.push(onDone)
+    STORE.isConfigLoading = true;
+    $("html, body").addClass("scroll-lock");
     return $.get("/app-config.json")
       .done((data) => {
-        onDone(data)
-        STORE.configCallbacks.forEach((cb) => cb(data));
+        console.log("Configuration acquired.", data);
+        onDone(data);
+        console.log("Config queue size:", STORE.configQueue.length);
+        STORE.configQueue.forEach((cb) => cb(data));
+        STORE.configQueue = [];
       })
-      .fail(function () {
-        reject();
-      })
-      .always(function () {
-        configRetrieveInProgress = false;
-      });
+      .fail(reject)
+      .always(() => STORE.isConfigLoading = false);
   });
 }
 
