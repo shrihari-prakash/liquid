@@ -8,7 +8,7 @@ const amqp = require("amqplib");
 export default class RabbitMQ {
   channel: any;
   connection: any;
-  channelName: string = Configuration.get("rabbitmq.channelName");
+  channelName: string = Configuration.get("rabbitmq.channel-name");
 
   constructor() {
     this.connect();
@@ -30,9 +30,7 @@ export default class RabbitMQ {
   }
 
   async publish(data: any) {
-    if (!this.channel && !this.connection) {
-      return;
-    }
+    if (!this.channel && !this.connection) return;
     await this.channel.sendToQueue(this.channelName, Buffer.from(JSON.stringify(data)));
   }
 }

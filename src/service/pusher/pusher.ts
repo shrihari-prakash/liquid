@@ -34,9 +34,7 @@ export default class Pusher {
   }
 
   async publish(event: PushEvent) {
-    if (!this.queue) {
-      return;
-    }
+    if (!this.queue) return;
     if (!Configuration.get("system.push-events").includes(event.name)) {
       return log.debug("Event `%s` now skipped.", event.name);
     }

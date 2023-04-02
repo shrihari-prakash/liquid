@@ -241,7 +241,7 @@
     "default": "amqp://localhost:5672"
   },
   {
-    "name": "rabbitmq.channelName",
+    "name": "rabbitmq.channel-name",
     "displayName": "RabbitMQ Channel Name",
     "envName": "RABBITMQ_CHANNEL_NAME",
     "description": "Channel name for RabbitMQ outbound events.",
