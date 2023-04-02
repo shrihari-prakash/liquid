@@ -14,6 +14,7 @@ import { MongoDB } from "./singleton/mongo-db";
 import { Api } from "./singleton/api/api";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
 import { Mailer } from "./singleton/mailer";
+
 const YAML = require("yamljs");
 const swaggerDocument = YAML.load(__dirname + "/swagger.yaml");
 
@@ -33,7 +34,7 @@ log.info("Static folder loaded: %s", staticFolder);
 app.get("/", function (_, res) {
   res.sendFile(path.join(__dirname, Configuration.get("system.static.default-page")));
 });
-if(Configuration.get("system.static.app-config-absolute-path")) {
+if (Configuration.get("system.static.app-config-absolute-path")) {
   app.get("/app-config.json", function (_, res) {
     res.sendFile(Configuration.get("system.static.app-config-absolute-path"));
   });

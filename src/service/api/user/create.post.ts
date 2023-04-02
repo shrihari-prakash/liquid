@@ -11,6 +11,9 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import Role from "../../../enum/role";
 import { hasErrors } from "../../../utils/api";
 import { generateVerificationCode } from "../../../utils/verification-code/verification-code";
+import { Pusher } from "../../../singleton/pusher";
+import { PushEvent } from "../../pusher/pusher";
+import { PushEventList } from "../../../enum/push-events";
 
 export const bcryptConfig = {
   salt: 10,
@@ -64,6 +67,7 @@ const POST_Create = async (req: Request, res: Response) => {
     const response = {
       user: newUser,
     };
+    Pusher.publish(new PushEvent(PushEventList.USER_CREATE, { user: newUser }));
     return res.status(statusCodes.created).json(new SuccessResponse(response));
   } catch (err) {
     log.error(err);

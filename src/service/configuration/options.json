@@ -217,6 +217,38 @@
     "default": 0
   },
   {
+    "name": "system.queue-adapter",
+    "displayName": "System Queue Adapter",
+    "envName": "SYSTEM_QUEUE_ADAPTER",
+    "description": "Specifies the queue adapter to use to send system events.",
+    "type": "string",
+    "default": "rabbitmq"
+  },
+  {
+    "name": "system.push-events",
+    "displayName": "System Push Events",
+    "envName": "SYSTEM_PUSH_EVENTS",
+    "description": "Comma separated list of events in the format `event_class.event` that the system should push to queue. Related to `Can Use Push Events (privilege.can-use-push-events)`",
+    "type": "stringArray",
+    "default": "user.follow"
+  },
+  {
+    "name": "rabbitmq.connectionString",
+    "displayName": "RabbitMQ Connection String",
+    "envName": "RABBITMQ_CONNECTION_STRING",
+    "description": "Connection string for RabbitMQ connection.",
+    "type": "string",
+    "default": "amqp://localhost:5672"
+  },
+  {
+    "name": "rabbitmq.channelName",
+    "displayName": "RabbitMQ Channel Name",
+    "envName": "RABBITMQ_CHANNEL_NAME",
+    "description": "Channel name for RabbitMQ outbound events.",
+    "type": "string",
+    "default": "liquid-events"
+  },
+  {
     "name": "cors.allowed-origins",
     "displayName": "Allowed Origins for CORS requests",
     "envName": "CORS_ALLOWED_ORIGINS",
@@ -231,6 +263,22 @@
     "description": "Specifies whether to use cache for optimizing API response time.",
     "type": "boolean",
     "default": true
+  },
+  {
+    "name": "privilege.can-use-rabbitmq",
+    "displayName": "Can Use RabbitMQ",
+    "envName": "CAN_USE_RABBITMQ",
+    "description": "Specifies whether system can use RabbitMQ.",
+    "type": "boolean",
+    "default": false
+  },
+  {
+    "name": "privilege.can-use-push-events",
+    "displayName": "Can Use Push Events",
+    "envName": "CAN_USE_PUSH_EVENTS",
+    "description": "Specifies if the system should publish certain events to RabbitMQ that can be used by external services.",
+    "type": "boolean",
+    "default": false
   },
   {
     "name": "privilege.can-use-follow-apis",

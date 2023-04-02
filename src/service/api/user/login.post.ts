@@ -9,6 +9,9 @@ import UserModel from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
+import { Pusher } from "../../../singleton/pusher";
+import { PushEvent } from "../../pusher/pusher";
+import { PushEventList } from "../../../enum/push-events";
 
 export const POST_LoginValidator = [
   body("username")
@@ -43,6 +46,7 @@ const POST_Login = async (req: Request, res: Response) => {
       userInfo: user,
     };
     req.session.user = user;
+    Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
     return res.status(statusCodes.success).json(new SuccessResponse(response));
   } catch (err) {
     log.error(err);

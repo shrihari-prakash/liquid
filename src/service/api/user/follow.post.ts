@@ -12,6 +12,9 @@ import { updateFollowCount } from "../../../utils/follow";
 import { hasErrors } from "../../../utils/api";
 import { FollowStatus } from "../../../enum/follow-status";
 import { getBlockStatus } from "../../../utils/block";
+import { Pusher } from "../../../singleton/pusher";
+import { PushEvent } from "../../pusher/pusher";
+import { PushEventList } from "../../../enum/push-events";
 
 export const POST_FollowValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
@@ -44,6 +47,7 @@ const POST_Follow = async (req: Request, res: Response) => {
       await updateFollowCount(sourceId, targetId, 1);
       sendSuccess(res, FollowStatus.FOLLOWING);
     }
+    Pusher.publish(new PushEvent(PushEventList.USER_FOLLOW, { source: sourceId, target: targetId }));
   } catch (err: any) {
     if (err.message.includes("E11000")) {
       sendSuccess(res, FollowStatus.DUPLICATE);

@@ -8,6 +8,9 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import { updateFollowCount } from "../../../utils/follow";
 import { hasErrors } from "../../../utils/api";
+import { Pusher } from "../../../singleton/pusher";
+import { PushEvent } from "../../pusher/pusher";
+import { PushEventList } from "../../../enum/push-events";
 
 const POST_Unfollow = async (req: Request, res: Response) => {
   try {
@@ -26,6 +29,7 @@ const POST_Unfollow = async (req: Request, res: Response) => {
     }
     await updateFollowCount(sourceId, targetId, -1);
     res.status(statusCodes.success).json(new SuccessResponse());
+    Pusher.publish(new PushEvent(PushEventList.USER_UNFOLLOW, { source: sourceId, target: targetId }));
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
