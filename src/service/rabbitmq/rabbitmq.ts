@@ -15,10 +15,7 @@ export default class RabbitMQ {
   }
 
   async connect() {
-    if (!Configuration.get("privilege.can-use-rabbitmq")) {
-      log.info("Usage of RabbitMQ is disabled.");
-      return;
-    }
+    if (!Configuration.get("privilege.can-use-rabbitmq")) return log.info("Usage of RabbitMQ is disabled.");
     try {
       this.connection = await amqp.connect(Configuration.get("rabbitmq.connectionString"));
       this.channel = await this.connection.createChannel();
