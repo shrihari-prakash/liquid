@@ -42,7 +42,8 @@
       "formInputBorderRadius": "7px",
       "surfaceBorderRadius": "8px",
       "backgroundColor": "#ffffff",
-      "formInputUseBorder": true
+      "formInputUseBorder": true,
+      "formInputPadding": "15px"
     },
     "dark": {
       "usePrimaryButton": true,
@@ -55,7 +56,8 @@
       "formInputBorderRadius": "7px",
       "surfaceBorderRadius": "8px",
       "backgroundColor": "#16181c",
-      "formInputUseBorder": true
+      "formInputUseBorder": true,
+      "formInputPadding": "15px"
     }
   }
 }

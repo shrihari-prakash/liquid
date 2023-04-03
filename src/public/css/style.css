@@ -20,6 +20,7 @@
   /* Other */
   --primary-button-border-radius: 30px;
   --form-input-border-radius: 7px;
+  --form-input-padding: 15px;
   --surface-border-radius: 8px;
 }
 
@@ -202,7 +203,7 @@ input[data-autocompleted] {
 .page .bg .form-group {
   margin-bottom: 0;
   border: 1px solid var(--border-color);
-  padding: 15px 15px;
+  padding: var(--form-input-padding);
   border-bottom: none;
 }
 .page .contents .form-group.first,

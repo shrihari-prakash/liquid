@@ -73,6 +73,7 @@ async function useTheme() {
   const theme = await getTheme();
   usePrimaryButton();
   setStyleProperty('--form-input-border-radius', theme.formInputBorderRadius);
+  setStyleProperty('--form-input-padding', theme.formInputPadding);
   setStyleProperty('--surface-border-radius', theme.surfaceBorderRadius);
   setStyleProperty('--background-color', theme.backgroundColor);
   if (STORE.theme === "light") {
