@@ -1,8 +1,12 @@
-$(function () {
+$(async function () {
   useTitle("Verify Your Identity")
   let form = document.getElementById("get-code-form");
   form.addEventListener("submit", getCode, true);
   STORE.autoFocusElement = $("#email");
+  const configuration = await getConfig();
+  if (!configuration.general.allowPasswordReset) {
+    $("body").empty();
+  }
 });
 
 function getCode(event) {

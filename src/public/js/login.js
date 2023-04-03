@@ -5,7 +5,10 @@ $(async function () {
   STORE.autoFocusElement = $("#username");
   const configuration = await getConfig();
   if (!configuration.general.allowAccountCreation) {
-    $(".signup").remove();
+    $(".signup-link").remove();
+  }
+  if (!configuration.general.allowPasswordReset) {
+    $(".forgot-password-link").remove();
   }
 });
 

@@ -5,7 +5,8 @@
   },
   "general": {
     "requireEmailVerification": true,
-    "allowAccountCreation": true
+    "allowAccountCreation": true,
+    "allowPasswordReset": true
   },
   "images": {
     "favicon": "images/app-icon-mini.png",
