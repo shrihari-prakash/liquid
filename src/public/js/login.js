@@ -5,7 +5,7 @@ $(async function () {
   STORE.autoFocusElement = $("#username");
   const configuration = await getConfig();
   if (!configuration.general.allowAccountCreation) {
-    document.querySelector(".signup").remove();
+    $(".signup").remove();
   }
 });
 
