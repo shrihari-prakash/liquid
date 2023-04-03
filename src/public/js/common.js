@@ -94,7 +94,9 @@ function getConfig() {
       resolve(STORE.config);
       $(".spinner-container").addClass("hidden");
       $("html, body").removeClass("scroll-lock");
-      if (STORE.autoFocusElement) STORE.autoFocusElement.focus();
+      if (STORE.autoFocusElement && !("ontouchstart" in document.documentElement)) {
+        STORE.autoFocusElement.focus();
+      }
     }
     if (STORE.isConfigLoading) return STORE.configQueue.push(resolve)
     STORE.isConfigLoading = true;
