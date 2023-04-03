@@ -96,6 +96,7 @@ function getConfig() {
       $("html, body").removeClass("scroll-lock");
       if (STORE.autoFocusElement && !("ontouchstart" in document.documentElement)) {
         STORE.autoFocusElement.focus();
+        STORE.autoFocusElement = null;
       }
     }
     if (STORE.isConfigLoading) return STORE.configQueue.push(resolve)
