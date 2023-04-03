@@ -1,10 +1,11 @@
 {
-  "general": {
-    "requireEmailVerification": true
-  },
   "oauth": {
     "clientId": "{{your_client_id}}",
     "redirectUri": "{{your_redirect_uri}}"
+  },
+  "general": {
+    "requireEmailVerification": true,
+    "allowAccountCreation": true
   },
   "images": {
     "favicon": "images/app-icon-mini.png",

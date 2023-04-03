@@ -1,8 +1,12 @@
-$(function () {
+$(async function () {
   useTitle("Login");
   let form = document.getElementById("login-form");
   form.addEventListener("submit", login, true);
   STORE.autoFocusElement = $("#username");
+  const configuration = await getConfig();
+  if (!configuration.general.allowAccountCreation) {
+    document.querySelector(".signup").remove();
+  }
 });
 
 function login(event) {
