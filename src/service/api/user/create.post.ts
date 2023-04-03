@@ -14,6 +14,7 @@ import { generateVerificationCode } from "../../../utils/verification-code/verif
 import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
+import { Configuration } from "../../../singleton/configuration";
 
 export const bcryptConfig = {
   salt: 10,
@@ -54,15 +55,22 @@ const POST_Create = async (req: Request, res: Response) => {
     }
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
     const role = Role.USER;
-    const newUser = (await new UserModel({
+    const toInsert: any = {
       username,
       firstName,
       lastName,
       email: email.toLowerCase(),
       role,
       password,
-    }).save()) as unknown as IUser;
-    await generateVerificationCode(newUser);
+    };
+    const shouldVerifyEmail = Configuration.get("user.require-email-verification");
+    if (!shouldVerifyEmail) {
+      toInsert.emailVerified = true;
+    }
+    const newUser = (await new UserModel(toInsert).save()) as unknown as IUser;
+    if (shouldVerifyEmail) {
+      await generateVerificationCode(newUser);
+    }
     newUser.password = undefined;
     const response = {
       user: newUser,

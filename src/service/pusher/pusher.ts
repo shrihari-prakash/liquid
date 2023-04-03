@@ -1,10 +1,13 @@
 import { Logger } from "../../singleton/logger";
 const log = Logger.getLogger().child({ from: "events" });
 
+import { v4 as uuidv4 } from "uuid";
+
 import { Configuration } from "../../singleton/configuration";
 import { RabbitMQ } from "../../singleton/rabbitmq";
 
 export class PushEvent {
+  id = uuidv4();
   name: string;
   data: any;
   constructor(name: string, data?: any) {

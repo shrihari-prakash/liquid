@@ -1,4 +1,7 @@
 {
+  "general": {
+    "requireEmailVerification": true
+  },
   "oauth": {
     "clientId": "{{your_client_id}}",
     "redirectUri": "{{your_redirect_uri}}"

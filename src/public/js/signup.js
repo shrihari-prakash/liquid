@@ -21,8 +21,13 @@ function signup(event) {
     lastName,
     email,
   })
-    .done(function () {
-      window.location = `/verify-account${window.location.search}`;
+    .done(async function () {
+      const configuration = await getConfig();
+      if (configuration.general.requireEmailVerification) {
+        window.location = `/verify-account${window.location.search}`;
+      } else {
+        window.location = `/login${window.location.search}`
+      }
     })
     .fail(function (response) {
       const buttonText = submit.value;

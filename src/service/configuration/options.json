@@ -305,6 +305,14 @@
     "default": false
   },
   {
+    "name": "user.require-email-verification",
+    "displayName": "User Creation Require Email Verification",
+    "envName": "USER_REQUIRE_EMAIL_VERIFICATION",
+    "description": "Specifies if email verification is required while signing up in the service. Also modify `general.requireEmailVerification` in your frontend app config.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "user.profile.editable-fields",
     "displayName": "Profile Editable Fields",
     "envName": "USER_PROFILE_EDITABLE_FIELDS",
