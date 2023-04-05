@@ -3,6 +3,11 @@ name: Docker Image CI
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Build and Publish"
+        default: "Liquid"
 
 jobs:
   build:
