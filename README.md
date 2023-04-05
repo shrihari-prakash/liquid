@@ -3,6 +3,7 @@
 An open source TypeScript implementation of [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) based Mongo DB and Redis with user sign up and login✨
 
 ![GitHub](https://img.shields.io/github/license/shrihari-prakash/liquid)
+[![Docker Image CI](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shrihari-prakash/liquid)
 ![GitHub last commit](https://img.shields.io/github/last-commit/shrihari-prakash/liquid)
 ![Lines of code](https://img.shields.io/tokei/lines/github/shrihari-prakash/liquid)
