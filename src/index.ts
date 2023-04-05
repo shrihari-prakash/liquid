@@ -1,13 +1,14 @@
 import { Logger } from "./singleton/logger";
 const log = Logger.getLogger().child({ from: "main" });
 
-import express from "express";
 require("dotenv").config();
 const path = require("path");
+const fs = require("fs");
+const swaggerUi = require("swagger-ui-express");
+const cors = require("cors");
+import express from "express";
 import session from "express-session";
 import bodyParser from "body-parser";
-const swaggerUi = require("swagger-ui-express");
-var cors = require("cors");
 
 import { Configuration } from "./singleton/configuration";
 import { MongoDB } from "./singleton/mongo-db";
@@ -34,10 +35,18 @@ log.info("Static folder loaded: %s", staticFolder);
 app.get("/", function (_, res) {
   res.sendFile(path.join(__dirname, Configuration.get("system.static.default-page")));
 });
-if (Configuration.get("system.static.app-config-absolute-path")) {
+const appConfigAbsolutePath = Configuration.get("system.static.app-config-absolute-path");
+if (appConfigAbsolutePath) {
   app.get("/app-config.json", function (_, res) {
-    res.sendFile(Configuration.get("system.static.app-config-absolute-path"));
+    res.sendFile(appConfigAbsolutePath);
   });
+} else if (!fs.existsSync(path.join(__dirname, "/public/app-config.json"))) {
+  const source = path.join(__dirname, "/public/app-config.sample.json");
+  const target = path.join(__dirname, "/public/app-config.json");
+  fs.copyFileSync(source, target);
+  log.warn(
+    "Frontend config was auto generated. You will still need to manually configure OAuth based options in `public/app-config.json`"
+  );
 }
 if (app.get("env") !== "production") {
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
