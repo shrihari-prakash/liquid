@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ release ]
   workflow_dispatch:
     inputs:
       name:
@@ -21,6 +21,6 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag shrihariprakash/liquid:$(date +%s)
+      run: docker build . --file Dockerfile --tag shrihariprakash/liquid:latest
     - name: Docker Push
-      run: docker push shrihariprakash/liquid:$(date +%s)
+      run: docker push shrihariprakash/liquid:latest
