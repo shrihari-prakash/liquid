@@ -3,6 +3,7 @@
 An open source TypeScript implementation of [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) based Mongo DB and Redis with user sign up and login✨
 
 ![GitHub](https://img.shields.io/github/license/shrihari-prakash/liquid)
+[![Docker Image CI](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shrihari-prakash/liquid)
 ![GitHub last commit](https://img.shields.io/github/last-commit/shrihari-prakash/liquid)
 ![Lines of code](https://img.shields.io/tokei/lines/github/shrihari-prakash/liquid)
@@ -37,8 +38,8 @@ In addition to OAuth, the service provides additional (but usually very needed) 
  node ./scripts/create-application-client mongodbConenctionString={{mongodb_connection_string}} clientSecret={{client_secret}} redirectUrls={{comma_seperated_list_of_redirect_urls}}
 ```
 
-3. Copy and rename file `src/public/app-config.sample.json` to `app-config.json` and replace the variables (most importantly, `oauth.clientId` and `oauth.redirectUri` from previous step).
-4. A large part of the service is configurable. You can find the configurable options in file [src/service/configuration/options.json](src/service/configuration/options.json). Parameters like MongoDB connection string and Redis connection settings can be changed. Simply copy the envName of the option youd like to set and put it in your `.env` with your intended value.
+3. Copy and rename file `src/public/app-config.sample.json` to `app-config.json` and replace the variables (*most importantly, `oauth.clientId` and `oauth.redirectUri` from previous step*).
+4. A large part of the service is configurable. You can find the configurable options in file [src/service/configuration/options.json](src/service/configuration/options.json). Parameters like MongoDB connection string and Redis connection settings can be changed. Simply copy the envName of the option youd like to set and put it in your `.env` with your intended value. For the most minimal setup, you probably need to change only `MONGO_DB_CONNECTION_STRING`, `REDIS_PORT`, `REDIS_HOST`, `REDIS_USERNAME` and `REDIS_PASSWORD`.
 5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
 6. Run `npm run build` to output production ready code.
 
