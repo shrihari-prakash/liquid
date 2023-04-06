@@ -452,7 +452,7 @@
     "name": "system.role.extended-roles",
     "displayName": "Extended Roles",
     "envName": "SYSTEM_ROLE_EXTENDED_ROLES",
-    "description": "Additional roles to be considered in the system. `system.role.order` SHOULD be updated along with this option to specify hierarchy of roles.",
+    "description": "Additional roles to be considered in the system. `system.role.ranking` SHOULD be updated along with this option to specify hierarchy of roles.",
     "type": "stringArray",
     "default": ""
   },
