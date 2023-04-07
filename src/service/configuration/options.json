@@ -123,7 +123,8 @@
     "envName": "STORAGE_Cloud_PATH",
     "description": "Path to store user uploaded files.",
     "type": "string",
-    "default": "content"
+    "default": "content",
+    "relatedOptions": ["privilege.can-use-cloud-storage", "s3.*"]
   },
   {
     "name": "s3.endpoint",
@@ -184,7 +185,8 @@
     "envName": "REDIS_PORT",
     "description": "Port for the Redis connection.",
     "type": "number",
-    "default": 6379
+    "default": 6379,
+    "relatedOptions": ["privilege.can-use-cache", "redis.*"]
   },
   {
     "name": "redis.host",
@@ -192,21 +194,24 @@
     "envName": "REDIS_HOST",
     "description": "Host for the Redis connection.",
     "type": "string",
-    "default": "127.0.0.1"
+    "default": "127.0.0.1",
+    "relatedOptions": ["privilege.can-use-cache", "redis.*"]
   },
   {
     "name": "redis.username",
     "displayName": "Redis Username",
     "envName": "REDIS_USERNAME",
     "description": "Username for the Redis connection.",
-    "type": "string"
+    "type": "string",
+    "relatedOptions": ["privilege.can-use-cache", "redis.*"]
   },
   {
     "name": "redis.password",
     "displayName": "Redis Password",
     "envName": "REDIS_PASSWORD",
     "description": "Password for the Redis connection.",
-    "type": "string"
+    "type": "string",
+    "relatedOptions": ["privilege.can-use-cache", "redis.*"]
   },
   {
     "name": "redis.db",
@@ -214,7 +219,8 @@
     "envName": "REDIS_DB",
     "description": "Password for the Redis connection.",
     "type": "number",
-    "default": 0
+    "default": 0,
+    "relatedOptions": ["privilege.can-use-cache", "redis.*"]
   },
   {
     "name": "system.queue-adapter",
@@ -222,7 +228,8 @@
     "envName": "SYSTEM_QUEUE_ADAPTER",
     "description": "Specifies the queue adapter to use to send system events.",
     "type": "string",
-    "default": "rabbitmq"
+    "default": "rabbitmq",
+    "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-rabbitmq"]
   },
   {
     "name": "system.push-events",
@@ -230,7 +237,8 @@
     "envName": "SYSTEM_PUSH_EVENTS",
     "description": "Comma separated list of events in the format `event_class.event` that the system should push to queue. Related to `Can Use Push Events (privilege.can-use-push-events)`",
     "type": "stringArray",
-    "default": "user.follow"
+    "default": "user.follow",
+    "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-rabbitmq"]
   },
   {
     "name": "rabbitmq.connectionString",
@@ -238,7 +246,8 @@
     "envName": "RABBITMQ_CONNECTION_STRING",
     "description": "Connection string for RabbitMQ connection.",
     "type": "string",
-    "default": "amqp://localhost:5672"
+    "default": "amqp://localhost:5672",
+    "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-rabbitmq"]
   },
   {
     "name": "rabbitmq.channel-name",
@@ -246,7 +255,8 @@
     "envName": "RABBITMQ_CHANNEL_NAME",
     "description": "Channel name for RabbitMQ outbound events.",
     "type": "string",
-    "default": "liquid-events"
+    "default": "liquid-events",
+    "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-rabbitmq"]
   },
   {
     "name": "cors.allowed-origins",
@@ -262,7 +272,8 @@
     "envName": "CAN_USE_CACHE",
     "description": "Specifies whether to use cache for optimizing API response time.",
     "type": "boolean",
-    "default": true
+    "default": true,
+    "relatedOptions": ["redis.*"]
   },
   {
     "name": "privilege.can-use-rabbitmq",
@@ -270,7 +281,8 @@
     "envName": "CAN_USE_RABBITMQ",
     "description": "Specifies whether system can use RabbitMQ.",
     "type": "boolean",
-    "default": false
+    "default": false,
+    "relatedOptions": ["privilege.can-use-push-events"]
   },
   {
     "name": "privilege.can-use-push-events",
@@ -278,7 +290,8 @@
     "envName": "CAN_USE_PUSH_EVENTS",
     "description": "Specifies if the system should publish certain events to RabbitMQ that can be used by external services.",
     "type": "boolean",
-    "default": false
+    "default": false,
+    "relatedOptions": ["privilege.can-use-rabbitmq"]
   },
   {
     "name": "privilege.can-use-follow-apis",
@@ -310,7 +323,8 @@
     "envName": "USER_REQUIRE_EMAIL_VERIFICATION",
     "description": "Specifies if email verification is required while signing up in the service. Also modify `general.requireEmailVerification` in your frontend app config.",
     "type": "boolean",
-    "default": true
+    "default": true,
+    "relatedOptions": ["sendgrid.*"]
   },
   {
     "name": "user.profile.editable-fields",
@@ -350,7 +364,8 @@
     "envName": "USER_SEARCH_RESULTS_CACHE_LIFETIME",
     "description": "Specifies in seconds the amount of time for which results for a search query will be cached",
     "type": "number",
-    "default": 30
+    "default": 30,
+    "relatedOptions": ["privilege.can-use-cache"]
   },
   {
     "name": "user.search-results.limit",
@@ -366,7 +381,8 @@
     "envName": "USER_BLOCK_STATUS_CACHE_LIFETIME",
     "description": "Specifies in seconds the amount of time for which block status will be cached",
     "type": "number",
-    "default": 60
+    "default": 60,
+    "relatedOptions": ["privilege.can-use-cache"]
   },
   {
     "name": "user.subscription.tier-list",
@@ -454,7 +470,8 @@
     "envName": "SYSTEM_ROLE_EXTENDED_ROLES",
     "description": "Additional roles to be considered in the system. `system.role.ranking` SHOULD be updated along with this option to specify hierarchy of roles.",
     "type": "stringArray",
-    "default": ""
+    "default": "",
+    "relatedOptions": ["system.role.ranking"]
   },
   {
     "name": "system.role.ranking",
@@ -462,7 +479,8 @@
     "envName": "SYSTEM_ROLE_RANKING",
     "description": "Comma separated list of role names and their ranks in format `role(score)` specifying the order of priorities for roles. Lower numbers have higher priorities.",
     "type": "stringArray",
-    "default": "super_admin(1),admin(2),internal_client(2),external_client(3),user(4)"
+    "default": "super_admin(1),admin(2),internal_client(2),external_client(3),user(4)",
+    "relatedOptions": ["system.role.extended-roles"]
   },
   {
     "name": "system.role.editor-roles",
