@@ -91,7 +91,8 @@
     "displayName": "Sendgrid API Key",
     "envName": "SENDGRID_API_KEY",
     "description": "API key for sendgrid.",
-    "type": "string"
+    "type": "string",
+    "relatedOptions": ["sendgrid.*"]
   },
   {
     "name": "sendgrid.force-send-emails",
@@ -99,7 +100,8 @@
     "envName": "SENDGRID_FORCE_SEND_EMAILS",
     "description": "Specifies if emails have to be sent even in development mode.",
     "type": "boolean",
-    "default": false
+    "default": false,
+    "relatedOptions": ["sendgrid.*"]
   },
   {
     "name": "sendgrid.verification-email-template-id",
@@ -107,7 +109,8 @@
     "envName": "SENDGRID_VERIFICATION_EMAIL_TEMPLATE_ID",
     "description": "Specifies the template ID of verification email template. Leave blank if you want to use plain text. Variables that will be replaced on template: `app_name`, `code`",
     "type": "string",
-    "default": ""
+    "default": "",
+    "relatedOptions": ["sendgrid.*"]
   },
   {
     "name": "sendgrid.outbound-email-address",
@@ -115,7 +118,8 @@
     "envName": "SENDGRID_OUTBOUND_EMAIL_ADDRESS",
     "description": "Email address to be used for outgoing emails from Sendgrid.",
     "type": "string",
-    "default": "liquid@example.com"
+    "default": "liquid@example.com",
+    "relatedOptions": ["sendgrid.*"]
   },
   {
     "name": "storage.cloud-path",
@@ -131,21 +135,24 @@
     "displayName": "S3 Endpoint",
     "envName": "S3_ENDPOINT",
     "description": "Endpoint to be used for S3 storage.",
-    "type": "string"
+    "type": "string",
+    "relatedOptions": ["privilege.can-use-cloud-storage", "s3.*"]
   },
   {
     "name": "s3.access-key-id",
     "displayName": "S3 Access Key ID",
     "envName": "S3_ACCESS_KEY_ID",
     "description": "Access key ID to be used for S3 storage.",
-    "type": "string"
+    "type": "string",
+    "relatedOptions": ["privilege.can-use-cloud-storage", "s3.*"]
   },
   {
     "name": "s3.access-key-secret",
     "displayName": "S3 Access Key Secret",
     "envName": "S3_ACCESS_KEY_SECRET",
     "description": "Access key secret to be used for S3 storage.",
-    "type": "string"
+    "type": "string",
+    "relatedOptions": ["privilege.can-use-cloud-storage", "s3.*"]
   },
   {
     "name": "s3.bucket-name",
@@ -153,7 +160,8 @@
     "envName": "S3_BUCKET_NAME",
     "description": "Bucket name to be used for S3 storage.",
     "type": "string",
-    "default": "liquid"
+    "default": "liquid",
+    "relatedOptions": ["privilege.can-use-cloud-storage", "s3.*"]
   },
   {
     "name": "s3.get-object-expiry",
@@ -161,7 +169,8 @@
     "envName": "S3_GET_OBJECT_EXPIRY",
     "description": "Expiry for getObject pre signed URLs.",
     "type": "number",
-    "default": 3600
+    "default": 3600,
+    "relatedOptions": ["privilege.can-use-cloud-storage", "s3.*"]
   },
   {
     "name": "s3.put-object-expiry",
@@ -169,7 +178,8 @@
     "envName": "S3_PUT_OBJECT_EXPIRY",
     "description": "Expiry for putObject pre signed URLs.",
     "type": "number",
-    "default": 3600
+    "default": 3600,
+    "relatedOptions": ["privilege.can-use-cloud-storage", "s3.*"]
   },
   {
     "name": "get-user-max-items",
@@ -307,7 +317,8 @@
     "envName": "CAN_USE_PROFILE_PICTURE_APIS",
     "description": "Specifies if users can use profile picture features. If enabled, you will require a S3 or S3-like cloud storage. Update options `Can Use Cloud Storage`, `S3 Access Key ID`, `S3 Access Key Secret`, `S3 Endpoint` and `S3 Bucket Name` along with this.",
     "type": "boolean",
-    "default": false
+    "default": false,
+    "relatedOptions": ["privilege.can-use-cloud-storage"]
   },
   {
     "name": "privilege.can-use-cloud-storage",
@@ -315,7 +326,8 @@
     "envName": "CAN_USE_CLOUD_STORAGE",
     "description": "Specifies if the application can use cloud storage.",
     "type": "boolean",
-    "default": false
+    "default": false,
+    "relatedOptions": ["s3.*"]
   },
   {
     "name": "user.require-email-verification",
