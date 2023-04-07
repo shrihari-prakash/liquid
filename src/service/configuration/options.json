@@ -60,7 +60,7 @@
     "envName": "MONGO_DB_CONNECTION_STRING",
     "description": "Connection string to connect to MongoDB.",
     "type": "string",
-    "default": "mongodb://localhost:27017/accounts"
+    "default": "mongodb://127.0.0.1:27017/accounts"
   },
   {
     "name": "oauth.authorization-code-lifetime",
