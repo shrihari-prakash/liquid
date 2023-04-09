@@ -52,11 +52,17 @@ The following steps assume you have Redis and Mongo DB installed on your host ma
 
 3. In your host machine, create a file called `app-config.json` with the contents of [this file](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/public/app-config.sample.json).
 4. Edit properties `oauth.clientId` and `oauth.redirectUri` to the document you just inserted into `clients` collection.
-5. Go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your configurations. Set `system.static.app-config-absolute-path` to `/environment/app-config.json`. Apart from this, you will need to edit `mongo-db.connection-string`, `sendgrid.api-key`, `sendgrid.outbound-email-address` and options starting with `redis.`. Sendgrid is required to send verification emails. If you do not want verifications, you can turn them off by turning off option `user.require-email-verification` and in app-config.json, `general.requireEmailVerification`.
-6. Export the settings and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
-7. Now open terminal in the folder that contains your app-config.json.
-8. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`
-9. You're all setup ✨. Reaching `host-machine:2000` should render login page.
+5. Go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your configurations. Set `system.static.app-config-absolute-path` to `/environment/app-config.json`. Apart from this, you will need to edit:
+   1. `mongo-db.connection-string`
+   2. `sendgrid.api-key`
+   3. `sendgrid.outbound-email-address`
+   4. and options starting with `redis.`. 
+
+6. Sendgrid is required to send verification emails. If you do not want verifications, you can turn them off by turning off option `user.require-email-verification` and in app-config.json, `general.requireEmailVerification`.
+7. Export the settings and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
+8. Now open terminal in the folder that contains your app-config.json.
+9. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`
+10. You're all setup ✨. Reaching `host-machine:2000` should render login page.
 ### Development
 1. Run `npm i`.
 2. Run the following command (without brackets):
