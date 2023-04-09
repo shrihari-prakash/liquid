@@ -31,7 +31,7 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 
 ## Setup
 ### Production Usage
-The following steps assume you have Redis and Mongo DB installed on your host machine.
+The following steps assume you have **Redis** and **MongoDB** installed on your host machine.
 1. Pull the docker image by using command `docker pull shrihariprakash/liquid:latest`.
 2. Create a collection in your database named `clients` and insert the following document into the collection (Make sure you edit the frontend URIs and secret in the document below):
 
@@ -50,19 +50,18 @@ The following steps assume you have Redis and Mongo DB installed on your host ma
 }
 ```
 
-3. In your host machine, create a file called `app-config.json` with the contents of [this file](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/public/app-config.sample.json).
-4. Edit properties `oauth.clientId` and `oauth.redirectUri` to values from the document you just inserted into clients collection.
-5. Now go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your backend configurations. Set `system.static.app-config-absolute-path` to `/environment/app-config.json`. Apart from this, you will need to edit:
-   1. `mongo-db.connection-string`
-   2. `sendgrid.api-key`
-   3. `sendgrid.outbound-email-address`
-   4. and options starting with `redis.`. 
-
-6. Sendgrid is required to send verification emails. If you do not want verifications, you can turn them off by turning off option `user.require-email-verification` and in app-config.json, `general.requireEmailVerification`.
-7. Export the settings and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
+3. In your host machine, create a file called `app-config.json` with the contents of [this file](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/public/app-config.sample.json) and edit properties `oauth -> clientId` and `oauth -> redirectUri` to values from the document you just inserted into clients collection. This is the configuration file used for all your frontend stuff like UI customizations.
+5. Now go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your backend configurations. For the most minimal setup, you will need to set:
+   * `system.static.app-config-absolute-path` to `/environment/app-config.json`
+   * `mongo-db.connection-string`
+   * `sendgrid.api-key`
+   * `sendgrid.outbound-email-address`
+   * and options starting with `redis`. 
+> **_NOTE:_** A sendgrid account API key is required to send verification emails. If you do not want to verify emails when users are signing up, you can turn it off by turning off option `user.require-email-verification` in .env and `general -> requireEmailVerification` in app-config.json.
+7. Export the configuration and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
 8. Now open terminal in the folder that contains your app-config.json.
 9. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`
-10. You're all setup ✨. Reaching `host-machine:2000` should render login page.
+10. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. [Click here for Swagger](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/swagger.yaml). Checkout the other options in [Option Manager](https://liquid-om.netlify.app/) to enable optional features if they interest you.
 ### Development
 1. Run `npm i`.
 2. Run the following command (without brackets):
