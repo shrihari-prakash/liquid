@@ -52,7 +52,7 @@ The following steps assume you have Redis and Mongo DB installed on your host ma
 
 3. In your host machine, create a file called `app-config.json` with the contents of [this file](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/public/app-config.sample.json).
 4. Edit properties `oauth.clientId` and `oauth.redirectUri` to values from the document you just inserted into clients collection.
-5. Go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your configurations. Set `system.static.app-config-absolute-path` to `/environment/app-config.json`. Apart from this, you will need to edit:
+5. Now go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your backend configurations. Set `system.static.app-config-absolute-path` to `/environment/app-config.json`. Apart from this, you will need to edit:
    1. `mongo-db.connection-string`
    2. `sendgrid.api-key`
    3. `sendgrid.outbound-email-address`
