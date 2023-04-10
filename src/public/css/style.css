@@ -4,7 +4,7 @@
   --text-color__light: #2b2b2b;
   --text-lighter-color__light: #808080;
   --border-color__light: #e1e1e1;
-  --glass-color__light: #ffffff40;
+  --glass-color__light: #00000030;
   --spinner-background-color__light: #ffffff;
   --spinner-primary-color__light: #000000;
   --spinner-secondary-color__light: #dbf2ff;
@@ -13,7 +13,7 @@
   --text-color: #e2e2e2;
   --text-lighter-color: #b3b3b3;
   --border-color: #555555;
-  --glass-color: #00000040;
+  --glass-color: #00000030;
   --spinner-background-color: #16181c;
   --spinner-primary-color: #ffffff40;
   --spinner-secondary-color: #2b2b2b;
@@ -270,14 +270,20 @@ input[data-autocompleted] {
   font-size: 14px;
 }
 
+.sidebar {
+  position: relative;
+}
+
 .page .intro {
-  padding: 72px 32px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 42px;
   flex-direction: column;
   justify-content: center;
   background-color: var(--glass-color);
   backdrop-filter: blur(10px);
-  width: 90%;
-  border-radius: var(--surface-border-radius);
+  width: 100%;
   user-select: none;
   display: none;
 }
@@ -285,11 +291,11 @@ input[data-autocompleted] {
 .page .title1,
 .page .title2 {
   font-size: x-large;
-  color: var(--text-color);
+  color: #fff;
 }
 
 .page .description {
-  color: var(--text-color);
+  color: #fff;
   margin-top: 10px;
 }
 
