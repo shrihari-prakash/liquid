@@ -37,16 +37,16 @@ The following steps assume you have **Redis** and **MongoDB** installed on your 
 
 ```
 {
-  id: "application_client",
-  grants: [
+  "id": "application_client",
+  "grants": [
     "client_credentials",
     "authorization_code",
     "refresh_token"
   ],
-  redirectUris: ["frontend-redirect-uri-1", "frontend-redirect-uri-2", ...],
-  secret: "super-secure-client-secret",
-  role: "internal_client",
-  displayName: "Application Client"
+  "redirectUris": ["frontend-redirect-uri-1", "frontend-redirect-uri-2", ...],
+  "secret": "super-secure-client-secret",
+  "role": "internal_client",
+  "displayName": "Application Client"
 }
 ```
 
