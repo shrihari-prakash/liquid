@@ -25,7 +25,7 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 
 > **_NOTE:_** You will require Redis to run this service. This is because the service needs to store access and refresh tokens with an auto expiry. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `privilege.can-use-cache` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database. Then it's upto you to write your own CRON to clean them.
 
-## Setup
+## ⚙️ Setup
 ### Production Usage
 The following steps assume you have **Redis** and **MongoDB** installed on your host machine.
 1. Pull the docker image by using command `docker pull shrihariprakash/liquid:latest`.
@@ -71,7 +71,7 @@ The following steps assume you have **Redis** and **MongoDB** installed on your 
 5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
 6. Run `npm run build` to output production ready code.
 
-### API Documentation:
+### 📖 API Documentation:
 
 In development environment, swagger is available at http://localhost:2000/docs. This has the documentation for all the additional functionalities that the service offers apart from OAuth. For OAuth itself, any regular OAuth documentation should work with this. OAuth related functionalities are available at `/oauth`.
 
