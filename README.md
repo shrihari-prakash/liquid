@@ -46,14 +46,14 @@ The following steps assume you have **Redis** and **MongoDB** installed on your 
 }
 ```
 
-3. In your host machine, create a file called `app-config.json` with the contents of [this file](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/public/app-config.sample.json) and edit properties `oauth -> clientId` and `oauth -> redirectUri` to values from the document you just inserted into clients collection. This is the configuration file used for all your frontend stuff like UI customizations.
+3. In your host machine, create a file called `app-config.json` with the contents of [this file](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/public/app-config.sample.json) and edit properties `oauth.client-id` and `oauth.redirect-uri` to values from the document you just inserted into clients collection. This is the configuration file used for all your frontend stuff like UI customizations.
 5. Now go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your backend configurations. For the most minimal setup, you will need to set:
    * `system.static.app-config-absolute-path` to `/environment/app-config.json`
    * `mongo-db.connection-string`
    * `sendgrid.api-key`
    * `sendgrid.outbound-email-address`
    * and options starting with `redis`. 
-> **_NOTE:_** A sendgrid account API key is required to send verification emails. If you do not want to verify emails when users are signing up, you can turn it off by turning off option `user.require-email-verification` in .env and `general -> requireEmailVerification` in app-config.json.
+> **_NOTE:_** A sendgrid account API key is required to send verification emails. If you do not want to verify emails when users are signing up, you can turn it off by turning off option `user.require-email-verification` in .env and app-config.json.
 7. Export the configuration and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
 8. Now open terminal in the folder that contains your app-config.json.
 9. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`
