@@ -1,4 +1,4 @@
-# Liquid - Seamless and highly customizable authentication and user APIs for your projects.
+# <img src="https://github.com/shrihari-prakash/liquid/blob/main/src/public/images/app-icon-mini.png" width="26" height="26"> Liquid: Seamless and highly customizable authentication and user APIs for your projects.
 
 An open source TypeScript implementation of [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) based Mongo DB and Redis with user sign up and login✨
 
@@ -13,23 +13,19 @@ When you start new projects, you typically find that you are writing the login, 
 
 ![Liquid](images/liquid-banner.png)
 
-### Features
+### 🚀 Features
 
 In addition to OAuth, the service provides additional (but usually very needed) features:
 
-⭐ High degree customization capabilities. Customize and configure every part of the UI and service.
-
-⭐ Out of the box support for user sign up and login.
-
-⭐ Includes follow and unfollow mechanisms with support for private accounts.
-
-⭐ Support for admin level and client APIs.
-
-⭐ Quick setup.
+* High degree customization capabilities. Customize and configure every part of the UI and service.
+* Out of the box support for user sign up and login.
+* Includes follow and unfollow mechanisms with support for private accounts.
+* Support for admin level and client APIs.
+* Quick setup.
 
 > **_NOTE:_** You will require Redis to run this service. This is because the service needs to store access and refresh tokens with an auto expiry. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `privilege.can-use-cache` to false. However, disabling this option is highly discouraged since tokens that are not revoked permanently stick to the database. Then it's upto you to write your own CRON to clean them.
 
-## Setup
+## ⚙️ Setup
 ### Production Usage
 The following steps assume you have **Redis** and **MongoDB** installed on your host machine.
 1. Pull the docker image by using command `docker pull shrihariprakash/liquid:latest`.
@@ -75,7 +71,7 @@ The following steps assume you have **Redis** and **MongoDB** installed on your 
 5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
 6. Run `npm run build` to output production ready code.
 
-### API Documentation:
+### 📖 API Documentation:
 
 In development environment, swagger is available at http://localhost:2000/docs. This has the documentation for all the additional functionalities that the service offers apart from OAuth. For OAuth itself, any regular OAuth documentation should work with this. OAuth related functionalities are available at `/oauth`.
 
