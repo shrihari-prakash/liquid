@@ -4,7 +4,7 @@ $(async function () {
   form.addEventListener("submit", signup, true);
   STORE.autoFocusElement = $("#username");
   const configuration = await getConfig();
-  if (!configuration.general.allowAccountCreation) {
+  if (!configuration["privilege.can-create-account"]) {
     $("body").empty();
   }
 });
@@ -27,7 +27,7 @@ function signup(event) {
   })
     .done(async function () {
       const configuration = await getConfig();
-      if (configuration.general.requireEmailVerification) {
+      if (configuration["user.require-email-verification"]) {
         window.location = `/verify-account${window.location.search}`;
       } else {
         window.location = `/login${window.location.search}`

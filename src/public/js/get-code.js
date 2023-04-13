@@ -4,7 +4,7 @@ $(async function () {
   form.addEventListener("submit", getCode, true);
   STORE.autoFocusElement = $("#email");
   const configuration = await getConfig();
-  if (!configuration.general.allowPasswordReset) {
+  if (!configuration["privilege.can-reset-password"]) {
     $("body").empty();
   }
 });

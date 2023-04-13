@@ -27,16 +27,16 @@ function changeToLightVariable(variable) {
   setStyleProperty(variable, `var(${variable}__light)`);
 }
 
-async function getTheme() {
+async function getThemeProp(variable) {
   const configuration = await getConfig();
-  const themeObject = configuration.theme;
-  return (STORE.theme === "light") ?
-    themeObject.light : themeObject.dark;
+  const prefix = (STORE.theme === "light") ?
+    "theme.light." : "theme.dark.";
+  return configuration[`${prefix}${variable}`];
 }
 
 async function useFavicon() {
   const configuration = await getConfig();
-  const favicon = configuration.images.favicon;
+  const favicon = configuration["assets.favicon-uri"];
   if (!favicon) return;
   var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
   link.type = 'image/png';
@@ -46,15 +46,10 @@ async function useFavicon() {
 }
 
 async function usePrimaryButton() {
-  const theme = await getTheme();
-  if (theme.usePrimaryButton) {
+  if (getThemeProp("use-primary-button")) {
     $(".action-button").addClass("btn-primary");
-    setStyleProperty("--primary-button-border-radius", theme.primaryButtonBorderRadius);
-    setStyleProperty("--primary-button-text-color", theme.primaryButtonTextColor);
-    setStyleProperty("--primary-button-active-text-color", theme.primaryButtonActiveTextColor);
-    setStyleProperty("--primary-button-color", theme.primaryButtonColor);
-    setStyleProperty("--primary-button-active-color", theme.primaryButtonActiveColor);
-    setStyleProperty("--primary-button-focus-box-shadow", theme.primaryButtonFocusBoxShadow);
+    const props = ["border-radius", "text-color", "active-text-color", "color", "active-color", "focus-box-shadow"];
+    props.forEach(async prop => setStyleProperty(`--primary-button-${prop}`, await getThemeProp(`primary-button.${prop}`)));
   } else {
     if (STORE.theme === "light") {
       $(".action-button").addClass("btn-light");
@@ -70,19 +65,17 @@ async function useTheme() {
     changeToLightVariable("--spinner-primary-color");
     changeToLightVariable("--spinner-secondary-color");
   }
-  const theme = await getTheme();
   usePrimaryButton();
-  setStyleProperty('--form-input-border-radius', theme.formInputBorderRadius);
-  setStyleProperty('--form-input-padding', theme.formInputPadding);
-  setStyleProperty('--surface-border-radius', theme.surfaceBorderRadius);
-  setStyleProperty('--background-color', theme.backgroundColor);
+  setStyleProperty('--background-color', await getThemeProp("background-color"));
+  setStyleProperty('--form-input-border-radius', await getThemeProp("form.input-border-radius"));
+  setStyleProperty('--form-input-padding', await getThemeProp("form.input-padding"));
   if (STORE.theme === "light") {
     changeToLightVariable("--text-color");
     changeToLightVariable("--text-lighter-color");
     changeToLightVariable("--border-color");
     changeToLightVariable("--glass-color");
   }
-  if (!theme.formInputUseBorder) {
+  if (!await getThemeProp("form.input-use-border")) {
     $(".form-group").addClass("no-border");
   }
 }
@@ -142,12 +135,12 @@ function makeImage(src, alt) {
 
 async function renderContent() {
   const configuration = await getConfig();
-  $(".app-name, .app-name-titlebar").text(configuration.content.appName);
-  $(".app-tagline") && $(".app-tagline").text(configuration.content.appTagline);
-  $(".title1").text(configuration.content.sidebar.intro.title1);
-  $(".title2").text(configuration.content.sidebar.intro.title2);
-  $(".description").text(configuration.content.sidebar.intro.description);
-  if (configuration.content.sidebar.enabled === false) {
+  $(".app-name, .app-name-titlebar").text(configuration["content.app-name"]);
+  $(".app-tagline") && $(".app-tagline").text(configuration["content.app-tagline"]);
+  $(".title1").text(configuration["content.sidebar.intro.title1"]);
+  $(".title2").text(configuration["content.sidebar.intro.title2"]);
+  $(".description").text(configuration["content.sidebar.intro.description"]);
+  if (configuration["content.sidebar.enabled"] === false) {
     $(".sidebar").css({
       display: "none",
       visibility: "hidden",
@@ -157,9 +150,9 @@ async function renderContent() {
     });
     return;
   }
-  const sidebarSrcDark = configuration.content.sidebar.backdropImageDark;
-  const sidebarSrcLight = configuration.content.sidebar.backdropImageLight;
-  if (configuration.content.sidebar.contentEnabled === true) {
+  const sidebarSrcDark = configuration["assets.sidebar.backdrop-image-dark"];
+  const sidebarSrcLight = configuration["assets.sidebar.backdrop-image-light"];
+  if (configuration["content.sidebar.enabled"] === true) {
     $(".intro").css({
       display: "flex",
     });
@@ -175,13 +168,13 @@ function useImages(configuration) {
   const miniIcon = $(".app-icon-mini");
   const headerIcon = $(".app-name");
   if (STORE.theme === "light") {
-    const miniIconLight = configuration.images.miniIconLight;
-    const headerIconLight = configuration.images.headerIconLight;
+    const miniIconLight = configuration["assets.mini-icon-light"];
+    const headerIconLight = configuration["assets.header-icon-light"];
     if (miniIconLight) miniIcon.html(makeImage(miniIconLight, "App Icon"));
     if (headerIconLight) headerIcon.html(makeImage(headerIconLight), "App Icon");
   } else if (STORE.theme === "dark") {
-    const miniIconDark = configuration.images.miniIconDark;
-    const headerIconDark = configuration.images.headerIconDark;
+    const miniIconDark = configuration["assets.mini-icon-dark"];
+    const headerIconDark = configuration["assets.header-icon-dark"];
     if (miniIconDark) miniIcon.html(makeImage(miniIconDark, "App Icon"));
     if (headerIconDark) headerIcon.html(makeImage(headerIconDark, "App Icon"));
   }
@@ -189,7 +182,7 @@ function useImages(configuration) {
 
 async function useTitle(title) {
   const configuration = await getConfig();
-  $(".app-name-titlebar").text(`${configuration.content.appName} - ${title}`);
+  $(".app-name-titlebar").text(`${configuration["content.app-name"]} - ${title}`);
 }
 
 function uuidv4() {

@@ -4,10 +4,10 @@ $(async function () {
   form.addEventListener("submit", login, true);
   STORE.autoFocusElement = $("#username");
   const configuration = await getConfig();
-  if (!configuration.general.allowAccountCreation) {
+  if (!configuration["privilege.can-create-account"]) {
     $(".signup-link").remove();
   }
-  if (!configuration.general.allowPasswordReset) {
+  if (!configuration["privilege.can-reset-password"]) {
     $(".forgot-password-link").remove();
   }
 });
@@ -34,8 +34,8 @@ function login(event) {
       const configuration = await getConfig();
       const params = new URLSearchParams({
         response_type: "code",
-        client_id: clientId || configuration.oauth.clientId,
-        redirect_uri: redirect || configuration.oauth.redirectUri,
+        client_id: clientId || configuration["oauth.client-id"],
+        redirect_uri: redirect || configuration["oauth.redirect-uri"],
         state: state || uuidv4(),
       });
       window.location = `/oauth/authorize?${params.toString()}`;

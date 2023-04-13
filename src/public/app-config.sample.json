@@ -1,63 +1,49 @@
 {
-  "oauth": {
-    "clientId": "{{your_client_id}}",
-    "redirectUri": "{{your_redirect_uri}}"
-  },
-  "general": {
-    "requireEmailVerification": true,
-    "allowAccountCreation": true,
-    "allowPasswordReset": true
-  },
-  "images": {
-    "favicon": "images/app-icon-mini.png",
-    "miniIconLight": "images/app-icon-mini.png",
-    "miniIconDark": "images/app-icon-mini.png",
-    "headerIconLight": "images/app-icon-header-light.png",
-    "headerIconDark": "images/app-icon-header-dark.png"
-  },
-  "content": {
-    "appName": "Liquid",
-    "appTagline": "Your tagline here.",
-    "sidebar": {
-      "enabled": true,
-      "contentEnabled": true,
-      "backdropImageDark": "images/bg.jpg",
-      "backdropImageLight": "images/bg-light.jpg",
-      "intro": {
-        "title1": "Plug & Play",
-        "title2": "with any project.",
-        "description": "Focus on writing your app logic while liquid handles the same old authentication logic 🔒"
-      }
-    }
-  },
-  "theme": {
-    "light": {
-      "usePrimaryButton": true,
-      "primaryButtonColor": "#007bff",
-      "primaryButtonActiveColor": "#0069d9",
-      "primaryButtonTextColor": "#ffffff",
-      "primaryButtonActiveTextColor": "#ffffff",
-      "primaryButtonFocusBoxShadow": "0 0 0 6px rgba(0, 123, 255, 0.5)",
-      "primaryButtonBorderRadius": "30px",
-      "formInputBorderRadius": "7px",
-      "surfaceBorderRadius": "8px",
-      "backgroundColor": "#ffffff",
-      "formInputUseBorder": true,
-      "formInputPadding": "15px"
-    },
-    "dark": {
-      "usePrimaryButton": true,
-      "primaryButtonColor": "#007bff",
-      "primaryButtonActiveColor": "#0069d9",
-      "primaryButtonTextColor": "#ffffff",
-      "primaryButtonActiveTextColor": "#ffffff",
-      "primaryButtonFocusBoxShadow": "0 0 0 6px rgba(0, 123, 255, 0.5)",
-      "primaryButtonBorderRadius": "30px",
-      "formInputBorderRadius": "7px",
-      "surfaceBorderRadius": "8px",
-      "backgroundColor": "#16181c",
-      "formInputUseBorder": true,
-      "formInputPadding": "15px"
-    }
-  }
+  "oauth.client-id": "{{your_oauth_client_id}}",
+  "oauth.redirect-uri": "{{your_oauth_redirect_uri}}",
+
+  "user.require-email-verification": true,
+
+  "privilege.can-create-account": true,
+  "privilege.can-reset-password": true,
+
+  "assets.favicon-uri": "images/app-icon-mini.png",
+  "assets.mini-icon-light": "images/app-icon-mini.png",
+  "assets.mini-icon-dark": "images/app-icon-mini.png",
+  "assets.header-icon-light": "images/app-icon-header-light.png",
+  "assets.header-icon-dark": "images/app-icon-header-dark.png",
+  "assets.sidebar.backdrop-image-dark": "images/bg.jpg",
+  "assets.sidebar.backdrop-image-light": "images/bg-light.jpg",
+
+  "content.app-name": "Liquid",
+  "content.app-tagline": "Your tagline here.",
+  "content.sidebar.enabled": true,
+  "content.sidebar.content-enabled": true,
+  "content.sidebar.intro.title1": "Plug & Play",
+  "content.sidebar.intro.title2": "with any project.",
+  "content.sidebar.intro.description": "Focus on writing your app logic while liquid handles the same old authentication logic 🔒",
+
+  "theme.light.background-color": "#ffffff",
+  "theme.light.use-primary-button": true,
+  "theme.light.primary-button.color": "#007bff",
+  "theme.light.primary-button.active-color": "#0069d9",
+  "theme.light.primary-button.text-color": "#ffffff",
+  "theme.light.primary-button.active-text-color": "#ffffff",
+  "theme.light.primary-button.focus-box-shadow": "0 0 0 6px rgba(0, 123, 255, 0.5)",
+  "theme.light.primary-button.border-radius": "30px",
+  "theme.light.form.input-border-radius": "7px",
+  "theme.light.form.input-use-border": true,
+  "theme.light.form.input-padding": "15px",
+
+  "theme.dark.background-color": "#16181c",
+  "theme.dark.use-primary-button": true,
+  "theme.dark.primary-button.color": "#007bff",
+  "theme.dark.primary-button.active-color": "#0069d9",
+  "theme.dark.primary-button.text-color": "#ffffff",
+  "theme.dark.primary-button.active-text-color": "#ffffff",
+  "theme.dark.primary-button.focus-box-shadow": "0 0 0 6px rgba(0, 123, 255, 0.5)",
+  "theme.dark.primary-button.border-radius": "30px",
+  "theme.dark.form.input-border-radius": "7px",
+  "theme.dark.form.input-use-border": true,
+  "theme.dark.form.input-padding": "15px"
 }
