@@ -3,8 +3,7 @@ $(async function () {
   let form = document.getElementById("signup-form");
   form.addEventListener("submit", signup, true);
   STORE.autoFocusElement = $("#username");
-  const configuration = await getConfig();
-  if (!configuration["privilege.can-create-account"]) {
+  if (!await getOption("privilege.can-create-account")) {
     $("body").empty();
   }
 });
@@ -26,8 +25,7 @@ function signup(event) {
     email,
   })
     .done(async function () {
-      const configuration = await getConfig();
-      if (configuration["user.require-email-verification"]) {
+      if (await getOption("user.require-email-verification")) {
         window.location = `/verify-account${window.location.search}`;
       } else {
         window.location = `/login${window.location.search}`

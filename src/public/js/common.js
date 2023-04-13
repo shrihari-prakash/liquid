@@ -27,16 +27,49 @@ function changeToLightVariable(variable) {
   setStyleProperty(variable, `var(${variable}__light)`);
 }
 
+function getConfiguration() {
+  return new Promise((resolve, reject) => {
+    if (STORE.config) return resolve(STORE.config);
+    const onDone = (data) => {
+      STORE.config = data;
+      resolve(STORE.config);
+      $(".spinner-container").addClass("hidden");
+      $("html, body").removeClass("scroll-lock");
+      if (STORE.autoFocusElement && !("ontouchstart" in document.documentElement)) {
+        STORE.autoFocusElement.focus();
+        STORE.autoFocusElement = null;
+      }
+    }
+    if (STORE.isConfigLoading) return STORE.configQueue.push(resolve)
+    STORE.isConfigLoading = true;
+    $("html, body").addClass("scroll-lock");
+    return $.get("/app-config.json")
+      .done((data) => {
+        console.log("Configuration retrieved.", data);
+        console.log(Object.keys(data).length + " options loaded.");
+        onDone(data);
+        console.log(STORE.configQueue.length + " callbacks in queue.");
+        STORE.configQueue.forEach((res) => res(data));
+        STORE.configQueue = [];
+      })
+      .fail(reject)
+      .always(() => STORE.isConfigLoading = false);
+  });
+}
+
+async function getOption(name) {
+  const configuration = await getConfiguration();
+  return configuration[name];
+}
+
 async function getThemeProp(variable) {
-  const configuration = await getConfig();
   const prefix = (STORE.theme === "light") ?
     "theme.light." : "theme.dark.";
-  return configuration[`${prefix}${variable}`];
+  return getOption(`${prefix}${variable}`);
 }
 
 async function useFavicon() {
-  const configuration = await getConfig();
-  const favicon = configuration["assets.favicon-uri"];
+  const favicon = await getOption("assets.favicon-uri");
   if (!favicon) return;
   var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
   link.type = 'image/png';
@@ -80,35 +113,6 @@ async function useTheme() {
   }
 }
 
-function getConfig() {
-  return new Promise((resolve, reject) => {
-    if (STORE.config) return resolve(STORE.config);
-    const onDone = (data) => {
-      STORE.config = data;
-      resolve(STORE.config);
-      $(".spinner-container").addClass("hidden");
-      $("html, body").removeClass("scroll-lock");
-      if (STORE.autoFocusElement && !("ontouchstart" in document.documentElement)) {
-        STORE.autoFocusElement.focus();
-        STORE.autoFocusElement = null;
-      }
-    }
-    if (STORE.isConfigLoading) return STORE.configQueue.push(resolve)
-    STORE.isConfigLoading = true;
-    $("html, body").addClass("scroll-lock");
-    return $.get("/app-config.json")
-      .done((data) => {
-        console.log("Configuration acquired.", data);
-        onDone(data);
-        console.log("Config queue size:", STORE.configQueue.length);
-        STORE.configQueue.forEach((res) => res(data));
-        STORE.configQueue = [];
-      })
-      .fail(reject)
-      .always(() => STORE.isConfigLoading = false);
-  });
-}
-
 function onSubmitError(params) {
   if (STORE.buttonAnimationTimeout) {
     clearTimeout(STORE.buttonAnimationTimeout);
@@ -134,13 +138,12 @@ function makeImage(src, alt) {
 }
 
 async function renderContent() {
-  const configuration = await getConfig();
-  $(".app-name, .app-name-titlebar").text(configuration["content.app-name"]);
-  $(".app-tagline") && $(".app-tagline").text(configuration["content.app-tagline"]);
-  $(".title1").text(configuration["content.sidebar.intro.title1"]);
-  $(".title2").text(configuration["content.sidebar.intro.title2"]);
-  $(".description").text(configuration["content.sidebar.intro.description"]);
-  if (configuration["content.sidebar.enabled"] === false) {
+  $(".app-name, .app-name-titlebar").text(await getOption("content.app-name"));
+  $(".app-tagline") && $(".app-tagline").text(await getOption("content.app-tagline"));
+  $(".title1").text(await getOption("content.sidebar.intro.title1"));
+  $(".title2").text(await getOption("content.sidebar.intro.title2"));
+  $(".description").text(await getOption("content.sidebar.intro.description"));
+  if (await getOption("content.sidebar.enabled") === false) {
     $(".sidebar").css({
       display: "none",
       visibility: "hidden",
@@ -150,9 +153,9 @@ async function renderContent() {
     });
     return;
   }
-  const sidebarSrcDark = configuration["assets.sidebar.backdrop-image-dark"];
-  const sidebarSrcLight = configuration["assets.sidebar.backdrop-image-light"];
-  if (configuration["content.sidebar.enabled"] === true) {
+  const sidebarSrcDark = await getOption("assets.sidebar.backdrop-image-dark");
+  const sidebarSrcLight = await getOption("assets.sidebar.backdrop-image-light");
+  if (await getOption("content.sidebar.enabled") === true) {
     $(".intro").css({
       display: "flex",
     });
@@ -161,28 +164,27 @@ async function renderContent() {
   if (sidebarSrc) {
     $(".sidebar").css("background-image", "url(" + sidebarSrc + ")");
   }
-  useImages(configuration);
+  useImages();
 }
 
-function useImages(configuration) {
+async function useImages() {
   const miniIcon = $(".app-icon-mini");
   const headerIcon = $(".app-name");
   if (STORE.theme === "light") {
-    const miniIconLight = configuration["assets.mini-icon-light"];
-    const headerIconLight = configuration["assets.header-icon-light"];
+    const miniIconLight = await getOption("assets.mini-icon-light");
+    const headerIconLight = await getOption("assets.header-icon-light");
     if (miniIconLight) miniIcon.html(makeImage(miniIconLight, "App Icon"));
     if (headerIconLight) headerIcon.html(makeImage(headerIconLight), "App Icon");
   } else if (STORE.theme === "dark") {
-    const miniIconDark = configuration["assets.mini-icon-dark"];
-    const headerIconDark = configuration["assets.header-icon-dark"];
+    const miniIconDark = await getOption("assets.mini-icon-dark");
+    const headerIconDark = await getOption("assets.header-icon-dark");
     if (miniIconDark) miniIcon.html(makeImage(miniIconDark, "App Icon"));
     if (headerIconDark) headerIcon.html(makeImage(headerIconDark, "App Icon"));
   }
 }
 
 async function useTitle(title) {
-  const configuration = await getConfig();
-  $(".app-name-titlebar").text(`${configuration["content.app-name"]} - ${title}`);
+  $(".app-name-titlebar").text(`${await getOption("content.app-name")} - ${title}`);
 }
 
 function uuidv4() {

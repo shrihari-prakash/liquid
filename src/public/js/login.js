@@ -3,11 +3,10 @@ $(async function () {
   let form = document.getElementById("login-form");
   form.addEventListener("submit", login, true);
   STORE.autoFocusElement = $("#username");
-  const configuration = await getConfig();
-  if (!configuration["privilege.can-create-account"]) {
+  if (!await getOption("privilege.can-create-account")) {
     $(".signup-link").remove();
   }
-  if (!configuration["privilege.can-reset-password"]) {
+  if (!await getOption("privilege.can-reset-password")) {
     $(".forgot-password-link").remove();
   }
 });
@@ -31,11 +30,10 @@ function login(event) {
       const clientId = url.searchParams.get("clientId");
       const redirect = url.searchParams.get("redirect");
       const state = url.searchParams.get("state");
-      const configuration = await getConfig();
       const params = new URLSearchParams({
         response_type: "code",
-        client_id: clientId || configuration["oauth.client-id"],
-        redirect_uri: redirect || configuration["oauth.redirect-uri"],
+        client_id: clientId || await getOption("oauth.client-id"),
+        redirect_uri: redirect || await getOption("oauth.redirect-uri"),
         state: state || uuidv4(),
       });
       window.location = `/oauth/authorize?${params.toString()}`;

@@ -1,11 +1,11 @@
 $(function () {
   useTitle("Verify Your Account")
   let form = document.getElementById("verify-form");
-  form.addEventListener("submit", getCode, true);
+  form.addEventListener("submit", resetPassword, true);
   STORE.autoFocusElement = $("#code");
 });
 
-function getCode(event) {
+function resetPassword(event) {
   event.preventDefault();
   const code = document.getElementById("code").value;
   const submit = document.getElementById("submit");

@@ -1,11 +1,11 @@
 $(function () {
   useTitle("Reset Password")
   let form = document.getElementById("reset-password-form");
-  form.addEventListener("submit", getCode, true);
+  form.addEventListener("submit", resetPassword, true);
   STORE.autoFocusElement = $("#code");
 });
 
-function getCode(event) {
+function resetPassword(event) {
   event.preventDefault();
   const code = document.getElementById("code").value;
   const password = document.getElementById("password").value;
