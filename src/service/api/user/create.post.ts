@@ -8,7 +8,6 @@ import { body } from "express-validator";
 import UserModel, { IUser } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import Role from "../../../enum/role";
 import { hasErrors } from "../../../utils/api";
 import { generateVerificationCode } from "../../../utils/verification-code/verification-code";
 import { Pusher } from "../../../singleton/pusher";
@@ -72,7 +71,7 @@ const POST_Create = async (req: Request, res: Response) => {
       }
     }
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
-    const role = Role.USER;
+    const role = Configuration.get("system.role.default");
     const toInsert: any = {
       username,
       firstName,

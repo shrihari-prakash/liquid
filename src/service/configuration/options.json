@@ -1,5 +1,13 @@
 [
   {
+    "name": "environment",
+    "displayName": "Environment",
+    "envName": "NODE_ENV",
+    "description": "Specifies the application environment. Possible values are 'development', 'production'",
+    "type": "string",
+    "default": "production"
+  },
+  {
     "name": "system.log-level",
     "displayName": "Log Level",
     "envName": "SYSTEM_LOG_LEVEL",
@@ -483,6 +491,14 @@
     "description": "Specifies the rate limit for extreme APIs for the specified window size.",
     "type": "number",
     "default": 5
+  },
+  {
+    "name": "system.role.default",
+    "displayName": "System Default Role",
+    "envName": "SYSTEM_DEFAULT_ROLE",
+    "description": "Specifies the default role to be used when users are signing up.",
+    "type": "string",
+    "default": "user"
   },
   {
     "name": "system.role.extended-roles",
