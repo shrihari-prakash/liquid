@@ -60,8 +60,8 @@ var sessionOptions: any = {
   cookie: {},
 };
 if (app.get("env") === "production") {
-  app.set("trust proxy", 1); // trust first proxy
-  sessionOptions.cookie.secure = true; // serve secure cookies
+  app.set("trust proxy", true);
+  sessionOptions.cookie.secure = true;
 }
 app.use(session(sessionOptions));
 app.use(
