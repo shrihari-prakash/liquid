@@ -155,7 +155,7 @@ async function renderContent() {
   }
   const sidebarSrcDark = await getOption("assets.sidebar.backdrop-image-dark");
   const sidebarSrcLight = await getOption("assets.sidebar.backdrop-image-light");
-  if (await getOption("content.sidebar.enabled") === true) {
+  if (await getOption("content.sidebar.content-enabled") === true) {
     $(".intro").css({
       display: "flex",
     });
