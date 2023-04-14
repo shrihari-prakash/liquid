@@ -26,6 +26,12 @@ export const PATCH_MeValidator = [
   body("customLink").optional().isURL().isLength({ min: 3, max: 256 }),
   body("pronouns").optional().isString().isLength({ min: 3, max: 24 }),
   body("organization").optional().isString().isAlpha().isLength({ min: 3, max: 128 }),
+  body("phoneCountryCode")
+    .optional()
+    .isString()
+    .isLength({ min: 2, max: 6 })
+    .matches(/^(\+?\d{1,3}|\d{1,4})$/gm),
+  body("phone").optional().isString().isLength({ min: 10, max: 12 }),
 ];
 
 const PATCH_Me = async (req: Request, res: Response) => {
@@ -45,6 +51,27 @@ const PATCH_Me = async (req: Request, res: Response) => {
     const password = req.body.password;
     if (password) {
       req.body.password = await bcrypt.hash(password, bcryptConfig.salt);
+    }
+    if (req.body.phone) {
+      const errors = [];
+      if (!Configuration.get("privilege.can-use-phone-number")) {
+        errors.push({
+          msg: "Invalid value",
+          param: "phone",
+          location: "body",
+        });
+      }
+      if (!req.body.phoneCountryCode) {
+        errors.push({
+          msg: "Invalid value",
+          param: "phoneCountryCode",
+          location: "body",
+        });
+      }
+      if (errors.length)
+        return res
+          .status(statusCodes.clientInputError)
+          .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
     }
     if (errors.length) {
       return res

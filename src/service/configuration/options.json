@@ -330,6 +330,14 @@
     "relatedOptions": ["s3.*"]
   },
   {
+    "name": "privilege.can-use-phone-number",
+    "displayName": "Can Use Phone Number On Signing Up",
+    "envName": "CAN_USE_PHONE_NUMBER",
+    "description": "Specifies if users can signup with phone numbers. Note that Liquid currently does not support verification of phone numbers. By default, all phone numbers are marked as unverified.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "user.require-email-verification",
     "displayName": "User Creation Require Email Verification",
     "envName": "USER_REQUIRE_EMAIL_VERIFICATION",

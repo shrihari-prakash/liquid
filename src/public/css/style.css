@@ -146,6 +146,17 @@ input[data-autocompleted] {
   background-color: transparent !important;
 }
 
+#width_tmp_select, .country-code-dropdown {
+  color: var(--text-color);
+  background-color: transparent !important;
+  border: none;
+  font-size: 20px;
+}
+
+.country-code-dropdown option {
+  color: initial;
+}
+
 .app-icon-mini {
   position: absolute;
   left: 16px;
@@ -234,7 +245,8 @@ input[data-autocompleted] {
 .page .contents .form-control:active,
 .page .contents .form-control:focus,
 .page .bg .form-control:active,
-.page .bg .form-control:focus {
+.page .bg .form-control:focus,
+select {
   outline: none;
   -webkit-box-shadow: none;
   box-shadow: none;

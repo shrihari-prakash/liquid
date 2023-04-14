@@ -30,12 +30,30 @@ export const POST_CreateValidator = [
   body("password").exists().isString().isLength({ min: 8, max: 128 }),
   body("firstName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
   body("lastName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
+  body("phoneCountryCode")
+    .optional()
+    .isString()
+    .isLength({ min: 2, max: 6 })
+    .matches(/^(\+?\d{1,3}|\d{1,4})$/gm),
+  body("phone").optional().isString().isLength({ min: 10, max: 12 }),
 ];
 
 const POST_Create = async (req: Request, res: Response) => {
   try {
-    const { username, firstName, lastName, email, password: passwordBody } = req.body;
+    const { username, firstName, lastName, email, password: passwordBody, phone, phoneCountryCode } = req.body;
     if (hasErrors(req, res)) return;
+    if (phone && !phoneCountryCode) {
+      const errors = [
+        {
+          msg: "Invalid value",
+          param: "phoneCountryCode",
+          location: "body",
+        },
+      ];
+      return res
+        .status(statusCodes.clientInputError)
+        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+    }
     const existingUser = (await UserModel.findOne({
       $or: [{ email: email.toLowerCase() }, { username }],
     }).exec()) as unknown as IUser;
@@ -66,6 +84,11 @@ const POST_Create = async (req: Request, res: Response) => {
     const shouldVerifyEmail = Configuration.get("user.require-email-verification");
     if (!shouldVerifyEmail) {
       toInsert.emailVerified = true;
+    }
+    if (phone && Configuration.get("privilege.can-use-phone-number")) {
+      toInsert.phone = phone;
+      toInsert.phoneCountryCode = phoneCountryCode;
+      toInsert.phoneVerified = false;
     }
     const newUser = (await new UserModel(toInsert).save()) as unknown as IUser;
     if (shouldVerifyEmail) {

@@ -6,6 +6,7 @@
 
   "privilege.can-create-account": true,
   "privilege.can-reset-password": true,
+  "privilege.can-use-phone-number": false,
 
   "assets.favicon-uri": "images/app-icon-mini.png",
   "assets.mini-icon-light": "images/app-icon-mini.png",
