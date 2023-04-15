@@ -29,6 +29,7 @@ import PATCH_Me, { PATCH_MeValidator } from "./me.patch";
 import PATCH_ProfilePicture from "./profile-picture.patch";
 import DELETE_FollowEntry, { DELETE_FollowEntryValidator } from "./follow-entry.delete";
 import DELETE_ProfilePicture from "./profile-picture.delete";
+import POST_Logout from "./logout.post";
 
 const UserRouter = express.Router();
 
@@ -40,6 +41,7 @@ UserRouter.post("/private", ...DelegatedAuthFlow, ...POST_PrivateValidator, POST
 UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
 UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
 UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
+UserRouter.post("/logout", ...DelegatedAuthFlow, POST_Logout);
 
 // Profile Picture
 if (Configuration.get("privilege.can-use-profile-picture-apis")) {

@@ -27,7 +27,7 @@ interface Code {
 
 interface Client {
   id: string;
-  redirectUris?: Scope;
+  redirectUris?: string[];
   grants: string | string[];
   displayName: string;
   role: string;

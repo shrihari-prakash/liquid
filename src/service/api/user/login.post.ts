@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 const { body } = require("express-validator");
 
-import UserModel from "../../../model/mongo/user";
+import UserModel, { IUser } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
@@ -34,7 +34,7 @@ const POST_Login = async (req: Request, res: Response) => {
     } else {
       query.username = username;
     }
-    const user = await UserModel.findOne(query, select).exec();
+    const user = (await UserModel.findOne(query, select).exec()) as unknown as IUser;
     if (!user) return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
     if (!user.emailVerified)
       return res.status(statusCodes.resourceNotActive).json(new ErrorResponse(errorMessages.resourceNotActive));

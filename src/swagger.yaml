@@ -553,6 +553,23 @@ paths:
                         $ref: "#/definitions/user"
       tags:
         - user-api
+  /user/logout:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Deletes user tokens and logs out the authenticated user.
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - user-api
   /user/verify-email:
     post:
       summary: Marks the user's account associated with the auto generated code as a verified.
@@ -1040,10 +1057,10 @@ paths:
         - bearerAuth: []
       summary: Updates a user's profile picture.
       parameters:
-         - in: formData
-           name: profile-picture
-           type: file
-           description: PNG image file.
+        - in: formData
+          name: profile-picture
+          type: file
+          description: PNG image file.
       responses:
         "200":
           description: Returns OK.
