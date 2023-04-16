@@ -13,7 +13,7 @@ import OAuthModel from "../../../model/oauth";
 const POST_Logout = async (req: Request, res: Response) => {
   try {
     const token = res.locals.oauth.token;
-    const user = res.locals.oauth.token.user;
+    const user = { ...res.locals.oauth.token.user };
     await OAuthModel.revokeToken(token);
     if (req.session && req.session.destroy) {
       req.session.destroy(() => null);
