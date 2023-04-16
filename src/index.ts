@@ -23,7 +23,9 @@ const app = express();
 if (app.get("env") !== "test") {
   activateRateLimiters(app);
 }
-const staticFolder = path.join(__dirname, Configuration.get("system.static-folder"));
+const staticFolder = Configuration.get("system.static.use-relative-path")
+  ? path.join(__dirname, Configuration.get("system.static-folder"))
+  : Configuration.get("system.static-folder");
 app.use(
   "/",
   express.static(staticFolder, {
@@ -33,7 +35,10 @@ app.use(
 );
 log.info("Static folder loaded: %s", staticFolder);
 app.get("/", function (_, res) {
-  res.sendFile(path.join(__dirname, Configuration.get("system.static.default-page")));
+  const defaultPage = Configuration.get("system.static.use-relative-path")
+    ? path.join(__dirname, Configuration.get("system.static.default-page"))
+    : Configuration.get("system.static.default-page");
+  res.sendFile(defaultPage);
 });
 const appConfigAbsolutePath = Configuration.get("system.static.app-config-absolute-path");
 if (appConfigAbsolutePath) {
