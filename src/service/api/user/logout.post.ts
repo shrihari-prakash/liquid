@@ -10,11 +10,14 @@ import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import OAuthModel from "../../../model/oauth";
 
-const POST_Logout = async (_: Request, res: Response) => {
+const POST_Logout = async (req: Request, res: Response) => {
   try {
     const token = res.locals.oauth.token;
     const user = res.locals.oauth.token.user;
     await OAuthModel.revokeToken(token);
+    if (req.session && req.session.destroy) {
+      req.session.destroy(() => null);
+    }
     Pusher.publish(new PushEvent(PushEventList.USER_LOGOUT, { user }));
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
