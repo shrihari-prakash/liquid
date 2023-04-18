@@ -88,7 +88,7 @@ const userSchema = {
   subscriptionExpiry: {
     type: Date,
     required: false,
-    default: Date.now(),
+    default: Date.now,
   },
   subscriptionTier: {
     type: String,

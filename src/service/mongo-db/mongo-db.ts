@@ -6,6 +6,9 @@ import mongoose from "mongoose";
 import { Configuration } from "../../singleton/configuration";
 
 export class MongoDB {
+  constructor() {
+    mongoose.set("strictQuery", false);
+  }
   public async connect() {
     try {
       const connectionString = Configuration.get("mongo-db.connection-string");
