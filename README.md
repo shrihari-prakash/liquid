@@ -28,7 +28,7 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 ## ⚙️ Setup
 ### Production Usage
 The following steps assume you have **Redis** and **MongoDB** installed on your host machine.
-1. Pull the docker image by using command `docker pull shrihariprakash/liquid:latest`.
+1. Pull the docker image by using command `docker pull shrihariprakash/liquid`.
 2. Create a collection in your database named `clients` and insert the following document into the collection (Make sure you edit the frontend URIs and secret in the document below):
 
 ```
