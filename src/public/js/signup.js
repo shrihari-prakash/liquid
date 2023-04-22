@@ -1,5 +1,5 @@
 $(async function () {
-  useTitle("Sign Up");
+  useTitle("Sign up");
   let form = document.getElementById("signup-form");
   form.addEventListener("submit", signup, true);
   STORE.autoFocusElement = $("#username");
