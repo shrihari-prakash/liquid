@@ -120,14 +120,6 @@ a:hover {
   padding: 7rem 0;
 }
 
-.spacer-top {
-  margin-top: 15px;
-}
-
-.spacer-bottom {
-  margin-bottom: 15px;
-}
-
 h2 {
   font-size: 20px;
 }
@@ -201,6 +193,14 @@ input[data-autocompleted] {
 @media (min-width: 1199.99px) {
   .page .contents {
     overflow-y: auto;
+  }
+
+  .spacer-top {
+    margin-top: 15px;
+  }
+
+  .spacer-bottom {
+    margin-bottom: 15px;
   }
 
   ::-webkit-scrollbar {
