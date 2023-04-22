@@ -113,6 +113,7 @@ async function useTheme() {
     $(".form-group").addClass("no-border");
   }
   attachOnResize();
+  onResize();
 }
 
 function attachOnResize() {
