@@ -16,7 +16,8 @@ const STORE = {
   isConfigLoading: false,
   buttonAnimationTimeout: null,
   theme: "dark",
-  autoFocusElement: null
+  autoFocusElement: null,
+  formTallerThanWindow: null
 };
 
 function setStyleProperty(name, value) {
@@ -111,11 +112,28 @@ async function useTheme() {
   if (!await getThemeProp("form.input-use-border")) {
     $(".form-group").addClass("no-border");
   }
+  attachOnResize();
+}
+
+function attachOnResize() {
+  window.addEventListener('resize', onResize, true);
+}
+
+function onResize() {
   const heightDiff = $(".container").prop('scrollHeight') - $(window).height();
-  if (heightDiff > 0) {
+  const formTallerThanWindow = heightDiff > 0;
+  if (STORE.formTallerThanWindow === formTallerThanWindow) {
+    return;
+  }
+  if (formTallerThanWindow) {
     $(".container > div > div").addClass("spacer-top");
     $("form").addClass("spacer-bottom");
+  } else {
+    $(".container > div > div").removeClass("spacer-top");
+    $("form").removeClass("spacer-bottom");
   }
+  STORE.formTallerThanWindow = formTallerThanWindow;
+  console.log("onResize complete.");
 }
 
 function onSubmitError(params) {
