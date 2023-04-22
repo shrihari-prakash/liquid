@@ -3,7 +3,7 @@
   --background-color__light: #ffffff;
   --text-color__light: #2b2b2b;
   --text-lighter-color__light: #808080;
-  --border-color__light: #e1e1e1;
+  --border-color__light: #dfdfdf;
   --glass-color__light: #00000030;
   --spinner-background-color__light: #ffffff;
   --spinner-primary-color__light: #000000;
@@ -120,6 +120,14 @@ a:hover {
   padding: 7rem 0;
 }
 
+.spacer-top {
+  margin-top: 15px;
+}
+
+.spacer-bottom {
+  margin-bottom: 15px;
+}
+
 h2 {
   font-size: 20px;
 }
@@ -146,7 +154,8 @@ input[data-autocompleted] {
   background-color: transparent !important;
 }
 
-#width_tmp_select, .country-code-dropdown {
+#width_tmp_select,
+.country-code-dropdown {
   color: var(--text-color);
   background-color: transparent !important;
   border: none;
@@ -192,6 +201,21 @@ input[data-autocompleted] {
 @media (min-width: 1199.99px) {
   .page .contents {
     overflow-y: auto;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:vertical {
+    margin: 0;
+    background-color: var(--border-color);
+  }
+
+  ::-webkit-scrollbar-button:start:decrement,
+  ::-webkit-scrollbar-button:end:increment {
+    height: 0;
+    display: block;
   }
 }
 

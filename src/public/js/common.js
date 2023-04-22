@@ -111,6 +111,11 @@ async function useTheme() {
   if (!await getThemeProp("form.input-use-border")) {
     $(".form-group").addClass("no-border");
   }
+  const heightDiff = $(".container").prop('scrollHeight') - $(window).height();
+  if (heightDiff > 0) {
+    $(".container > div > div").addClass("spacer-top");
+    $("form").addClass("spacer-bottom");
+  }
 }
 
 function onSubmitError(params) {
