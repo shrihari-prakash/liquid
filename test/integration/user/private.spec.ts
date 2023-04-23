@@ -13,7 +13,7 @@ it("should test john_doe switching to private account", async () => {
       .then(async (res) => {
         try {
           chai.expect(res.status).to.eql(200);
-          const user = (await UserModel.findOne({ id: MemoryStore.users.user1 }).exec()) as unknown as IUser;
+          const user = (await UserModel.findOne({ _id: MemoryStore.users.user1._id }).exec()) as unknown as IUser;
           chai.expect(user.isPrivate).to.be.eq(true);
           return resolve();
         } catch (e) {
@@ -33,7 +33,7 @@ it("should test john_doe switching to public account", async () => {
       .then(async (res) => {
         try {
           chai.expect(res.status).to.eql(200);
-          const user = (await UserModel.findOne({ id: MemoryStore.users.user1 }).exec()) as unknown as IUser;
+          const user = (await UserModel.findOne({ _id: MemoryStore.users.user1._id }).exec()) as unknown as IUser;
           chai.expect(user.isPrivate).to.be.eq(false);
           return resolve();
         } catch (e) {

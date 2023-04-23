@@ -10,6 +10,7 @@ const MemoryStore = {
   },
   users: {
     user1: {
+      _id: null,
       username: "john_doe",
       password: "helloworld",
       firstName: "John",
@@ -17,6 +18,7 @@ const MemoryStore = {
       email: "johndoe@example.com",
     },
     user2: {
+      _id: null,
       username: "rick_asthley",
       password: "helloworld",
       firstName: "Rick",
