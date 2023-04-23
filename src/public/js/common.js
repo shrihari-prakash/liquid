@@ -6,6 +6,7 @@ $(function () {
     STORE.theme = "light";
   }
   useTheme();
+  useFont();
   renderContent();
   useFavicon();
 });
@@ -114,6 +115,21 @@ async function useTheme() {
   }
   attachOnResize();
   onResize();
+}
+
+async function useFont() {
+  const appFont = await getOption("theme.app-font");
+  const appFontURL = await getOption("theme.app-font-url");
+  if (!appFont && !appFontURL) {
+    return;
+  }
+  console.log(appFont, appFontURL);
+  var link = document.createElement('link');
+  link.setAttribute('rel', 'stylesheet');
+  link.setAttribute('type', 'text/css');
+  link.setAttribute('href', appFontURL);
+  document.head.appendChild(link);
+  document.querySelector("body").style.fontFamily = appFont;
 }
 
 function attachOnResize() {
