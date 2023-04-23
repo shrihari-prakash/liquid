@@ -141,7 +141,7 @@ export type IUser = {
   middleName?: string;
   lastName: string;
   role: string;
-  designation: string;
+  designation?: string;
   bio: string;
   profilePictureUrl: string;
   profilePicturePath: string;
@@ -192,6 +192,8 @@ export const IUserProjection = {
   firstName: 1,
   middleName: 1,
   lastName: 1,
+  role: 1,
+  designation: 1,
   bio: 1,
   profilePictureUrl: 1,
   profilePicturePath: 1,
