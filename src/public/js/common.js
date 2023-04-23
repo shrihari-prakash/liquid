@@ -35,8 +35,6 @@ function getConfiguration() {
     const onDone = (data) => {
       STORE.config = data;
       resolve(STORE.config);
-      $(".spinner-container").addClass("hidden");
-      $("html, body").removeClass("scroll-lock");
       if (STORE.autoFocusElement && !("ontouchstart" in document.documentElement)) {
         STORE.autoFocusElement.focus();
         STORE.autoFocusElement = null;
@@ -117,6 +115,11 @@ async function useTheme() {
   onResize();
 }
 
+function hideSpinner() {
+  $(".spinner-container").addClass("hidden");
+  $("html, body").removeClass("scroll-lock");
+}
+
 async function useFont() {
   let appFontFace = await getOption("theme.app-font-face");
   let appFontURL = await getOption("theme.app-font-url");
@@ -130,6 +133,13 @@ async function useFont() {
   link.setAttribute('rel', 'stylesheet');
   link.setAttribute('type', 'text/css');
   link.setAttribute('href', appFontURL);
+  if (!("onload" in link)) {
+    hideSpinner();
+  } else {
+    console.log("Link onload is supported. Spinner will be hidden after font loads.")
+    link.onload = hideSpinner;
+    link.onerror = hideSpinner;
+  }
   document.head.appendChild(link);
   document.querySelector("body").style.fontFamily = appFontFace;
 }
