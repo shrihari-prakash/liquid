@@ -118,18 +118,15 @@ async function useTheme() {
 }
 
 async function useFont() {
-  const appFont = await getOption("theme.app-font");
+  const appFontFace = await getOption("theme.app-font-face");
   const appFontURL = await getOption("theme.app-font-url");
-  if (!appFont && !appFontURL) {
-    return;
-  }
-  console.log(appFont, appFontURL);
-  var link = document.createElement('link');
+  if (!appFontFace && !appFontURL) return;
+  const link = document.createElement('link');
   link.setAttribute('rel', 'stylesheet');
   link.setAttribute('type', 'text/css');
   link.setAttribute('href', appFontURL);
   document.head.appendChild(link);
-  document.querySelector("body").style.fontFamily = appFont;
+  document.querySelector("body").style.fontFamily = appFontFace;
 }
 
 function attachOnResize() {

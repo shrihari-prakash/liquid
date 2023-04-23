@@ -24,7 +24,7 @@
   "content.sidebar.intro.title2": "with any project.",
   "content.sidebar.intro.description": "Focus on writing your app logic while liquid handles the same old authentication logic 🔒",
 
-  "theme.app-font": null,
+  "theme.app-font-face": null,
   "theme.app-font-url": null,
 
   "theme.light.background-color": "#ffffff",
