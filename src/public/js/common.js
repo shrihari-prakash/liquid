@@ -118,9 +118,14 @@ async function useTheme() {
 }
 
 async function useFont() {
-  const appFontFace = await getOption("theme.app-font-face");
-  const appFontURL = await getOption("theme.app-font-url");
-  if (!appFontFace && !appFontURL) return;
+  let appFontFace = await getOption("theme.app-font-face");
+  let appFontURL = await getOption("theme.app-font-url");
+  if (!appFontFace && !appFontURL) {
+    appFontFace = "Poppins";
+    appFontURL = "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,800&display=swap";
+  };
+  console.log(`Switching to "${appFontFace}" as default font.`);
+  console.log(`Loading font from ${appFontURL}.`);
   const link = document.createElement('link');
   link.setAttribute('rel', 'stylesheet');
   link.setAttribute('type', 'text/css');
