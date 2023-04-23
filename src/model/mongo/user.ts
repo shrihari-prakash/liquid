@@ -26,6 +26,7 @@ const userSchema = {
     type: String,
     required: true,
   },
+  designation: String,
   profilePictureUrl: String,
   profilePicturePath: String,
   bio: String,
@@ -140,6 +141,7 @@ export type IUser = {
   middleName?: string;
   lastName: string;
   role: string;
+  designation: string;
   bio: string;
   profilePictureUrl: string;
   profilePicturePath: string;

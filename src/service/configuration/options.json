@@ -379,7 +379,7 @@
     "envName": "ADMIN_API_USER_PROFILE_EDITABLE_FIELDS",
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
-    "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName,bio,pronouns,customLink,organization"
+    "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName,bio,pronouns,customLink,organization,designation"
   },
   {
     "name": "user.search.search-fields",
