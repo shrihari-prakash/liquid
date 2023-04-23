@@ -31,7 +31,7 @@ The following steps assume you have **Redis** and **MongoDB** installed on your 
 1. Pull the docker image by using command `docker pull shrihariprakash/liquid`.
 2. Create a collection in your database named `clients` and insert the following document into the collection (Make sure you edit the frontend URIs and secret in the document below):
 
-```
+```json
 {
   "id": "application_client",
   "grants": [
@@ -39,7 +39,7 @@ The following steps assume you have **Redis** and **MongoDB** installed on your 
     "authorization_code",
     "refresh_token"
   ],
-  "redirectUris": ["frontend-redirect-uri-1", "frontend-redirect-uri-2", ...],
+  "redirectUris": ["{{frontend-redirect-uri-1}}", "{{frontend-redirect-uri-2}}"],
   "secret": "super-secure-client-secret",
   "role": "internal_client",
   "displayName": "Application Client"
@@ -63,7 +63,7 @@ The following steps assume you have **Redis** and **MongoDB** installed on your 
 1. Run `npm i`.
 2. Run the following command (without brackets):
 
-```
+```properties
  node ./scripts/create-application-client mongodbConenctionString={{mongodb_connection_string}} clientSecret={{client_secret}} redirectUrls={{comma_seperated_list_of_redirect_urls}}
 ```
 
