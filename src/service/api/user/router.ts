@@ -34,7 +34,9 @@ import POST_Logout from "./logout.post";
 const UserRouter = express.Router();
 
 //Core
-UserRouter.post("/create", ...POST_CreateValidator, POST_Create);
+if (Configuration.get("privilege.can-create-account")) {
+  UserRouter.post("/create", ...POST_CreateValidator, POST_Create);
+}
 UserRouter.post("/login", ...POST_LoginValidator, POST_Login);
 UserRouter.get("/verify-email", ...GET_VerifyEmailValidator, GET_VerifyEmail);
 UserRouter.post("/private", ...DelegatedAuthFlow, ...POST_PrivateValidator, POST_Private);

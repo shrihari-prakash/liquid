@@ -7,6 +7,7 @@ import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
 import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
 import POST_Access, { POST_AccessValidator } from "./access.post";
 import POST_Verify, { POST_VerifyValidator } from "./verify.post";
+import POST_Create, { POST_CreateValidator } from "../shared/create.post";
 import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_EditableFields from "./editable-fields.get";
 import PATCH_User, { PATCH_UserValidator } from "./user.patch";
@@ -27,5 +28,6 @@ AdminApiRouter.post(
   POST_SubscriptionValidator,
   POST_Subscription
 );
+AdminApiRouter.post("/create", ...DelegatedAuthFlow, AuthorizeAdmin, POST_CreateValidator, POST_Create);
 
 export default AdminApiRouter;

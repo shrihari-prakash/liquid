@@ -357,6 +357,14 @@
     "default": false
   },
   {
+    "name": "privilege.can-create-account",
+    "displayName": "Can Use Create Account",
+    "envName": "CAN_CREATE_ACCOUNT",
+    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "user.require-email-verification",
     "displayName": "User Creation Require Email Verification",
     "envName": "USER_REQUIRE_EMAIL_VERIFICATION",
