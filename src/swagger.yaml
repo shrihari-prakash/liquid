@@ -4,6 +4,48 @@ info:
   description: Seamless authentication and user management APIs for your projects based on TypeScript, MongoDB and Redis.
   version: 0.1
 paths:
+  /user/admin-api/create:
+    post:
+      summary: Bulk user creation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  role:
+                    type: string
+                  phoneCountryCode:
+                    type: string
+                  phone:
+                    type: string
+                  email:
+                    type: string
+                  password:
+                    type: string
+      responses:
+        "200":
+          description: Returns the user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  insertedCount:
+                    type: integer
+      tags:
+        - admin-api
   /user/admin-api/user-info:
     get:
       security:
@@ -249,6 +291,48 @@ paths:
                     type: boolean
       tags:
         - admin-api
+  /user/client-api/create:
+    post:
+      summary: Bulk user creation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  role:
+                    type: string
+                  phoneCountryCode:
+                    type: string
+                  phone:
+                    type: string
+                  email:
+                    type: string
+                  password:
+                    type: string
+      responses:
+        "200":
+          description: Returns the user details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  insertedCount:
+                    type: integer
+      tags:
+        - client-api
   /user/client-api/user-info:
     get:
       security:
@@ -509,7 +593,22 @@ paths:
                   type: object
                   properties:
                     user:
-                      $ref: "#/definitions/user"
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                        firstName:
+                          type: string
+                        lastName:
+                          type: string
+                        phoneCountryCode:
+                          type: string
+                        phone:
+                          type: string
+                        email:
+                          type: string
+                        password:
+                          type: string
       responses:
         "200":
           description: Returns the user details.
