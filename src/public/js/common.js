@@ -5,11 +5,21 @@ $(function () {
   if (theme === "light") {
     STORE.theme = "light";
   }
+  checkCookie();
   useTheme();
   useFont();
   renderContent();
   useFavicon();
 });
+
+function checkCookie() {
+  if (!navigator.cookieEnabled) {
+    const body = $("body");
+    body.html("Usage of cookies is disabled. Please enable cookies and reload to continue.");
+    body.css({ display: "flex", alignItems: "center", justifyContent: "center" });
+    $("html,body").css({ height: "100%", width: "100%" });
+  }
+}
 
 const STORE = {
   config: null,
