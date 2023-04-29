@@ -25,7 +25,7 @@ export const PATCH_MeValidator = [
   body("bio").optional().isString().isLength({ min: 3, max: 256 }),
   body("customLink").optional().isURL().isLength({ min: 3, max: 256 }),
   body("pronouns").optional().isString().isLength({ min: 3, max: 24 }),
-  body("organization").optional().isString().isAlpha().isLength({ min: 3, max: 128 }),
+  body("organization").optional().isString().isLength({ min: 3, max: 128 }),
   body("phoneCountryCode")
     .optional()
     .isString()
