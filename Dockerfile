@@ -4,7 +4,7 @@ COPY package*.json ./
 COPY tsconfig.json ./
 COPY src /app/src
 RUN ls -a
-RUN npm install
+RUN npm ci
 RUN npm run build
 RUN npm prune --production
 EXPOSE 2000
