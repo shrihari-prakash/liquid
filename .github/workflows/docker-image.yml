@@ -15,6 +15,6 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag "shrihariprakash/liquid:1.0.${{github.run_id}}"
+      run: docker build . --file Dockerfile -t "shrihariprakash/liquid:1.0.${{github.run_number}}" -t "shrihariprakash/liquid:latest"
     - name: Docker Push
-      run: docker push "shrihariprakash/liquid:1.0.${{github.run_id}}"
+      run: docker push shrihariprakash/liquid --all-tags
