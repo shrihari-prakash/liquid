@@ -8,6 +8,14 @@
     "default": "production"
   },
   {
+    "name": "system.enable-swagger",
+    "displayName": "Enable Swagger",
+    "envName": "SYSTEM_ENABLE_SWAGGER",
+    "description": "Specifies if swagger UI is available. If enabled, swagger will be available on /docs",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "system.log-level",
     "displayName": "Log Level",
     "envName": "SYSTEM_LOG_LEVEL",
