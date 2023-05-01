@@ -53,7 +53,7 @@ if (appConfigAbsolutePath) {
     "Frontend config was auto generated. You will still need to manually configure OAuth based options in `public/app-config.json`"
   );
 }
-if (app.get("env") !== "production") {
+if (Configuration.get("system.enable-swagger") || app.get("env") !== "production") {
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 app.use(bodyParser.json());

@@ -30,11 +30,12 @@ paths:
                     type: string
                   email:
                     type: string
+                    format: email
                   password:
                     type: string
       responses:
         "200":
-          description: Returns the user details.
+          description: Returns the number of users inserted.
           content:
             application/json:
               schema:
@@ -45,7 +46,7 @@ paths:
                   insertedCount:
                     type: integer
       tags:
-        - admin-api
+        - user-admin-api
   /user/admin-api/user-info:
     get:
       security:
@@ -73,12 +74,12 @@ paths:
                         items:
                           $ref: "#/definitions/user"
       tags:
-        - admin-api
+        - user-admin-api
   /user/admin-api/access:
     post:
       security:
         - bearerAuth: []
-      summary: 'Provide access to an admin API for the given users. Permissions array sample: ["PATCH_/user/admin-api/user"]'
+      summary: 'Provide access to an admin API for the given users.'
       requestBody:
         required: true
         content:
@@ -90,10 +91,12 @@ paths:
                   type: array
                   items:
                     type: string
+                    pattern: ^[6][a-f0-9]{23}$
                 permissions:
                   type: array
                   items:
                     type: string
+                    pattern: (GET|POST|PATCH|DELETE)_/user/admin-api/route
                 status:
                   type: boolean
       responses:
@@ -107,7 +110,7 @@ paths:
                   ok:
                     type: boolean
       tags:
-        - admin-api
+        - user-admin-api
   /user/admin-api/user:
     patch:
       security:
@@ -122,6 +125,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
                 username:
                   type: string
                 firstName:
@@ -141,7 +145,7 @@ paths:
                 role:
                   type: string
       responses:
-        "200": # status code
+        "200":
           description: Returns OK.
           content:
             application/json:
@@ -154,14 +158,14 @@ paths:
                       ok:
                         type: boolean
       tags:
-        - admin-api
+        - user-admin-api
   /user/admin-api/editable-fields:
     get:
       security:
         - bearerAuth: []
       summary: Retrieves the user fields that can be edited by the admin user.
       responses:
-        "200": # status code
+        "200":
           description: Returns a list of field names.
           content:
             application/json:
@@ -176,7 +180,7 @@ paths:
                         items:
                           type: string
       tags:
-        - admin-api
+        - user-admin-api
   /user/admin-api/ban:
     post:
       security:
@@ -191,6 +195,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
                 state:
                   type: boolean
       responses:
@@ -204,7 +209,7 @@ paths:
                   ok:
                     type: boolean
       tags:
-        - admin-api
+        - user-admin-api
   /user/admin-api/restrict:
     post:
       security:
@@ -219,6 +224,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
                 state:
                   type: boolean
       responses:
@@ -232,7 +238,7 @@ paths:
                   ok:
                     type: boolean
       tags:
-        - admin-api
+        - user-admin-api
   /user/admin-api/subscription:
     post:
       security:
@@ -247,8 +253,14 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
                 state:
                   type: boolean
+                tier:
+                  type: string
+                expiry:
+                  type: string
+                  format: date-time
                 expiry:
                   type: string
       responses:
@@ -262,7 +274,7 @@ paths:
                   ok:
                     type: boolean
       tags:
-        - admin-api
+        - user-admin-api
   /user/admin-api/verify:
     post:
       security:
@@ -277,6 +289,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
                 state:
                   type: boolean
       responses:
@@ -290,7 +303,7 @@ paths:
                   ok:
                     type: boolean
       tags:
-        - admin-api
+        - user-admin-api
   /user/client-api/create:
     post:
       summary: Bulk user creation.
@@ -317,6 +330,7 @@ paths:
                     type: string
                   email:
                     type: string
+                    format: email
                   password:
                     type: string
       responses:
@@ -332,7 +346,7 @@ paths:
                   insertedCount:
                     type: integer
       tags:
-        - client-api
+        - user-client-api
   /user/client-api/user-info:
     get:
       security:
@@ -360,7 +374,7 @@ paths:
                         items:
                           $ref: "#/definitions/user"
       tags:
-        - client-api
+        - user-client-api
   /user/client-api/block-status:
     get:
       security:
@@ -391,7 +405,7 @@ paths:
                       following:
                         type: boolean
       tags:
-        - client-api
+        - user-client-api
   /user/client-api/follow-status:
     get:
       security:
@@ -422,7 +436,7 @@ paths:
                       following:
                         type: boolean
       tags:
-        - client-api
+        - user-client-api
   /user/client-api/user-following:
     get:
       security:
@@ -457,7 +471,7 @@ paths:
                             target:
                               $ref: "#/definitions/user"
       tags:
-        - client-api
+        - user-client-api
   /user/client-api/user-followers:
     get:
       security:
@@ -492,7 +506,7 @@ paths:
                             source:
                               $ref: "#/definitions/user"
       tags:
-        - client-api
+        - user-client-api
   /user/client-api/ban:
     post:
       security:
@@ -507,6 +521,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
                 state:
                   type: boolean
       responses:
@@ -520,7 +535,7 @@ paths:
                   ok:
                     type: boolean
       tags:
-        - client-api
+        - user-client-api
   /user/client-api/restrict:
     post:
       security:
@@ -535,6 +550,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
                 state:
                   type: boolean
       responses:
@@ -548,7 +564,7 @@ paths:
                   ok:
                     type: boolean
       tags:
-        - client-api
+        - user-client-api
   /user/client-api/subscription:
     post:
       security:
@@ -563,8 +579,14 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
                 state:
                   type: boolean
+                tier:
+                  type: string
+                expiry:
+                  type: string
+                  format: date-time
                 expiry:
                   type: string
       responses:
@@ -578,7 +600,7 @@ paths:
                   ok:
                     type: boolean
       tags:
-        - client-api
+        - user-client-api
   /user/create:
     post:
       summary: Creates an user.
@@ -607,6 +629,7 @@ paths:
                           type: string
                         email:
                           type: string
+                          format: email
                         password:
                           type: string
       responses:
@@ -635,6 +658,7 @@ paths:
                   type: string
                 email:
                   type: string
+                  format: email
                 password:
                   type: string
       responses:
@@ -891,6 +915,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
       responses:
         "200":
           description: Returns OK.
@@ -943,6 +968,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
       responses:
         "200":
           description: Returns OK.
@@ -995,6 +1021,7 @@ paths:
               properties:
                 request:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
       responses:
         "200":
           description: Returns OK.
@@ -1021,6 +1048,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
       responses:
         "200":
           description: Returns OK.
@@ -1204,9 +1232,9 @@ paths:
         - user-api
 
 tags:
-  - name: admin-api
+  - name: user-admin-api
     description: Restricted to system admins. Super Admin role has access to all these APIs. To provide access to other users, Super Admin needs to explicitly give permissions using `POST user/admin-api/access` API. Needs an `authorization_code` grant login.
-  - name: client-api
+  - name: user-client-api
     description: Accessible by `client_credentials` grant.
   - name: user-api
     description: All the user APIs in the system. Accessible only by `authorization_code` grant.
@@ -1215,6 +1243,8 @@ definitions:
   user:
     type: object
     properties:
+      _id:
+        type: string
       firstName:
         type: string
       middleName:
@@ -1225,28 +1255,41 @@ definitions:
         type: string
       role:
         type: string
+      bio:
+        type: string
+      designation:
+        type: string
       profilePictureUrl:
+        type: string
+      pronouns:
         type: string
       verified:
         type: boolean
+      varifiedDate:
+        type: string
+        format: date-time
+      customLink:
+        type: string
       followingCount:
-        type: string
+        type: integer
       followerCount:
-        type: string
+        type: integer
       isPrivate:
-        type: string
+        type: boolean
       isSubscribed:
         type: boolean
       subscriptionTier:
         type: string
       subscriptionExpiry:
         type: string
+        format: date-time
       isBanned:
         type: boolean
       isRestricted:
         type: boolean
       email:
         type: string
+        format: email
       phone:
         type: string
       isFollowing:
