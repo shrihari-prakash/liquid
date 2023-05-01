@@ -942,6 +942,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
       responses:
         "200":
           description: Returns OK.
@@ -995,6 +996,7 @@ paths:
               properties:
                 target:
                   type: string
+                  pattern: ^[6][a-f0-9]{23}$
       responses:
         "200":
           description: Returns OK.
