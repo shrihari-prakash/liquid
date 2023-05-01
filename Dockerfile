@@ -1,5 +1,4 @@
 FROM node:alpine
-LABEL org.opencontainers.image.source=https://github.com/shrihari-prakash/liquid
 WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
