@@ -1,6 +1,4 @@
 name: Docker Image CI
-env:
-  CI_VERSION: "1.0.${CI_PIPELINE_IID}"
 on:
   push:
     branches: [ release ]
@@ -17,6 +15,6 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag shrihariprakash/liquid:$CI_VERSION
+      run: docker build . --file Dockerfile --tag "shrihariprakash/liquid:1.0.${CI_PIPELINE_IID}"
     - name: Docker Push
-      run: docker push shrihariprakash/liquid:$CI_VERSION
+      run: docker push "shrihariprakash/liquid:1.0.${CI_PIPELINE_IID}"
