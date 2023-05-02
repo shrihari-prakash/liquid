@@ -23,11 +23,22 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 * Support for admin level and client APIs.
 * Quick setup.
 
-> **_NOTE:_** You will require Redis to run this service. This is because the service needs to store access and refresh tokens with an auto expiry. If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `privilege.can-use-cache` to false. However, disabling this option is highly discouraged since access tokens are deleted (although invalidated) only when the refresh token expires which is typically a really long time. Also using databases for such things might not be a great idea for performance reasons.
+## 📦 Dependencies
+Almost everything is **optional** except MongoDB.
+| Dependency                  | Optional | Used by Default | Related Options                                                        | Disable Recommended? |
+| --------------------------- | -------- | --------------- | ---------------------------------------------------------------------- | -------------------- |
+| MongoDB                     | No       | Yes             | mongo-db.connection-string                                             | No                   |
+| Redis                       | Yes      | Yes             | privilege.can-use-cache, redis.\*                                      | No                   |
+| SendGrid                    | Yes      | Yes             | user.require-email-verification (both backend & frontend), sendgrid.\* | No                   |
+| AWS S3 (or) S3 like storage | Yes      | No              | privilege.can-use-profile-picture-apis, s3.\*                          | Yes                  |
+| RabbitMQ                    | Yes      | No              | privilege.can-use-push-events, privilege.can-use-rabbitmq, rabbitmq.\* | Yes                  |
+
+> **_NOTE:_** If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `privilege.can-use-cache` to false. However, disabling this option is highly discouraged since access tokens are deleted (although invalidated) only when the refresh token expires which is typically a really long time. Also using databases for such things might not be a great idea for performance reasons.
+
 
 ## ⚙️ Setup
 ### Production Usage
-The following steps assume already you have **Redis** and **MongoDB**.
+The following steps assume already you have **Redis** and **MongoDB** and **Sendgrid**.
 1. Pull the docker image by using command `docker pull shrihariprakash/liquid`.
 2. Create a collection in your database named `clients` and insert the following document into the collection (Make sure you edit the frontend URIs and secret in the document below):
 
