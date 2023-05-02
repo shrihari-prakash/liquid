@@ -58,17 +58,16 @@ The following steps assume already you have **Redis** and **MongoDB** and **Send
 ```
 
 3. In your host machine, create a file called `app-config.json` with the contents of [this file](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/public/app-config.sample.json) and edit properties `oauth.client-id` and `oauth.redirect-uri` to values from the document you just inserted into clients collection. This is the configuration file used for all your frontend stuff like UI customizations.
-5. Now go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your backend configurations. For the most minimal setup, you will need to set:
+4. Now go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your backend configurations. For the most minimal setup, you will need to set:
    * `system.static.app-config-absolute-path` to `/environment/app-config.json`
    * `mongo-db.connection-string`
    * `sendgrid.api-key`
    * `sendgrid.outbound-email-address`
    * and options starting with `redis`. 
-> **_NOTE:_** A sendgrid account API key is required to send verification emails. If you do not want to verify emails when users are signing up, you can turn it off by turning off option `user.require-email-verification` in .env and app-config.json.
-7. Export the configuration and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
-8. Now open terminal in the folder that contains your app-config.json.
-9. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`
-10. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. [Click here for Swagger](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/swagger.yaml). Checkout the other options in [Option Manager](https://liquid-om.netlify.app/) to enable optional features if they interest you. Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
+5. Export the configuration and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
+6. Now open terminal in the folder that contains your app-config.json.
+7. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`
+8. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. [Click here for Swagger](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/swagger.yaml). Checkout the other options in [Option Manager](https://liquid-om.netlify.app/) to enable optional features if they interest you. Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
 > **_NOTE:_** If you are using nginx as reverse proxy and find that cookies are not working or if you get the error `Server error: handle() did not return a user object` while logging in, add `proxy_set_header X-Forwarded-Proto $scheme;` to server -> location in your nginx config.
 ### Development
 1. Run `npm i`.
