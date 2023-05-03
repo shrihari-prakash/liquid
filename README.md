@@ -25,14 +25,13 @@ In addition to OAuth, the service provides additional (but usually very needed) 
 
 ## 📦 Dependencies
 Almost everything is **optional** except MongoDB.
-| Dependency                  | Optional | Used by Default | Related Options                                                        | Disable Recommended? |
-| --------------------------- | -------- | --------------- | ---------------------------------------------------------------------- | -------------------- |
-| MongoDB                     | No       | Yes             | mongo-db.connection-string                                             | No                   |
-| Redis                       | Yes      | Yes             | privilege.can-use-cache, redis.\*                                      | No                   |
-| SendGrid                    | Yes      | Yes             | user.require-email-verification (both backend & frontend), sendgrid.\* | No                   |
-| AWS S3 (or) S3 like storage | Yes      | No              | privilege.can-use-profile-picture-apis, s3.\*                          | Yes                  |
-| RabbitMQ                    | Yes      | No              | privilege.can-use-push-events, privilege.can-use-rabbitmq, rabbitmq.\* | Yes                  |
-
+| Dependency                  | Optional | Used by Default | Related Options                                                                                            | Disable Recommended? |
+| --------------------------- | -------- | --------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
+| MongoDB                     | No       | Yes             | mongo-db.connection-string                                                                                 | No                   |
+| Redis                       | Yes      | Yes             | privilege.can-use-cache, redis.\*                                                                          | No                   |
+| SendGrid                    | Yes      | Yes             | user.require-email-verification (backend & frontend), privilege.can-reset-password (frontend), sendgrid.\* | No                   |
+| AWS S3 (or) S3 like storage | Yes      | No              | privilege.can-use-profile-picture-apis, s3.\*                                                              | Yes                  |
+| RabbitMQ                    | Yes      | No              | privilege.can-use-push-events, privilege.can-use-rabbitmq, rabbitmq.\*                                     | Yes                  |
 > **_NOTE:_** If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `privilege.can-use-cache` to false. However, disabling this option is highly discouraged since access tokens are deleted (although invalidated) only when the refresh token expires which is typically a really long time. Also using databases for such things might not be a great idea for performance reasons.
 
 
