@@ -65,8 +65,9 @@ The following steps assume already you have **Redis** and **MongoDB** and **Send
    * and options starting with `redis`. 
 5. Export the configuration and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
 6. Now open terminal in the folder that contains your app-config.json.
-7. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`
-8. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. [Click here for Swagger](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/swagger.yaml). Checkout the other options in [Option Manager](https://liquid-om.netlify.app/) to enable optional features if they interest you. Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
+7. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
+8. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
+9. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. [Click here for Swagger](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/swagger.yaml). Checkout the other options in [Option Manager](https://liquid-om.netlify.app/) to enable optional features if they interest you. Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
 > **_NOTE:_** If you are using nginx as reverse proxy and find that cookies are not working or if you get the error `Server error: handle() did not return a user object` while logging in, add `proxy_set_header X-Forwarded-Proto $scheme;` to server -> location in your nginx config.
 ### Development
 1. Run `npm i`.
