@@ -68,6 +68,7 @@ const OAuthModel = {
       const dbClient = await ClientModel.findOne(query).lean();
       return dbClient as unknown as Client;
     } catch (err) {
+      log.error("Error fetching client.")
       log.error(err);
       throw err;
     }
@@ -101,14 +102,13 @@ const OAuthModel = {
             "EX",
             Configuration.get("oauth.refresh-token-lifetime") as number
           );
-        log.debug("Token saved to cache.");
         return token;
       }
       const dbToken = new TokenModel(token);
       await dbToken.save();
-      log.debug("Token saved to cache.");
       return dbToken.toObject() as unknown as Token;
     } catch (err) {
+      log.error("Error saving token.");
       log.error(err);
       throw err;
     }
@@ -117,12 +117,10 @@ const OAuthModel = {
   getAccessToken: async (accessToken: string) => {
     try {
       if (useTokenCache) {
-        log.debug("Get access token.");
         let cacheToken: any = await Redis.client.get(accessToken);
         cacheToken = JSON.parse(cacheToken);
         if (!cacheToken) return null;
         cacheToken.accessTokenExpiresAt = new Date(cacheToken.accessTokenExpiresAt);
-        log.debug("Access token retrieved from cache.");
         return cacheToken;
       }
       const dbTokenObject = await TokenModel.findOne({
@@ -190,9 +188,9 @@ const OAuthModel = {
       }
       const mongoInstance = new AuthorizationCodeModel(authorizationCode);
       const dbAuthorizationCode = (await mongoInstance.save()).toObject();
-      log.debug("AuthorizationCode saved.");
       return dbAuthorizationCode as unknown as AuthorizationCode;
     } catch (err) {
+      log.error("Error saving authorization code.");
       log.error(err);
       throw err;
     }
@@ -202,7 +200,6 @@ const OAuthModel = {
     try {
       if (useTokenCache) {
         let cacheCode: any = (await Redis.client.get(authorizationCode)) as string;
-        log.debug("Auth code retrieved from cache.");
         cacheCode = JSON.parse(cacheCode) as AuthorizationCode;
         cacheCode.expiresAt = new Date(cacheCode.expiresAt);
         return cacheCode;
@@ -210,7 +207,6 @@ const OAuthModel = {
       const dbResult = await AuthorizationCodeModel.findOne({
         authorizationCode,
       }).lean();
-      log.debug("Auth code retrieved from database.");
       return dbResult as unknown as AuthorizationCode;
     } catch (err) {
       log.error("Error retrieving auth code.");
@@ -224,15 +220,14 @@ const OAuthModel = {
       const code = authorizationCode.authorizationCode;
       if (useTokenCache) {
         await Redis.client.del(code);
-        log.debug("Auth code deleted from cache.");
         return true;
       }
       await AuthorizationCodeModel.deleteOne({
         authorizationCode: code,
       }).exec();
-      log.debug("Auth code deleted from database.");
       return true;
     } catch (err) {
+      log.error("Error deleting authorization code.");
       log.error(err);
       throw err;
     }
