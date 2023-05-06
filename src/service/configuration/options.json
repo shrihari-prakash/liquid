@@ -87,7 +87,8 @@
     "envName": "MONGO_DB_CONNECTION_STRING",
     "description": "Connection string to connect to MongoDB.",
     "type": "string",
-    "default": "mongodb://127.0.0.1:27017/accounts"
+    "default": "mongodb://127.0.0.1:27017/accounts",
+    "relatedOptions": ["mongo-db.use-transactions"]
   },
   {
     "name": "mongo-db.use-transactions",
@@ -95,7 +96,8 @@
     "envName": "MONGO_DB_USE_TRANSACTIONS",
     "description": "Specifies if application can use MongoDB transactions in APIs where multiple write operations are involved. Highly recommended that you turn this on if you have a replica set.",
     "type": "boolean",
-    "default": false
+    "default": false,
+    "relatedOptions": ["mongo-db.connection-string"]
   },
   {
     "name": "oauth.authorization-code-lifetime",
