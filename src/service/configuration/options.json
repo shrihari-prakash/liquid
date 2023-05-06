@@ -90,6 +90,14 @@
     "default": "mongodb://127.0.0.1:27017/accounts"
   },
   {
+    "name": "mongo-db.use-transactions",
+    "displayName": "MongoDB Use Transactions",
+    "envName": "MONGO_DB_USE_TRANSACTIONS",
+    "description": "Specifies if application can use MongoDB transactions in APIs where multiple write operations are involved. Highly recommended that you turn this on if you have a replica set.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "oauth.authorization-code-lifetime",
     "displayName": "Authorization Code Lifetime",
     "envName": "OAUTH_AUTHORIZATION_CODE_LIFETIME",
