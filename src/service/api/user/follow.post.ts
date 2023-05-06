@@ -15,6 +15,7 @@ import { getBlockStatus } from "../../../utils/block";
 import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
+import { MongoDB } from "../../../singleton/mongo-db";
 
 export const POST_FollowValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
@@ -23,6 +24,7 @@ function sendSuccess(res: Response, status: string) {
 }
 
 const POST_Follow = async (req: Request, res: Response) => {
+  let session = "";
   try {
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
@@ -31,6 +33,9 @@ const POST_Follow = async (req: Request, res: Response) => {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     const isBlocked = await getBlockStatus(targetId, sourceId, res, true);
     if (isBlocked) return;
+    session = await MongoDB.startSession();
+    MongoDB.startTransaction(session);
+    const sessionOptions = MongoDB.getSessionOptions(session);
     const query: any = {
       targetId,
       sourceId,
@@ -40,20 +45,25 @@ const POST_Follow = async (req: Request, res: Response) => {
     }).exec()) as unknown as IUser;
     if (target.isPrivate) {
       query.approved = false;
-      await new FollowModel(query).save();
+      await new FollowModel(query).save(sessionOptions);
+      await MongoDB.commitTransaction(session);
       sendSuccess(res, FollowStatus.REQUESTED);
     } else {
-      await new FollowModel(query).save();
-      await updateFollowCount(sourceId, targetId, 1);
+      await new FollowModel(query).save(sessionOptions);
+      await updateFollowCount(sourceId, targetId, 1, sessionOptions);
+      await MongoDB.commitTransaction(session);
       sendSuccess(res, FollowStatus.FOLLOWING);
     }
     Pusher.publish(new PushEvent(PushEventList.USER_FOLLOW, { source: sourceId, target: targetId }));
   } catch (err: any) {
-    if (err.message.includes("E11000")) {
+    if (err?.message?.includes("E11000")) {
       sendSuccess(res, FollowStatus.DUPLICATE);
     }
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    await MongoDB.abortTransaction(session);
+    return res
+      .status(statusCodes.internalError)
+      .json(new ErrorResponse(errorMessages.internalError, { transactionId: session }));
   }
 };
 

@@ -20,16 +20,12 @@ const GET_Followers = async (req: Request, res: Response) => {
     if (offset) {
       query[0].$match.$and.push({ createdAt: { $lt: new Date(offset) } });
     }
-    FollowModel.aggregate(query).exec(async function (up, records) {
-      if (up) {
-        throw up;
-      }
-      for (let i = 0; i < records.length; i++) {
-        checkSubscription(records[i].source);
-        await attachProfilePicture(records[i].source);
-      }
-      res.status(statusCodes.success).json(new SuccessResponse({ records }));
-    });
+    const records = await FollowModel.aggregate(query).exec();
+    for (let i = 0; i < records.length; i++) {
+      checkSubscription(records[i].source);
+      await attachProfilePicture(records[i].source);
+    }
+    res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

@@ -13,7 +13,7 @@ import { attachProfilePicture } from "../../../utils/profile-picture";
 const GET_FollowRequests = async (req: Request, res: Response) => {
   try {
     const userId = res.locals.oauth.token.user._id;
-    FollowModel.aggregate([
+    const records = await FollowModel.aggregate([
       {
         $match: {
           $and: [{ targetId: new mongo.ObjectId(userId) }, { approved: false }],
@@ -38,16 +38,12 @@ const GET_FollowRequests = async (req: Request, res: Response) => {
           "source.emailVerified": 0,
         },
       },
-    ]).exec(async function (up, records) {
-      if (up) {
-        throw up;
-      }
-      for (let i = 0; i < records.length; i++) {
-        checkSubscription(records[i].source);
-        await attachProfilePicture(records[i].source);
-      }
-      res.status(statusCodes.success).json(new SuccessResponse({ records }));
-    });
+    ]).exec();
+    for (let i = 0; i < records.length; i++) {
+      checkSubscription(records[i].source);
+      await attachProfilePicture(records[i].source);
+    }
+    res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

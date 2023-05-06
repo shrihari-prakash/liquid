@@ -12,6 +12,7 @@ import { FollowStatus } from "../../../enum/follow-status";
 import BlockModel from "../../../model/mongo/block";
 import FollowModel from "../../../model/mongo/follow";
 import { updateFollowCount } from "../../../utils/follow";
+import { MongoDB } from "../../../singleton/mongo-db";
 
 export const POST_BlockValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
@@ -20,12 +21,16 @@ function sendSuccess(res: Response, status: string) {
 }
 
 const POST_Block = async (req: Request, res: Response) => {
+  let session = "";
   try {
     if (hasErrors(req, res)) return;
     const sourceAccount = res.locals.oauth.token.user._id;
     const blockedAccount = req.body.target;
     if (sourceAccount === blockedAccount)
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+    session = await MongoDB.startSession();
+    MongoDB.startTransaction(session);
+    const sessionOptions = MongoDB.getSessionOptions(session);
     const query: any = {
       targetId: blockedAccount,
       sourceId: sourceAccount,
@@ -34,32 +39,38 @@ const POST_Block = async (req: Request, res: Response) => {
       _id: blockedAccount,
     }).exec()) as unknown as IUser;
     if (target) {
-      await new BlockModel(query).save();
+      await new BlockModel(query).save(sessionOptions);
       // Delete follow entry for the source person following the blocked account.
-      const result1 = await FollowModel.deleteOne({
+      const intermQuery1 = FollowModel.deleteOne({
         sourceId: sourceAccount,
         targetId: blockedAccount,
         approved: true,
       });
+      if (sessionOptions) intermQuery1.session(sessionOptions.session);
+      const result1 = await intermQuery1;
       if (result1.deletedCount) {
-        await updateFollowCount(sourceAccount, blockedAccount, -1);
+        await updateFollowCount(sourceAccount, blockedAccount, -1, sessionOptions);
       }
       // Delete follow entry for the blocked person following the source account.
-      const result2 = await FollowModel.deleteOne({
+      const intermQuery2 = FollowModel.deleteOne({
         sourceId: blockedAccount,
         targetId: sourceAccount,
         approved: true,
       });
+      if (sessionOptions) intermQuery2.session(sessionOptions.session);
+      const result2 = await intermQuery2;
       if (result2.deletedCount) {
-        await updateFollowCount(blockedAccount, sourceAccount, -1);
+        await updateFollowCount(blockedAccount, sourceAccount, -1, sessionOptions);
       }
     }
+    await MongoDB.commitTransaction(session);
     sendSuccess(res, FollowStatus.BLOCKED);
   } catch (err: any) {
-    if (err.message.includes("E11000")) {
+    if (err?.message?.includes("E11000")) {
       sendSuccess(res, FollowStatus.BLOCKED);
     }
     log.error(err);
+    await MongoDB.abortTransaction(session);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
