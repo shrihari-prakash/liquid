@@ -7,7 +7,7 @@
 ![Lines of code](https://img.shields.io/tokei/lines/github/shrihari-prakash/liquid)
 ![GitHub Repo stars](https://img.shields.io/github/stars/shrihari-prakash/liquid?style=social)
 
-Liquid is a Docker-based open-source authentication server that supercharges your product development by offering out of the box APIs for features like follow-unfollow, blocking, and banning and let's you focus on just your application logic. 🚀
+Liquid is a Docker-based open-source authentication server that supercharges your product development by offering out of the box APIs for features like follow-unfollow, blocking, and banning so that you can focus on just your application logic. 🚀
 
 ![Liquid](images/liquid-banner.png)
 
