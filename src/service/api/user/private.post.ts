@@ -50,6 +50,8 @@ const POST_Private = async (req: Request, res: Response) => {
       }
       await MongoDB.commitTransaction(session);
       return res.status(statusCodes.success).json(new SuccessResponse({ acceptedCount: requestsToApprove.length }));
+    } else {
+      await MongoDB.commitTransaction(session);
     }
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
