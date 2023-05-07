@@ -33,12 +33,16 @@ app.use(
     extensions: ["html"],
   })
 );
-app.set("request-count", 0);
-app.use("*", (_, __, next) => {
-  app.set("request-count", app.get("request-count") + 1);
-  next();
-});
 log.info("Static folder loaded: %s", staticFolder);
+if (Configuration.get("system.stats.enable-request-counting")) {
+  log.debug("Request counting enabled.");
+  const key = Configuration.get("system.stats.request-count-key") as unknown as string;
+  app.set(key, 0);
+  app.use("*", (_, __, next) => {
+    app.set(key, app.get(key) + 1);
+    next();
+  });
+}
 app.get("/", function (_, res) {
   const defaultPage = Configuration.get("system.static.use-relative-path")
     ? path.join(__dirname, Configuration.get("system.static.default-page"))

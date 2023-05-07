@@ -7,6 +7,7 @@ const os = require("os");
 import app from "../../..";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
+import { Configuration } from "../../../singleton/configuration";
 
 const GET__Stats = async (_: Request, res: Response) => {
   try {
@@ -18,7 +19,7 @@ const GET__Stats = async (_: Request, res: Response) => {
       nodeVersion: process.version,
       cpuMake: os.cpus()[0].model,
       upTime: process.uptime(),
-      requestsHandled: app.get("request-count"),
+      requestsHandled: app.get(Configuration.get("system.stats.request-count-key")),
       heapTotal: Math.round(heapTotal * 100) / 100,
       heapUsed: Math.round(heapUsed * 100) / 100,
     };
