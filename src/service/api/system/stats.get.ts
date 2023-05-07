@@ -2,6 +2,7 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/code" });
 
 import { Request, Response } from "express";
+const os = require("os");
 
 import app from "../../..";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
@@ -15,6 +16,7 @@ const GET__Stats = async (_: Request, res: Response) => {
       processId: process.pid,
       platform: process.platform,
       nodeVersion: process.version,
+      cpuMake: os.cpus()[0].model,
       upTime: process.uptime(),
       requestsHandled: app.get("request-count"),
       heapTotal: Math.round(heapTotal * 100) / 100,
