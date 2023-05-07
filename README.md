@@ -1,6 +1,4 @@
-# <img src="https://github.com/shrihari-prakash/liquid/blob/main/src/public/images/app-icon-mini.png" width="26" height="26"> Liquid: Seamless and highly customizable authentication and user APIs for your projects.
-
-An open source TypeScript implementation of [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) based Mongo DB and Redis with user sign up and login✨
+# <img src="https://github.com/shrihari-prakash/liquid/blob/main/src/public/images/app-icon-mini.png" width="26" height="26"> Liquid: Seamless and highly customizable authentication and user APIs for any project.
 
 ![GitHub](https://img.shields.io/github/license/shrihari-prakash/liquid)
 [![Docker Image CI](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml)
@@ -9,14 +7,11 @@ An open source TypeScript implementation of [oauthjs/node-oauth2-server](https:/
 ![Lines of code](https://img.shields.io/tokei/lines/github/shrihari-prakash/liquid)
 ![GitHub Repo stars](https://img.shields.io/github/stars/shrihari-prakash/liquid?style=social)
 
-When you start new projects, you typically find that you are writing the login, account creation and authentication logic over and over again. This repository provides a plug and play boiler plate code that acts as an authentication and user management server for your other microservices.
+"Liquid is an open-source authentication server that comes in a Docker package. Set up in minutes, Liquid simplifies authentication and user management and offers out of the box APIs for features like follow-unfollow, blocking, and banning. While you focus on your application logic, Liquid ensures secure and customizable authentication system thus supercharging your product development. 🚀" -ChatGPT (it's a pretty accurate description though)
 
 ![Liquid](images/liquid-banner.png)
 
-### 🚀 Features
-
-In addition to OAuth, the service provides additional (but usually very needed) features:
-
+### ⭐ Features
 * High degree customization capabilities. Customize and configure every part of the UI and service.
 * Out of the box support for user sign up and login.
 * Includes follow and unfollow mechanisms with support for private accounts.
