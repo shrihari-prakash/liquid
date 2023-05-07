@@ -48,6 +48,7 @@ export class MongoDB {
   public startTransaction(sessionId: string) {
     const session = this.sessions.get(sessionId);
     if (session) {
+      log.debug("Starting transaction for session %s.", sessionId);
       return session.startTransaction();
     }
   }
@@ -55,6 +56,7 @@ export class MongoDB {
   public commitTransaction(sessionId: string) {
     const session = this.sessions.get(sessionId);
     if (session) {
+      log.debug("Committing transaction for session %s.", sessionId);
       this.sessions.delete(sessionId);
       return session.commitTransaction();
     }
@@ -63,6 +65,7 @@ export class MongoDB {
   public abortTransaction(sessionId: string) {
     const session = this.sessions.get(sessionId);
     if (session) {
+      log.debug("Aborting transaction for session %s.", sessionId);
       this.sessions.delete(sessionId);
       return session.abortTransaction();
     }
