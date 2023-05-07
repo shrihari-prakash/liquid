@@ -45,7 +45,8 @@
     "envName": "SYSTEM_STATS_ENABLE_REQUEST_COUNTING",
     "description": "Specifies if application should count the number of requests served since service was started and return it in stats API.",
     "type": "boolean",
-    "default": false
+    "default": false,
+    "relatedOptions": ["system.stats.request-counter-key"]
   },
   {
     "name": "system.stats.request-counter-key",
@@ -53,7 +54,8 @@
     "envName": "SYSTEM_STATS_REQUEST_COUNTER_KEY",
     "description": "Specifies the key to be used for storing and retrieving request count in express app.",
     "type": "string",
-    "default": "liquid-request-count"
+    "default": "liquid-request-count",
+    "relatedOptions": ["system.stats.enable-request-counting"]
   },
   {
     "name": "system.static.use-relative-path",
