@@ -68,7 +68,7 @@ const OAuthModel = {
       const dbClient = await ClientModel.findOne(query).lean();
       return dbClient as unknown as Client;
     } catch (err) {
-      log.error("Error fetching client.")
+      log.error("Error fetching client.");
       log.error(err);
       throw err;
     }
@@ -200,6 +200,7 @@ const OAuthModel = {
     try {
       if (useTokenCache) {
         let cacheCode: any = (await Redis.client.get(authorizationCode)) as string;
+        if (!cacheCode) return null;
         cacheCode = JSON.parse(cacheCode) as AuthorizationCode;
         cacheCode.expiresAt = new Date(cacheCode.expiresAt);
         return cacheCode;

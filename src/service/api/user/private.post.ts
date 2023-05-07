@@ -9,37 +9,52 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
 import UserModel from "../../../model/mongo/user";
 import FollowModel from "../../../model/mongo/follow";
+import { MongoDB } from "../../../singleton/mongo-db";
 
 export const POST_PrivateValidator = [body("state").exists().isBoolean()];
 
 const POST_Private = async (req: Request, res: Response) => {
+  let session = "";
   try {
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const state = req.body.state;
-    await UserModel.updateOne({ _id: userId }, { $set: { isPrivate: state } });
+    session = await MongoDB.startSession();
+    MongoDB.startTransaction(session);
+    const sessionOptions = MongoDB.getSessionOptions(session);
+    const intermQuery1 = UserModel.updateOne({ _id: userId }, { $set: { isPrivate: state } });
+    if (sessionOptions) intermQuery1.session(sessionOptions.session);
+    await intermQuery1;
     // Accept all pending follow requests.
     if (state === false) {
       const requestsToApprove = await FollowModel.find({
         $and: [{ targetId: userId }, { approved: false }],
       });
       if (requestsToApprove.length) {
-        const result = (await FollowModel.updateMany({ targetId: userId }, { $set: { approved: true } })) as any;
+        const intermQuery2 = FollowModel.updateMany({ targetId: userId }, { $set: { approved: true } });
+        if (sessionOptions) intermQuery2.session(sessionOptions.session);
+        const result = (await intermQuery2) as any;
         // Update follower count for the user going public.
-        await UserModel.updateOne({ _id: userId }, { $inc: { followerCount: result.modifiedCount } });
+        const intermQuery3 = UserModel.updateOne({ _id: userId }, { $inc: { followerCount: result.modifiedCount } });
+        if (sessionOptions) intermQuery3.session(sessionOptions.session);
         // Update folowing counts of the users whose requests were approved.
-        await UserModel.updateMany(
+        await intermQuery3;
+        const intermQuery4 = UserModel.updateMany(
           {
             _id: { $in: requestsToApprove.map((request) => request.sourceId) },
           },
           { $inc: { followingCount: 1 } }
         );
+        if (sessionOptions) intermQuery4.session(sessionOptions.session);
+        await intermQuery4;
       }
+      await MongoDB.commitTransaction(session);
       return res.status(statusCodes.success).json(new SuccessResponse({ acceptedCount: requestsToApprove.length }));
     }
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
+    await MongoDB.abortTransaction(session);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
