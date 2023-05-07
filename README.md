@@ -1,4 +1,4 @@
-# <img src="https://github.com/shrihari-prakash/liquid/blob/main/src/public/images/app-icon-mini.png" width="26" height="26"> Liquid: Seamless and highly customizable authentication and user APIs for any project.
+# <img src="https://github.com/shrihari-prakash/liquid/blob/main/src/public/images/app-icon-mini.png" width="26" height="26"> Liquid: Seamless and highly customizable authentication and user management server for any project.
 
 ![GitHub](https://img.shields.io/github/license/shrihari-prakash/liquid)
 [![Docker Image CI](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml)
@@ -7,7 +7,7 @@
 ![Lines of code](https://img.shields.io/tokei/lines/github/shrihari-prakash/liquid)
 ![GitHub Repo stars](https://img.shields.io/github/stars/shrihari-prakash/liquid?style=social)
 
-"Liquid is an open-source authentication server that comes in a Docker package. Set up in minutes, Liquid simplifies authentication and user management and offers out of the box APIs for features like follow-unfollow, blocking, and banning. While you focus on your application logic, Liquid ensures secure and customizable authentication system thus supercharging your product development. 🚀" -ChatGPT (it's a pretty accurate description though)
+Liquid is a Docker-based open-source authentication server that supercharges your product development by offering out of the box APIs for features like follow-unfollow, blocking, and banning and let's you focus on just your application logic. 🚀
 
 ![Liquid](images/liquid-banner.png)
 
