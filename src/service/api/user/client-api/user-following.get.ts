@@ -2,7 +2,7 @@ import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "client-api/user-following" });
 
 import { Request, Response } from "express";
-import { body } from "express-validator";
+import { query } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
@@ -12,7 +12,7 @@ import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { checkSubscription } from "../../../../utils/subscription";
 import { getPaginationLimit } from "../../../../utils/pagination";
 
-export const GET_UserFollowingValidator = [body("target").exists().isString().isLength({ min: 8, max: 128 })];
+export const GET_UserFollowingValidator = [query("target").exists().isString().isLength({ min: 8, max: 128 })];
 
 const GET_UserFollowing = async (req: Request, res: Response) => {
   try {
