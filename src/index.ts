@@ -33,6 +33,11 @@ app.use(
     extensions: ["html"],
   })
 );
+app.set("request-count", 0);
+app.use("*", (_, __, next) => {
+  app.set("request-count", app.get("request-count") + 1);
+  next();
+});
 log.info("Static folder loaded: %s", staticFolder);
 app.get("/", function (_, res) {
   const defaultPage = Configuration.get("system.static.use-relative-path")
