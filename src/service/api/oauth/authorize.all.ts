@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { OAuthServer } from "../../../singleton/oauth-server";
 
-function Authorize() {
+function ALL__Authorize() {
   return OAuthServer.server.authorize({
     authenticateHandler: {
       handle: (req: Request) => {
@@ -11,4 +11,4 @@ function Authorize() {
   });
 }
 
-export default Authorize();
+export default ALL__Authorize();

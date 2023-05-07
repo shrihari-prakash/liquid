@@ -1,21 +1,11 @@
 import express from "express";
-import { OAuthServer } from "../../../singleton/oauth-server";
-import Authorize from "./authorize";
+
+import ALL__Token from "./token.all";
+import ALL__Authorize from "./authorize.all";
 
 const OAuthRouter = express.Router();
 
-const oauthOptions = {
-  requireClientAuthentication: {
-    authorization_code: false,
-    refresh_token: false,
-  },
-};
-OAuthRouter.all("/token", OAuthServer.server.token(oauthOptions));
-
-OAuthRouter.all("/authorize", Authorize);
-
-OAuthRouter.get("/", OAuthServer.server.authenticate(), function (req, res) {
-  res.send("Congratulations, you are in a secret area!");
-});
+OAuthRouter.all("/token", ALL__Token);
+OAuthRouter.all("/authorize", ALL__Authorize);
 
 export default OAuthRouter;
