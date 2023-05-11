@@ -11,6 +11,7 @@ import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get";
 import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get";
 import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
+import GET_List from "../shared/list.get";
 
 const ClientApiRouter = express.Router();
 
@@ -20,6 +21,7 @@ ClientApiRouter.post("/restrict", ...ClientAuthFlow, POST_RestrictValidator, POS
 ClientApiRouter.post("/subscription", ...ClientAuthFlow, POST_SubscriptionValidator, POST_Subscription);
 ClientApiRouter.get("/block-status", ...ClientAuthFlow, GET_BlockStatusValidator, GET_BlockStatus);
 ClientApiRouter.post("/create", ...ClientAuthFlow, POST_CreateValidator, POST_Create);
+ClientApiRouter.get("/list", ...ClientAuthFlow, GET_List);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {
@@ -27,5 +29,6 @@ if (canUseFollowAPIs) {
   ClientApiRouter.get("/user-following", ...ClientAuthFlow, GET_UserFollowingValidator, GET_UserFollowing);
   ClientApiRouter.get("/user-followers", ...ClientAuthFlow, GET_UserFollowersValidator, GET_UserFollowers);
 }
+
 
 export default ClientApiRouter;
