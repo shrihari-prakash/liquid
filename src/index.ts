@@ -7,6 +7,7 @@ const fs = require("fs");
 const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
 import express from "express";
+import RedisStore from "connect-redis";
 import session from "express-session";
 import bodyParser from "body-parser";
 
@@ -15,6 +16,7 @@ import { MongoDB } from "./singleton/mongo-db";
 import { Api } from "./singleton/api/api";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
 import { Mailer } from "./singleton/mailer";
+import { Redis } from "./singleton/redis";
 
 const YAML = require("yamljs");
 const swaggerDocument = YAML.load(__dirname + "/swagger.yaml");
@@ -73,6 +75,14 @@ var sessionOptions: any = {
   saveUninitialized: false,
   cookie: {},
 };
+if (Configuration.get("privilege.can-use-cache")) {
+  log.info("Using Redis store for express sessions.");
+  let redisStore = new RedisStore({
+    client: Redis.client,
+    prefix: "liquid_sid:",
+  });
+  sessionOptions.store = redisStore;
+}
 if (app.get("env") === "production") {
   app.set("trust proxy", true);
   sessionOptions.cookie.secure = true;
