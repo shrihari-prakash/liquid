@@ -11,6 +11,9 @@ import UserModel from "../../../model/mongo/user";
 import { Configuration } from "../../../singleton/configuration";
 import { bcryptConfig } from "./create.post";
 import { hasErrors } from "../../../utils/api";
+import { Language } from "../../../enum/language";
+
+const languages = Language.map((l) => l.code);
 
 export const PATCH_MeValidator = [
   body("username")
@@ -22,6 +25,8 @@ export const PATCH_MeValidator = [
   body("password").optional().isString().isLength({ min: 8, max: 128 }),
   body("firstName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
   body("lastName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
+  body("gender").optional().isString().isLength({ min: 2, max: 128 }),
+  body("preferredLanguage").optional().isString().isAlpha().isIn(languages).isLength({ min: 2, max: 2 }),
   body("bio").optional().isString().isLength({ min: 3, max: 256 }),
   body("customLink").optional().isURL().isLength({ min: 3, max: 256 }),
   body("pronouns").optional().isString().isLength({ min: 3, max: 24 }),

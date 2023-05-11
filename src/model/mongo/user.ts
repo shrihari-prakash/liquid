@@ -22,6 +22,12 @@ const userSchema = {
     type: String,
     required: true,
   },
+  gender: String,
+  preferredLanguage: {
+    type: String,
+    required: true,
+    default: "en",
+  },
   role: {
     type: String,
     required: true,
@@ -140,6 +146,8 @@ export type IUser = {
   firstName: string;
   middleName?: string;
   lastName: string;
+  gender: string;
+  preferredLanguage: string;
   role: string;
   designation?: string;
   bio: string;
@@ -192,6 +200,8 @@ export const IUserProjection = {
   firstName: 1,
   middleName: 1,
   lastName: 1,
+  gender: 1,
+  preferredLanguage: 1,
   role: 1,
   designation: 1,
   bio: 1,
