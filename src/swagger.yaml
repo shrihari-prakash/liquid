@@ -1253,6 +1253,8 @@ definitions:
         type: string
       lastName:
         type: string
+      gender:
+        type: string
       username:
         type: string
       role:

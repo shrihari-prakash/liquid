@@ -77,7 +77,7 @@ const POST_Create = async (req: Request, res: Response) => {
       if (phone) {
         user.phone = phone;
         user.phoneCountryCode = phoneCountryCode;
-        user.phoneVerified = false;
+        user.phoneVerified = true;
       }
       insertList[i] = user;
     }
