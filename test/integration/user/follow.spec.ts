@@ -6,10 +6,7 @@ import UserModel, { IUser } from "../../../src/model/mongo/user";
 import { setupUsers } from "../utils/records";
 
 describe("Follow", () => {
-  before(async () => {
-    await FollowModel.deleteMany({});
-    await setupUsers();
-  });
+  before(setupUsers);
 
   it("should set status to requested when following a private account", async () => {
     return new Promise<void>(async (resolve, reject) => {

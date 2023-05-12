@@ -4,16 +4,21 @@ import TokenModel from "../../../src/model/mongo/token";
 import UserModel from "../../../src/model/mongo/user";
 import VerificationCodeModel from "../../../src/model/mongo/verification-code";
 import MemoryStore from "../store";
+import FollowModel from "../../../src/model/mongo/follow";
+import BlockModel from "../../../src/model/mongo/block";
 
 export const MockData = JSON.parse(JSON.stringify(MemoryStore));
 
 export const setupUsers = async () => {
   await UserModel.deleteMany({});
-  await VerificationCodeModel.deleteMany({});
   await TokenModel.deleteMany({});
+  await FollowModel.deleteMany({});
+  await BlockModel.deleteMany({});
+  await VerificationCodeModel.deleteMany({});
 
   await chai.request(app).post("/user/create").send(MemoryStore.users.user2);
   await chai.request(app).post("/user/create").send(MemoryStore.users.user1);
+
   const users = await UserModel.find({});
 
   const user1password = MemoryStore.users.user1.password;
@@ -28,7 +33,6 @@ export const setupUsers = async () => {
 
   await UserModel.updateOne({ email: MemoryStore.users.user1.email }, { $set: { emailVerified: true } });
   await UserModel.updateOne({ email: MemoryStore.users.user2.email }, { $set: { emailVerified: true } });
-  await VerificationCodeModel.deleteMany({});
 
   const token1 = {
     accessToken: "john_doe_access_token",

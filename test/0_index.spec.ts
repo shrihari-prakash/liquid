@@ -9,10 +9,12 @@ const mongod = new MongoMemoryServer({
 });
 import { MongoDB } from "../src/singleton/mongo-db";
 import ClientModel from "../src/model/mongo/client";
+import { Logger } from "../src/singleton/logger";
 
 process.env.NODE_ENV = "test";
-process.env.SYSTEM_LOG_LEVEL = "error";
 process.env.CAN_USE_CACHE = "false";
+
+Logger.logger.level = "error";
 
 chai.use(chaiHttp);
 
@@ -22,7 +24,6 @@ describe("Integration Test", () => {
     process.env.MONGO_DB_CONNECTION_STRING = await mongod.getUri();
     MongoDB.connect();
     await ClientModel.deleteMany({});
-    console.log("Init done.");
   });
-  it("should", () => {});
+  it("dummy test", () => {});
 });

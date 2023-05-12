@@ -6,10 +6,7 @@ import UserModel, { IUser } from "../../../src/model/mongo/user";
 import { setupUsers } from "../utils/records";
 
 describe("Block", () => {
-  before(async () => {
-    await BlockModel.deleteMany({});
-    await setupUsers();
-  });
+  before(setupUsers);
 
   describe("should test john_doe blocking rick_asthley", () => {
     it("run follow actions", () => {
