@@ -10,6 +10,7 @@ jobs:
     uses: "./.github/workflows/integration-tests.yml"
   build:
     runs-on: ubuntu-latest
+    needs: test
     steps:
     - uses: actions/checkout@v3
     - name: docker login
