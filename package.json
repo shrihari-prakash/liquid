@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register test/**/*.spec.ts",
+    "test": "mocha -r ts-node/register test/**/*.spec.ts --exit",
     "build": "rimraf ./build && tsc && npm run copy-files",
     "copy-files": "copyfiles -u 1 \"src/public/**/*.js\" \"src/**/*.yaml\" \"src/**/*.html\" \"src/**/*.css\" \"src/**/*.json\" \"src/**/*.jpg\" \"src/**/*.png\" build/",
     "start:dev": "nodemon --inspect",
