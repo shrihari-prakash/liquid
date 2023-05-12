@@ -85,8 +85,15 @@ const PATCH_Me = async (req: Request, res: Response) => {
     }
     await UserModel.updateOne({ _id: userId }, { $set: { ...req.body } }).exec();
     res.status(statusCodes.success).json(new SuccessResponse());
-  } catch (err) {
+  } catch (err: any) {
     log.error(err);
+    if (err?.name === "MongoServerError" && err?.code === 11000) {
+      const keyPattern = Object.keys(err.keyPattern);
+      const key = keyPattern[0];
+      return res
+        .status(statusCodes.conflict)
+        .json(new ErrorResponse(errorMessages.conflict, { duplicateFields: [key] }));
+    }
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
