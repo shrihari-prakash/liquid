@@ -1,6 +1,6 @@
 name: Docker Image CI
 env:
-  CI_VERSION: "1.0.${CI_PIPELINE_IID}"
+  CI_VERSION: "1.0.${GITHUB_RUN_NUMBER}"
 on:
   push:
     branches: [ release ]
