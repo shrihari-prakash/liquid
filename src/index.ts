@@ -22,9 +22,22 @@ const YAML = require("yamljs");
 const swaggerDocument = YAML.load(__dirname + "/swagger.yaml");
 
 const app = express();
+
+// Rate limiting
 if (app.get("env") !== "test") {
   activateRateLimiters(app);
 }
+if (Configuration.get("system.stats.enable-request-counting")) {
+  log.debug("Request counting enabled.");
+  const key = Configuration.get("system.stats.request-count-key") as unknown as string;
+  app.set(key, 0);
+  app.use("*", (_, __, next) => {
+    app.set(key, app.get(key) + 1);
+    next();
+  });
+}
+
+// Static files
 const staticFolder = Configuration.get("system.static.use-relative-path")
   ? path.join(__dirname, Configuration.get("system.static-folder"))
   : Configuration.get("system.static-folder");
@@ -36,15 +49,6 @@ app.use(
   })
 );
 log.info("Static folder loaded: %s", staticFolder);
-if (Configuration.get("system.stats.enable-request-counting")) {
-  log.debug("Request counting enabled.");
-  const key = Configuration.get("system.stats.request-count-key") as unknown as string;
-  app.set(key, 0);
-  app.use("*", (_, __, next) => {
-    app.set(key, app.get(key) + 1);
-    next();
-  });
-}
 app.get("/", function (_, res) {
   const defaultPage = Configuration.get("system.static.use-relative-path")
     ? path.join(__dirname, Configuration.get("system.static.default-page"))
@@ -69,6 +73,8 @@ if (Configuration.get("system.enable-swagger") || app.get("env") !== "production
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Session stuff
 var sessionOptions: any = {
   secret: Configuration.get("cookie-session-secret"),
   resave: false,
@@ -88,6 +94,8 @@ if (app.get("env") === "production") {
   sessionOptions.cookie.secure = true;
 }
 app.use(session(sessionOptions));
+
+// CORS
 app.use(
   cors({
     credentials: true,
@@ -95,10 +103,11 @@ app.use(
   })
 );
 
-MongoDB.connect();
-
+//Singleton services.
+if (app.get("env") !== "test") {
+  MongoDB.connect();
+}
 Api.initialize(app);
-
 Mailer.initialize(app);
 
 app.listen(Configuration.get("system.app-port"), () => {

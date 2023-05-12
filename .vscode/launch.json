@@ -10,6 +10,16 @@
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "start:dev"]
+    },
+    {
+      "name": "Test",
+      "type": "node",
+      "request": "launch",
+      "restart": true,
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test"]
     }
   ]
 }
