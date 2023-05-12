@@ -6,6 +6,8 @@ on:
     branches: [ release ]
   workflow_dispatch:
 jobs:
+  test:
+    uses: ".github/workflows/integration-tests.yml@main"
   build:
     runs-on: ubuntu-latest
     steps:
