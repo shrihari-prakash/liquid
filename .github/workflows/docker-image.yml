@@ -1,6 +1,6 @@
 name: Docker Image CI
 env:
-  CI_VERSION: "1.0.${GITHUB_RUN_NUMBER}"
+  CI_VERSION: "1.0.${{github.run_number}}"
 on:
   push:
     branches: [ release ]
