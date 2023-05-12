@@ -4,7 +4,6 @@
 [![Docker Image CI](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml)
 [![Integration Tests CI](https://github.com/shrihari-prakash/liquid/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/integration-tests.yml)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shrihari-prakash/liquid)
-![GitHub last commit](https://img.shields.io/github/last-commit/shrihari-prakash/liquid)
 ![Lines of code](https://img.shields.io/tokei/lines/github/shrihari-prakash/liquid)
 ![GitHub Repo stars](https://img.shields.io/github/stars/shrihari-prakash/liquid?style=social)
 
