@@ -47,6 +47,47 @@ paths:
                     type: integer
       tags:
         - user-admin-api
+  /user/admin-api/list:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns an array of users in the system that can be paginated.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Records per page.
+        - in: query
+          name: offset
+          schema:
+            type: string
+            pattern: ^[6][a-f0-9]{23}$
+          description: `_id` of last record in the previous page.
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            approved:
+                              type: boolean
+                            target:
+                              $ref: "#/definitions/user"
+      tags:
+        - user-admin-api
   /user/admin-api/user-info:
     get:
       security:
@@ -347,6 +388,47 @@ paths:
                     type: integer
       tags:
         - user-client-api
+  /user/client-api/list:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns an array of users in the system that can be paginated.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Records per page.
+        - in: query
+          name: offset
+          schema:
+            type: string
+            pattern: ^[6][a-f0-9]{23}$
+          description: `_id` of last record in the previous page.
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            approved:
+                              type: boolean
+                            target:
+                              $ref: "#/definitions/user"
+      tags:
+        - user-client-api
   /user/client-api/user-info:
     get:
       security:
@@ -446,8 +528,20 @@ paths:
         - in: query
           name: target
           schema:
-            type: integer
+            type: string
+            pattern: ^[6][a-f0-9]{23}$
           description: ID of the user.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Records per page.
+        - in: query
+          name: offset
+          schema:
+            type: string
+            format: date-time
+          description: `createdAt` field of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
@@ -481,8 +575,20 @@ paths:
         - in: query
           name: target
           schema:
-            type: integer
+            type: string
+            pattern: ^[6][a-f0-9]{23}$
           description: ID of the user.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Records per page.
+        - in: query
+          name: offset
+          schema:
+            type: string
+            format: date-time
+          description: `createdAt` field of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
@@ -1068,6 +1174,18 @@ paths:
       security:
         - bearerAuth: []
       summary: Returns an array of users that the user associated with the API token is following.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Records per page.
+        - in: query
+          name: offset
+          schema:
+            type: string
+            format: date-time
+          description: `createdAt` field of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
@@ -1097,6 +1215,18 @@ paths:
       security:
         - bearerAuth: []
       summary: Returns an array of users that are following the user associated with the API token.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Records per page.
+        - in: query
+          name: offset
+          schema:
+            type: string
+            format: date-time
+          description: `createdAt` field of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
