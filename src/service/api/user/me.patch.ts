@@ -12,6 +12,7 @@ import { Configuration } from "../../../singleton/configuration";
 import { bcryptConfig } from "./create.post";
 import { hasErrors } from "../../../utils/api";
 import { Language } from "../../../enum/language";
+import { deleteUserIdFromRedis } from "../../../model/oauth";
 
 const languages = Language.map((l) => l.code);
 
@@ -85,6 +86,7 @@ const PATCH_Me = async (req: Request, res: Response) => {
     }
     await UserModel.updateOne({ _id: userId }, { $set: { ...req.body } }).exec();
     res.status(statusCodes.success).json(new SuccessResponse());
+    deleteUserIdFromRedis(userId);
   } catch (err: any) {
     log.error(err);
     if (err?.name === "MongoServerError" && err?.code === 11000) {

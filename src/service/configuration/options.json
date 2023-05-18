@@ -288,6 +288,15 @@
     "relatedOptions": ["privilege.can-use-cache", "redis.*"]
   },
   {
+    "name": "redis.key-prefix",
+    "displayName": "Redis Key Prefix",
+    "envName": "REDIS_KEY_PREFIX",
+    "description": "Key prefix for Redis keys.",
+    "type": "string",
+    "default": "liquid:",
+    "relatedOptions": ["privilege.can-use-cache", "redis.*"]
+  },
+  {
     "name": "system.queue-adapter",
     "displayName": "System Queue Adapter",
     "envName": "SYSTEM_QUEUE_ADAPTER",

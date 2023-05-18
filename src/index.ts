@@ -86,7 +86,7 @@ if (Configuration.get("privilege.can-use-cache")) {
   log.info("Using Redis store for express sessions.");
   let redisStore = new RedisStore({
     client: Redis.client,
-    prefix: "liquid_sid:",
+    prefix: "session_id:",
   });
   sessionOptions.store = redisStore;
 }
