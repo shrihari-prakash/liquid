@@ -64,7 +64,7 @@ const getPrefixedCode = (code: string) => `${codePrefix}${code}`;
 const userIdPrefix = "user:";
 const getPrefixedUserId = (userId: string) => `${userIdPrefix}${userId}`;
 
-export const deleteUserIdFromRedis = async (userId: string) => {
+export const flushUserInfoFromRedis = async (userId: string) => {
   await Redis.client.del(getPrefixedUserId(userId));
   log.debug("User info for %s flushed from cache.", userId);
 };
