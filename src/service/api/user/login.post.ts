@@ -3,7 +3,7 @@ const log = Logger.getLogger().child({ from: "user/login" });
 
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-const { body } = require("express-validator");
+import { body } from "express-validator";
 
 import UserModel, { IUser } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";

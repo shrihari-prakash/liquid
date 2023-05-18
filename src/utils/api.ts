@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { errorMessages, statusCodes } from "./http-status";
 import { ErrorResponse } from "./response";
 
-const { validationResult } = require("express-validator");
+import { validationResult } from "express-validator";
 
 export function hasErrors(req: Request, res: Response) {
   const errors = validationResult(req);

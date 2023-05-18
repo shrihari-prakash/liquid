@@ -2,7 +2,7 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/verify-email" });
 
 import { Request, Response } from "express";
-const { query } = require("express-validator");
+import { query } from "express-validator";
 
 import UserModel from "../../../model/mongo/user";
 import VerificationCodeModel from "../../../model/mongo/verification-code";

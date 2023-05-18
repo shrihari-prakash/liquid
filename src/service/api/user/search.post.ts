@@ -15,7 +15,7 @@ import { attachProfilePicture } from "../../../utils/profile-picture";
 
 export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
 
-const redisPrefix = "SEARCH_";
+const redisPrefix = "search:";
 const POST_Search = async (req: Request, res: Response) => {
   if (hasErrors(req, res)) return;
   try {

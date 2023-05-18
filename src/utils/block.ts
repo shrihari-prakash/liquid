@@ -5,7 +5,7 @@ import { Redis } from "../singleton/redis";
 import { errorMessages, statusCodes } from "./http-status";
 import { ErrorResponse } from "./response";
 
-const redisPrefix = "BLOCK_";
+const redisPrefix = "block:";
 export const getBlockStatus = async (sourceId: string, targetId: string, res: any, skipCache = false) => {
   if (Configuration.get("privilege.can-use-cache") && !skipCache) {
     const cacheResults = await Redis.client.get(`${redisPrefix}${sourceId}_${targetId}`);

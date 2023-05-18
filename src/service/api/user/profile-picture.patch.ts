@@ -2,8 +2,9 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/unfollow" });
 
 import { Request, Response } from "express";
-const multer = require("multer");
-const multerS3 = require("multer-s3");
+import { S3Client } from "@aws-sdk/client-s3";
+import multer from "multer";
+import multerS3 from "multer-s3";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
@@ -25,7 +26,7 @@ if (Configuration.get("privilege.can-use-cloud-storage")) {
       cb(null, true);
     },
     storage: multerS3({
-      s3: S3.client,
+      s3: S3.client as S3Client,
       bucket: Configuration.get("s3.bucket-name"),
       metadata: function (req: any, _: any, cb: any) {
         const userId = req.res?.locals.oauth.token.user._id;

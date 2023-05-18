@@ -3,7 +3,7 @@ const log = Logger.getLogger().child({ from: "rabbitmq" });
 
 import { Configuration } from "../../singleton/configuration";
 
-const amqp = require("amqplib");
+import amqp from "amqplib";
 
 export default class RabbitMQ {
   channel: any;

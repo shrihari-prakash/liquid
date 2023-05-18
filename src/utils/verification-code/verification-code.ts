@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+import * as path from 'path';
+import * as fs from 'fs';
 import { v4 as uuidv4 } from "uuid";
 
 import { IUser } from "../../model/mongo/user";

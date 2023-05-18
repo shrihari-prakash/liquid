@@ -15,6 +15,7 @@ class Redis {
       username: Configuration.get("redis.username") as string,
       password: Configuration.get("redis.password") as string,
       db: Configuration.get("redis.db") as number,
+      keyPrefix: Configuration.get("redis.key-prefix") as string
     });
     this.client.on("connect", function () {
       log.info("Connected to Redis (%s:%s).", host, port);
