@@ -118,7 +118,8 @@ const OAuthModel = {
   saveToken: async (token: Token, client: Client, user: User) => {
     try {
       token.client = client;
-      token.user = user;
+      // No need to store the full user as _id is resolved to full object while retrieving from cache/db.
+      token.user = { _id: user._id };
       if (useTokenCache) {
         const serialized = JSON.stringify(token);
         await Redis.client.set(
