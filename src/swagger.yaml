@@ -63,7 +63,7 @@ paths:
           schema:
             type: string
             pattern: ^[6][a-f0-9]{23}$
-          description: `_id` of last record in the previous page.
+          description: _id of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
@@ -302,8 +302,6 @@ paths:
                 expiry:
                   type: string
                   format: date-time
-                expiry:
-                  type: string
       responses:
         "200":
           description: Returns OK.
@@ -404,7 +402,7 @@ paths:
           schema:
             type: string
             pattern: ^[6][a-f0-9]{23}$
-          description: `_id` of last record in the previous page.
+          description: _id of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
@@ -541,7 +539,7 @@ paths:
           schema:
             type: string
             format: date-time
-          description: `createdAt` field of last record in the previous page.
+          description: createdAt field of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
@@ -588,7 +586,7 @@ paths:
           schema:
             type: string
             format: date-time
-          description: `createdAt` field of last record in the previous page.
+          description: createdAt field of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
@@ -693,8 +691,6 @@ paths:
                 expiry:
                   type: string
                   format: date-time
-                expiry:
-                  type: string
       responses:
         "200":
           description: Returns OK.
@@ -1185,7 +1181,7 @@ paths:
           schema:
             type: string
             format: date-time
-          description: `createdAt` field of last record in the previous page.
+          description: createdAt field of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
@@ -1226,7 +1222,7 @@ paths:
           schema:
             type: string
             format: date-time
-          description: `createdAt` field of last record in the previous page.
+          description: createdAt field of last record in the previous page.
       responses:
         "200":
           description: Returns list of users.
@@ -1365,11 +1361,11 @@ paths:
 
 tags:
   - name: user-admin-api
-    description: Restricted to system admins. Super Admin role has access to all these APIs. To provide access to other users, Super Admin needs to explicitly give permissions using `POST user/admin-api/access` API. Needs an `authorization_code` grant login.
+    description: Restricted to system admins. Super Admin role has access to all these APIs. To provide access to other users, Super Admin needs to explicitly give permissions using POST user/admin-api/access API. Needs an authorization_code grant login.
   - name: user-client-api
-    description: Accessible by `client_credentials` grant.
+    description: Accessible by client_credentials grant.
   - name: user-api
-    description: All the user APIs in the system. Accessible only by `authorization_code` grant.
+    description: All the user APIs in the system. Accessible only by authorization_code grant.
 
 definitions:
   user:

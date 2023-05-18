@@ -1,11 +1,13 @@
 import { Logger } from "./singleton/logger";
 const log = Logger.getLogger().child({ from: "main" });
 
-require("dotenv").config();
-const path = require("path");
-const fs = require("fs");
-const swaggerUi = require("swagger-ui-express");
-const cors = require("cors");
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import * as path from 'path';
+import * as fs from 'fs';
+import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 import express from "express";
 import RedisStore from "connect-redis";
 import session from "express-session";
@@ -18,9 +20,8 @@ import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
 import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
 
-const YAML = require("yamljs");
-const swaggerDocument = YAML.load(__dirname + "/swagger.yaml");
-
+import YAML from "yaml";
+const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", 'utf8'))
 const app = express();
 
 // Rate limiting

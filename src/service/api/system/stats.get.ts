@@ -2,7 +2,7 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/code" });
 
 import { Request, Response } from "express";
-const os = require("os");
+import * as os from "os";
 
 import app from "../../..";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
