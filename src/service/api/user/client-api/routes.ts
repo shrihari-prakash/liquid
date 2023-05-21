@@ -6,6 +6,7 @@ import POST_Ban, { POST_BanValidator } from "../shared/ban.post";
 import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
 import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
 import POST_Create, { POST_CreateValidator } from "../shared/create.post";
+import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get";
@@ -17,6 +18,7 @@ const ClientApiRouter = express.Router();
 
 ClientApiRouter.get("/user-info", ...ClientAuthFlow, GET_UserInfoValidator, GET_UserInfo);
 ClientApiRouter.post("/ban", ...ClientAuthFlow, POST_BanValidator, POST_Ban);
+ClientApiRouter.post("/credits", ...ClientAuthFlow, POST_CreditsValidator, POST_Credits);
 ClientApiRouter.post("/restrict", ...ClientAuthFlow, POST_RestrictValidator, POST_Restrict);
 ClientApiRouter.post("/subscription", ...ClientAuthFlow, POST_SubscriptionValidator, POST_Subscription);
 ClientApiRouter.get("/block-status", ...ClientAuthFlow, GET_BlockStatusValidator, GET_BlockStatus);

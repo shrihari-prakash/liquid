@@ -251,6 +251,38 @@ paths:
                     type: boolean
       tags:
         - user-admin-api
+  /user/admin-api/credits:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Modifies user credits for a given user. Possible operations are increment, decrement and set
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                  pattern: ^[6][a-f0-9]{23}$
+                operation:
+                  type: string
+                  enum: [increment, decrement, set]
+                value:
+                  type: integer
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - user-admin-api
   /user/admin-api/restrict:
     post:
       security:
@@ -628,6 +660,38 @@ paths:
                   pattern: ^[6][a-f0-9]{23}$
                 state:
                   type: boolean
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - user-client-api
+  /user/client-api/credits:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Modifies user credits for a given user. Possible operations are increment, decrement and set
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                  pattern: ^[6][a-f0-9]{23}$
+                operation:
+                  type: string
+                  enum: [increment, decrement, set]
+                value:
+                  type: integer
       responses:
         "200":
           description: Returns OK.
