@@ -1,13 +1,13 @@
 import { Logger } from "./singleton/logger";
 const log = Logger.getLogger().child({ from: "main" });
 
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 dotenv.config();
 
-import * as path from 'path';
-import * as fs from 'fs';
-import cors from 'cors';
-import swaggerUi from 'swagger-ui-express';
+import * as path from "path";
+import * as fs from "fs";
+import cors from "cors";
+import swaggerUi from "swagger-ui-express";
 import express from "express";
 import RedisStore from "connect-redis";
 import session from "express-session";
@@ -21,7 +21,7 @@ import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
 
 import YAML from "yaml";
-const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", 'utf8'))
+const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", "utf8"));
 const app = express();
 
 // Rate limiting
@@ -110,6 +110,11 @@ if (app.get("env") !== "test") {
 }
 Api.initialize(app);
 Mailer.initialize(app);
+
+if (Configuration.get("user.account-creation.allow-only-whitelisted-email-domains")) {
+  log.info("Allowing only whitelisted domain names in user sign up.");
+  log.info("Allowed domains: %s", Configuration.get("user.account-creation.whitelisted-email-domains"));
+}
 
 app.listen(Configuration.get("system.app-port"), () => {
   log.info(

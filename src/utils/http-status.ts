@@ -18,6 +18,7 @@ export const errorMessages = {
   rateLimitError: "RateLimitError",
   conflict: "ResourceConflict",
   creationThrottled: "CreationThrottled",
+  badEmailDomain: "BadEmailDomain",
   invalidFile: "InvalidFile",
   banned: "Banned",
   unauthorized: "Unauthorized",

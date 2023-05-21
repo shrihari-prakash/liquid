@@ -419,6 +419,24 @@
     "relatedOptions": ["sendgrid.*"]
   },
   {
+    "name": "user.account-creation.allow-only-whitelisted-email-domains",
+    "displayName": "User Account Creation Allow Only Whitelisted Email Domains",
+    "envName": "USER_ACCOUNT_CREATION_ALLOW_ONLY_WHITELISTED_EMAIL_DOMAINS",
+    "description": "Specifies if account creation API should allow only the whitelisted email domains in email field.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["user.account-creation.whitelisted-email-domains"]
+  },
+  {
+    "name": "user.account-creation.whitelisted-email-domains",
+    "displayName": "User Account Creation Whitelisted Email Domains",
+    "envName": "USER_ACCOUNT_CREATION_WHITELITED_EMAIL_DOMAINS",
+    "description": "Comma separated list of domain names allowed for user sign up. Particularly useful to prevent users from using disposable emails.",
+    "type": "stringArray",
+    "default": "gmail.com,googlemail.com,outlook.com,live.com,live.fr,live.co.uk,live.nl,live.it,live.com.au,live.ca,hotmail.com,hotmail.co.uk,hotmail.fr,hotmail.it,hotmail.es,hotmail.de,yahoo.com,yahoo.fr,yahoo.co.uk,yahoo.com.br,yahoo.co.in,hotmail.de,rocketmail.com,yahoo.in,yahoo.ca,yahoo.com.au,yahoo.com.ar,yahoo.com.mx,yahoo.com.sg,mac.com,msn.com,icloud.com,mail.com,yandex.ru,proton.me,protonmail.com",
+    "relatedOptions": ["user.account-creation.allow-only-whitelisted-email-domains"]
+  },
+  {
     "name": "user.account-creation.enable-ip-based-throttle",
     "displayName": "User Account Creation Enable IP Based Throttle",
     "envName": "USER_ACCOUNT_CREATION_ENABLE_IP_BASED_THROTTLE",

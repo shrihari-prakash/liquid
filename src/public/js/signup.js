@@ -55,6 +55,9 @@ async function signup(event) {
       if (response.status === 400 && response.responseJSON.additionalInfo) {
         return onFieldError({ response, buttonText });
       }
+      if (response.status === 400 && response.responseJSON.error === "BadEmailDomain") {
+        return onSubmitError({ errorText: "Bad email domain", buttonText });
+      }
       if (response.status === 409) {
         return onSubmitError({ errorText: "Account already exists", buttonText });
       }
