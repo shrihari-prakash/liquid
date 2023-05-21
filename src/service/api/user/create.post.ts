@@ -60,6 +60,13 @@ const POST_Create = async (req: Request, res: Response) => {
     }
     const { username, firstName, lastName, email, password: passwordBody, phone, phoneCountryCode } = req.body;
     if (hasErrors(req, res)) return;
+    if (Configuration.get("user.account-creation.allow-only-whitelisted-email-domains")) {
+      const domain = email.replace(/.*@/, "");
+      const whitelistedEmailDomains = Configuration.get("user.account-creation.whitelisted-email-domains");
+      if (!whitelistedEmailDomains.includes(domain)) {
+        return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.badEmailDomain));
+      }
+    }
     if (phone && !phoneCountryCode) {
       const errors = [
         {
