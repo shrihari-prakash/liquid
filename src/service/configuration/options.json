@@ -410,13 +410,31 @@
     "default": true
   },
   {
-    "name": "user.require-email-verification",
-    "displayName": "User Creation Require Email Verification",
-    "envName": "USER_REQUIRE_EMAIL_VERIFICATION",
+    "name": "user.account-creation.require-email-verification",
+    "displayName": "User Account Creation Require Email Verification",
+    "envName": "USER_ACCOUNT_CREATION_REQUIRE_EMAIL_VERIFICATION",
     "description": "Specifies if email verification is required while signing up in the service. Also modify `general.requireEmailVerification` in your frontend app config.",
     "type": "boolean",
     "default": true,
     "relatedOptions": ["sendgrid.*"]
+  },
+  {
+    "name": "user.account-creation.enable-ip-based-throttle",
+    "displayName": "User Account Creation Enable IP Based Throttle",
+    "envName": "USER_ACCOUNT_CREATION_ENABLE_IP_BASED_THROTTLE",
+    "description": "Specifies if creating multiple accounts from the same IP should be throttled for a specified amount of time.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["user.account-creation.ip-based-throttle.window-size"]
+  },
+  {
+    "name": "user.account-creation.ip-based-throttle.window-size",
+    "displayName": "User Account Creation IP Based Throttle Window Size",
+    "envName": "USER_ACCOUNT_CREATION_IP_BASED_THROTTLE_WINDOW_SIZE",
+    "description": "Specifies the window size in seconds to throttle the account creation. Default is 24 hours.",
+    "type": "number",
+    "default": 86400,
+    "relatedOptions": ["user.account-creation.enable-ip-based-throttle"]
   },
   {
     "name": "user.profile.editable-fields",

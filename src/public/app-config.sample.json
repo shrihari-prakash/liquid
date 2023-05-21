@@ -2,7 +2,7 @@
   "oauth.client-id": "{{your_oauth_client_id}}",
   "oauth.redirect-uri": "{{your_oauth_redirect_uri}}",
 
-  "user.require-email-verification": true,
+  "user.account-creation.require-email-verification": true,
 
   "privilege.can-create-account": true,
   "privilege.can-reset-password": true,

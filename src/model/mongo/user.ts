@@ -132,6 +132,10 @@ const userSchema = {
     required: true,
     default: [],
   },
+  creationIp: {
+    type: String,
+    required: true,
+  },
 };
 
 const schemaInstance = new mongoose.Schema(userSchema, {
@@ -190,8 +194,11 @@ export type IUser = {
   deleted: boolean;
   deletedDate: Date;
   allowedAdminAPIs: string[];
+  creationIp: string;
   isFollowing?: boolean;
   requested?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export const IUserProjection = {
