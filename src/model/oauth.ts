@@ -8,6 +8,7 @@ import AuthorizationCodeModel from "./mongo/authorization-code";
 import ClientModel from "./mongo/client";
 import TokenModel from "./mongo/token";
 import UserModel from "./mongo/user";
+import Role from "../enum/role";
 
 interface Token {
   accessToken: string;
@@ -118,8 +119,12 @@ const OAuthModel = {
   saveToken: async (token: Token, client: Client, user: User) => {
     try {
       token.client = client;
-      // No need to store the full user as _id is resolved to full object while retrieving from cache/db.
-      token.user = { _id: user._id };
+      if (user.role !== Role.INTERNAL_CLIENT) {
+        // No need to store the full user as _id is resolved to full object while retrieving from cache/db.
+        token.user = { _id: user._id };
+      } else {
+        token.user = user;
+      }
       if (useTokenCache) {
         const serialized = JSON.stringify(token);
         await Redis.client.set(
@@ -153,7 +158,9 @@ const OAuthModel = {
         let cacheToken: any = await Redis.client.get(getPrefixedToken(accessToken));
         cacheToken = JSON.parse(cacheToken);
         if (!cacheToken) return null;
-        cacheToken.user = await getUserInfo(cacheToken.user._id);
+        if (cacheToken.user.role !== Role.INTERNAL_CLIENT) {
+          cacheToken.user = await getUserInfo(cacheToken.user._id);
+        }
         cacheToken.accessTokenExpiresAt = new Date(cacheToken.accessTokenExpiresAt);
         return cacheToken;
       }
@@ -173,7 +180,9 @@ const OAuthModel = {
       let cacheToken: any = await Redis.client.get(getPrefixedToken(refreshToken));
       cacheToken = JSON.parse(cacheToken);
       if (!cacheToken) return null;
-      cacheToken.user = await getUserInfo(cacheToken.user._id);
+      if (cacheToken.user.role !== Role.INTERNAL_CLIENT) {
+        cacheToken.user = await getUserInfo(cacheToken.user._id);
+      }
       cacheToken.refreshTokenExpiresAt = new Date(cacheToken.refreshTokenExpiresAt);
       log.debug("Refresh token retrieved from cache.");
       return cacheToken;
