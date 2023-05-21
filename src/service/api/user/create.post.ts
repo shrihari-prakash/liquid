@@ -14,6 +14,7 @@ import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { Configuration } from "../../../singleton/configuration";
+import moment from "moment";
 
 export const bcryptConfig = {
   salt: 10,
@@ -39,6 +40,24 @@ export const POST_CreateValidator = [
 
 const POST_Create = async (req: Request, res: Response) => {
   try {
+    if (Configuration.get("user.account-creation.enable-ip-based-throttle")) {
+      const ipResult = (await UserModel.findOne({
+        creationIp: req.ip,
+      }).exec()) as unknown as IUser;
+      if (ipResult && ipResult.creationIp === req.ip) {
+        const duration = moment.duration(moment().diff(moment(ipResult.createdAt)));
+        const difference = duration.asSeconds();
+        const window = Configuration.get("user.account-creation.ip-based-throttle.window-size");
+        if (difference <= window) {
+          log.info(
+            "Duplicate account creation for ip %s throttled. %s seconds left for lifting the throttle.",
+            req.ip,
+            window - difference
+          );
+          return res.status(statusCodes.tooManyRequests).json(new ErrorResponse(errorMessages.creationThrottled));
+        }
+      }
+    }
     const { username, firstName, lastName, email, password: passwordBody, phone, phoneCountryCode } = req.body;
     if (hasErrors(req, res)) return;
     if (phone && !phoneCountryCode) {
@@ -79,8 +98,9 @@ const POST_Create = async (req: Request, res: Response) => {
       email: email.toLowerCase(),
       role,
       password,
+      creationIp: req.ip,
     };
-    const shouldVerifyEmail = Configuration.get("user.require-email-verification");
+    const shouldVerifyEmail = Configuration.get("user.account-creation.require-email-verification");
     if (!shouldVerifyEmail) {
       toInsert.emailVerified = true;
     }
