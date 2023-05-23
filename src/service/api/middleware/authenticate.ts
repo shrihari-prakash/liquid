@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express";
+import { Request as OAuthRequest, Response as OAuthResponse } from "@node-oauth/oauth2-server";
+
 import Role from "../../../enum/role";
 import { OAuthServer } from "../../../singleton/oauth-server";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
@@ -32,5 +34,15 @@ const AuthenticateClient = async (_: Request, res: Response, next: NextFunction)
   }
 };
 
-export const DelegatedAuthFlow = [OAuthServer.server.authenticate, AuthenticateUser];
-export const ClientAuthFlow = [OAuthServer.server.authenticate, AuthenticateClient];
+const Authenticate = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const token = await OAuthServer.server.authenticate(new OAuthRequest(req), new OAuthResponse(res));
+    res.locals.oauth = { token: token };
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const DelegatedAuthFlow = [Authenticate, AuthenticateUser];
+export const ClientAuthFlow = [Authenticate, AuthenticateClient];

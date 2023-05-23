@@ -20,6 +20,7 @@ async function ALL__Token(req: Request, res: Response) {
       expires_in: Configuration.get("oauth.access-token-lifetime"),
       refresh_token: token.refreshToken,
     };
+    res.locals.oauth = { token: token };
     res.status(statusCodes.success).json(response);
   } catch (error: any) {
     if (!error.name) {

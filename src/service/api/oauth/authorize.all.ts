@@ -8,20 +8,21 @@ import { Configuration } from "../../../singleton/configuration";
 
 async function ALL__Authorize(req: Request, res: Response, next: NextFunction) {
   try {
-    const response = await OAuthServer.server.authorize(new OAuthRequest(req), new OAuthResponse(res), {
+    const code = await OAuthServer.server.authorize(new OAuthRequest(req), new OAuthResponse(res), {
       authenticateHandler: {
         handle: (req: Request) => {
           return req.session.user;
         },
       },
     });
+    res.locals.oauth = { code: code };
     if (Configuration.get("oauth.authorization.enable-redirect")) {
       const url = new URL(req.query.redirect_uri as string);
-      url.searchParams.set("code", response.authorizationCode);
+      url.searchParams.set("code", code.authorizationCode);
       url.searchParams.set("state", (req.query.state as string) || uuidv4());
       return res.redirect(url.toString());
     } else {
-      return res.json({ code: response.authorizationCode, state: (req.query.state as string) || uuidv4() });
+      return res.json({ code: code.authorizationCode, state: (req.query.state as string) || uuidv4() });
     }
   } catch (error: any) {
     if (!error.name) {
