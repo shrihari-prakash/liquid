@@ -101,6 +101,11 @@ const userSchema = {
     type: String,
     required: false,
   },
+  credits: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   isActive: {
     type: Boolean,
     required: true,
@@ -131,6 +136,10 @@ const userSchema = {
     type: Array,
     required: true,
     default: [],
+  },
+  creationIp: {
+    type: String,
+    required: true,
   },
 };
 
@@ -179,6 +188,7 @@ export type IUser = {
   isSubscribed: boolean;
   subscriptionExpiry: Date;
   subscriptionTier: string;
+  credits: number;
   isActive: boolean;
   deactivateDate: Date;
   isBanned: boolean;
@@ -190,8 +200,11 @@ export type IUser = {
   deleted: boolean;
   deletedDate: Date;
   allowedAdminAPIs: string[];
+  creationIp: string;
   isFollowing?: boolean;
   requested?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export const IUserProjection = {
@@ -224,6 +237,7 @@ export const IUserProjection = {
   isSubscribed: 1,
   subscriptionTier: 1,
   subscriptionExpiry: 1,
+  credits: 1
 };
 
 export default UserModel;

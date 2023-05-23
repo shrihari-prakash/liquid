@@ -10,6 +10,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
 import { hasErrors } from "../../../../utils/api";
 import { Configuration } from "../../../../singleton/configuration";
+import { flushUserInfoFromRedis } from "../../../../model/oauth";
 
 export const POST_SubscriptionValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
@@ -58,6 +59,7 @@ const POST_Subscription = async (req: Request, res: Response) => {
     };
     await UserModel.updateOne({ _id: target }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
+    flushUserInfoFromRedis(target);
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

@@ -10,26 +10,38 @@ import UserModel from "../../../../model/mongo/user";
 import { hasErrors } from "../../../../utils/api";
 import { flushUserInfoFromRedis } from "../../../../model/oauth";
 
-export const POST_RestrictValidator = [
+const Operations = {
+  INCREMENT: "increment",
+  DECREMENT: "decrement",
+  SET: "set",
+};
+
+export const POST_CreditsValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
-  body("state").exists().isBoolean(),
-  body("reason").optional().isString().isLength({ min: 8, max: 128 }),
+  body("type").exists().isString().isIn([Operations.INCREMENT, Operations.DECREMENT, Operations.SET]),
+  body("value").exists().isInt({ min: 0 }),
 ];
 
-const POST_Restrict = async (req: Request, res: Response) => {
+const POST_Credits = async (req: Request, res: Response) => {
   if (hasErrors(req, res)) return;
   try {
+    const query: any = {};
     const target = req.body.target;
-    const state = req.body.state;
-    const reason = req.body.reason;
-    const query = {
-      $set: {
-        isRestricted: state,
-        restrictedDate: new Date(new Date().toUTCString()),
-        restrictedReason: reason || null,
-      },
-    };
-    await UserModel.updateOne({ _id: target }, query);
+    let value;
+    switch (req.body.type) {
+      case Operations.INCREMENT:
+        value = req.body.value;
+        query.$inc = { credits: value };
+        break;
+      case Operations.DECREMENT:
+        value = req.body.value;
+        query.$inc = { credits: -value };
+        break;
+      case Operations.SET:
+        value = req.body.value;
+        query.$set = { credits: value };
+    }
+    await UserModel.findByIdAndUpdate(target, query);
     res.status(statusCodes.success).json(new SuccessResponse());
     flushUserInfoFromRedis(target);
   } catch (err) {
@@ -38,4 +50,4 @@ const POST_Restrict = async (req: Request, res: Response) => {
   }
 };
 
-export default POST_Restrict;
+export default POST_Credits;

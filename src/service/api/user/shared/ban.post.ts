@@ -8,6 +8,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api";
+import { flushUserInfoFromRedis } from "../../../../model/oauth";
 
 export const POST_BanValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
@@ -26,6 +27,7 @@ const POST_Ban = async (req: Request, res: Response) => {
     };
     await UserModel.updateOne({ _id: target }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
+    flushUserInfoFromRedis(target);
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

@@ -13,6 +13,7 @@ import Role from "../../../../enum/role";
 import { bcryptConfig } from "../create.post";
 import { hasErrors } from "../../../../utils/api";
 import { PATCH_MeValidator } from "../me.patch";
+import { flushUserInfoFromRedis } from "../../../../model/oauth";
 
 export const PATCH_UserValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
@@ -77,6 +78,7 @@ const PATCH_User = async (req: Request, res: Response) => {
     }
     await UserModel.updateOne({ _id: userId }, { $set: { ...req.body } }).exec();
     res.status(statusCodes.success).json(new SuccessResponse());
+    flushUserInfoFromRedis(userId);
   } catch (err: any) {
     log.error(err);
     if (err?.name === "MongoServerError" && err?.code === 11000) {

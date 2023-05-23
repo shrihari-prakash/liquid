@@ -8,6 +8,7 @@ import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscri
 import POST_Access, { POST_AccessValidator } from "./access.post";
 import POST_Verify, { POST_VerifyValidator } from "./verify.post";
 import POST_Create, { POST_CreateValidator } from "../shared/create.post";
+import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post";
 import GET_List from "../shared/list.get";
 import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_EditableFields from "./editable-fields.get";
@@ -20,6 +21,7 @@ AdminApiRouter.post("/access", ...DelegatedAuthFlow, AuthorizeAdmin, POST_Access
 AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, AuthorizeAdmin, GET_EditableFields);
 AdminApiRouter.patch("/user", ...DelegatedAuthFlow, AuthorizeAdmin, PATCH_UserValidator, PATCH_User);
 AdminApiRouter.post("/ban", ...DelegatedAuthFlow, AuthorizeAdmin, POST_BanValidator, POST_Ban);
+AdminApiRouter.post("/credits", ...DelegatedAuthFlow, AuthorizeAdmin, POST_CreditsValidator, POST_Credits);
 AdminApiRouter.post("/restrict", ...DelegatedAuthFlow, AuthorizeAdmin, POST_RestrictValidator, POST_Restrict);
 AdminApiRouter.post("/verify", ...DelegatedAuthFlow, AuthorizeAdmin, POST_VerifyValidator, POST_Verify);
 AdminApiRouter.post(

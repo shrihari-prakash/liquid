@@ -40,7 +40,7 @@ async function signup(event) {
   submit.disabled = true;
   $.post("/user/create", user)
     .done(async function () {
-      if (await getOption("user.require-email-verification")) {
+      if (await getOption("user.account-creation.require-email-verification")) {
         window.location = `/verify-account${window.location.search}`;
       } else {
         window.location = `/login${window.location.search}`
@@ -55,8 +55,14 @@ async function signup(event) {
       if (response.status === 400 && response.responseJSON.additionalInfo) {
         return onFieldError({ response, buttonText });
       }
+      if (response.status === 400 && response.responseJSON.error === "BadEmailDomain") {
+        return onSubmitError({ errorText: "Bad email domain", buttonText });
+      }
       if (response.status === 409) {
         return onSubmitError({ errorText: "Account already exists", buttonText });
+      }
+      if (response.status === 429) {
+        return onSubmitError({ errorText: "Account creation limited", buttonText });
       }
       onSubmitError({ errorText: "Signup error", buttonText });
     })
