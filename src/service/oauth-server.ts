@@ -1,15 +1,16 @@
 import { Logger } from "../singleton/logger";
 const log = Logger.getLogger().child({ from: "oauth-service" });
 
-import ExpressOAuthServer from "express-oauth-server";
+import OAuth2Server from '@node-oauth/oauth2-server';
+
 import OAuthModel from "../model/oauth";
 import { Configuration } from "../singleton/configuration";
 
 class OAuthServer {
-  server: ExpressOAuthServer;
+  server: OAuth2Server;
   constructor() {
     log.info("Initializing OAuth server...");
-    this.server = new ExpressOAuthServer({
+    this.server = new OAuth2Server({
       model: OAuthModel,
       authorizationCodeLifetime: Configuration.get("oauth.authorization-code-lifetime") as number,
       accessTokenLifetime: Configuration.get("oauth.access-token-lifetime") as number,
