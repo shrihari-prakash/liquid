@@ -13,6 +13,7 @@ import { Logger } from "../src/singleton/logger";
 
 process.env.NODE_ENV = "test";
 process.env.CAN_USE_CACHE = "false";
+process.env.USER_ACCOUNT_CREATION_ALLOW_ONLY_WHITELISTED_EMAIL_DOMAINS = "false";
 
 Logger.logger.level = "error";
 
