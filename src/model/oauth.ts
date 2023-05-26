@@ -1,13 +1,15 @@
 import { Logger } from "../singleton/logger";
 const log = Logger.getLogger().child({ from: "oauth-model" });
 
+import bcrypt from "bcrypt";
+
 import { Redis } from "../singleton/redis";
 import { Configuration } from "../singleton/configuration";
 
 import AuthorizationCodeModel from "./mongo/authorization-code";
 import ClientModel from "./mongo/client";
 import TokenModel from "./mongo/token";
-import UserModel from "./mongo/user";
+import UserModel, { IUser } from "./mongo/user";
 import Role from "../enum/role";
 
 interface Token {
@@ -105,6 +107,14 @@ const OAuthModel = {
       log.error(err);
       throw err;
     }
+  },
+
+  getUser: async function (username: string, password: string) {
+    const dbUser = await UserModel.findOne({ username }, ["+password"]).lean() as IUser;
+    const isPasswordValid = await bcrypt.compare(password, dbUser.password || "");
+    if (!isPasswordValid)
+      throw new Error(`Invalid password`);
+    return dbUser as unknown as Token;
   },
 
   getUserFromClient: (client: Client) => {
