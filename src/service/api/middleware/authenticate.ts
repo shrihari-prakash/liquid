@@ -16,7 +16,7 @@ const AuthenticateUser = async (_: Request, res: Response, next: NextFunction) =
     return next();
   } catch (err) {
     res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
-    return next(new Error(errorMessages.unauthorized));
+    return;
   }
 };
 
@@ -30,7 +30,7 @@ const AuthenticateClient = async (_: Request, res: Response, next: NextFunction)
     return next();
   } catch (err) {
     res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
-    return next(new Error(errorMessages.unauthorized));
+    return;
   }
 };
 
@@ -39,8 +39,9 @@ const Authenticate = async (req: Request, res: Response, next: NextFunction) => 
     const token = await OAuthServer.server.authenticate(new OAuthRequest(req), new OAuthResponse(res));
     res.locals.oauth = { token: token };
     next();
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    return;
   }
 };
 
