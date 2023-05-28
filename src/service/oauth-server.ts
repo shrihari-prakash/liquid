@@ -1,7 +1,7 @@
 import { Logger } from "../singleton/logger";
 const log = Logger.getLogger().child({ from: "oauth-service" });
 
-import ExpressOAuthServer from "express-oauth-server";
+import ExpressOAuthServer from "@node-oauth/express-oauth-server";
 import OAuthModel from "../model/oauth";
 import { Configuration } from "../singleton/configuration";
 
