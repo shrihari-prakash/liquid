@@ -4,6 +4,7 @@ const log = Logger.getLogger().child({ from: "user/create" });
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { body } from "express-validator";
+import moment from "moment";
 
 import UserModel, { IUser } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
@@ -14,7 +15,7 @@ import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { Configuration } from "../../../singleton/configuration";
-import moment from "moment";
+import { sanitizeEmailAddress } from "../../../utils/email";
 
 export const bcryptConfig = {
   salt: 10,
@@ -80,7 +81,7 @@ const POST_Create = async (req: Request, res: Response) => {
         .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
     }
     const existingUser = (await UserModel.findOne({
-      $or: [{ email: email.toLowerCase() }, { username }],
+      $or: [{ email: sanitizeEmailAddress(email) }, { username }],
     }).exec()) as unknown as IUser;
     if (existingUser) {
       const duplicateFields = [];
@@ -102,7 +103,7 @@ const POST_Create = async (req: Request, res: Response) => {
       username,
       firstName,
       lastName,
-      email: email.toLowerCase(),
+      email: sanitizeEmailAddress(email),
       role,
       password,
       creationIp: req.ip,

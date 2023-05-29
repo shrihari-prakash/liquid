@@ -12,6 +12,7 @@ import { hasErrors } from "../../../utils/api";
 import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
+import { sanitizeEmailAddress } from "../../../utils/email";
 
 export const POST_LoginValidator = [
   body("username")
@@ -30,7 +31,7 @@ const POST_Login = async (req: Request, res: Response) => {
     const select = ["+password"];
     const query: any = {};
     if (email) {
-      query.email = email.toLowerCase();
+      query.email = sanitizeEmailAddress(email);
     } else {
       query.username = username;
     }
