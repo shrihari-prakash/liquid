@@ -445,10 +445,10 @@
     "relatedOptions": ["user.account-creation.allow-only-whitelisted-email-domains"]
   },
   {
-    "name": "user.account-creation.sanitize-gmail-address",
-    "displayName": "User Account Creation Sanitize Gmail Address",
-    "envName": "USER_ACCOUNT_CREATION_SANITIZE_GMAIL_ADDRESS",
-    "description": "Specifies if Gmail addresses should be sanitized before writing and reading from database. This prevents users from creating duplicate accounts by inserting dots in their email. Check https://support.google.com/mail/answer/7436150 for more info.",
+    "name": "user.account-creation.sanitize-gmail-addresses",
+    "displayName": "User Account Creation Sanitize Gmail Addresses",
+    "envName": "USER_ACCOUNT_CREATION_SANITIZE_GMAIL_ADDRESSES",
+    "description": "Specifies if Gmail addresses should be sanitized before writing and reading from the database. This prevents users from creating duplicate accounts by inserting dots in their email. Check https://support.google.com/mail/answer/7436150 for more info.",
     "type": "boolean",
     "default": true
   },
