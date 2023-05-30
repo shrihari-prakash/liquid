@@ -7,7 +7,7 @@ $(async function () {
     $("body").empty();
   }
   if (!await getOption("privilege.can-use-phone-number")) {
-    $(".phone-group").hide();
+    $(".phone-group").remove();
   } else {
     const onPhoneChange = function () {
       $("#width_tmp_option").html($('#phoneCountryCode option:selected').text());
