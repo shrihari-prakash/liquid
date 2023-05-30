@@ -81,6 +81,13 @@
   overflow: hidden;
 }
 
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overscroll-behavior: contain;
+}
+
 body {
   font-family: "Arial", sans-serif;
   background-color: var(--background-color);
@@ -97,6 +104,7 @@ a {
   -o-transition: 0.3s all ease;
   transition: 0.3s all ease;
 }
+
 a:hover {
   text-decoration: none !important;
 }
@@ -159,7 +167,12 @@ input[data-autocompleted] {
 
 .page,
 .page .container > .row {
-  height: 100vh;
+  height: 100%;
+}
+
+.page .contents,
+.page .contents .container {
+  height: 100%;
 }
 
 .page .bg {
@@ -209,13 +222,27 @@ input[data-autocompleted] {
   .page .bg {
     width: 100%;
   }
+
   .page .bg:first-child {
     display: none;
   }
+
   .app-icon-mini {
     position: static;
-    margin-left: 16px;
-    margin-top: 16px;
+    padding-left: 16px;
+    padding-top: 16px;
+  }
+
+  .container {
+    padding-top: 15px;
+  }
+
+  .container form {
+    padding-bottom: 15px;
+  }
+
+  .page {
+    height: calc(100% - 48px);
   }
 }
 .page .contents .form-group,
@@ -225,17 +252,20 @@ input[data-autocompleted] {
   padding: var(--form-input-padding);
   border-bottom: none;
 }
+
 .page .contents .form-group.first,
 .page .bg .form-group.first {
   border-top-left-radius: var(--form-input-border-radius);
   border-top-right-radius: var(--form-input-border-radius);
 }
+
 .page .contents .form-group.last,
 .page .bg .form-group.last {
   border-bottom: 1px solid var(--border-color);
   border-bottom-left-radius: var(--form-input-border-radius);
   border-bottom-right-radius: var(--form-input-border-radius);
 }
+
 .page .contents .form-group label,
 .page .bg .form-group label {
   font-size: 12px;
@@ -244,6 +274,7 @@ input[data-autocompleted] {
   color: var(--text-lighter-color);
   user-select: none;
 }
+
 .page .contents .form-control,
 .page .bg .form-control {
   border: none;
@@ -251,6 +282,7 @@ input[data-autocompleted] {
   font-size: 20px;
   border-radius: 0;
 }
+
 .page .contents .form-control:active,
 .page .contents .form-control:focus,
 .page .bg .form-control:active,
@@ -497,3 +529,4 @@ select {
     transform: translate3d(4px, 0, 0);
   }
 }
+
