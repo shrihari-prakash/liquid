@@ -196,7 +196,24 @@ function onFieldError({ response, buttonText }) {
 }
 
 function makeImage(src, alt) {
-  return `<img alt="${alt}" src="${src}" />`;
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.src = src;
+    image.alt = alt;
+    if (image.complete) {
+      resolve(image);
+      image.onload = function () { };
+    }
+    else {
+      image.onload = function () {
+        resolve(image);
+        // clear onLoad, IE behaves irratically with animated gifs otherwise
+        image.onload = function () { };
+      }
+      image.onerror = reject
+    }
+    return image;
+  })
 }
 
 async function renderContent() {
@@ -232,16 +249,26 @@ async function renderContent() {
 async function useImages() {
   const miniIcon = $(".app-icon-mini");
   const headerIcon = $(".app-name");
-  if (STORE.theme === "light") {
-    const miniIconLight = await getOption("assets.mini-icon-light");
-    const headerIconLight = await getOption("assets.header-icon-light");
-    if (miniIconLight) miniIcon.html(makeImage(miniIconLight, "App Icon"));
-    if (headerIconLight) headerIcon.html(makeImage(headerIconLight), "App Icon");
-  } else if (STORE.theme === "dark") {
-    const miniIconDark = await getOption("assets.mini-icon-dark");
-    const headerIconDark = await getOption("assets.header-icon-dark");
-    if (miniIconDark) miniIcon.html(makeImage(miniIconDark, "App Icon"));
-    if (headerIconDark) headerIcon.html(makeImage(headerIconDark, "App Icon"));
+  const miniIconLoader = $("<div><div class='spinner'></div></div>").appendTo(miniIcon);
+  miniIconLoader.css({
+    height: 32,
+    width: 32,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  });
+  const isLightTheme = STORE.theme === "light";
+  const miniIconLight = await getOption(isLightTheme ? "assets.mini-icon-light" : "assets.mini-icon-dark");
+  const headerIconLight = await getOption(isLightTheme ? "assets.header-icon-light" : "assets.header-icon-dark");
+  if (miniIconLight) {
+    const miniIconImage = await makeImage(miniIconLight, "App Icon");
+    miniIcon.empty();
+    miniIcon.append(miniIconImage);
+  };
+  if (headerIconLight) {
+    const headerIconImage = await makeImage(headerIconLight, "App Icon");
+    headerIcon.empty();
+    headerIcon.append(headerIconImage);
   }
 }
 
