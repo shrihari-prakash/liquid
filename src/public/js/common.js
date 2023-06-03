@@ -217,7 +217,10 @@ function makeImage(src, alt) {
 }
 
 async function renderContent() {
-  $(".app-name, .app-name-titlebar").text(await getOption("content.app-name"));
+  if (!await getOption(`assets.header-icon-${STORE.theme}`)) {
+    $(".app-name").text(await getOption("content.app-name"));
+  }
+  $(".app-name-titlebar").text(await getOption("content.app-name"));
   $(".app-tagline") && $(".app-tagline").text(await getOption("content.app-tagline"));
   $(".title1").text(await getOption("content.sidebar.intro.title1"));
   $(".title2").text(await getOption("content.sidebar.intro.title2"));
@@ -249,26 +252,33 @@ async function renderContent() {
 async function useImages() {
   const miniIcon = $(".app-icon-mini");
   const headerIcon = $(".app-name");
-  const miniIconLoader = $("<div><div class='spinner'></div></div>").appendTo(miniIcon);
-  miniIconLoader.css({
+  const loaderStyles = {
     height: 32,
     width: 32,
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
-  });
-  const isLightTheme = STORE.theme === "light";
-  const miniIconLight = await getOption(isLightTheme ? "assets.mini-icon-light" : "assets.mini-icon-dark");
-  const headerIconLight = await getOption(isLightTheme ? "assets.header-icon-light" : "assets.header-icon-dark");
-  if (miniIconLight) {
-    const miniIconImage = await makeImage(miniIconLight, "App Icon");
+  };
+  const miniIconSrc = await getOption(`assets.mini-icon-${STORE.theme}`);
+  const headerIconSrc = await getOption(`assets.header-icon-${STORE.theme}`);
+  if (miniIconSrc) {
+    const miniIconLoader = $("<div><div class='spinner'></div></div>").appendTo(miniIcon);
+    miniIconLoader.css(loaderStyles);
+    const miniIconImage = await makeImage(miniIconSrc, "App Icon");
     miniIcon.empty();
     miniIcon.append(miniIconImage);
   };
-  if (headerIconLight) {
-    const headerIconImage = await makeImage(headerIconLight, "App Icon");
+  if (headerIconSrc) {
+    headerIcon.empty();
+    const headerIconLoader =
+      $("<div class='header-spinner-container'><div class='spinner'></div></div>")
+        .appendTo(headerIcon);
+    headerIconLoader.css(loaderStyles);
+    headerIcon.parent().css({ display: 'flex', alignItems: 'center' });
+    const headerIconImage = await makeImage(headerIconSrc, "App Icon");
     headerIcon.empty();
     headerIcon.append(headerIconImage);
+    headerIcon.parent().css({ display: 'block' });
   }
 }
 

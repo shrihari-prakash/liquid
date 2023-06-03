@@ -479,6 +479,15 @@ select {
   width: 16px;
 }
 
+.app-name .spinner {
+  height: 16px;
+  width: 16px;
+}
+
+.app-name .header-spinner-container {
+  margin-left: 10px;
+}
+
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
