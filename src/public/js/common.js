@@ -249,6 +249,29 @@ async function renderContent() {
   useImages();
 }
 
+async function renderMiniIcon(miniIcon, miniIconSrc, loaderStyles) {
+  if (!miniIconSrc) return;
+  const miniIconLoader = $("<div><div class='spinner' /></div>").appendTo(miniIcon);
+  miniIconLoader.css(loaderStyles);
+  const miniIconImage = await makeImage(miniIconSrc, "App Icon");
+  miniIcon.empty();
+  miniIcon.append(miniIconImage);
+}
+
+async function renderHeaderIcon(headerIcon, headerIconSrc, loaderStyles) {
+  if (!headerIconSrc) return;
+  headerIcon.empty();
+  const headerIconLoader =
+    $("<div><div class='spinner' /></div>")
+      .appendTo(headerIcon);
+  headerIconLoader.css(loaderStyles);
+  headerIcon.parent().css({ display: 'flex', alignItems: 'center' });
+  const headerIconImage = await makeImage(headerIconSrc, "App Icon");
+  headerIcon.empty();
+  headerIcon.append(headerIconImage);
+  headerIcon.parent().css({ display: 'block' });
+}
+
 async function useImages() {
   const miniIcon = $(".app-icon-mini");
   const headerIcon = $(".app-name");
@@ -261,25 +284,8 @@ async function useImages() {
   };
   const miniIconSrc = await getOption(`assets.mini-icon-${STORE.theme}`);
   const headerIconSrc = await getOption(`assets.header-icon-${STORE.theme}`);
-  if (miniIconSrc) {
-    const miniIconLoader = $("<div><div class='spinner'></div></div>").appendTo(miniIcon);
-    miniIconLoader.css(loaderStyles);
-    const miniIconImage = await makeImage(miniIconSrc, "App Icon");
-    miniIcon.empty();
-    miniIcon.append(miniIconImage);
-  };
-  if (headerIconSrc) {
-    headerIcon.empty();
-    const headerIconLoader =
-      $("<div class='header-spinner-container'><div class='spinner'></div></div>")
-        .appendTo(headerIcon);
-    headerIconLoader.css(loaderStyles);
-    headerIcon.parent().css({ display: 'flex', alignItems: 'center' });
-    const headerIconImage = await makeImage(headerIconSrc, "App Icon");
-    headerIcon.empty();
-    headerIcon.append(headerIconImage);
-    headerIcon.parent().css({ display: 'block' });
-  }
+  renderMiniIcon(miniIcon, miniIconSrc, loaderStyles);
+  renderHeaderIcon(headerIcon, headerIconSrc, loaderStyles);
 }
 
 async function useTitle(title) {
