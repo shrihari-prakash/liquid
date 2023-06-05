@@ -61,10 +61,10 @@
     "name": "system.static.use-relative-path",
     "displayName": "Static Use Relative Path",
     "envName": "SYSTEM_STATIC_USE_RELATIVE_PATH",
-    "description": "Specifies if the path in options `system.static-folder` and `system.static.default-page` are `relative` or `absolute`.",
+    "description": "Specifies if the path in option `system.static-folder` is `relative`.",
     "type": "boolean",
     "default": true,
-    "relatedOptions": ["system.static-folder", "system.static.default-page"]
+    "relatedOptions": ["system.static-folder"]
   },
   {
     "name": "system.static-folder",
@@ -73,22 +73,13 @@
     "description": "Specifies the name of the folder that contains static HTML files. For example, if you have a file named login.html inside the folder named static in src, navigating to your-domain.com/login will render login.html.",
     "type": "string",
     "default": "public",
-    "relatedOptions": ["system.static.use-relative-path", "system.static.default-page"]
-  },
-  {
-    "name": "system.static.default-page",
-    "displayName": "Default Static Page",
-    "envName": "SYSTEM_STATIC_DEFAULT_PAGE",
-    "description": "Specifies the name of the HTML file that renders in the application's root URL.",
-    "type": "string",
-    "default": "public/login.html",
-    "relatedOptions": ["system.static.use-relative-path", "system.static-folder"]
+    "relatedOptions": ["system.static.use-relative-path"]
   },
   {
     "name": "system.static.app-config-absolute-path",
     "displayName": "Static App Config Absolute Path",
     "envName": "SYSTEM_STATIC_APP_CONFIG_ABSOLUTE_PATH",
-    "description": "Specifies the absolute path for frontend configuration file. If not speficied 'src/public/app-config.json' is used. You usually don't need to touch this unless your hosting provider limits you from placing custom files inside a sub folder.",
+    "description": "Specifies the absolute path for frontend configuration file. If not speficied 'app-config.json' in src folder is used.",
     "type": "string"
   },
   {

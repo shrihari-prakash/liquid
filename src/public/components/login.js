@@ -3,7 +3,7 @@ import { ThemeContext } from "../context/theme.js";
 import { isEmail, useTitle, uuidv4 } from "../utils/utils.js";
 import Layout from "./layout.js";
 
-function Login() {
+export default function Login() {
   const submitButtonText = "Login";
 
   const configuration = React.useContext(ConfigurationContext);
@@ -140,7 +140,3 @@ function Login() {
     </form>
   );
 }
-
-const domContainer = document.querySelector("#root");
-const root = ReactDOM.createRoot(domContainer);
-root.render(React.createElement(Layout, {}, React.createElement(Login)));

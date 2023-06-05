@@ -23,10 +23,12 @@ export default function Layout({ children }) {
   }, []);
 
   React.useEffect(() => {
-    if (!configuration && theme === "light") {
-      changeToLightVariable("--spinner-background-color");
-      changeToLightVariable("--spinner-primary-color");
-      changeToLightVariable("--spinner-secondary-color");
+    if (!configuration) {
+      if (theme === "light") {
+        changeToLightVariable("--spinner-background-color");
+        changeToLightVariable("--spinner-primary-color");
+        changeToLightVariable("--spinner-secondary-color");
+      }
       return;
     }
 

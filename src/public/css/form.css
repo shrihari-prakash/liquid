@@ -77,6 +77,22 @@ input[data-autocompleted] {
   background-color: transparent !important;
 }
 
+.dropdown {
+  color: var(--text-color);
+  background-color: transparent !important;
+  border: none;
+  font-size: 20px;
+  width: "max-content";
+}
+
+.dropdown:focus {
+  outline: none;
+}
+
+.dropdown option {
+  color: initial;
+}
+
 .page-links {
   width: 100%;
   display: flex;

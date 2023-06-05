@@ -81,6 +81,14 @@ h3 {
   align-items: center;
 }
 
+.flex {
+  display: flex;
+}
+
+.spacer-bottom {
+  margin-bottom: 1.5rem;
+}
+
 .layout {
   height: 100%;
   width: 100%;

@@ -38,40 +38,6 @@ if (Configuration.get("system.stats.enable-request-counting")) {
   });
 }
 
-// Static files
-const staticFolder = Configuration.get("system.static.use-relative-path")
-  ? path.join(__dirname, Configuration.get("system.static-folder"))
-  : Configuration.get("system.static-folder");
-app.use(
-  "/",
-  express.static(staticFolder, {
-    index: false,
-    extensions: ["html"],
-  })
-);
-log.info("Static folder loaded: %s", staticFolder);
-app.get("/", function (_, res) {
-  const defaultPage = Configuration.get("system.static.use-relative-path")
-    ? path.join(__dirname, Configuration.get("system.static.default-page"))
-    : Configuration.get("system.static.default-page");
-  res.sendFile(defaultPage);
-});
-const appConfigAbsolutePath = Configuration.get("system.static.app-config-absolute-path");
-if (appConfigAbsolutePath) {
-  app.get("/app-config.json", function (_, res) {
-    res.sendFile(appConfigAbsolutePath);
-  });
-} else if (!fs.existsSync(path.join(__dirname, "/public/app-config.json"))) {
-  const source = path.join(__dirname, "/public/app-config.sample.json");
-  const target = path.join(__dirname, "/public/app-config.json");
-  fs.copyFileSync(source, target);
-  log.warn(
-    "Frontend config was auto generated. You will still need to manually configure OAuth based options in `public/app-config.json`"
-  );
-}
-if (Configuration.get("system.enable-swagger") || app.get("env") !== "production") {
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -110,6 +76,42 @@ if (app.get("env") !== "test") {
 }
 Api.initialize(app);
 Mailer.initialize(app);
+
+// UI
+const staticFolder = Configuration.get("system.static.use-relative-path")
+  ? path.join(__dirname, Configuration.get("system.static-folder"))
+  : Configuration.get("system.static-folder");
+app.use(
+  "/",
+  express.static(staticFolder, {
+    index: false,
+    extensions: ["html"],
+  })
+);
+const appConfigAbsolutePath = Configuration.get("system.static.app-config-absolute-path");
+if (appConfigAbsolutePath) {
+  app.get("/app-config.json", function (_, res) {
+    res.sendFile(appConfigAbsolutePath);
+  });
+} else {
+  const localAppConfigPath = path.join(__dirname, "app-config.json");
+  if (!fs.existsSync(localAppConfigPath)) {
+    const source = path.join(__dirname, "app-config.sample.json");
+    const target = localAppConfigPath;
+    fs.copyFileSync(source, target);
+  }
+  app.get("/app-config.json", function (_, res) {
+    res.sendFile(localAppConfigPath);
+  });
+  log.warn("Frontend config was not found. Please configure option `system.static.app-config-absolute-path`");
+}
+if (Configuration.get("system.enable-swagger") || app.get("env") !== "production") {
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
+app.all("*", function (_, res) {
+  const root = path.join(__dirname, "/public/index.html");
+  res.sendFile(root);
+});
 
 if (Configuration.get("user.account-creation.allow-only-whitelisted-email-domains")) {
   log.info("Allowing only whitelisted domain names in user sign up.");
