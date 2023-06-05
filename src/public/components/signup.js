@@ -1,8 +1,7 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
 import { countryCodes } from "../utils/country-codes.js";
-import { isEmail, useTitle, uuidv4 } from "../utils/utils.js";
-import Layout from "./layout.js";
+import { useTitle } from "../utils/utils.js";
 
 export default function SignUp() {
   const submitButtonText = "Create Account";
@@ -17,7 +16,6 @@ export default function SignUp() {
   const countryCodeDummyRef = React.useRef(null);
 
   const appName = configuration["content.app-name"];
-  const favicon = configuration["assets.favicon-uri"];
 
   React.useEffect(() => useTitle(configuration["content.app-name"], "Sign Up"), []);
 

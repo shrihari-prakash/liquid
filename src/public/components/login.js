@@ -1,7 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
 import { isEmail, useTitle, uuidv4 } from "../utils/utils.js";
-import Layout from "./layout.js";
 
 export default function Login() {
   const submitButtonText = "Login";
@@ -14,7 +13,6 @@ export default function Login() {
   const [submitting, setSubmitting] = React.useState(false);
 
   const appName = configuration["content.app-name"];
-  const favicon = configuration["assets.favicon-uri"];
 
   React.useEffect(() => useTitle(configuration["content.app-name"], "Login"), []);
 

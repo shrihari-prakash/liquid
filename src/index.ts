@@ -21,7 +21,7 @@ import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
 
 import YAML from "yaml";
-const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", "utf8"));
+
 const app = express();
 
 // Rate limiting
@@ -106,6 +106,7 @@ if (appConfigAbsolutePath) {
   log.warn("Frontend config was not found. Please configure option `system.static.app-config-absolute-path`");
 }
 if (Configuration.get("system.enable-swagger") || app.get("env") !== "production") {
+  const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", "utf8"));
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 app.all("*", function (_, res) {

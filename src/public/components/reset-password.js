@@ -1,20 +1,14 @@
 import { ConfigurationContext } from "../context/configuration.js";
-import { ThemeContext } from "../context/theme.js";
-import { isEmail, useTitle, uuidv4 } from "../utils/utils.js";
-import Layout from "./layout.js";
+import { useTitle } from "../utils/utils.js";
 
 export default function ResetPassword() {
     const submitButtonText = "Change Password";
 
     const configuration = React.useContext(ConfigurationContext);
-    const theme = React.useContext(ThemeContext);
 
     const [buttonText, setButtonText] = React.useState(submitButtonText);
     const [hasError, setHasError] = React.useState(false);
     const [submitting, setSubmitting] = React.useState(false);
-
-    const appName = configuration["content.app-name"];
-    const favicon = configuration["assets.favicon-uri"];
 
     React.useEffect(() => useTitle(configuration["content.app-name"], "Reset your password"), []);
 
