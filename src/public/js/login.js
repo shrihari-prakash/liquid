@@ -1,4 +1,5 @@
-$(async function () {
+
+/* $(async function () {
   useTitle("Login");
   let form = document.getElementById("login-form");
   form.addEventListener("submit", login, true);
@@ -53,3 +54,5 @@ function login(event) {
       submit.disabled = false;
     });
 }
+ */
+

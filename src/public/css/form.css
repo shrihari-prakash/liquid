@@ -1,0 +1,98 @@
+.form {
+  position: relative;
+  width: 100%;
+  padding: 15px;
+  width: 100%;
+  max-width: 45%;
+}
+
+@media (max-width: 1199.99px) and (orientation: portrait) {
+  .form {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+.form-group {
+  margin-bottom: 0;
+  border: 1px solid var(--border-color);
+  padding: 15px;
+  border-bottom: none;
+}
+
+.form-group.first {
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.form-group.last {
+  border-bottom: 1px solid var(--border-color);
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+.form-group label {
+  font-size: 12px;
+  display: block;
+  margin-bottom: 0;
+  color: var(--text-lighter-color);
+  user-select: none;
+}
+
+.form-control {
+  margin: 0;
+  width: 100%;
+  border: none;
+  padding: 0;
+  font-size: 20px;
+  font-family: inherit;
+  border-radius: 0;
+  height: calc(1.5em + 0.75rem + 2px);
+}
+
+.form-control:active,
+.form-control:focus,
+.form-control:active,
+.form-control:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.form-control,
+.form-control:focus {
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+.form-control::placeholder {
+  color: var(--text-lighter-color);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+input[data-autocompleted] {
+  background-color: transparent !important;
+}
+
+.page-links {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  margin: 1.5rem 0;
+}
+
+.page-link {
+  color: var(--text-lighter-color);
+  text-decoration: none;
+  position: relative;
+  top: 2px;
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.page-link:hover {
+  color: var(--text-color);
+}

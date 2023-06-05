@@ -2,6 +2,7 @@ node_modules
 app-config.json
 docker-compose.yml
 build
+compiled
 .env
 uploads
 content
