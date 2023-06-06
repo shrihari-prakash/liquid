@@ -1,6 +1,6 @@
 {
   "watch": ["src"],
   "ext": ".ts,.js, .json, .yaml",
-  "ignore": ["src/public"],
+  "ignore": ["src/public", "app-config.json"],
   "exec": "ts-node ./src/index.ts"
 }
