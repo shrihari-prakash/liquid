@@ -5,6 +5,7 @@ import { useFont, useFavicon, changeToLightVariable, setStyleProperty, getTheme 
 export default function Layout({ children }) {
   const [configuration, setConfiguration] = React.useState();
   const [fontLoading, setFontLoading] = React.useState(true);
+  const [miniIconLoaded, setMiniIconLoaded] = React.useState(false);
 
   const theme = getTheme();
 
@@ -67,7 +68,15 @@ export default function Layout({ children }) {
         <div className="layout">
           {configuration[`assets.mini-icon-${theme}`] && (
             <div className="app-icon-mini">
-              <img src={configuration[`assets.mini-icon-${theme}`]} alt={configuration[`content.app-name`]} />
+              <div className="icon">
+                <div style={{ display: miniIconLoaded ? "none" : "block" }} className="spinner"></div>
+                <img
+                  style={{ display: miniIconLoaded ? "block" : "none" }}
+                  onLoad={() => setMiniIconLoaded(true)}
+                  src={configuration[`assets.mini-icon-${theme}`]}
+                  alt={configuration[`content.app-name`]}
+                />
+              </div>
             </div>
           )}
           <div className="page">

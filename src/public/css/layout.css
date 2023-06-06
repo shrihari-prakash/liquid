@@ -105,12 +105,38 @@ h3 {
   top: 16px;
 }
 
-.app-icon-mini > img {
+.app-icon-mini .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+}
+
+.app-icon-mini img {
   height: 32px;
 }
 
 .app-icon-header {
+  position: relative;
   height: 1.74rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-icon-header img {
+  height: 100%;
+}
+
+.app-icon-mini .spinner {
+  height: 16px;
+  width: 16px;
+}
+
+.app-icon-header .spinner {
+  height: 16px;
+  width: 16px;
 }
 
 .app-tagline {

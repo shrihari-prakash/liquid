@@ -12,6 +12,7 @@ export default function SignUp() {
   const [buttonText, setButtonText] = React.useState(submitButtonText);
   const [hasError, setHasError] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
+  const [miniIconLoaded, setMiniIconLoaded] = React.useState(false);
 
   const appName = configuration["content.app-name"];
 
@@ -98,7 +99,17 @@ export default function SignUp() {
         <h3>
           Sign up &#x2022;&nbsp;
           {configuration[`assets.header-icon-${theme}`] ? (
-            <img className="app-icon-header" alt={appName} src={configuration[`assets.header-icon-${theme}`]} />
+            <div className="app-icon-header">
+              <div
+                style={{ display: miniIconLoaded ? "none" : "block" }}
+                className="spinner"
+              />
+              <img
+                style={{ display: miniIconLoaded ? "block" : "none" }}
+                onLoad={() => setMiniIconLoaded(true)}
+                alt={appName}
+                src={configuration[`assets.header-icon-${theme}`]} />
+            </div>
           ) : (
             <strong className="app-name">{appName}</strong>
           )}
