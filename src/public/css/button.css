@@ -1,0 +1,78 @@
+.button {
+  height: 54px;
+  color: var(--primary-button-text-color);
+  background-color: var(--primary-button-color);
+  border: none;
+  border-radius: var(--primary-button-border-radius);
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding-left: 30px;
+  padding-right: 30px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  appearance: button;
+  width: 100%;
+  cursor: pointer;
+}
+
+.button:hover {
+  color: var(--primary-button-active-text-color);
+  background-color: var(--primary-button-active-color);
+  border: none;
+}
+
+.button:disabled {
+  background-color: var(--primary-button-color);
+  border: none;
+}
+
+.button:active,
+.button:focus {
+  background-color: var(--primary-button-active-color);
+  color: var(--primary-button-active-text-color);
+  background-image: none;
+  border: none;
+  box-shadow: var(--primary-button-focus-box-shadow);
+}
+
+.shake,
+.shake:hover {
+  color: #ffffff;
+  background-color: #ed4337 !important;
+  border-color: #ed4337 !important;
+}
+
+.shake {
+  animation: shake 1s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0) rotate(1deg);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0) rotate(-1deg);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}

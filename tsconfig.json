@@ -107,5 +107,5 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "exclude": ["scripts", "test", "build", "node_modules"]
+  "exclude": ["scripts", "test", "build", "node_modules", "gulpfile.js"]
 }
