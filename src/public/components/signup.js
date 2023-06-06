@@ -98,7 +98,7 @@ export default function SignUp() {
         <h3>
           Sign up &#x2022;&nbsp;
           {configuration[`assets.header-icon-${theme}`] ? (
-            <img height="32" alt={appName} src={configuration[`assets.header-icon-${theme}`]} />
+            <img className="app-icon-header" alt={appName} src={configuration[`assets.header-icon-${theme}`]} />
           ) : (
             <strong className="app-name">{appName}</strong>
           )}

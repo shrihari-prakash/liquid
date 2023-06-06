@@ -82,7 +82,7 @@ export default function Login() {
         <h3>
           Login to&nbsp;
           {configuration[`assets.header-icon-${theme}`] ? (
-            <img height="32" alt={appName} src={configuration[`assets.header-icon-${theme}`]} />
+            <img className="app-icon-header" alt={appName} src={configuration[`assets.header-icon-${theme}`]} />
           ) : (
             <strong className="app-name">{appName}</strong>
           )}

@@ -77,6 +77,8 @@ h2 {
 
 h3 {
   font-size: 1.75rem;
+  align-items: center;
+  white-space: nowrap;
   display: flex;
   align-items: center;
 }
@@ -105,6 +107,10 @@ h3 {
 
 .app-icon-mini > img {
   height: 32px;
+}
+
+.app-icon-header {
+  height: 1.74rem;
 }
 
 .app-tagline {
@@ -210,6 +216,11 @@ h3 {
 }
 
 @media (max-width: 1199.99px) {
+  h3,
+  .app-icon-header {
+    font-size: 1.6rem;
+  }
+
   .app-icon-mini {
     width: calc(100% - 16px);
     position: static;
