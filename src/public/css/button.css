@@ -26,20 +26,18 @@
   border: none;
 }
 
-.button:focus {
-  color: var(--primary-button-text-color);
-}
-
 .button:disabled {
   background-color: var(--primary-button-color);
   border: none;
 }
 
-.button:active {
+.button:active,
+.button:focus {
   background-color: var(--primary-button-active-color);
   color: var(--primary-button-active-text-color);
   background-image: none;
   border: none;
+  box-shadow: var(--primary-button-focus-box-shadow);
 }
 
 .shake,

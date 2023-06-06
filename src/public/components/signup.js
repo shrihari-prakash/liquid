@@ -13,8 +13,6 @@ export default function SignUp() {
   const [hasError, setHasError] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
 
-  const countryCodeDummyRef = React.useRef(null);
-
   const appName = configuration["content.app-name"];
 
   React.useEffect(() => useTitle(configuration["content.app-name"], "Sign Up"), []);
@@ -93,8 +91,6 @@ export default function SignUp() {
   if (!configuration["privilege.can-create-account"]) {
     return null;
   }
-
-  console.log(countryCodeDummyRef.current && countryCodeDummyRef.current.offsetWidth);
 
   return (
     <form className="form" onSubmit={signup}>

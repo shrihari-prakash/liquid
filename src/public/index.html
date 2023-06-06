@@ -8,6 +8,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="./css/layout.css" />
     <title class="app-name-titlebar">Accounts</title>
+    <script type="module">
+      import { getTheme, changeToLightVariable } from "./utils/utils.js";
+      const theme = getTheme();
+      if (theme === "light") {
+        changeToLightVariable("--spinner-background-color");
+        changeToLightVariable("--spinner-primary-color");
+        changeToLightVariable("--spinner-secondary-color");
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -15,7 +24,6 @@
     <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.6.4.min.js"
       integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="

@@ -1,14 +1,12 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
-import { useFont, useFavicon, changeToLightVariable, setStyleProperty } from "../utils/utils.js";
+import { useFont, useFavicon, changeToLightVariable, setStyleProperty, getTheme } from "../utils/utils.js";
 
 export default function Layout({ children }) {
   const [configuration, setConfiguration] = React.useState();
   const [fontLoading, setFontLoading] = React.useState(true);
 
-  const urlString = window.location;
-  const url = new URL(urlString);
-  const theme = url.searchParams.get("theme") || "dark";
+  const theme = getTheme();
 
   function getThemeVariable(variable) {
     return configuration[`theme.${theme}.${variable}`];
@@ -24,11 +22,6 @@ export default function Layout({ children }) {
 
   React.useEffect(() => {
     if (!configuration) {
-      if (theme === "light") {
-        changeToLightVariable("--spinner-background-color");
-        changeToLightVariable("--spinner-primary-color");
-        changeToLightVariable("--spinner-secondary-color");
-      }
       return;
     }
 

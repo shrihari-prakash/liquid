@@ -14,6 +14,13 @@ export function useTitle(appName, string) {
   $(".app-name-titlebar").text(`${appName} - ${string}`);
 }
 
+export function getTheme() {
+  const urlString = window.location;
+  const url = new URL(urlString);
+  const theme = url.searchParams.get("theme") || "dark";
+  return theme
+}
+
 export function useFont(fontFace, fontUrl, onDone) {
   let appFontFace = fontFace;
   let appFontURL = fontUrl;

@@ -73,7 +73,7 @@
     "description": "Specifies the name of the folder that contains static HTML files. For example, if you have a file named login.html inside the folder named static in src, navigating to your-domain.com/login will render login.html.",
     "type": "string",
     "default": "public",
-    "relatedOptions": ["system.static.use-relative-path"]
+    "relatedOptions": ["system.static.use-relative-path", "system.static.fallback-to-index"]
   },
   {
     "name": "system.static.app-config-absolute-path",
@@ -81,6 +81,15 @@
     "envName": "SYSTEM_STATIC_APP_CONFIG_ABSOLUTE_PATH",
     "description": "Specifies the absolute path for frontend configuration file. If not speficied 'app-config.json' in src folder is used.",
     "type": "string"
+  },
+  {
+    "name": "system.static.fallback-to-index",
+    "displayName": "Static Falls Back to Index",
+    "envName": "SYSTEM_STATIC_FALLBACK_TO_INDEX",
+    "description": "Specifies if unhandled routes will fall back to serving index.html in static folder.",
+    "type": "boolean",
+    "default": true,
+    "relatedOptions": ["system.static-folder", "system.static.use-relative-path"]
   },
   {
     "name": "cookie-session-secret",

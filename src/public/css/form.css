@@ -16,19 +16,19 @@
 .form-group {
   margin-bottom: 0;
   border: 1px solid var(--border-color);
-  padding: 15px;
+  padding: var(--form-input-padding);
   border-bottom: none;
 }
 
 .form-group.first {
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
+  border-top-left-radius: var(--form-input-border-radius);
+  border-top-right-radius: var(--form-input-border-radius);
 }
 
 .form-group.last {
   border-bottom: 1px solid var(--border-color);
-  border-bottom-left-radius: 7px;
-  border-bottom-right-radius: 7px;
+  border-bottom-left-radius: var(--form-input-border-radius);
+  border-bottom-right-radius: var(--form-input-border-radius);
 }
 
 .form-group label {

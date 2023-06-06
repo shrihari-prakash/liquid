@@ -109,10 +109,13 @@ if (Configuration.get("system.enable-swagger") || app.get("env") !== "production
   const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", "utf8"));
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
-app.all("*", function (_, res) {
-  const root = path.join(__dirname, "/public/index.html");
-  res.sendFile(root);
-});
+
+if (Configuration.get("system.static.fallback-to-index")) {
+  app.all("*", function (_, res) {
+    const index = path.join(staticFolder, "index.html");
+    res.sendFile(index);
+  });
+}
 
 if (Configuration.get("user.account-creation.allow-only-whitelisted-email-domains")) {
   log.info("Allowing only whitelisted domain names in user sign up.");
