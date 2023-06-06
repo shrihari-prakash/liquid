@@ -28,7 +28,6 @@
   "theme.app-font-url": null,
 
   "theme.light.background-color": "#ffffff",
-  "theme.light.use-primary-button": true,
   "theme.light.primary-button.color": "#007bff",
   "theme.light.primary-button.active-color": "#0069d9",
   "theme.light.primary-button.text-color": "#ffffff",
