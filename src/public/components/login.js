@@ -67,6 +67,10 @@ export default function Login() {
           onSubmitError({ errorText: "Too Many Retries" });
           return;
         }
+        if (response.responseJSON.error === "ResourceNotActive") {
+          onSubmitError({ errorText: "Account not verified" });
+          return;
+        }
         if (response.status === 400 && response.responseJSON.additionalInfo) {
           return onFieldError({ response });
         }
