@@ -13,6 +13,7 @@ export class MongoDB {
 
   constructor() {
     mongoose.set("strictQuery", false);
+    mongoose.set('runValidators', true);
     this.useTransactions = Configuration.get("mongo-db.use-transactions");
     if (this.useTransactions) {
       log.info("MongoDB transactions are enabled.");

@@ -418,6 +418,14 @@
     "default": true
   },
   {
+    "name": "privilege.can-use-credit-transactions",
+    "displayName": "Can Use Credit Transactions",
+    "envName": "CAN_USE_CREDIT_TRANSACTIONS",
+    "description": "Specifies if the application should maintain a history of credit changes for user accounts.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "user.account-creation.require-email-verification",
     "displayName": "User Account Creation Require Email Verification",
     "envName": "USER_ACCOUNT_CREATION_REQUIRE_EMAIL_VERIFICATION",

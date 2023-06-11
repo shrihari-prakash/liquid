@@ -112,7 +112,7 @@ const OAuthModel = {
       // There is no notion of users in client_credentials grant.
       // So we simply return the client id for the username.
       // See more here: https://github.com/node-oauth/node-oauth2-server/issues/71#issuecomment-1181515928
-      resolve({ username: client.id, role: client.role });
+      resolve({ _id: client._id, username: client.id, role: client.role });
     });
   },
 

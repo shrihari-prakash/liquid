@@ -31,4 +31,5 @@ export const errorMessages = {
   resourceDoesNotExist: "ResourceDoesNotExist",
   incompleteSubmission: "IncompleteSubmission",
   resourceNotActive: "ResourceNotActive",
+  insufficientCredits: "InsufficientCredits",
 };

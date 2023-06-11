@@ -26,6 +26,7 @@ const AuthenticateClient = async (_: Request, res: Response, next: NextFunction)
     if (res.locals.user.role !== Role.INTERNAL_CLIENT) {
       throw statusCodes.unauthorized;
     }
+    res.locals.user.isClient = true;
     res.locals.client = res.locals.oauth.token.client;
     return next();
   } catch (err) {
