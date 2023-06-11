@@ -418,9 +418,9 @@
     "default": true
   },
   {
-    "name": "privilege.can-use-credit-transactions",
-    "displayName": "Can Use Credit Transactions",
-    "envName": "CAN_USE_CREDIT_TRANSACTIONS",
+    "name": "privilege.can-use-credit-transaction-history",
+    "displayName": "Can Use Credit Transaction History",
+    "envName": "CAN_USE_CREDIT_TRANSACTION_HISTORY",
     "description": "Specifies if the application should maintain a history of credit changes for user accounts.",
     "type": "boolean",
     "default": false

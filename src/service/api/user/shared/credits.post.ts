@@ -65,7 +65,7 @@ const POST_Credits = async (req: Request, res: Response) => {
     if (!updateResult.modifiedCount) {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.insufficientCredits));
     }
-    if (Configuration.get("privilege.can-use-credit-transactions")) {
+    if (Configuration.get("privilege.can-use-credit-transaction-history")) {
       const sourceType = res.locals.user.isClient ? "client" : "user";
       const creditTransaction = {
         sourceType,
