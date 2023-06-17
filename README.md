@@ -13,9 +13,9 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 
 ### ⭐ Features
 * High degree customization capabilities. Customize and configure every part of the UI and service.
-* Out of the box support for user sign up and login.
-* Includes follow and unfollow mechanisms with support for private accounts.
-* Support for admin level and client APIs.
+* Out of the box support for mechanisms like follow - unfollow, blocking and private accounts.
+* Support for administrative APIs.
+* Battle tested APIs with support for database transactions for high reliability.
 * Quick setup.
 
 ## 📦 Dependencies
@@ -62,7 +62,7 @@ The following steps assume already you have **Redis** and **MongoDB** and **Send
 4. Now open terminal in the folder that contains your app-config.json.
 5. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
 6. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
-7. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. If the rest of your project is running on Node, you can use the [Liquid Node Connector](https://github.com/shrihari-prakash/liquid-node-connector) to authenticate users connecting to your service and also to get client tokens to interact with Liquid client APIs. [Click here for Swagger](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/swagger.yaml). Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
+7. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. If the rest of your project is running on Node, you can use the [Liquid Node Connector](https://www.npmjs.com/package/liquid-node-connector) to authenticate users connecting to your service and also to get client tokens to interact with Liquid client APIs. [Click here for Swagger](https://shrihari-prakash.github.io/liquid-docs). Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
 > **_NOTE:_** If you are using nginx as reverse proxy and find that cookies are not working or if you get the error `Server error: handle() did not return a user object` while logging in, add `proxy_set_header X-Forwarded-Proto $scheme;` to server -> location in your nginx config.
 ### Development
 1. Run `npm i`.

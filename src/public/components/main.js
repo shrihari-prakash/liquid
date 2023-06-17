@@ -21,8 +21,7 @@ function getRenderElement() {
         case "/reset-password":
             return ResetPassword;
         default:
-            return NotFound
-            break;
+            return NotFound;
     }
 }
 

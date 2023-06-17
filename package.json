@@ -1,7 +1,7 @@
 {
   "name": "liquid",
   "version": "1.0.0",
-  "description": "",
+  "description": "Seamless and highly customizable authentication and user management server.",
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.spec.ts --exit",
@@ -16,7 +16,7 @@
   },
   "keywords": [],
   "author": "Shrihari Prakash",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.21.5",
     "@babel/preset-react": "^7.22.3",

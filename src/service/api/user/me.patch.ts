@@ -21,7 +21,7 @@ export const PATCH_MeValidator = [
     .optional()
     .isString()
     .isLength({ min: 8, max: 30 })
-    .matches(/^[a-z_][a-z0-9._]*$/i),
+    .matches(new RegExp(Configuration.get("user.account-creation.username-validation-regex"), "i")),
   body("email").optional().isEmail(),
   body("password").optional().isString().isLength({ min: 8, max: 128 }),
   body("firstName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),

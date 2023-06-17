@@ -12,15 +12,22 @@ import { hasErrors } from "../../../../utils/api";
 import { Configuration } from "../../../../singleton/configuration";
 import { bcryptConfig } from "../create.post";
 
+const passwordRegex = Configuration.get("user.account-creation.password-validation-regex");
+
 export const POST_CreateValidator = [
   body().isArray(),
   body("*.username")
     .exists()
     .isString()
     .isLength({ min: 8, max: 30 })
-    .matches(/^[a-z_][a-z0-9._]*$/i),
+    .matches(new RegExp(Configuration.get("user.account-creation.username-validation-regex"), "i")),
   body("*.email").exists().isEmail(),
-  body("*.password").exists().isString().isLength({ min: 8, max: 128 }),
+  body("*.password")
+    .exists()
+    .isString()
+    .isLength({ min: 8, max: 128 })
+    .if(() => !!passwordRegex)
+    .matches(new RegExp(passwordRegex)),
   body("*.firstName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
   body("*.lastName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
   body("*.role").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),

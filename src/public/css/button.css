@@ -26,8 +26,10 @@
   border: none;
 }
 
-.button:disabled {
+.button:disabled,
+.button[disabled] {
   background-color: var(--primary-button-color);
+  opacity: 0.5;
   border: none;
 }
 
