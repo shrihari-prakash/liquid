@@ -21,14 +21,24 @@ export const bcryptConfig = {
   salt: 10,
 };
 
+const passwordRegex = Configuration.get("user.account-creation.password-validation-regex");
+if (passwordRegex) {
+  log.debug("Using custom regex (%s) for password validations.", passwordRegex);
+}
+
 export const POST_CreateValidator = [
   body("username")
     .exists()
     .isString()
     .isLength({ min: 8, max: 30 })
-    .matches(/^[a-z_][a-z0-9._]*$/i),
+    .matches(new RegExp(Configuration.get("user.account-creation.username-validation-regex"), "i")),
   body("email").exists().isEmail(),
-  body("password").exists().isString().isLength({ min: 8, max: 128 }),
+  body("password")
+    .exists()
+    .isString()
+    .isLength({ min: 8, max: 128 })
+    .if(() => !!passwordRegex)
+    .matches(new RegExp(passwordRegex)),
   body("firstName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
   body("lastName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
   body("phoneCountryCode")

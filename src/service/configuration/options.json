@@ -426,6 +426,22 @@
     "default": false
   },
   {
+    "name": "user.account-creation.username-validation-regex",
+    "displayName": "User Account Creation Username Validation Regex",
+    "envName": "USER_ACCOUNT_CREATION_USERNAME_VALIDATION_REGEX",
+    "description": "Specifies the regex to be used to validate username for user accounts.",
+    "type": "string",
+    "default": "^[a-z_][a-z0-9._]*$"
+  },
+  {
+    "name": "user.account-creation.password-validation-regex",
+    "displayName": "User Account Creation Password Validation Regex",
+    "envName": "USER_ACCOUNT_CREATION_PASSWORD_VALIDATION_REGEX",
+    "description": "Specifies the regex to be used to validate password for user accounts.",
+    "type": "string",
+    "default": null
+  },
+  {
     "name": "user.account-creation.require-email-verification",
     "displayName": "User Account Creation Require Email Verification",
     "envName": "USER_ACCOUNT_CREATION_REQUIRE_EMAIL_VERIFICATION",
