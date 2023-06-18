@@ -11,32 +11,26 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import { hasErrors } from "../../../../utils/api";
 import { Configuration } from "../../../../singleton/configuration";
 import { bcryptConfig } from "../create.post";
-
-const passwordRegex = Configuration.get("user.account-creation.password-validation-regex");
+import {
+  getEmailValidator,
+  getFirstNameValidator,
+  getLastNameValidator,
+  getPasswordValidator,
+  getPhoneCountryCodeValidator,
+  getPhoneValidator,
+  getUsernameValidator,
+} from "../../../../utils/validator/user";
 
 export const POST_CreateValidator = [
   body().isArray(),
-  body("*.username")
-    .exists()
-    .isString()
-    .isLength({ min: 8, max: 30 })
-    .matches(new RegExp(Configuration.get("user.account-creation.username-validation-regex"), "i")),
-  body("*.email").exists().isEmail(),
-  body("*.password")
-    .exists()
-    .isString()
-    .isLength({ min: 8, max: 128 })
-    .if(() => !!passwordRegex)
-    .matches(new RegExp(passwordRegex)),
-  body("*.firstName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("*.lastName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
+  getUsernameValidator(body, true, true),
+  getPasswordValidator(body, true, true),
+  getEmailValidator(body, true, true),
+  getFirstNameValidator(body, true, true),
+  getLastNameValidator(body, true, true),
+  getPhoneCountryCodeValidator(body, false, true),
+  getPhoneValidator(body, false, true),
   body("*.role").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("*.phoneCountryCode")
-    .optional()
-    .isString()
-    .isLength({ min: 2, max: 6 })
-    .matches(/^(\+?\d{1,3}|\d{1,4})$/gm),
-  body("*.phone").optional().isString().isLength({ min: 10, max: 12 }),
 ];
 
 const POST_Create = async (req: Request, res: Response) => {

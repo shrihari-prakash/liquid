@@ -16,37 +16,28 @@ import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { Configuration } from "../../../singleton/configuration";
 import { sanitizeEmailAddress } from "../../../utils/email";
+import {
+  getEmailValidator,
+  getFirstNameValidator,
+  getLastNameValidator,
+  getPasswordValidator,
+  getPhoneCountryCodeValidator,
+  getPhoneValidator,
+  getUsernameValidator,
+} from "../../../utils/validator/user";
 
 export const bcryptConfig = {
   salt: 10,
 };
 
-const passwordRegex = Configuration.get("user.account-creation.password-validation-regex");
-if (passwordRegex) {
-  log.debug("Using custom regex (%s) for password validations.", passwordRegex);
-}
-
 export const POST_CreateValidator = [
-  body("username")
-    .exists()
-    .isString()
-    .isLength({ min: 8, max: 30 })
-    .matches(new RegExp(Configuration.get("user.account-creation.username-validation-regex"), "i")),
-  body("email").exists().isEmail(),
-  body("password")
-    .exists()
-    .isString()
-    .isLength({ min: 8, max: 128 })
-    .if(() => !!passwordRegex)
-    .matches(new RegExp(passwordRegex)),
-  body("firstName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("lastName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("phoneCountryCode")
-    .optional()
-    .isString()
-    .isLength({ min: 2, max: 6 })
-    .matches(/^(\+?\d{1,3}|\d{1,4})$/gm),
-  body("phone").optional().isString().isLength({ min: 10, max: 12 }),
+  getUsernameValidator(body, true),
+  getPasswordValidator(body, true),
+  getEmailValidator(body, true),
+  getFirstNameValidator(body, true),
+  getLastNameValidator(body, true),
+  getPhoneCountryCodeValidator(body, false),
+  getPhoneValidator(body, false),
 ];
 
 const POST_Create = async (req: Request, res: Response) => {
