@@ -10,10 +10,13 @@ const mongod = new MongoMemoryServer({
 import { MongoDB } from "../src/singleton/mongo-db";
 import ClientModel from "../src/model/mongo/client";
 import { Logger } from "../src/singleton/logger";
+import Options from "../src/service/configuration/options.json";
 
+Options.forEach((option) => {
+  if (option.default) process.env[option.envName] = option.default + "";
+});
 process.env.NODE_ENV = "test";
 process.env.CAN_USE_CACHE = "false";
-process.env.USER_ACCOUNT_CREATION_ALLOW_ONLY_WHITELISTED_EMAIL_DOMAINS = "false";
 
 Logger.logger.level = "error";
 
