@@ -4,6 +4,3 @@ docker-compose.yml
 build
 compiled
 .env
-uploads
-content
-storage

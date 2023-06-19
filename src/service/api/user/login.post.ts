@@ -13,23 +13,12 @@ import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { sanitizeEmailAddress } from "../../../utils/email";
-import { Configuration } from "../../../singleton/configuration";
-
-const passwordRegex = Configuration.get("user.account-creation.password-validation-regex");
+import { getEmailValidator, getPasswordValidator, getUsernameValidator } from "../../../utils/validator/user";
 
 export const POST_LoginValidator = [
-  body("username")
-    .optional()
-    .isString()
-    .isLength({ min: 8, max: 30 })
-    .matches(new RegExp(Configuration.get("user.account-creation.username-validation-regex"), "i")),
-  body("email").optional().isString().isEmail(),
-  body("password")
-    .exists()
-    .isString()
-    .isLength({ min: 8, max: 128 })
-    .if(() => !!passwordRegex)
-    .matches(new RegExp(passwordRegex)),
+  getUsernameValidator(body, false),
+  getEmailValidator(body, false),
+  getPasswordValidator(body, true),
 ];
 
 const POST_Login = async (req: Request, res: Response) => {
