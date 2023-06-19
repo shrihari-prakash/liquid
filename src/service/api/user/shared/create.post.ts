@@ -74,6 +74,7 @@ const POST_Create = async (req: Request, res: Response) => {
         role,
         password,
         emailVerified: true,
+        creationIp: req.ip
       };
       if (phone) {
         user.phone = phone;
