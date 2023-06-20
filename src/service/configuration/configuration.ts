@@ -22,6 +22,8 @@ export class Configuration {
     switch (option.type) {
       case "boolean":
         return value === "true" || value === true;
+      case "number":
+        return typeof value === "string" ? parseInt(value, 10) : value;
       case "numberArray":
         return value.split(delim).map((elem: string) => parseInt(elem));
       case "stringArray":
