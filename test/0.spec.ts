@@ -23,11 +23,10 @@ Logger.logger.level = "error";
 chai.use(chaiHttp);
 
 describe("Integration Test", () => {
-  before(async () => {
+  it("setup tests", async () => {
     await mongod.start();
     process.env.MONGO_DB_CONNECTION_STRING = await mongod.getUri();
     MongoDB.connect();
     await ClientModel.deleteMany({});
   });
-  it("dummy test", () => {});
 });
