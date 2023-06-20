@@ -4,6 +4,7 @@ const log = Logger.getLogger().child({ from: "admin-api/user/create" });
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { body } from "express-validator";
+import { v4 as uuidv4 } from "uuid";
 
 import UserModel from "../../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
@@ -22,6 +23,7 @@ import {
 } from "../../../../utils/validator/user";
 import { MongoDB } from "../../../../singleton/mongo-db";
 import { sanitizeEmailAddress } from "../../../../utils/email";
+import InviteCodeModel from "../../../../model/mongo/invite-code";
 
 export const POST_CreateValidator = [
   body().isArray(),
@@ -81,7 +83,7 @@ const POST_Create = async (req: Request, res: Response) => {
         role,
         password,
         emailVerified: true,
-        creationIp: req.ip
+        creationIp: req.ip,
       };
       if (phone) {
         user.phone = phone;
@@ -90,10 +92,29 @@ const POST_Create = async (req: Request, res: Response) => {
       }
       insertList[i] = user;
     }
+    let inserted;
     if (sessionOptions) {
-      await UserModel.insertMany(insertList, sessionOptions);
+      inserted = await UserModel.insertMany(insertList, sessionOptions);
     } else {
-      await UserModel.insertMany(insertList);
+      inserted = await UserModel.insertMany(insertList);
+    }
+    if (Configuration.get("user.account-creation.enable-invite-only")) {
+      let inviteCodes: any[] = [];
+      const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
+      for (let i = 0; i < inserted.length; i++) {
+        const user = inserted[i];
+        for (let j = 0; j < inviteCodeCount; j++) {
+          inviteCodes.push({
+            code: uuidv4(),
+            sourceId: user._id,
+          });
+        }
+      }
+      if (sessionOptions) {
+        await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
+      } else {
+        await InviteCodeModel.insertMany(inviteCodes);
+      }
     }
     await MongoDB.commitTransaction(session);
     log.info(`${insertList.length} records inserted.`);

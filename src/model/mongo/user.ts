@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose, { ObjectId, Schema } from "mongoose";
 
 const userSchema = {
   username: {
@@ -107,6 +107,10 @@ const userSchema = {
     min: 0,
     default: 0,
   },
+  invitedBy: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
   isActive: {
     type: Boolean,
     required: true,
@@ -190,6 +194,7 @@ export type IUser = {
   subscriptionExpiry: Date;
   subscriptionTier: string;
   credits: number;
+  invitedBy: string;
   isActive: boolean;
   deactivateDate: Date;
   isBanned: boolean;
@@ -238,7 +243,8 @@ export const IUserProjection = {
   isSubscribed: 1,
   subscriptionTier: 1,
   subscriptionExpiry: 1,
-  credits: 1
+  credits: 1,
+  invitedBy: 1,
 };
 
 export default UserModel;

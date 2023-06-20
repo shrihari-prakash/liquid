@@ -451,6 +451,24 @@
     "relatedOptions": ["sendgrid.*"]
   },
   {
+    "name": "user.account-creation.enable-invite-only",
+    "displayName": "User Account Creation Enable Invite Only",
+    "envName": "USER_ACCOUNT_CREATION_ENABLE_INVITE_ONLY",
+    "description": "Specifies if accounts can be created only using an invite code.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["user.account-creation.invites-per-person"]
+  },
+  {
+    "name": "user.account-creation.invites-per-person",
+    "displayName": "User Account Creation Invites Per Person",
+    "envName": "USER_ACCOUNT_CREATION_INVITES_PER_PERSON",
+    "description": "Specifies the number of invites a person can make.",
+    "type": "number",
+    "default": 5,
+    "relatedOptions": ["user.account-creation.enable-invite-only"]
+  },
+  {
     "name": "user.account-creation.allow-only-whitelisted-email-domains",
     "displayName": "User Account Creation Allow Only Whitelisted Email Domains",
     "envName": "USER_ACCOUNT_CREATION_ALLOW_ONLY_WHITELISTED_EMAIL_DOMAINS",
