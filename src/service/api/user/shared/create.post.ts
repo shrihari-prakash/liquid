@@ -91,9 +91,9 @@ const POST_Create = async (req: Request, res: Response) => {
       insertList[i] = user;
     }
     if (sessionOptions) {
-      response = await UserModel.insertMany(insertList, sessionOptions);
+      await UserModel.insertMany(insertList, sessionOptions);
     } else {
-      response = await UserModel.insertMany(insertList);
+      await UserModel.insertMany(insertList);
     }
     await MongoDB.commitTransaction(session);
     log.info(`${insertList.length} records inserted.`);
