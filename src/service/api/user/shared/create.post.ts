@@ -20,6 +20,8 @@ import {
   getPhoneValidator,
   getUsernameValidator,
 } from "../../../../utils/validator/user";
+import { MongoDB } from "../../../../singleton/mongo-db";
+import { sanitizeEmailAddress } from "../../../../utils/email";
 
 export const POST_CreateValidator = [
   body().isArray(),
@@ -34,19 +36,24 @@ export const POST_CreateValidator = [
 ];
 
 const POST_Create = async (req: Request, res: Response) => {
+  let session = "";
   try {
+    session = await MongoDB.startSession();
+    MongoDB.startTransaction(session);
+    const sessionOptions = MongoDB.getSessionOptions(session);
     if (hasErrors(req, res)) return;
     const sourceList = req.body;
     const existingUsers = await UserModel.find({
       $or: [
         {
-          email: { $in: sourceList.map((u: any) => u.email) },
+          email: { $in: sourceList.map((u: any) => sanitizeEmailAddress(u.email)) },
         },
         {
           username: { $in: sourceList.map((u: any) => u.username) },
         },
       ],
     }).lean();
+    log.debug("Found %d duplicate users in bulk create", existingUsers.length);
     if (existingUsers.length) {
       return res
         .status(statusCodes.clientInputError)
@@ -83,11 +90,18 @@ const POST_Create = async (req: Request, res: Response) => {
       }
       insertList[i] = user;
     }
-    await UserModel.insertMany(insertList);
+    let response;
+    if (sessionOptions) {
+      response = await UserModel.insertMany(insertList, sessionOptions);
+    } else {
+      response = await UserModel.insertMany(insertList);
+    }
+    await MongoDB.commitTransaction(session);
     log.info(`${insertList.length} records inserted.`);
     return res.status(statusCodes.created).json(new SuccessResponse({ insertedCount: insertList.length }));
   } catch (err) {
     log.error(err);
+    await MongoDB.abortTransaction(session);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
