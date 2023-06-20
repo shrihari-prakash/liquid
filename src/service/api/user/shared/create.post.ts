@@ -90,7 +90,6 @@ const POST_Create = async (req: Request, res: Response) => {
       }
       insertList[i] = user;
     }
-    let response;
     if (sessionOptions) {
       response = await UserModel.insertMany(insertList, sessionOptions);
     } else {
