@@ -32,7 +32,7 @@ export const POST_CreateValidator = [
   getLastNameValidator(body, true, true),
   getPhoneCountryCodeValidator(body, false, true),
   getPhoneValidator(body, false, true),
-  body("*.role").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
+  body("*.role").optional().isString().isLength({ min: 3, max: 32 }),
 ];
 
 const POST_Create = async (req: Request, res: Response) => {
