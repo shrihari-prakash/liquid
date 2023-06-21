@@ -22,6 +22,4 @@ const schemaInstance = new mongoose.Schema(inviteCodeSchema, {
   }),
   InviteCodeModel = mongoose.model("invite-code", schemaInstance);
 
-schemaInstance.index({ sourceId: 1, targetId: 1 }, { unique: true });
-
 export default InviteCodeModel;
