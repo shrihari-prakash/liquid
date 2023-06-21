@@ -40,10 +40,10 @@ export const POST_CreateValidator = [
 const POST_Create = async (req: Request, res: Response) => {
   let session = "";
   try {
+    if (hasErrors(req, res)) return;
     session = await MongoDB.startSession();
     MongoDB.startTransaction(session);
     const sessionOptions = MongoDB.getSessionOptions(session);
-    if (hasErrors(req, res)) return;
     const sourceList = req.body;
     const existingUsers = await UserModel.find({
       $or: [
@@ -57,6 +57,7 @@ const POST_Create = async (req: Request, res: Response) => {
     }).lean();
     log.debug("Found %d duplicate users in bulk create", existingUsers.length);
     if (existingUsers.length) {
+      await MongoDB.abortTransaction(session);
       return res
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { existingUsers }));
