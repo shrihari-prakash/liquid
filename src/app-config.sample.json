@@ -29,6 +29,7 @@
   "theme.app-font-url": null,
 
   "theme.light.background-color": "#ffffff",
+  "theme.light.primary-button.height": "54px",
   "theme.light.primary-button.color": "#007bff",
   "theme.light.primary-button.active-color": "#0069d9",
   "theme.light.primary-button.text-color": "#ffffff",
@@ -37,10 +38,11 @@
   "theme.light.primary-button.border-radius": "30px",
   "theme.light.form.input-border-radius": "7px",
   "theme.light.form.input-use-border": true,
-  "theme.light.form.input-padding": "15px",
+  "theme.light.form.input-vertical-padding": "8px",
+  "theme.light.form.input-horizontal-padding": "10px",
 
   "theme.dark.background-color": "#16181c",
-  "theme.dark.use-primary-button": true,
+  "theme.dark.primary-button.height": "54px",
   "theme.dark.primary-button.color": "#007bff",
   "theme.dark.primary-button.active-color": "#0069d9",
   "theme.dark.primary-button.text-color": "#ffffff",
@@ -49,5 +51,6 @@
   "theme.dark.primary-button.border-radius": "30px",
   "theme.dark.form.input-border-radius": "7px",
   "theme.dark.form.input-use-border": true,
-  "theme.dark.form.input-padding": "15px"
+  "theme.dark.form.input-vertical-padding": "8px",
+  "theme.dark.form.input-horizontal-padding": "10px"
 }
