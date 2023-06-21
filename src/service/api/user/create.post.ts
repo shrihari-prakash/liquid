@@ -46,48 +46,49 @@ export const POST_CreateValidator = [
 ];
 
 async function validateInviteCode(req: Request, res: Response, user: IUser) {
-  if (Configuration.get("user.account-creation.enable-invite-only")) {
-    if (!req.body.inviteCode) {
-      const errors = [
-        {
-          msg: "Invalid value",
-          param: "inviteCode",
-          location: "body",
-        },
-      ];
-      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
-      return false;
-    }
-    const inviteCode = await InviteCodeModel.findOne({ code: req.body.inviteCode });
-    if (!inviteCode || inviteCode.targetId) {
-      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidInviteCode));
-      return false;
-    }
-    user.invitedBy = inviteCode.sourceId.toString();
+  if (!Configuration.get("user.account-creation.enable-invite-only")) {
     return true;
   }
+  if (!req.body.inviteCode) {
+    const errors = [
+      {
+        msg: "Invalid value",
+        param: "inviteCode",
+        location: "body",
+      },
+    ];
+    res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+    return false;
+  }
+  const inviteCode = await InviteCodeModel.findOne({ code: req.body.inviteCode });
+  if (!inviteCode || inviteCode.targetId) {
+    res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidInviteCode));
+    return false;
+  }
+  user.invitedBy = inviteCode.sourceId.toString();
   return true;
 }
 
 async function useInviteCode(user: IUser, code: string, sessionOptions: { session: ClientSession } | undefined) {
-  if (Configuration.get("user.account-creation.enable-invite-only")) {
-    const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
-    const inviteCodes = [];
-    for (let j = 0; j < inviteCodeCount; j++) {
-      inviteCodes.push({
-        code: generateInviteCode(),
-        sourceId: user._id,
-      });
-    }
-    if (sessionOptions) {
-      await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
-    } else {
-      await InviteCodeModel.insertMany(inviteCodes);
-    }
-    const updateUsedBy = InviteCodeModel.updateOne({ code: code }, { $set: { targetId: user._id } });
-    if (sessionOptions) updateUsedBy.session(sessionOptions.session);
-    await updateUsedBy;
+  if (!Configuration.get("user.account-creation.enable-invite-only")) {
+    return true;
   }
+  const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
+  const inviteCodes = [];
+  for (let j = 0; j < inviteCodeCount; j++) {
+    inviteCodes.push({
+      code: generateInviteCode(),
+      sourceId: user._id,
+    });
+  }
+  if (sessionOptions) {
+    await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
+  } else {
+    await InviteCodeModel.insertMany(inviteCodes);
+  }
+  const updateUsedBy = InviteCodeModel.updateOne({ code: code }, { $set: { targetId: user._id } });
+  if (sessionOptions) updateUsedBy.session(sessionOptions.session);
+  await updateUsedBy;
 }
 
 const POST_Create = async (req: Request, res: Response) => {
