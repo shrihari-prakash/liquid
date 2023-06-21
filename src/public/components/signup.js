@@ -56,6 +56,9 @@ export default function SignUp() {
       user.phone = document.getElementById("phone").value;
       user.phoneCountryCode = document.getElementById("phoneCountryCode").value;
     }
+    if (configuration["user.account-creation.enable-invite-only"]) {
+      user.inviteCode = document.getElementById("inviteCode").value;
+    }
     setSubmitting(true);
     $.post("/user/create", user)
       .done(function () {
@@ -133,6 +136,21 @@ export default function SignUp() {
           required
         />
       </div>
+      {configuration["user.account-creation.enable-invite-only"] &&
+        <div className="form-group">
+          <label className="noselect" htmlFor="email">
+            Invite Code
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="XX-0000-0000000000"
+            spellCheck="false"
+            id="inviteCode"
+            required
+          />
+        </div>
+      }
       <div className="form-group">
         <label className="noselect" htmlFor="firstName">
           First Name

@@ -3,6 +3,7 @@
   "oauth.redirect-uri": "{{your_oauth_redirect_uri}}",
 
   "user.account-creation.require-email-verification": true,
+  "user.account-creation.enable-invite-only": false,
 
   "privilege.can-create-account": true,
   "privilege.can-reset-password": true,

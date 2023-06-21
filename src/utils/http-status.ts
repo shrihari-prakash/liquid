@@ -15,6 +15,7 @@ export const statusCodes = {
 export const errorMessages = {
   internalError: "InternalServerError",
   clientInputError: "ClientInputError",
+  invalidInviteCode: "InvalidInviteCode",
   rateLimitError: "RateLimitError",
   conflict: "ResourceConflict",
   creationThrottled: "CreationThrottled",
