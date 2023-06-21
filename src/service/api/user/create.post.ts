@@ -5,7 +5,6 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { body } from "express-validator";
 import moment from "moment";
-import { v4 as uuidv4 } from "uuid";
 
 import UserModel, { IUser } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
@@ -29,6 +28,7 @@ import {
 import InviteCodeModel from "../../../model/mongo/invite-code";
 import { MongoDB } from "../../../singleton/mongo-db";
 import { ClientSession } from "mongoose";
+import { generateInviteCode } from "../../../utils/invite-code";
 
 export const bcryptConfig = {
   salt: 10,
@@ -75,7 +75,7 @@ async function useInviteCode(user: IUser, code: string, sessionOptions: { sessio
     const inviteCodes = [];
     for (let j = 0; j < inviteCodeCount; j++) {
       inviteCodes.push({
-        code: uuidv4(),
+        code: generateInviteCode(),
         sourceId: user._id,
       });
     }

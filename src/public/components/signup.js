@@ -144,7 +144,7 @@ export default function SignUp() {
           <input
             type="text"
             className="form-control"
-            placeholder="invite-code"
+            placeholder="XX-0000-0000000000"
             spellCheck="false"
             id="inviteCode"
             required

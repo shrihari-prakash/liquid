@@ -4,7 +4,6 @@ const log = Logger.getLogger().child({ from: "admin-api/user/create" });
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { body } from "express-validator";
-import { v4 as uuidv4 } from "uuid";
 
 import UserModel from "../../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
@@ -24,6 +23,7 @@ import {
 import { MongoDB } from "../../../../singleton/mongo-db";
 import { sanitizeEmailAddress } from "../../../../utils/email";
 import InviteCodeModel from "../../../../model/mongo/invite-code";
+import { generateInviteCode } from "../../../../utils/invite-code";
 
 export const POST_CreateValidator = [
   body().isArray(),
@@ -105,7 +105,7 @@ const POST_Create = async (req: Request, res: Response) => {
         const user = inserted[i];
         for (let j = 0; j < inviteCodeCount; j++) {
           inviteCodes.push({
-            code: uuidv4(),
+            code: generateInviteCode(),
             sourceId: user._id,
           });
         }
