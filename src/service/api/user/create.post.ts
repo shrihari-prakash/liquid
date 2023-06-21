@@ -28,6 +28,7 @@ import {
 } from "../../../utils/validator/user";
 import InviteCodeModel from "../../../model/mongo/invite-code";
 import { MongoDB } from "../../../singleton/mongo-db";
+import { ClientSession } from "mongoose";
 
 export const bcryptConfig = {
   salt: 10,
@@ -43,6 +44,51 @@ export const POST_CreateValidator = [
   getPhoneValidator(body, false),
   body("inviteCode").optional().isString(),
 ];
+
+async function validateInviteCode(req: Request, res: Response, user: IUser) {
+  if (Configuration.get("user.account-creation.enable-invite-only")) {
+    if (!req.body.inviteCode) {
+      const errors = [
+        {
+          msg: "Invalid value",
+          param: "inviteCode",
+          location: "body",
+        },
+      ];
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return false;
+    }
+    const inviteCode = await InviteCodeModel.findOne({ code: req.body.inviteCode });
+    if (!inviteCode || inviteCode.targetId) {
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidInviteCode));
+      return false;
+    }
+    user.invitedBy = inviteCode.sourceId.toString();
+    return true;
+  }
+  return true;
+}
+
+async function useInviteCode(user: IUser, code: string, sessionOptions: { session: ClientSession } | undefined) {
+  if (Configuration.get("user.account-creation.enable-invite-only")) {
+    const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
+    const inviteCodes = [];
+    for (let j = 0; j < inviteCodeCount; j++) {
+      inviteCodes.push({
+        code: uuidv4(),
+        sourceId: user._id,
+      });
+    }
+    if (sessionOptions) {
+      await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
+    } else {
+      await InviteCodeModel.insertMany(inviteCodes);
+    }
+    const updateUsedBy = InviteCodeModel.updateOne({ code: code }, { $set: { targetId: user._id } });
+    if (sessionOptions) updateUsedBy.session(sessionOptions.session);
+    await updateUsedBy;
+  }
+}
 
 const POST_Create = async (req: Request, res: Response) => {
   let session = "";
@@ -126,50 +172,16 @@ const POST_Create = async (req: Request, res: Response) => {
       toInsert.phoneCountryCode = phoneCountryCode;
       toInsert.phoneVerified = false;
     }
-    if (Configuration.get("user.account-creation.enable-invite-only")) {
-      if (!req.body.inviteCode) {
-        const errors = [
-          {
-            msg: "Invalid value",
-            param: "inviteCode",
-            location: "body",
-          },
-        ];
-        return res
-          .status(statusCodes.clientInputError)
-          .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
-      }
-      const inviteCode = await InviteCodeModel.findOne({ code: req.body.inviteCode });
-      if (!inviteCode || inviteCode.targetId) {
-        return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidInviteCode));
-      }
-      toInsert.invitedBy = inviteCode.sourceId;
+    const isInviteCodeValid = await validateInviteCode(req, res, toInsert);
+    if (!isInviteCodeValid) {
+      await MongoDB.abortTransaction(session);
+      return;
     }
     const newUser = (await new UserModel(toInsert).save(sessionOptions)) as unknown as IUser;
     if (shouldVerifyEmail) {
       await generateVerificationCode(newUser);
     }
-    if (Configuration.get("user.account-creation.enable-invite-only")) {
-      const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
-      const inviteCodes = [];
-      for (let j = 0; j < inviteCodeCount; j++) {
-        inviteCodes.push({
-          code: uuidv4(),
-          sourceId: newUser._id,
-        });
-      }
-      if (sessionOptions) {
-        await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
-      } else {
-        await InviteCodeModel.insertMany(inviteCodes);
-      }
-      const updateUsedBy = InviteCodeModel.updateOne(
-        { code: req.body.inviteCode },
-        { $set: { targetId: newUser._id } }
-      );
-      if (sessionOptions) updateUsedBy.session(sessionOptions.session);
-      await updateUsedBy;
-    }
+    await useInviteCode(newUser, req.body.inviteCode, sessionOptions);
     newUser.password = undefined;
     const response = {
       user: newUser,

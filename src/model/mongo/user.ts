@@ -194,7 +194,7 @@ export type IUser = {
   subscriptionExpiry: Date;
   subscriptionTier: string;
   credits: number;
-  invitedBy: string;
+  invitedBy: string | ObjectId;
   isActive: boolean;
   deactivateDate: Date;
   isBanned: boolean;
