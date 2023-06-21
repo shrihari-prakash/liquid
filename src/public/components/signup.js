@@ -146,6 +146,7 @@ export default function SignUp() {
             className="form-control"
             placeholder="XX-0000-0000000000"
             spellCheck="false"
+            autoComplete="off"
             id="inviteCode"
             required
           />
