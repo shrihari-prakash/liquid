@@ -27,7 +27,7 @@ export default function Layout({ children }) {
     }
 
     const usePrimaryButton = () => {
-      const props = ["border-radius", "text-color", "active-text-color", "color", "active-color", "focus-box-shadow"];
+      const props = ["border-radius", "text-color", "active-text-color", "color", "active-color", "focus-box-shadow", "height"];
       props.forEach((prop) => {
         setStyleProperty(`--primary-button-${prop}`, getThemeVariable(`primary-button.${prop}`));
       });
@@ -38,11 +38,16 @@ export default function Layout({ children }) {
       setStyleProperty("--background-color", getThemeVariable("background-color"));
       setStyleProperty("--form-input-border-radius", getThemeVariable("form.input-border-radius"));
       setStyleProperty("--form-input-padding", getThemeVariable("form.input-padding"));
+      setStyleProperty("--form-input-vertical-padding", getThemeVariable("form.input-vertical-padding"));
+      setStyleProperty("--form-input-horizontal-padding", getThemeVariable("form.input-horizontal-padding"));
       if (theme === "light") {
         changeToLightVariable("--text-color");
         changeToLightVariable("--text-lighter-color");
         changeToLightVariable("--border-color");
         changeToLightVariable("--glass-color");
+      }
+      if (!getThemeVariable("form.input-use-border")) {
+        setStyleProperty("--border-color", "transparant");
       }
     };
 

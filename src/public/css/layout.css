@@ -15,12 +15,13 @@
   --background-color: #16181c;
   --text-color: #e2e2e2;
   --text-lighter-color: #b3b3b3;
-  --border-color: #555555;
+  --border-color: #424242;
   --glass-color: #00000030;
   --spinner-background-color: #16181c;
   --spinner-primary-color: #ffffff40;
   --spinner-secondary-color: #2b2b2b;
   /* Other */
+  --primary-button-height: 54px;
   --primary-button-border-radius: 30px;
   --form-input-border-radius: 7px;
   --form-input-padding: 15px;
