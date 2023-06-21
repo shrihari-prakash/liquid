@@ -25,6 +25,10 @@ import {
   getPhoneValidator,
   getUsernameValidator,
 } from "../../../utils/validator/user";
+import InviteCodeModel from "../../../model/mongo/invite-code";
+import { MongoDB } from "../../../singleton/mongo-db";
+import { ClientSession } from "mongoose";
+import { generateInviteCode } from "../../../utils/invite-code";
 
 export const bcryptConfig = {
   salt: 10,
@@ -38,9 +42,57 @@ export const POST_CreateValidator = [
   getLastNameValidator(body, true),
   getPhoneCountryCodeValidator(body, false),
   getPhoneValidator(body, false),
+  body("inviteCode").optional().isString(),
 ];
 
+async function validateInviteCode(req: Request, res: Response, user: IUser) {
+  if (!Configuration.get("user.account-creation.enable-invite-only")) {
+    return true;
+  }
+  if (!req.body.inviteCode) {
+    const errors = [
+      {
+        msg: "Invalid value",
+        param: "inviteCode",
+        location: "body",
+      },
+    ];
+    res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+    return false;
+  }
+  const inviteCode = await InviteCodeModel.findOne({ code: req.body.inviteCode });
+  if (!inviteCode || inviteCode.targetId) {
+    res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidInviteCode));
+    return false;
+  }
+  user.invitedBy = inviteCode.sourceId.toString();
+  return true;
+}
+
+async function useInviteCode(user: IUser, code: string, sessionOptions: { session: ClientSession } | undefined) {
+  if (!Configuration.get("user.account-creation.enable-invite-only")) {
+    return true;
+  }
+  const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
+  const inviteCodes = [];
+  for (let j = 0; j < inviteCodeCount; j++) {
+    inviteCodes.push({
+      code: generateInviteCode(),
+      sourceId: user._id,
+    });
+  }
+  if (sessionOptions) {
+    await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
+  } else {
+    await InviteCodeModel.insertMany(inviteCodes);
+  }
+  const updateUsedBy = InviteCodeModel.updateOne({ code: code }, { $set: { targetId: user._id } });
+  if (sessionOptions) updateUsedBy.session(sessionOptions.session);
+  await updateUsedBy;
+}
+
 const POST_Create = async (req: Request, res: Response) => {
+  let session = "";
   try {
     if (Configuration.get("user.account-creation.enable-ip-based-throttle")) {
       const ipResult = (await UserModel.findOne({
@@ -98,6 +150,9 @@ const POST_Create = async (req: Request, res: Response) => {
         return res.status(statusCodes.created).json(new SuccessResponse(response));
       }
     }
+    session = await MongoDB.startSession();
+    MongoDB.startTransaction(session);
+    const sessionOptions = MongoDB.getSessionOptions(session);
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
     const role = Configuration.get("system.role.default");
     const toInsert: any = {
@@ -118,18 +173,26 @@ const POST_Create = async (req: Request, res: Response) => {
       toInsert.phoneCountryCode = phoneCountryCode;
       toInsert.phoneVerified = false;
     }
-    const newUser = (await new UserModel(toInsert).save()) as unknown as IUser;
+    const isInviteCodeValid = await validateInviteCode(req, res, toInsert);
+    if (!isInviteCodeValid) {
+      await MongoDB.abortTransaction(session);
+      return;
+    }
+    const newUser = (await new UserModel(toInsert).save(sessionOptions)) as unknown as IUser;
     if (shouldVerifyEmail) {
       await generateVerificationCode(newUser);
     }
+    await useInviteCode(newUser, req.body.inviteCode, sessionOptions);
     newUser.password = undefined;
     const response = {
       user: newUser,
     };
+    await MongoDB.commitTransaction(session);
     Pusher.publish(new PushEvent(PushEventList.USER_CREATE, { user: newUser }));
     return res.status(statusCodes.created).json(new SuccessResponse(response));
   } catch (err) {
     log.error(err);
+    await MongoDB.abortTransaction(session);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };

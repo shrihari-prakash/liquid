@@ -16,8 +16,12 @@ export const setupUsers = async () => {
   await BlockModel.deleteMany({});
   await VerificationCodeModel.deleteMany({});
 
-  await chai.request(app).post("/user/create").send(MemoryStore.users.user1);
-  await chai.request(app).post("/user/create").send(MemoryStore.users.user2);
+  try {
+    await chai.request(app).post("/user/create").send(MemoryStore.users.user1);
+    await chai.request(app).post("/user/create").send(MemoryStore.users.user2);
+  } catch (err) {
+    console.error(err);
+  }
 
   const users = await UserModel.find({});
 

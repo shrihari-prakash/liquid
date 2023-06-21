@@ -22,6 +22,8 @@ import {
 } from "../../../../utils/validator/user";
 import { MongoDB } from "../../../../singleton/mongo-db";
 import { sanitizeEmailAddress } from "../../../../utils/email";
+import InviteCodeModel from "../../../../model/mongo/invite-code";
+import { generateInviteCode } from "../../../../utils/invite-code";
 
 export const POST_CreateValidator = [
   body().isArray(),
@@ -38,10 +40,10 @@ export const POST_CreateValidator = [
 const POST_Create = async (req: Request, res: Response) => {
   let session = "";
   try {
+    if (hasErrors(req, res)) return;
     session = await MongoDB.startSession();
     MongoDB.startTransaction(session);
     const sessionOptions = MongoDB.getSessionOptions(session);
-    if (hasErrors(req, res)) return;
     const sourceList = req.body;
     const existingUsers = await UserModel.find({
       $or: [
@@ -55,6 +57,7 @@ const POST_Create = async (req: Request, res: Response) => {
     }).lean();
     log.debug("Found %d duplicate users in bulk create", existingUsers.length);
     if (existingUsers.length) {
+      await MongoDB.abortTransaction(session);
       return res
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { existingUsers }));
@@ -81,7 +84,7 @@ const POST_Create = async (req: Request, res: Response) => {
         role,
         password,
         emailVerified: true,
-        creationIp: req.ip
+        creationIp: req.ip,
       };
       if (phone) {
         user.phone = phone;
@@ -90,10 +93,29 @@ const POST_Create = async (req: Request, res: Response) => {
       }
       insertList[i] = user;
     }
+    let inserted;
     if (sessionOptions) {
-      await UserModel.insertMany(insertList, sessionOptions);
+      inserted = await UserModel.insertMany(insertList, sessionOptions);
     } else {
-      await UserModel.insertMany(insertList);
+      inserted = await UserModel.insertMany(insertList);
+    }
+    if (Configuration.get("user.account-creation.enable-invite-only")) {
+      let inviteCodes: any[] = [];
+      const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
+      for (let i = 0; i < inserted.length; i++) {
+        const user = inserted[i];
+        for (let j = 0; j < inviteCodeCount; j++) {
+          inviteCodes.push({
+            code: generateInviteCode(),
+            sourceId: user._id,
+          });
+        }
+      }
+      if (sessionOptions) {
+        await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
+      } else {
+        await InviteCodeModel.insertMany(inviteCodes);
+      }
     }
     await MongoDB.commitTransaction(session);
     log.info(`${insertList.length} records inserted.`);
