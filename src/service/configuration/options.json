@@ -438,8 +438,7 @@
     "displayName": "User Account Creation Password Validation Regex",
     "envName": "USER_ACCOUNT_CREATION_PASSWORD_VALIDATION_REGEX",
     "description": "Specifies the regex to be used to validate password for user accounts.",
-    "type": "string",
-    "default": null
+    "type": "string"
   },
   {
     "name": "user.account-creation.require-email-verification",

@@ -35,4 +35,10 @@ export class Configuration {
         return value;
     }
   }
+
+  public set(name: string, value: any) {
+    console.log("set", name, value);
+    const option: Option = this.options[name];
+    process.env[option.envName] = value + "";
+  }
 }
