@@ -57,8 +57,8 @@
   color: var(--text-lighter-color);
 }
 
-.form-group > span,
-.form-group > input {
+.form-group > .form-control,
+.form-group > .form-control-multi {
   width: calc(100% - (var(--form-input-horizontal-padding) * 2));
   border: 1px solid var(--border-color);
   padding-top: var(--form-input-vertical-padding);

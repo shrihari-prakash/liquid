@@ -202,7 +202,7 @@ export default function SignUp() {
           <label className="noselect" htmlFor="phone">
             Phone
           </label>
-          <span className="flex">
+          <span className="form-control-multi flex">
             <select
               name="phoneCountryCode"
               id="phoneCountryCode"
