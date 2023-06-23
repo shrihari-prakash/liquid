@@ -124,6 +124,12 @@
     "default": "Focus on writing your app logic while liquid handles the same old authentication logic 🔒"
   },
   {
+    "name": "form.input.can-display-placeholder",
+    "displayName": "Form Input Can Display Placeholder",
+    "description": "Specifies if input fields in forms can display placeholder.",
+    "default": true
+  },
+  {
     "name": "theme.app-font-face",
     "displayName": "Theme - App Font Face",
     "description": "Specifies the Font Face to be used in static pages.",

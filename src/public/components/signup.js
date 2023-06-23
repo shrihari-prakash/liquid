@@ -1,7 +1,7 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
 import { countryCodes } from "../utils/country-codes.js";
-import { useTitle } from "../utils/utils.js";
+import { getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function SignUp() {
   const submitButtonText = "Create Account";
@@ -126,7 +126,7 @@ export default function SignUp() {
         <input
           type="text"
           className="form-control"
-          placeholder="your_username"
+          placeholder={getPlaceholder("your_username", configuration)}
           minLength="8"
           autoComplete="username"
           autoCorrect="off"
@@ -144,7 +144,7 @@ export default function SignUp() {
           <input
             type="text"
             className="form-control"
-            placeholder="XX-0000-0000000000"
+            placeholder={getPlaceholder("XX-0000-0000000000", configuration)}
             spellCheck="false"
             autoComplete="off"
             id="inviteCode"
@@ -159,7 +159,7 @@ export default function SignUp() {
         <input
           type="text"
           className="form-control"
-          placeholder="Your First Name"
+          placeholder={getPlaceholder("Your First Name", configuration)}
           minLength="3"
           autoCorrect="off"
           autoCapitalize="on"
@@ -175,7 +175,7 @@ export default function SignUp() {
         <input
           type="text"
           className="form-control"
-          placeholder="Your Last Name"
+          placeholder={getPlaceholder("Your Last Name", configuration)}
           minLength="3"
           autoCorrect="off"
           autoCapitalize="on"
@@ -191,7 +191,7 @@ export default function SignUp() {
         <input
           type="email"
           className="form-control"
-          placeholder="your@email.com"
+          placeholder={getPlaceholder("your@email.com", configuration)}
           spellCheck="false"
           id="email"
           required
@@ -216,7 +216,13 @@ export default function SignUp() {
                   {`${countryCode.iso} (${countryCode.code})`}
                 </option>)}
             </select>
-            <input type="tel" className="form-control" placeholder="0000000000" spellCheck="false" id="phone" />
+            <input
+              type="tel"
+              className="form-control"
+              placeholder={getPlaceholder("0000000000", configuration)}
+              spellCheck="false"
+              id="phone"
+            />
           </span>
         </div>}
       <div className="form-group last mb-3">
@@ -224,7 +230,7 @@ export default function SignUp() {
         <input
           type="password"
           className="form-control"
-          placeholder="********"
+          placeholder={getPlaceholder("********", configuration)}
           minLength="8"
           autoComplete="new-password"
           id="password"

@@ -63,3 +63,11 @@ export function setStyleProperty(name, value) {
 export function changeToLightVariable(variable) {
   setStyleProperty(variable, `var(${variable}__light)`);
 }
+
+export function getPlaceholder(text, configuration) {
+  if (configuration["form.input.can-display-placeholder"]) {
+    return text;
+  } else {
+    return "";
+  }
+}

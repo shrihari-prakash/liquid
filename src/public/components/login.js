@@ -1,6 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
-import { isEmail, useTitle, uuidv4 } from "../utils/utils.js";
+import { getPlaceholder, isEmail, useTitle, uuidv4 } from "../utils/utils.js";
 
 export default function Login() {
   const submitButtonText = "Login";
@@ -111,7 +111,7 @@ export default function Login() {
         <input
           type="text"
           className="form-control"
-          placeholder="your_username"
+          placeholder={getPlaceholder("your_username", configuration)}
           minLength="8"
           autoComplete="username"
           autoCorrect="off"
@@ -126,7 +126,7 @@ export default function Login() {
         <input
           type="password"
           className="form-control"
-          placeholder="********"
+          placeholder={getPlaceholder("********", configuration)}
           minLength="8"
           autoComplete="current-password"
           id="password"

@@ -1,5 +1,5 @@
 import { ConfigurationContext } from "../context/configuration.js";
-import { useTitle } from "../utils/utils.js";
+import { getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function VerifyAccount() {
     const submitButtonText = "Verify";
@@ -59,7 +59,7 @@ export default function VerifyAccount() {
                 <input
                     type="text"
                     className="form-control"
-                    placeholder="Your Verification Code"
+                    placeholder={getPlaceholder("Your Verification Code", configuration)}
                     minLength="4"
                     autoComplete="off"
                     autoCorrect="off"
