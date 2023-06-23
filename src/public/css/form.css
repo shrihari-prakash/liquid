@@ -19,7 +19,7 @@
 }
 
 .form-group label {
-  font-size: 12px;
+  font-size: 14px;
   display: block;
   margin-top: 8px;
   margin-bottom: 4px;
@@ -93,13 +93,16 @@ input[data-autocompleted] {
 }
 
 .page-links {
+  line-height: 100%;
   width: 100%;
   display: flex;
   justify-content: end;
-  margin: 1.2rem 0;
+  align-items: center;
+  margin: 1rem 0 1.4rem 0;
 }
 
 .page-link {
+  line-height: 100%;
   color: var(--text-lighter-color);
   text-decoration: none;
   position: relative;
