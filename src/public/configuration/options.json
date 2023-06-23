@@ -1,0 +1,282 @@
+[
+  {
+    "name": "oauth.client-id",
+    "displayName": "OAuth Client ID",
+    "description": "Specifies the Client ID of the default OAuth client. Use query parameter `clientId` to use a different client."
+  },
+  {
+    "name": "oauth.redirect-uri",
+    "displayName": "OAuth Redirect URI",
+    "description": "Specifies the default Redirect URI after login. Use query parameter `redirect` on login to use a different Redirect URI."
+  },
+  {
+    "name": "user.account-creation.require-email-verification",
+    "displayName": "User Account Creation Require Email Verification",
+    "description": "Specifies if email verification is required while signing up in the service. Also modify `user.account-creation.require-email-verification` in your backend config.",
+    "default": true
+  },
+  {
+    "name": "user.account-creation.enable-invite-only",
+    "displayName": "User Account Creation Enable Invite Only",
+    "description": "Specifies if accounts can be created only using an invite code. Also modify `user.account-creation.enable-invite-only` in your backend config.",
+    "default": false
+  },
+  {
+    "name": "privilege.can-create-account",
+    "displayName": "Can Use Create Account",
+    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`. Also modify `privilege.can-create-account` in your backend config.",
+    "default": true
+  },
+  {
+    "name": "privilege.can-reset-password",
+    "displayName": "Can Use Reset Password",
+    "description": "Specifies if users can reset their passwords using forgot password option.",
+    "default": true
+  },
+  {
+    "name": "privilege.can-use-phone-number",
+    "displayName": "Can Use Phone Number On Signing Up",
+    "description": "Specifies if users can signup with phone numbers. Note that Liquid currently does not support verification of phone numbers. By default, all phone numbers are marked as unverified.  Also modify `privilege.can-use-phone-number` in your backend config.",
+    "default": false
+  },
+  {
+    "name": "assets.favicon-uri",
+    "displayName": "Favicon URI",
+    "description": "Specifies the URL for the favicon.",
+    "default": "images/app-icon-mini.png"
+  },
+  {
+    "name": "assets.mini-icon-light",
+    "displayName": "Mini Icon (Light Mode)",
+    "description": "Specifies the URL for the icon in the top left of the screens.",
+    "default": "images/app-icon-mini.png"
+  },
+  {
+    "name": "assets.mini-icon-dark",
+    "displayName": "Mini Icon Dark (Dark Mode)",
+    "description": "Specifies the URL for the icon in the top left of the screens.",
+    "default": "images/app-icon-mini.png"
+  },
+  {
+    "name": "assets.header-icon-light",
+    "displayName": "Header Icon (Light Mode)",
+    "description": "Specifies the URL for the icon that appears in the header of the screen.",
+    "default": "images/app-icon-header-light.png"
+  },
+  {
+    "name": "assets.header-icon-dark",
+    "displayName": "Header Icon (Dark Mode)",
+    "description": "Specifies the URL for the icon that appears in the header of the screen.",
+    "default": "images/app-icon-header-dark.png"
+  },
+  {
+    "name": "assets.sidebar.backdrop-image-light",
+    "displayName": "Backdrop Image (Light Mode)",
+    "description": "Specifies the URL for the sidebar background image.",
+    "default": "images/bg-light.jpg"
+  },
+  {
+    "name": "assets.sidebar.backdrop-image-dark",
+    "displayName": "Backdrop Image (Dark Mode)",
+    "description": "Specifies the URL for the sidebar background image.",
+    "default": "images/bg.jpg"
+  },
+  {
+    "name": "content.app-name",
+    "displayName": "App Name",
+    "description": "Specifies the name of the application.",
+    "default": "Liquid"
+  },
+  {
+    "name": "content.app-tagline",
+    "displayName": "App Tagline",
+    "description": "Specifies the tagline of the application.",
+    "default": "Your tagline here."
+  },
+  {
+    "name": "content.sidebar.enabled",
+    "displayName": "Enable Sidebar",
+    "description": "Specifies the sidebar can be shown.",
+    "default": true
+  },
+  {
+    "name": "content.sidebar.content-enabled",
+    "displayName": "Enable Sidebar Content",
+    "description": "Specifies the sidebar content can be shown.",
+    "default": true
+  },
+  {
+    "name": "content.sidebar.intro.title1",
+    "displayName": "Sidebar Intro Title 1",
+    "description": "Specifies the content for Title 1 of the sidebar intro.",
+    "default": "Plug & Play"
+  },
+  {
+    "name": "content.sidebar.intro.title2",
+    "displayName": "Sidebar Intro Title 2",
+    "description": "Specifies the content for Title 2 of the sidebar intro.",
+    "default": "with any project."
+  },
+  {
+    "name": "content.sidebar.intro.description",
+    "displayName": "Sidebar Intro Description",
+    "description": "Specifies the content for Description of the sidebar intro.",
+    "default": "Focus on writing your app logic while liquid handles the same old authentication logic 🔒"
+  },
+  {
+    "name": "theme.app-font-face",
+    "displayName": "Theme - App Font Face",
+    "description": "Specifies the Font Face to be used in static pages.",
+    "default": null
+  },
+  {
+    "name": "theme.app-font-url",
+    "displayName": "Theme - App Font URL",
+    "description": "Specifies the Font URL associated with the given Font Face to be used in static pages.",
+    "default": null
+  },
+  {
+    "name": "theme.light.background-color",
+    "displayName": "Theme - Background Color (Light Mode)",
+    "description": "Specifies the page background color.",
+    "default": "#ffffff"
+  },
+  {
+    "name": "theme.light.primary-button.height",
+    "displayName": "Theme - Primary Button Height (Light Mode)",
+    "description": "Specifies the height of the submit button in forms.",
+    "default": "54px"
+  },
+  {
+    "name": "theme.light.primary-button.color",
+    "displayName": "Theme - Primary Button Color (Light Mode)",
+    "description": "Specifies the color of the submit button in forms.",
+    "default": "#007bff"
+  },
+  {
+    "name": "theme.light.primary-button.active-color",
+    "displayName": "Theme - Primary Button Active Color (Light Mode)",
+    "description": "Specifies the color of the submit button (when active) in forms.",
+    "default": "#0069d9"
+  },
+  {
+    "name": "theme.light.primary-button.text-color",
+    "displayName": "Theme - Primary Button Text Color (Light Mode)",
+    "description": "Specifies the text color of the submit button in forms.",
+    "default": "#ffffff"
+  },
+  {
+    "name": "theme.light.primary-button.active-text-color",
+    "displayName": "Theme - Primary Button Text Active Color (Light Mode)",
+    "description": "Specifies the text color of the submit button (when active) in forms.",
+    "default": "#ffffff"
+  },
+  {
+    "name": "theme.light.primary-button.focus-box-shadow",
+    "displayName": "Theme - Primary Button Box Shadow (Light Mode)",
+    "description": "Specifies the value for box shadow property of the submit button (when focussed) in forms.",
+    "default": "0 0 0 6px rgba(0, 123, 255, 0.5)"
+  },
+  {
+    "name": "theme.light.primary-button.border-radius",
+    "displayName": "Theme - Primary Button Border Radius (Light Mode)",
+    "description": "Specifies the border radius of the submit button in forms.",
+    "default": "30px"
+  },
+  {
+    "name": "theme.light.form.input-border-radius",
+    "displayName": "Theme - Form Input Border Radius (Light Mode)",
+    "description": "Specifies the border radius of the input fields in forms.",
+    "default": "7px"
+  },
+  {
+    "name": "theme.light.form.input-use-border",
+    "displayName": "Theme - Use Border in Form Input (Light Mode)",
+    "description": "Specifies the borders can be used in input fields in forms.",
+    "default": true
+  },
+  {
+    "name": "theme.light.form.input-vertical-padding",
+    "displayName": "Theme - Form Input Vertical Padding (Light Mode)",
+    "description": "Specifies the vertical padding of the input fields in forms.",
+    "default": "8px"
+  },
+  {
+    "name": "theme.light.form.input-horizontal-padding",
+    "displayName": "Theme - Form Input Horizontal Padding (Light Mode)",
+    "description": "Specifies the horizontal padding of the input fields in forms.",
+    "default": "10px"
+  },
+  {
+    "name": "theme.dark.background-color",
+    "displayName": "Theme - Background Color (Dark Mode)",
+    "description": "Specifies the page background color.",
+    "default": "#16181c"
+  },
+  {
+    "name": "theme.dark.primary-button.height",
+    "displayName": "Theme - Primary Button Height (Dark Mode)",
+    "description": "Specifies the height of the submit button in forms.",
+    "default": "54px"
+  },
+  {
+    "name": "theme.dark.primary-button.color",
+    "displayName": "Theme - Primary Button Color (Dark Mode)",
+    "description": "Specifies the color of the submit button in forms.",
+    "default": "#007bff"
+  },
+  {
+    "name": "theme.dark.primary-button.active-color",
+    "displayName": "Theme - Primary Button Active Color (Dark Mode)",
+    "description": "Specifies the color of the submit button (when active) in forms.",
+    "default": "#0069d9"
+  },
+  {
+    "name": "theme.dark.primary-button.text-color",
+    "displayName": "Theme - Primary Button Text Color (Dark Mode)",
+    "description": "Specifies the text color of the submit button in forms.",
+    "default": "#ffffff"
+  },
+  {
+    "name": "theme.dark.primary-button.active-text-color",
+    "displayName": "Theme - Primary Button Text Active Color (Dark Mode)",
+    "description": "Specifies the text color of the submit button (when active) in forms.",
+    "default": "#ffffff"
+  },
+  {
+    "name": "theme.dark.primary-button.focus-box-shadow",
+    "displayName": "Theme - Primary Button Box Shadow (Dark Mode)",
+    "description": "Specifies the value for box shadow property of the submit button (when focussed) in forms.",
+    "default": "0 0 0 6px rgba(0, 123, 255, 0.5)"
+  },
+  {
+    "name": "theme.dark.primary-button.border-radius",
+    "displayName": "Theme - Primary Button Border Radius (Dark Mode)",
+    "description": "Specifies the border radius of the submit button in forms.",
+    "default": "30px"
+  },
+  {
+    "name": "theme.dark.form.input-border-radius",
+    "displayName": "Theme - Form Input Border Radius (Dark Mode)",
+    "description": "Specifies the border radius of the input fields in forms.",
+    "default": "7px"
+  },
+  {
+    "name": "theme.dark.form.input-use-border",
+    "displayName": "Theme - Use Border in Form Input (Dark Mode)",
+    "description": "Specifies the borders can be used in input fields in forms.",
+    "default": true
+  },
+  {
+    "name": "theme.dark.form.input-vertical-padding",
+    "displayName": "Theme - Form Input Vertical Padding (Dark Mode)",
+    "description": "Specifies the vertical padding of the input fields in forms.",
+    "default": "8px"
+  },
+  {
+    "name": "theme.dark.form.input-horizontal-padding",
+    "displayName": "Theme - Form Input Horizontal Padding (Dark Mode)",
+    "description": "Specifies the horizontal padding of the input fields in forms.",
+    "default": "10px"
+  }
+]

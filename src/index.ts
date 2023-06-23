@@ -81,6 +81,7 @@ Mailer.initialize(app);
 const staticFolder = Configuration.get("system.static.use-relative-path")
   ? path.join(__dirname, Configuration.get("system.static-folder"))
   : Configuration.get("system.static-folder");
+log.info("Static path normalized to %s", staticFolder);
 app.use(
   "/",
   express.static(staticFolder, {
@@ -94,9 +95,9 @@ if (appConfigAbsolutePath) {
     res.sendFile(appConfigAbsolutePath);
   });
 } else {
-  const localAppConfigPath = path.join(__dirname, "app-config.json");
+  const localAppConfigPath = path.join(staticFolder, "configuration/app-config.json");
   if (!fs.existsSync(localAppConfigPath)) {
-    const source = path.join(__dirname, "app-config.sample.json");
+    const source = path.join(staticFolder, "configuration/app-config.sample.json");
     const target = localAppConfigPath;
     fs.copyFileSync(source, target);
   }

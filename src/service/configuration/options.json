@@ -413,7 +413,7 @@
     "name": "privilege.can-create-account",
     "displayName": "Can Use Create Account",
     "envName": "CAN_CREATE_ACCOUNT",
-    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`.",
+    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`. Also modify `privilege.can-create-account` in your frontend config.",
     "type": "boolean",
     "default": true
   },
@@ -444,7 +444,7 @@
     "name": "user.account-creation.require-email-verification",
     "displayName": "User Account Creation Require Email Verification",
     "envName": "USER_ACCOUNT_CREATION_REQUIRE_EMAIL_VERIFICATION",
-    "description": "Specifies if email verification is required while signing up in the service. Also modify `general.requireEmailVerification` in your frontend app config.",
+    "description": "Specifies if email verification is required while signing up in the service. Also modify `user.account-creation.require-email-verification` in your frontend app config.",
     "type": "boolean",
     "default": true,
     "relatedOptions": ["sendgrid.*"]

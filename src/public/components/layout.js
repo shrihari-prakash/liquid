@@ -14,10 +14,20 @@ export default function Layout({ children }) {
   }
 
   React.useEffect(() => {
-    $.get("/app-config.json").done((data) => {
-      console.log("Configuration retrieved.", data);
-      console.log(Object.keys(data).length + " options loaded.");
-      setConfiguration(data);
+    $.get("./configuration/options.json").done((options) => {
+      console.log("Options retrieved.", options);
+      console.log(Object.keys(options).length + " options loaded.");
+      $.get("/app-config.json").done((conf) => {
+        console.log(Object.keys(conf).length + " options configured.");
+        console.log("Configuration retrieved.", conf);
+        options.forEach((option) => {
+          if (typeof conf[option.name] === "undefined") {
+            conf[option.name] = option.default;
+          }
+        });
+        console.log("Full configuration:", conf);
+        setConfiguration(conf);
+      });
     });
   }, []);
 
@@ -27,7 +37,15 @@ export default function Layout({ children }) {
     }
 
     const usePrimaryButton = () => {
-      const props = ["border-radius", "text-color", "active-text-color", "color", "active-color", "focus-box-shadow", "height"];
+      const props = [
+        "border-radius",
+        "text-color",
+        "active-text-color",
+        "color",
+        "active-color",
+        "focus-box-shadow",
+        "height",
+      ];
       props.forEach((prop) => {
         setStyleProperty(`--primary-button-${prop}`, getThemeVariable(`primary-button.${prop}`));
       });
