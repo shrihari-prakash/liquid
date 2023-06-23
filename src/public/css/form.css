@@ -55,6 +55,7 @@
 
 .form-control::placeholder {
   color: var(--text-lighter-color);
+  opacity: 0.5;
 }
 
 .form-group > .form-control,
