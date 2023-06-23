@@ -51,8 +51,8 @@ The following steps assume already you have **Redis** and **MongoDB** and **Send
 }
 ```
 
-1. Go to [Liquid Option Manager](https://liquid-om.netlify.app/frontend) and edit your frontend configurations. Edit properties `oauth.client-id` and `oauth.redirect-uri` to values from the document you just inserted into clients collection and export it. Feel free to explore other options related to UI customizations.
-2. Now go to [Liquid Option Manager](https://liquid-om.netlify.app/backend) and edit your backend configurations. For the most minimal setup, you will need to set:
+1. Go to [Liquid Option Manager (Frontend)](https://liquid-om.netlify.app/frontend) and edit your frontend configurations. Edit properties `oauth.client-id` and `oauth.redirect-uri` to values from the document you just inserted into clients collection and export it. Feel free to explore other options related to UI customizations.
+2. Now go to [Liquid Option Manager (Backend)](https://liquid-om.netlify.app/backend) and edit your backend configurations. For the most minimal setup, you will need to set:
    * `system.static.app-config-absolute-path` to `/environment/app-config.json`
    * `mongo-db.connection-string`
    * `sendgrid.api-key`
