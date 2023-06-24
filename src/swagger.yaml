@@ -1368,6 +1368,35 @@ paths:
                         type: boolean
       tags:
         - user-api
+  /user/invite-codes:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrives the invite codes for the logged in user. 
+      responses:
+        "200":
+          description: Returns invite codes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      inviteCodes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            targetId:
+                              type: string
+      tags:
+        - user-api
   /user/profile-picture:
     patch:
       consumes:

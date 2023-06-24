@@ -47,7 +47,9 @@ UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_S
 UserRouter.post("/logout", ...DelegatedAuthFlow, POST_Logout);
 
 // Invite System
-UserRouter.get("/invite-codes", ...DelegatedAuthFlow, GET_InviteCodes);
+if (Configuration.get("user.account-creation.enable-invite-only")) {
+  UserRouter.get("/invite-codes", ...DelegatedAuthFlow, GET_InviteCodes);
+}
 
 // Profile Picture
 if (Configuration.get("privilege.can-use-profile-picture-apis")) {
