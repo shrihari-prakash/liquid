@@ -45,6 +45,8 @@ export default function Layout({ children }) {
         "active-color",
         "focus-box-shadow",
         "height",
+        "error-color",
+        "error-text-color",
       ];
       props.forEach((prop) => {
         setStyleProperty(`--primary-button-${prop}`, getThemeVariable(`primary-button.${prop}`));
@@ -61,11 +63,13 @@ export default function Layout({ children }) {
       if (theme === "light") {
         changeToLightVariable("--text-color");
         changeToLightVariable("--text-lighter-color");
-        changeToLightVariable("--border-color");
+        changeToLightVariable("--form-input-border-color");
         changeToLightVariable("--glass-color");
       }
       if (!getThemeVariable("form.input-use-border")) {
-        setStyleProperty("--border-color", "transparant");
+        setStyleProperty("--form-input-border-color", "transparant");
+      } else {
+        setStyleProperty("--form-input-border-color", getThemeVariable("form.input-border-color"));
       }
     };
 

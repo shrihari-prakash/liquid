@@ -178,6 +178,18 @@
     "default": "#ffffff"
   },
   {
+    "name": "theme.light.primary-button.error-color",
+    "displayName": "Theme - Primary Button Error Color (Light Mode)",
+    "description": "Specifies the color of the submit button (during error) in forms.",
+    "default": "#ed4337"
+  },
+  {
+    "name": "theme.light.primary-button.error-text-color",
+    "displayName": "Theme - Primary Button Text Error Color (Light Mode)",
+    "description": "Specifies the color of the submit button (during error) in forms.",
+    "default": "#ffffff"
+  },
+  {
     "name": "theme.light.primary-button.focus-box-shadow",
     "displayName": "Theme - Primary Button Box Shadow (Light Mode)",
     "description": "Specifies the value for box shadow property of the submit button (when focussed) in forms.",
@@ -200,6 +212,12 @@
     "displayName": "Theme - Use Border in Form Input (Light Mode)",
     "description": "Specifies the borders can be used in input fields in forms.",
     "default": true
+  },
+  {
+    "name": "theme.light.form.input-border-color",
+    "displayName": "Theme - Form Input Border Color (Light Mode)",
+    "description": "Specifies the border colors used in form input fields.",
+    "default": "#c8c8c8"
   },
   {
     "name": "theme.light.form.input-vertical-padding",
@@ -250,6 +268,18 @@
     "default": "#ffffff"
   },
   {
+    "name": "theme.dark.primary-button.error-color",
+    "displayName": "Theme - Primary Button Error Color (Dark Mode)",
+    "description": "Specifies the color of the submit button (during error) in forms.",
+    "default": "#ed4337"
+  },
+  {
+    "name": "theme.dark.primary-button.error-text-color",
+    "displayName": "Theme - Primary Button Text Error Color (Dark Mode)",
+    "description": "Specifies the color of the submit button (during error) in forms.",
+    "default": "#ffffff"
+  },
+  {
     "name": "theme.dark.primary-button.focus-box-shadow",
     "displayName": "Theme - Primary Button Box Shadow (Dark Mode)",
     "description": "Specifies the value for box shadow property of the submit button (when focussed) in forms.",
@@ -272,6 +302,12 @@
     "displayName": "Theme - Use Border in Form Input (Dark Mode)",
     "description": "Specifies the borders can be used in input fields in forms.",
     "default": true
+  },
+  {
+    "name": "theme.dark.form.input-border-color",
+    "displayName": "Theme - Form Input Border Color (Dark Mode)",
+    "description": "Specifies the border colors used in form input fields.",
+    "default": "#424242"
   },
   {
     "name": "theme.dark.form.input-vertical-padding",

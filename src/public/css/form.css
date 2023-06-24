@@ -61,7 +61,7 @@
 .form-group > .form-control,
 .form-group > .form-control-multi {
   width: calc(100% - (var(--form-input-horizontal-padding) * 2));
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--form-input-border-color);
   padding-top: var(--form-input-vertical-padding);
   padding-bottom: var(--form-input-vertical-padding);
   padding-left: var(--form-input-horizontal-padding);
