@@ -14,10 +14,20 @@ export default function Layout({ children }) {
   }
 
   React.useEffect(() => {
-    $.get("/app-config.json").done((data) => {
-      console.log("Configuration retrieved.", data);
-      console.log(Object.keys(data).length + " options loaded.");
-      setConfiguration(data);
+    $.get("./configuration/options.json").done((options) => {
+      console.log("Options retrieved.", options);
+      console.log(Object.keys(options).length + " options loaded.");
+      $.get("/app-config.json").done((conf) => {
+        console.log(Object.keys(conf).length + " options configured.");
+        console.log("Configuration retrieved.", conf);
+        options.forEach((option) => {
+          if (typeof conf[option.name] === "undefined") {
+            conf[option.name] = option.default;
+          }
+        });
+        console.log("Full configuration:", conf);
+        setConfiguration(conf);
+      });
     });
   }, []);
 
@@ -27,7 +37,17 @@ export default function Layout({ children }) {
     }
 
     const usePrimaryButton = () => {
-      const props = ["border-radius", "text-color", "active-text-color", "color", "active-color", "focus-box-shadow", "height"];
+      const props = [
+        "border-radius",
+        "text-color",
+        "active-text-color",
+        "color",
+        "active-color",
+        "focus-box-shadow",
+        "height",
+        "error-color",
+        "error-text-color",
+      ];
       props.forEach((prop) => {
         setStyleProperty(`--primary-button-${prop}`, getThemeVariable(`primary-button.${prop}`));
       });
@@ -43,11 +63,13 @@ export default function Layout({ children }) {
       if (theme === "light") {
         changeToLightVariable("--text-color");
         changeToLightVariable("--text-lighter-color");
-        changeToLightVariable("--border-color");
+        changeToLightVariable("--form-input-border-color");
         changeToLightVariable("--glass-color");
       }
       if (!getThemeVariable("form.input-use-border")) {
-        setStyleProperty("--border-color", "transparant");
+        setStyleProperty("--form-input-border-color", "transparant");
+      } else {
+        setStyleProperty("--form-input-border-color", getThemeVariable("form.input-border-color"));
       }
     };
 

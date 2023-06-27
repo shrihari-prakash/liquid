@@ -1,5 +1,5 @@
 import { ConfigurationContext } from "../context/configuration.js";
-import { useTitle } from "../utils/utils.js";
+import { getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function GetCode() {
     const submitButtonText = "Get Code";
@@ -62,7 +62,7 @@ export default function GetCode() {
                 <input
                     type="email"
                     className="form-control"
-                    placeholder="your@email.com"
+                    placeholder={getPlaceholder("your@email.com", configuration)}
                     minLength="8"
                     autoComplete="off"
                     autoCorrect="off"

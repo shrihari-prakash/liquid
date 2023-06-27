@@ -1,0 +1,5 @@
+{
+  "oauth.client-id": "{{your_oauth_client_id}}",
+  "oauth.redirect-uri": "{{your_oauth_redirect_uri}}"
+}
+

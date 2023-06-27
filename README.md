@@ -51,8 +51,8 @@ The following steps assume already you have **Redis** and **MongoDB** and **Send
 }
 ```
 
-1. In your host machine, create a file called `app-config.json` with the contents of [this file](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/app-config.sample.json) and edit properties `oauth.client-id` and `oauth.redirect-uri` to values from the document you just inserted into clients collection. This is the configuration file used for all your frontend stuff like UI customizations.
-2. Now go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your backend configurations. For the most minimal setup, you will need to set:
+1. Go to [Liquid Option Manager (Frontend)](https://liquid-om.netlify.app/frontend) and edit your frontend configurations. Edit properties `oauth.client-id` and `oauth.redirect-uri` to values from the document you just inserted into clients collection and export it. Feel free to explore other options related to UI customizations.
+2. Now go to [Liquid Option Manager (Backend)](https://liquid-om.netlify.app/backend) and edit your backend configurations. For the most minimal setup, you will need to set:
    * `system.static.app-config-absolute-path` to `/environment/app-config.json`
    * `mongo-db.connection-string`
    * `sendgrid.api-key`
@@ -63,7 +63,18 @@ The following steps assume already you have **Redis** and **MongoDB** and **Send
 5. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
 6. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
 7. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. If the rest of your project is running on Node, you can use the [Liquid Node Connector](https://www.npmjs.com/package/liquid-node-connector) to authenticate users connecting to your service and also to get client tokens to interact with Liquid client APIs. [Click here for Swagger](https://shrihari-prakash.github.io/liquid-docs). Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
-> **_NOTE:_** If you are using nginx as reverse proxy and find that cookies are not working or if you get the error `Server error: handle() did not return a user object` while logging in, add `proxy_set_header X-Forwarded-Proto $scheme;` to server -> location in your nginx config.
+
+#### Special Configurations for Nginx Reverse Proxy
+It is important that you configure the headers `X-Forwarded-Proto` and `X-Forwarded-For` as follows to ensure that the security features work properly:
+
+```
+location / {
+  # other reverse proxy configurations...
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header X-Forwarded-For $remote_addr;
+}
+```
+
 ### Development
 1. Run `npm i`.
 2. Run the following command (without brackets):

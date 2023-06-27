@@ -1,5 +1,5 @@
 import { ConfigurationContext } from "../context/configuration.js";
-import { useTitle } from "../utils/utils.js";
+import { getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function ResetPassword() {
     const submitButtonText = "Change Password";
@@ -61,7 +61,7 @@ export default function ResetPassword() {
                 <input
                     type="text"
                     class="form-control"
-                    placeholder="Verification code"
+                    placeholder={getPlaceholder("Verification code", configuration)}
                     minLength="8"
                     autoComplete="off"
                     id="code"
@@ -73,7 +73,7 @@ export default function ResetPassword() {
                 <input
                     type="password"
                     class="form-control"
-                    placeholder="********"
+                    placeholder={getPlaceholder("********", configuration)}
                     minLength="8"
                     autoComplete="new-password"
                     id="password"

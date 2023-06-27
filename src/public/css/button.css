@@ -44,9 +44,9 @@
 
 .shake,
 .shake:hover {
-  color: #ffffff;
-  background-color: #ed4337 !important;
-  border-color: #ed4337 !important;
+  color: var(--primary-button-error-text-color) !important;
+  background-color: var(--primary-button-error-color) !important;
+  border-color: var(--primary-button-error-color) !important;
 }
 
 .shake {
