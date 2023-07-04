@@ -43,19 +43,19 @@
     "name": "assets.favicon-uri",
     "displayName": "Favicon URI",
     "description": "Specifies the URL for the favicon.",
-    "default": "images/app-icon-mini.png"
+    "default": "images/app-icon-mini-light.png"
   },
   {
     "name": "assets.mini-icon-light",
     "displayName": "Mini Icon (Light Mode)",
     "description": "Specifies the URL for the icon in the top left of the screens.",
-    "default": "images/app-icon-mini.png"
+    "default": "images/app-icon-mini-light.png"
   },
   {
     "name": "assets.mini-icon-dark",
     "displayName": "Mini Icon Dark (Dark Mode)",
     "description": "Specifies the URL for the icon in the top left of the screens.",
-    "default": "images/app-icon-mini.png"
+    "default": "images/app-icon-mini-dark.png"
   },
   {
     "name": "assets.header-icon-light",
