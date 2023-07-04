@@ -73,7 +73,7 @@
     "name": "assets.sidebar.backdrop-image-light",
     "displayName": "Backdrop Image (Light Mode)",
     "description": "Specifies the URL for the sidebar background image.",
-    "default": "images/bg-light.jpg"
+    "default": "images/bg.jpg"
   },
   {
     "name": "assets.sidebar.backdrop-image-dark",
@@ -157,13 +157,13 @@
     "name": "theme.light.primary-button.color",
     "displayName": "Theme - Primary Button Color (Light Mode)",
     "description": "Specifies the color of the submit button in forms.",
-    "default": "#007bff"
+    "default": "#0E86D4"
   },
   {
     "name": "theme.light.primary-button.active-color",
     "displayName": "Theme - Primary Button Active Color (Light Mode)",
     "description": "Specifies the color of the submit button (when active) in forms.",
-    "default": "#0069d9"
+    "default": "#055C9D"
   },
   {
     "name": "theme.light.primary-button.text-color",
@@ -193,7 +193,7 @@
     "name": "theme.light.primary-button.focus-box-shadow",
     "displayName": "Theme - Primary Button Box Shadow (Light Mode)",
     "description": "Specifies the value for box shadow property of the submit button (when focussed) in forms.",
-    "default": "0 0 0 6px rgba(0, 123, 255, 0.5)"
+    "default": "0 0 0 6px #055C9D4D"
   },
   {
     "name": "theme.light.primary-button.border-radius",
@@ -235,7 +235,7 @@
     "name": "theme.dark.background-color",
     "displayName": "Theme - Background Color (Dark Mode)",
     "description": "Specifies the page background color.",
-    "default": "#16181c"
+    "default": "#191414"
   },
   {
     "name": "theme.dark.primary-button.height",
@@ -247,13 +247,13 @@
     "name": "theme.dark.primary-button.color",
     "displayName": "Theme - Primary Button Color (Dark Mode)",
     "description": "Specifies the color of the submit button in forms.",
-    "default": "#007bff"
+    "default": "#055C9D"
   },
   {
     "name": "theme.dark.primary-button.active-color",
     "displayName": "Theme - Primary Button Active Color (Dark Mode)",
     "description": "Specifies the color of the submit button (when active) in forms.",
-    "default": "#0069d9"
+    "default": "#003B73"
   },
   {
     "name": "theme.dark.primary-button.text-color",
@@ -283,7 +283,7 @@
     "name": "theme.dark.primary-button.focus-box-shadow",
     "displayName": "Theme - Primary Button Box Shadow (Dark Mode)",
     "description": "Specifies the value for box shadow property of the submit button (when focussed) in forms.",
-    "default": "0 0 0 6px rgba(0, 123, 255, 0.5)"
+    "default": "0 0 0 6px #003B734D"
   },
   {
     "name": "theme.dark.primary-button.border-radius",
