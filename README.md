@@ -1,4 +1,4 @@
-# <img src="https://github.com/shrihari-prakash/liquid/blob/main/src/public/images/app-icon-mini.png" width="26" height="26"> Liquid: Seamless and highly customizable authentication and user management server for any project.
+# <img src="https://github.com/shrihari-prakash/liquid/blob/main/src/public/images/app-icon-mini-dark.png" width="26" height="26"> Liquid: Seamless and highly customizable authentication and user management server for any project.
 
 ![GitHub](https://img.shields.io/github/license/shrihari-prakash/liquid)
 [![Docker Image CI](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml)

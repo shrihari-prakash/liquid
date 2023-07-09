@@ -213,13 +213,21 @@ const OAuthModel = {
     return true;
   },
 
-  saveAuthorizationCode: async (code: Code, client: Client, user: User) => {
+  saveAuthorizationCode: async (
+    code: Code,
+    client: Client,
+    user: User,
+    codeChallenge?: string,
+    codeChallengeMethod?: string
+  ) => {
     try {
       const authorizationCode = {
         authorizationCode: code.authorizationCode,
         expiresAt: code.expiresAt,
         client: client || {},
         user: user || {},
+        codeChallenge: codeChallenge,
+        codeChallengeMethod: codeChallengeMethod,
       };
       if (useTokenCache) {
         await Redis.client.set(
