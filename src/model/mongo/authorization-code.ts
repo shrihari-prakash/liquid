@@ -6,6 +6,8 @@ const authorizationCodeSchema = {
   expiresAt: Date,
   client: Object,
   user: Object,
+  codeChallenge: String,
+  codeChallengeMethod: String,
   createdAt: {
     type: Date,
     default: Date.now,
