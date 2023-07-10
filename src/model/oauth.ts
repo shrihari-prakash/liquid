@@ -25,8 +25,8 @@ interface Code {
   authorizationCode: string;
   expiresAt: Date;
   redirectUri: string;
-  codeChallenge: string;
-  codeChallengeMethod: string;
+  codeChallenge?: string;
+  codeChallengeMethod?: string;
 }
 
 interface Client {
