@@ -25,6 +25,8 @@ interface Code {
   authorizationCode: string;
   expiresAt: Date;
   redirectUri: string;
+  codeChallenge: string;
+  codeChallengeMethod: string;
 }
 
 interface Client {
@@ -213,21 +215,15 @@ const OAuthModel = {
     return true;
   },
 
-  saveAuthorizationCode: async (
-    code: Code,
-    client: Client,
-    user: User,
-    codeChallenge?: string,
-    codeChallengeMethod?: string
-  ) => {
+  saveAuthorizationCode: async (code: Code, client: Client, user: User) => {
     try {
       const authorizationCode = {
         authorizationCode: code.authorizationCode,
         expiresAt: code.expiresAt,
         client: client || {},
         user: user || {},
-        codeChallenge: codeChallenge,
-        codeChallengeMethod: codeChallengeMethod,
+        codeChallenge: code.codeChallenge,
+        codeChallengeMethod: code.codeChallengeMethod,
       };
       if (useTokenCache) {
         await Redis.client.set(
