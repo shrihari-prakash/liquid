@@ -29,7 +29,7 @@ Almost everything is **optional** except MongoDB.
 | RabbitMQ                    | Yes      | No              | privilege.can-use-push-events, privilege.can-use-rabbitmq, rabbitmq.\*                                     | Yes                  |
 > **_NOTE:_** If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `privilege.can-use-cache` to false. However, disabling this option is highly discouraged since access tokens are deleted (although invalidated) only when the refresh token expires which is typically a really long time. Also using databases for such things might not be a great idea for performance reasons.
 
-The core OAuth logic of Liquid is powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) by the [@node-oauth](https://github.com/node-oauth) team.
+The core OAuth logic of Liquid is powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) from [@node-oauth](https://github.com/node-oauth).
 
 ## ⚙️ Setup
 ### Production Usage
