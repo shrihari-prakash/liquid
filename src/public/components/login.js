@@ -54,12 +54,18 @@ export default function Login() {
         const clientId = url.searchParams.get("clientId");
         const redirect = url.searchParams.get("redirect");
         const state = url.searchParams.get("state");
+        const codeChallenge = url.searchParams.get("codeChallenge");
+        const codeChallengeMethod = url.searchParams.get("codeChallengeMethod");
         const params = new URLSearchParams({
           response_type: "code",
           client_id: clientId || configuration["oauth.client-id"],
           redirect_uri: redirect || configuration["oauth.redirect-uri"],
           state: state || uuidv4(),
         });
+        if (codeChallenge && codeChallengeMethod) {
+          params.append("code_challenge", codeChallenge);
+          params.append("code_challenge_method", codeChallengeMethod);
+        }
         window.location = `/oauth/authorize?${params.toString()}`;
       })
       .fail(function (response) {
@@ -88,15 +94,13 @@ export default function Login() {
           Login to&nbsp;
           {configuration[`assets.header-icon-${theme}`] ? (
             <div className="app-icon-header">
-              <div
-                style={{ display: miniIconLoaded ? "none" : "block" }}
-                className="spinner"
-              />
+              <div style={{ display: miniIconLoaded ? "none" : "block" }} className="spinner" />
               <img
                 style={{ display: miniIconLoaded ? "block" : "none" }}
                 onLoad={() => setMiniIconLoaded(true)}
                 alt={appName}
-                src={configuration[`assets.header-icon-${theme}`]} />
+                src={configuration[`assets.header-icon-${theme}`]}
+              />
             </div>
           ) : (
             <strong className="app-name">{appName}</strong>
