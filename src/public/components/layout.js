@@ -14,20 +14,21 @@ export default function Layout({ children }) {
   }
 
   React.useEffect(() => {
-    $.get("./configuration/options.json").done((options) => {
-      console.log("Options retrieved.", options);
-      console.log(Object.keys(options).length + " options loaded.");
-      $.get("/app-config.json").done((conf) => {
-        console.log(Object.keys(conf).length + " options configured.");
-        console.log("Configuration retrieved.", conf);
-        options.forEach((option) => {
-          if (typeof conf[option.name] === "undefined") {
-            conf[option.name] = option.default;
-          }
-        });
-        console.log("Full configuration:", conf);
-        setConfiguration(conf);
+    const allOptions = fetch("./configuration/options.json");
+    const appConfig = fetch("/app-config.json");
+    Promise.all([allOptions, appConfig]).then(async (results) => {
+      const [optionsResponse, confResponse] = results;
+      const options = await optionsResponse.json();
+      const conf = await confResponse.json();
+      console.log(Object.keys(options).length + " options loaded.", options);
+      console.log(Object.keys(conf).length + " options configured.", conf);
+      options.forEach((option) => {
+        if (typeof conf[option.name] === "undefined") {
+          conf[option.name] = option.default;
+        }
       });
+      console.log("Full configuration:", conf);
+      setConfiguration(conf);
     });
   }, []);
 
