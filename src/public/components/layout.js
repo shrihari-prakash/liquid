@@ -16,6 +16,7 @@ export default function Layout({ children }) {
   React.useEffect(() => {
     const allOptions = fetch("./configuration/options.json");
     const appConfig = fetch("/app-config.json");
+    const startTime = +new Date();
     Promise.all([allOptions, appConfig]).then(async (results) => {
       const [optionsResponse, confResponse] = results;
       const options = await optionsResponse.json();
@@ -29,6 +30,7 @@ export default function Layout({ children }) {
       });
       console.log("Full configuration:", conf);
       setConfiguration(conf);
+      console.log("Static page loaded in " + (+new Date() - startTime) + "ms");
     });
   }, []);
 
