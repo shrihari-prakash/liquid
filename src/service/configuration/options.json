@@ -468,6 +468,15 @@
     "relatedOptions": ["user.account-creation.enable-invite-only"]
   },
   {
+    "name": "user.account-creation.invite-code-availability-window",
+    "displayName": "User Account Creation Invite Code Availability Window",
+    "envName": "USER_ACCOUNT_CREATION_INVITE_CODE_AVAILABILITY_WINDOW",
+    "description": "Specifies the window size in seconds to have been ellapsed since user account creation after which users can get their invite codes.",
+    "type": "number",
+    "default": 10,
+    "relatedOptions": ["user.account-creation.enable-invite-only"]
+  },
+  {
     "name": "user.account-creation.allow-only-whitelisted-email-domains",
     "displayName": "User Account Creation Allow Only Whitelisted Email Domains",
     "envName": "USER_ACCOUNT_CREATION_ALLOW_ONLY_WHITELISTED_EMAIL_DOMAINS",
