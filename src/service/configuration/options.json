@@ -521,6 +521,14 @@
     "relatedOptions": ["user.account-creation.enable-ip-based-throttle"]
   },
   {
+    "name": "user.account-creation.initial-credit-count",
+    "displayName": "User Account Creation Initial Credit Count",
+    "envName": "USER_ACCOUNT_CREATION_INITIAL_CREDIT_COUNT",
+    "description": "Specifies the initial amount of credits user accounts will have after creation.",
+    "type": "number",
+    "default": 0
+  },
+  {
     "name": "user.profile.editable-fields",
     "displayName": "Profile Editable Fields",
     "envName": "USER_PROFILE_EDITABLE_FIELDS",

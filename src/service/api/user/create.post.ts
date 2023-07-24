@@ -155,6 +155,7 @@ const POST_Create = async (req: Request, res: Response) => {
     const sessionOptions = MongoDB.getSessionOptions(session);
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
     const role = Configuration.get("system.role.default");
+    const credits = Configuration.get("user.account-creation.initial-credit-count");
     const toInsert: any = {
       username,
       firstName,
@@ -162,6 +163,7 @@ const POST_Create = async (req: Request, res: Response) => {
       email: sanitizeEmailAddress(email),
       role,
       password,
+      credits,
       creationIp: req.ip,
     };
     const shouldVerifyEmail = Configuration.get("user.account-creation.require-email-verification");

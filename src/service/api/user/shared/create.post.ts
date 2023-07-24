@@ -76,6 +76,7 @@ const POST_Create = async (req: Request, res: Response) => {
       } = sourceList[i];
       const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
       const role = roleBody || Configuration.get("system.role.default");
+      const credits = Configuration.get("user.account-creation.initial-credit-count");
       const user: any = {
         username,
         firstName,
@@ -83,6 +84,7 @@ const POST_Create = async (req: Request, res: Response) => {
         email: email.toLowerCase(),
         role,
         password,
+        credits,
         emailVerified: true,
         creationIp: req.ip,
       };
