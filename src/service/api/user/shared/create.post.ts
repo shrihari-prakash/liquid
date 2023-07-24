@@ -24,6 +24,7 @@ import { MongoDB } from "../../../../singleton/mongo-db";
 import { sanitizeEmailAddress } from "../../../../utils/email";
 import InviteCodeModel from "../../../../model/mongo/invite-code";
 import { generateInviteCode } from "../../../../utils/invite-code";
+import { isRoleRankHigher } from "../../../../utils/role";
 
 export const POST_CreateValidator = [
   body().isArray(),
@@ -76,6 +77,12 @@ const POST_Create = async (req: Request, res: Response) => {
       } = sourceList[i];
       const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
       const role = roleBody || Configuration.get("system.role.default");
+      const currentUserRole = res.locals.user.role;
+      // Do not allow creation of users with more powerful roles.
+      if (!isRoleRankHigher(currentUserRole, role)) {
+        log.debug("Blocked account creation for role %s. Current user role: %s", role, currentUserRole);
+        return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+      }
       const credits = Configuration.get("user.account-creation.initial-credit-count");
       const user: any = {
         username,

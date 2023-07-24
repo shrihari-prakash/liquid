@@ -24,6 +24,7 @@ export const errorMessages = {
   invalidFile: "InvalidFile",
   banned: "Banned",
   unauthorized: "Unauthorized",
+  insufficientPrivileges: "InsufficientPrivileges",
   forbidden: "Forbidden",
   notFound: "NotFound",
   accessDenied: "AccessDenied",
