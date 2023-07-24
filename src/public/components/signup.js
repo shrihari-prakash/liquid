@@ -144,7 +144,7 @@ export default function SignUp() {
           <input
             type="text"
             className="form-control"
-            placeholder={getPlaceholder("XX-0000-0000000000", configuration)}
+            placeholder={getPlaceholder("YOUR-INVITE-CODE", configuration)}
             spellCheck="false"
             autoComplete="off"
             id="inviteCode"

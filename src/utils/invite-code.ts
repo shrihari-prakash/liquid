@@ -11,5 +11,5 @@ const getRandomDigits = (length = 1) =>
     .join("");
 
 export const generateInviteCode = () => {
-  return `${getRandomLetters(2)}-${getRandomDigits(4)}-${Date.now()}`;
+  return `${getRandomLetters(4)}-${getRandomDigits(4)}-${Date.now()}`;
 };

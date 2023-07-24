@@ -14,26 +14,12 @@ import { bcryptConfig } from "../create.post";
 import { hasErrors } from "../../../../utils/api";
 import { PATCH_MeValidator } from "../me.patch";
 import { flushUserInfoFromRedis } from "../../../../model/oauth";
+import { isRoleRankHigher } from "../../../../utils/role";
 
 export const PATCH_UserValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
   ...PATCH_MeValidator,
 ];
-
-const exractRank = (roleRank: string) => {
-  return (roleRank.match(/\(([^)]+)\)/) as string[])[1];
-};
-
-const findRoleRank = (role: string) => {
-  const roleRanking = Configuration.get("system.role.ranking");
-  return roleRanking.find((r: string) => r.split("(")[0] === role);
-};
-
-const isRoleRankHigher = (currentRole: string, comparisonRole: string) => {
-  const currentRoleRank = exractRank(findRoleRank(currentRole));
-  const comparisonRoleRank = exractRank(findRoleRank(comparisonRole));
-  return parseInt(currentRoleRank) < parseInt(comparisonRoleRank);
-};
 
 const PATCH_User = async (req: Request, res: Response) => {
   try {
@@ -54,7 +40,7 @@ const PATCH_User = async (req: Request, res: Response) => {
     const target = (await UserModel.findOne({ _id: userId })) as unknown as IUser;
     // Allow changing data only upto the level of the current user's role.
     if (!isRoleRankHigher(currentUserRole, target.role)) {
-      return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
+      return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
     }
     const role = req.body.role;
     if (role) {
@@ -64,7 +50,7 @@ const PATCH_User = async (req: Request, res: Response) => {
         return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
       }
       if (!editorRoles.includes(currentUserRole) || !isRoleRankHigher(currentUserRole, role)) {
-        return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
+        return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       }
     }
     const password = req.body.password;
