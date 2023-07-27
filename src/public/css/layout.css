@@ -228,7 +228,7 @@ h3 {
 .fineprint {
   margin-top: 12px;
   color: var(--text-lighter-color);
-  font-size: small;
+  font-size: x-small;
   text-align: center;
 }
 
