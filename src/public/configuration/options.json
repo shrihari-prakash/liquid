@@ -118,6 +118,18 @@
     "default": "with any project."
   },
   {
+    "name": "content.terms-and-conditions-url",
+    "displayName": "Terms and Conditions URL",
+    "description": "Specifies the URL for terms and conditions of your application.",
+    "default": "#"
+  },
+  {
+    "name": "content.privacy-policy-url",
+    "displayName": "Privacy Policy URL",
+    "description": "Specifies the URL for privacy policies of your application.",
+    "default": "#"
+  },
+  {
     "name": "content.sidebar.intro.description",
     "displayName": "Sidebar Intro Description",
     "description": "Specifies the content for Description of the sidebar intro.",
