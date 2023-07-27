@@ -225,6 +225,17 @@ h3 {
   animation-timing-function: cubic-bezier(0.53, 0.21, 0.29, 0.67);
 }
 
+.fineprint {
+  margin-top: 12px;
+  color: var(--text-lighter-color);
+  font-size: small;
+  text-align: center;
+}
+
+.fineprint a {
+  color: var(--text-lighter-color);
+}
+
 @keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);

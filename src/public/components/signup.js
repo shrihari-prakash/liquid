@@ -15,6 +15,8 @@ export default function SignUp() {
   const [miniIconLoaded, setMiniIconLoaded] = React.useState(false);
 
   const appName = configuration["content.app-name"];
+  const termsAndConditions = configuration["content.terms-and-conditions-url"];
+  const privacyPolicy = configuration["content.privacy-policy-url"]
 
   React.useEffect(() => useTitle(configuration["content.app-name"], "Sign Up"), []);
 
@@ -250,6 +252,23 @@ export default function SignUp() {
         className={"button" + (hasError ? " shake" : "")}
         value={buttonText}
       />
+      <div class="fineprint">
+        {(termsAndConditions || privacyPolicy) &&
+          "By clicking on Create Account, you"
+        }
+        {termsAndConditions &&
+          <>
+            &nbsp;agree to the <a href={termsAndConditions}> terms and conditions</a> of {appName}
+            {!privacyPolicy && "."}
+          </>
+        }
+        {privacyPolicy &&
+          <>
+            &nbsp;{termsAndConditions && "and "}
+            confirm that you've read our <a href={privacyPolicy}>privacy policy</a>.
+          </>
+        }
+      </div>
     </form>
   );
 }
