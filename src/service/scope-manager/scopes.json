@@ -89,6 +89,11 @@
     "parent": "user.delegated.all"
   },
   {
+    "name": "system.client.all",
+    "description": "View and manage the system.",
+    "parent": "*"
+  },
+  {
     "name": "user.client.all",
     "description": "View and manage your accounts in the system.",
     "parent": "*"
@@ -147,6 +152,11 @@
     "name": "user.client.block.read",
     "description": "View people that the accounts in the sytstem have blocked.",
     "parent": "user.client.all"
+  },
+  {
+    "name": "system.admin.all",
+    "description": "View and manage the system.",
+    "parent": "*"
   },
   {
     "name": "user.admin.all",

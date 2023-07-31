@@ -294,10 +294,11 @@ const OAuthModel = {
   },
 
   validateScope: (user: IUser, client: Client, scope: string | string[]): Promise<string | string[] | Falsey> => {
-    log.debug("Validating scope %s for client %s and user %s", scope, client.id, user.username);
+    log.debug("Validating scope %s for client %s and user %s.", scope, client.id, user.username);
     return new Promise((resolve) => {
       const clientHasAccess = ScopeManager.canRequestScope(scope, client);
       if (!clientHasAccess) {
+        log.debug("Validating scope %s for client %s failed due to insufficient access.", scope, client.id);
         return resolve(false);
       }
       if (client.id === user.username) {
