@@ -21,6 +21,7 @@ import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
 
 import YAML from "yaml";
+import { ScopeManager } from "./singleton/scope-manager";
 
 const app = express();
 
@@ -130,5 +131,7 @@ app.listen(Configuration.get("system.app-port"), () => {
     )}`
   );
 });
+
+ScopeManager;
 
 export default app;

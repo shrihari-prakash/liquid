@@ -1,6 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
-import { getPlaceholder, isEmail, useTitle, uuidv4 } from "../utils/utils.js";
+import { getOauthAuthorizationParams, getPlaceholder, isEmail, useTitle, uuidv4 } from "../utils/utils.js";
 
 export default function Login() {
   const submitButtonText = "Login";
@@ -36,7 +36,7 @@ export default function Login() {
     return;
   }
 
-  function login(event) {
+  async function login(event) {
     event.preventDefault();
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
@@ -48,25 +48,16 @@ export default function Login() {
       data.username = username;
     }
     $.post("/user/login", data)
-      .done(function () {
-        const urlString = window.location;
-        const url = new URL(urlString);
-        const clientId = url.searchParams.get("clientId");
-        const redirect = url.searchParams.get("redirect");
-        const state = url.searchParams.get("state");
-        const codeChallenge = url.searchParams.get("codeChallenge");
-        const codeChallengeMethod = url.searchParams.get("codeChallengeMethod");
-        const params = new URLSearchParams({
-          response_type: "code",
-          client_id: clientId || configuration["oauth.client-id"],
-          redirect_uri: redirect || configuration["oauth.redirect-uri"],
-          state: state || uuidv4(),
-        });
-        if (codeChallenge && codeChallengeMethod) {
-          params.append("code_challenge", codeChallenge);
-          params.append("code_challenge_method", codeChallengeMethod);
+      .done(async function () {
+        const authParams = getOauthAuthorizationParams(configuration)
+        const params = new URLSearchParams(authParams);
+        const clientInfo = await $.get("/user/client-info?id=" + authParams.client_id);
+        console.log("Client role", clientInfo.data.role);
+        if (clientInfo.data.client.role === "internal_client") {
+          window.location = `/oauth/authorize?${params.toString()}`;
+        } else {
+          window.location = `/consent?${params.toString()}`;
         }
-        window.location = `/oauth/authorize?${params.toString()}`;
       })
       .fail(function (response) {
         if (response.responseJSON.error === "RateLimitError") {

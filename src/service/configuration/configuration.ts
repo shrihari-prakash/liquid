@@ -12,7 +12,7 @@ export class Configuration {
   options: any;
 
   constructor() {
-    this.options = Options.reduce((obj, item) => Object.assign(obj, { [item.name]: item }), {});
+    this.options = Options.reduce((options, option) => Object.assign(options, { [option.name]: option }), {});
   }
 
   public get(name: string, defaultValue?: any, delim = ",") {

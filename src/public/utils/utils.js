@@ -71,3 +71,26 @@ export function getPlaceholder(text, configuration) {
     return "";
   }
 }
+
+export function getOauthAuthorizationParams(configuration) {
+  const urlString = window.location;
+  const url = new URL(urlString);
+  const redirect = url.searchParams.get("redirect") || configuration["oauth.redirect-uri"];
+  const state = url.searchParams.get("state") || uuidv4();
+  const scope = url.searchParams.get("scope") || "user.delegated.all";
+  const codeChallenge = url.searchParams.get("codeChallenge");
+  const codeChallengeMethod = url.searchParams.get("codeChallengeMethod");
+  const clientId = url.searchParams.get("clientId") || configuration["oauth.client-id"];
+  const params = {
+    response_type: "code",
+    client_id: clientId,
+    redirect_uri: redirect,
+    scope: scope,
+    state: state,
+  }
+  if (codeChallenge && codeChallengeMethod) {
+    params.code_challenge = codeChallenge;
+    params.code_challenge_method = codeChallengeMethod;
+  }
+  return params;
+}

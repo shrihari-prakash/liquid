@@ -80,6 +80,30 @@ h3 {
   display: flex;
 }
 
+.flex-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.multi-action {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.consent-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.consent-loader > .spinner {
+  margin-right: 8px;
+}
+
 .spacer-bottom {
   margin-bottom: 1.5rem;
 }
@@ -228,7 +252,7 @@ h3 {
 .fineprint {
   margin-top: 12px;
   color: var(--text-lighter-color);
-  font-size: .75rem;
+  font-size: 0.75rem;
   text-align: center;
 }
 

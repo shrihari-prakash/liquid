@@ -5,6 +5,11 @@ const clientSchema = {
   secret: String,
   displayName: String,
   role: String,
+  scope: {
+    type: Array,
+    required: true,
+    default: ["user.delegated.all"],
+  },
   grants: [String],
   redirectUris: [String],
 };

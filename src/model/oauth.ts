@@ -7,8 +7,10 @@ import { Configuration } from "../singleton/configuration";
 import AuthorizationCodeModel from "./mongo/authorization-code";
 import ClientModel from "./mongo/client";
 import TokenModel from "./mongo/token";
-import UserModel from "./mongo/user";
+import UserModel, { IUser } from "./mongo/user";
 import Role from "../enum/role";
+import { ScopeManager } from "../singleton/scope-manager";
+import { Falsey } from "@node-oauth/oauth2-server";
 
 interface Token {
   accessToken: string;
@@ -35,6 +37,7 @@ interface Client {
   grants: string | string[];
   displayName: string;
   role: string;
+  scope: string;
   accessTokenLifetime?: number | undefined;
   refreshTokenLifetime?: number | undefined;
   [key: string]: any;
@@ -89,6 +92,12 @@ const getUserInfo = async (userId: string) => {
   return userInfo;
 };
 
+const isApplicationClient = (user: any) => {
+  const appplicationClient = user.role === Role.INTERNAL_CLIENT || user.role === Role.EXTERNAL_CLIENT;
+  log.debug("isApplicationClient result for %s: %s", user.username, appplicationClient);
+  return appplicationClient;
+};
+
 const OAuthModel = {
   getClient: async function (clientId: string, clientSecret: string) {
     try {
@@ -114,14 +123,14 @@ const OAuthModel = {
       // There is no notion of users in client_credentials grant.
       // So we simply return the client id for the username.
       // See more here: https://github.com/node-oauth/node-oauth2-server/issues/71#issuecomment-1181515928
-      resolve({ _id: client._id, username: client.id, role: client.role });
+      resolve({ _id: client._id, username: client.id, role: client.role, scope: client.scope });
     });
   },
 
   saveToken: async (token: Token, client: Client, user: User) => {
     try {
       token.client = client;
-      if (user.role !== Role.INTERNAL_CLIENT) {
+      if (!isApplicationClient(user)) {
         // No need to store the full user as _id is resolved to full object while retrieving from cache/db.
         token.user = { _id: user._id };
       } else {
@@ -160,7 +169,7 @@ const OAuthModel = {
         let cacheToken: any = await Redis.client.get(getPrefixedToken(accessToken));
         cacheToken = JSON.parse(cacheToken);
         if (!cacheToken) return null;
-        if (cacheToken.user.role !== Role.INTERNAL_CLIENT) {
+        if (!isApplicationClient(cacheToken.user)) {
           cacheToken.user = await getUserInfo(cacheToken.user._id);
         }
         cacheToken.accessTokenExpiresAt = new Date(cacheToken.accessTokenExpiresAt);
@@ -182,7 +191,7 @@ const OAuthModel = {
       let cacheToken: any = await Redis.client.get(getPrefixedToken(refreshToken));
       cacheToken = JSON.parse(cacheToken);
       if (!cacheToken) return null;
-      if (cacheToken.user.role !== Role.INTERNAL_CLIENT) {
+      if (!isApplicationClient(cacheToken.user)) {
         cacheToken.user = await getUserInfo(cacheToken.user._id);
       }
       cacheToken.refreshTokenExpiresAt = new Date(cacheToken.refreshTokenExpiresAt);
@@ -282,10 +291,30 @@ const OAuthModel = {
     }
   },
 
-  verifyScope: (token: Token, scope: string | string[]): Promise<boolean> => {
-    /* This is where we check to make sure the client has access to this scope */
-    const userHasAccess = scope === "default"; // return true if this user / client combo has access to this resource
-    return new Promise((resolve) => resolve(userHasAccess));
+  validateScope: (user: IUser, client: Client, scope: string | string[]): Promise<string | string[] | Falsey> => {
+    log.debug("Validating scope %s for client %s and user %s", scope, client.id, user.username);
+    return new Promise((resolve) => {
+      const clientHasAccess = ScopeManager.canRequestScope(scope, client);
+      if (!clientHasAccess) {
+        return resolve(false);
+      }
+      if (client.id === user.username) {
+        // For client credentials grant, there is no notion of user.
+        return resolve(scope);
+      }
+      const userHasAccess = ScopeManager.canRequestScope(scope, user);
+      if (userHasAccess) {
+        resolve(scope);
+      } else {
+        resolve(false);
+      }
+    });
+  },
+
+  verifyScope: (token: Token, scope: string) => {
+    log.debug("Verifying scope %s for client %s", scope, token.client.id);
+    console.log(token, scope);
+    return token.scope === scope;
   },
 };
 
