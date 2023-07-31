@@ -11,7 +11,6 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { bcryptConfig } from "./create.post";
 import { hasErrors } from "../../../utils/api";
-import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const POST_ResetPasswordValidator = [
   body("code").exists().isString().isLength({ min: 3, max: 128 }),
@@ -20,9 +19,6 @@ export const POST_ResetPasswordValidator = [
 
 const POST_ResetPassword = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.all", res)) {
-      return;
-    };
     if (hasErrors(req, res)) return;
     const { code, password: passwordBody } = req.body;
     const dbCode = await VerificationCodeModel.findOne({ code }).exec();
