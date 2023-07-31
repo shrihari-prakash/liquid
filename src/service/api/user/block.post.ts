@@ -13,6 +13,7 @@ import BlockModel from "../../../model/mongo/block";
 import FollowModel from "../../../model/mongo/follow";
 import { updateFollowCount } from "../../../utils/follow";
 import { MongoDB } from "../../../singleton/mongo-db";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const POST_BlockValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
@@ -23,6 +24,9 @@ function sendSuccess(res: Response, status: string) {
 const POST_Block = async (req: Request, res: Response) => {
   let session = "";
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.block.write", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const sourceAccount = res.locals.oauth.token.user._id;
     const blockedAccount = req.body.target;

@@ -11,11 +11,15 @@ import { useFollowersQuery } from "../../../../model/query/followers";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { checkSubscription } from "../../../../utils/subscription";
 import { getPaginationLimit } from "../../../../utils/pagination";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const GET_UserFollowersValidator = [query("target").exists().isString().isLength({ min: 8, max: 128 })];
 
 const GET_UserFollowers = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.client.follow.read", res)) {
+      return;
+    };
     const userId = req.query.target as string;
     const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;

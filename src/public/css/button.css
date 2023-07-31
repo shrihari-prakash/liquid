@@ -58,7 +58,7 @@
 
 .button.outline {
   background-color: transparent;
-  color: var(--primary-button-color);
+  color: var(--text-color);
 }
 
 .button:active,

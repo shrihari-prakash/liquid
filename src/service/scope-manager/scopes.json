@@ -24,27 +24,22 @@
     "parent": "user.delegated.follow.all"
   },
   {
-    "name": "user.delegated.follow.read-followers",
-    "description": "View people who follow you.",
-    "parent": "user.delegated.follow.read"
-  },
-  {
-    "name": "user.delegated.follow.read-following",
-    "description": "View people who you follow.",
-    "parent": "user.delegated.follow.read"
-  },
-  {
-    "name": "user.delegated.follow.accept-follow-request",
+    "name": "user.delegated.follow.write.accept-follow-request",
     "description": "Accept follow requests on your behalf.",
     "parent": "user.delegated.follow.write"
   },
   {
-    "name": "user.delegated.follow.delete-follow-request",
+    "name": "user.delegated.follow.write.delete-follow-request",
     "description": "Delete follow requests on your behalf.",
     "parent": "user.delegated.follow.write"
   },
   {
-    "name": "user.delegated.follow.follow",
+    "name": "user.delegated.follow.write.remove-follower",
+    "description": "Delete follow requests on your behalf.",
+    "parent": "user.delegated.follow.write"
+  },
+  {
+    "name": "user.delegated.follow.write.follow",
     "description": "Follow people on your behalf.",
     "parent": "user.delegated.follow.write"
   },
@@ -55,7 +50,7 @@
   },
   {
     "name": "user.delegated.block.all",
-    "description": "Block, unblock and view blocked people on your behalf.",
+    "description": "Block, unblock and view people you've blocked on your behalf.",
     "parent": "user.delegated.all"
   },
   {
@@ -109,21 +104,6 @@
     "parent": "user.client.follow.all"
   },
   {
-    "name": "user.client.follow.write",
-    "description": "Manage following and your followers of accounts in the system.",
-    "parent": "user.client.follow.all"
-  },
-  {
-    "name": "user.client.follow.read-followers",
-    "description": "View accounts in the system follow.",
-    "parent": "user.client.follow.read"
-  },
-  {
-    "name": "user.client.follow.read-following",
-    "description": "View followers of accounts in the system.",
-    "parent": "user.client.follow.read"
-  },
-  {
     "name": "user.client.profile.all",
     "description": "View and manage profile information of user accounts in the system.",
     "parent": "user.client.all"
@@ -174,6 +154,11 @@
     "parent": "*"
   },
   {
+    "name": "user.admin.access.write",
+    "description": "View and manage permissions of other users and clients in the system.",
+    "parent": "user.admin.all"
+  },
+  {
     "name": "user.admin.profile.all",
     "description": "View and manage profile information of user accounts in the system.",
     "parent": "user.admin.all"
@@ -186,6 +171,11 @@
   {
     "name": "user.admin.profile.write",
     "description": "Edit your profile information of user accounts in the system.",
+    "parent": "user.admin.profile.all"
+  },
+  {
+    "name": "user.admin.profile.create",
+    "description": "Create user accounts in the system.",
     "parent": "user.admin.profile.all"
   },
   {
@@ -214,3 +204,4 @@
     "parent": "user.admin.profile.all"
   }
 ]
+

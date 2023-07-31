@@ -9,9 +9,13 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 const GET_FollowRequests = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.read", res)) {
+      return;
+    };
     const userId = res.locals.oauth.token.user._id;
     const records = await FollowModel.aggregate([
       {

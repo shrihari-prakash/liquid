@@ -6,13 +6,13 @@
   max-width: 45%;
 }
 
-.consent-form ul {
+.consent-form .scope-container {
   user-select: none;
   list-style: none;
   padding: 0;
 }
 
-.consent-form li {
+.consent-form .scope-item {
   display: flex;
   align-items: center;
   margin-top: 0.5em;
@@ -23,13 +23,17 @@
   border-radius: var(--form-input-border-radius);
 }
 
+.consent-form .scope-item-desc {
+  margin-left: calc(var(--form-input-vertical-padding) * 2);
+}
+
 .circle {
   position: relative;
   background: var(--primary-button-color);
   border-radius: 50%;
+  min-width: 28px;
   width: 28px;
   height: 28px;
-  margin-right: calc(var(--form-input-vertical-padding) * 2);
 }
 
 .checkmark {

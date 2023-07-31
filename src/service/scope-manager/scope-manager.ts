@@ -1,7 +1,11 @@
 import { Logger } from "../../singleton/logger";
 const log = Logger.getLogger().child({ from: "scope-manager" });
 
+import { Response } from "express";
+
 import Scopes from "./scopes.json";
+import { errorMessages, statusCodes } from "../../utils/http-status";
+import { ErrorResponse } from "../../utils/response";
 
 interface Scope {
   name: string;
@@ -30,6 +34,21 @@ export class ScopeManager {
     return this.scopes;
   }
 
+  isScopeAllowedForSharedSession(scope: string, res: Response) {
+    return this.isScopeAllowedForSession(scope.replace("<ENTITY>", "client"), res)
+      || this.isScopeAllowedForSession(scope.replace("<ENTITY>", "admin"), res)
+  }
+
+  isScopeAllowedForSession(scope: string, res: Response) {
+    const allowedScopes = res.locals?.oauth?.token?.scope || "";
+    if (this.isScopeAllowed(scope, allowedScopes)) {
+      return true;
+    } else {
+      res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+      return false;
+    }
+  }
+
   canRequestScope(scopes: any, entity: any) {
     if (scopes) {
       scopes = scopes.split(",");
@@ -49,7 +68,6 @@ export class ScopeManager {
     if (allowedScopes.includes(scopeObject.name) || allowedScopes.includes(scopeObject.parent)) {
       return true;
     } else if (scopeObject.parent) {
-      log.debug("Scope not allowed for %s. Searching in parent scope %s.", scopeObject.name, scopeObject.parent);
       return this.isScopeAllowed(scopeObject.parent, allowedScopes);
     } else {
       return false;

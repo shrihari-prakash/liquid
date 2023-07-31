@@ -16,6 +16,7 @@ import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { MongoDB } from "../../../singleton/mongo-db";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const POST_FollowValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
@@ -26,6 +27,9 @@ function sendSuccess(res: Response, status: string) {
 const POST_Follow = async (req: Request, res: Response) => {
   let session = "";
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.write.follow", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;

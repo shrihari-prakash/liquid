@@ -8,11 +8,15 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
 import BlockModel from "../../../model/mongo/block";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const POST_UnblockValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
 const POST_Unblock = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.block.write", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;

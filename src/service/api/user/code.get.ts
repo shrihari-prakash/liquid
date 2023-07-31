@@ -9,11 +9,15 @@ import { hasErrors } from "../../../utils/api";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { generateVerificationCode } from "../../../utils/verification-code/verification-code";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const GET_CodeValidator = [query("email").exists().isEmail()];
 
 const GET_Code = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.all", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const { email } = req.query;
     const existingUser = (await UserModel.findOne({

@@ -29,6 +29,7 @@ interface Code {
   redirectUri: string;
   codeChallenge?: string;
   codeChallengeMethod?: string;
+  scope?: string;
 }
 
 interface Client {
@@ -233,6 +234,7 @@ const OAuthModel = {
         user: user || {},
         codeChallenge: code.codeChallenge,
         codeChallengeMethod: code.codeChallengeMethod,
+        scope: code.scope
       };
       if (useTokenCache) {
         await Redis.client.set(

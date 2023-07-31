@@ -8,19 +8,25 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import { hasErrors } from "../../../../utils/api";
 import UserModel from "../../../../model/mongo/user";
+import { ScopeManager } from "../../../../singleton/scope-manager";
+import ClientModel from "../../../../model/mongo/client";
 
 export const POST_AccessValidator = [
   body("targets").exists().isArray(),
-  body("permissions").exists().isArray(),
+  body("targetType").exists().isString(),
+  body("scope").exists().isArray(),
   body("status").exists().isBoolean(),
 ];
 
 const POST_Access = async (req: Request, res: Response) => {
-  if (hasErrors(req, res)) return;
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.admin.access.write", res)) {
+      return;
+    };
+    if (hasErrors(req, res)) return;
     if (
       req.body.targets.some((t: string) => typeof t !== "string") ||
-      req.body.permissions.some((p: string) => typeof p !== "string")
+      req.body.scope.some((p: string) => typeof p !== "string")
     ) {
       const errors = [
         {
@@ -39,11 +45,12 @@ const POST_Access = async (req: Request, res: Response) => {
       action = "$pull";
       arraycondition = "$in";
     }
-    await UserModel.updateMany(
+    const model = req.body.targetType === "user" ? UserModel : ClientModel;
+    await model.updateMany(
       { _id: { $in: req.body.targets } },
       {
         [action]: {
-          allowedAdminAPIs: { [arraycondition]: req.body.permissions },
+          scope: { [arraycondition]: req.body.scope },
         },
       }
     );
@@ -52,7 +59,6 @@ const POST_Access = async (req: Request, res: Response) => {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
-  res.status(statusCodes.success).json(new SuccessResponse());
 };
 
 export default POST_Access;

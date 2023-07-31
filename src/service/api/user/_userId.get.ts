@@ -11,9 +11,13 @@ import FollowModel from "../../../model/mongo/follow";
 import { getBlockStatus } from "../../../utils/block";
 import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.all", res)) {
+      return;
+    };
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.params.userId;
     // The first two parameters reversed because we need to find if the target has blocked the source.
