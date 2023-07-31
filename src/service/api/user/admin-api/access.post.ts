@@ -26,12 +26,24 @@ const POST_Access = async (req: Request, res: Response) => {
     if (hasErrors(req, res)) return;
     if (
       req.body.targets.some((t: string) => typeof t !== "string") ||
-      req.body.scope.some((p: string) => typeof p !== "string")
+      req.body.scope.some((s: string) => typeof s !== "string")
     ) {
       const errors = [
         {
           msg: "Invalid value",
           param: null,
+          location: "body",
+        },
+      ];
+      return res
+        .status(statusCodes.clientInputError)
+        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+    }
+    if (req.body.scope.some((s: string) => typeof ScopeManager.getScopes()[s] === "undefined")) {
+      const errors = [
+        {
+          msg: "Invalid value",
+          param: "scope",
           location: "body",
         },
       ];
