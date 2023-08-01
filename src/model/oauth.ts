@@ -88,7 +88,6 @@ const getUserInfo = async (userId: string) => {
 
 const isApplicationClient = (user: any) => {
   const appplicationClient = user.role === Role.INTERNAL_CLIENT || user.role === Role.EXTERNAL_CLIENT;
-  log.debug("isApplicationClient result for %s: %s", user.username, appplicationClient);
   return appplicationClient;
 };
 
@@ -228,7 +227,7 @@ const OAuthModel = {
         user: user || {},
         codeChallenge: code.codeChallenge,
         codeChallengeMethod: code.codeChallengeMethod,
-        scope: code.scope
+        scope: code.scope,
       };
       if (useTokenCache) {
         await Redis.client.set(
@@ -300,7 +299,19 @@ const OAuthModel = {
         return resolve(scope);
       }
       if (!user.scope) {
-        user.scope = ["user.delegated.all"]
+        user.scope = ["user.delegated.all"];
+      }
+      // Sometimes, the frontends do not know the scopes a user can request ahead of time.
+      // Since there is usually a higher amount of trust for internal clients in the system,
+      // so it is okay to return all scopes that a user has.
+      if (client.role === Role.INTERNAL_CLIENT) {
+        scope = user.scope.join(",");
+        log.debug(
+          "Granting all allowed scopes (%s) for user %s due to request from internal client",
+          scope,
+          user.username
+        );
+        return resolve(scope);
       }
       const userHasAccess = ScopeManager.canRequestScope(scope, user);
       if (userHasAccess) {
@@ -311,8 +322,13 @@ const OAuthModel = {
     });
   },
 
+  // I don't know honestly if this method is even called, I have never seen it being called.
   verifyScope: (token: Token, scope: string): Promise<boolean> => {
     return new Promise((resolve) => {
+      const client = token.client;
+      if (client.role === Role.INTERNAL_CLIENT) {
+        return resolve(true);
+      }
       log.debug("Verifying scope %s for client %s", scope, token.client.id);
       console.log(token, scope);
       return resolve(token.scope === scope);
