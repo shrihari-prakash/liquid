@@ -23,6 +23,10 @@ export const POST_LoginValidator = [
 
 const POST_Login = async (req: Request, res: Response) => {
   try {
+    if (req.session && req.session.user) {
+      log.debug("Returning existing session for user %s.", req.session.user.username);
+      return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: req.session.user }));
+    }
     if (hasErrors(req, res)) return;
     const { username, email, password } = req.body;
     const select = ["+password"];
