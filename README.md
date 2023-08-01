@@ -48,6 +48,7 @@ The following steps assume already you have **Redis** and **MongoDB** and **Send
   "redirectUris": ["{{frontend-redirect-uri-1}}", "{{frontend-redirect-uri-2}}"],
   "secret": "super-secure-client-secret",
   "role": "internal_client",
+  "scope": ["*"],
   "displayName": "Application Client"
 }
 ```

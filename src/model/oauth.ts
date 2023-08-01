@@ -325,6 +325,18 @@ const OAuthModel = {
       }
     });
   },
+
+  verifyScope: (token: Token, scope: string): Promise<boolean> => {
+    log.info("Verifying scope for token %s...", token.accessToken);
+    return new Promise((resolve) => {
+      if (!token.scope) {
+        return false;
+      }
+      let requestedScopes = scope.split(",");
+      let authorizedScopes = typeof token.scope === "string" ? token.scope.split(",") : token.scope;
+      return resolve(requestedScopes.every((s) => authorizedScopes.indexOf(s) >= 0));
+    });
+  },
 };
 
 export default OAuthModel;
