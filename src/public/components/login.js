@@ -56,7 +56,7 @@ export default function Login() {
         if (clientInfo.data.client.role === "internal_client") {
           window.location = `/oauth/authorize?${params.toString()}`;
         } else {
-          window.location = `/consent?${params.toString()}`;
+          window.location = `/consent${window.location.search}`;
         }
       })
       .fail(function (response) {
