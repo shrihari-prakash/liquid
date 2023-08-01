@@ -120,7 +120,7 @@ paths:
     post:
       security:
         - bearerAuth: []
-      summary: 'Provide access to an admin API for the given users.'
+      summary: 'Provide access to the given scope for the specified targets. Targets can be of type user or client.'
       requestBody:
         required: true
         content:
@@ -133,11 +133,13 @@ paths:
                   items:
                     type: string
                     pattern: ^[6][a-f0-9]{23}$
-                permissions:
+                targetType:
+                  type: string
+                  enum: [user, client]
+                scope:
                   type: array
                   items:
                     type: string
-                    pattern: (GET|POST|PATCH|DELETE)_/user/admin-api/route
                 status:
                   type: boolean
       responses:

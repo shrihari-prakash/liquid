@@ -10,12 +10,16 @@ import { hasErrors } from "../../../utils/api";
 import UserModel from "../../../model/mongo/user";
 import FollowModel from "../../../model/mongo/follow";
 import { MongoDB } from "../../../singleton/mongo-db";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const POST_PrivateValidator = [body("state").exists().isBoolean()];
 
 const POST_Private = async (req: Request, res: Response) => {
   let session = "";
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.write", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const state = req.body.state;

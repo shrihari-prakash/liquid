@@ -23,6 +23,10 @@ export const POST_LoginValidator = [
 
 const POST_Login = async (req: Request, res: Response) => {
   try {
+    if (req.session && req.session.user) {
+      log.debug("Returning existing session for user %s.", req.session.user.username);
+      return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: req.session.user }));
+    }
     if (hasErrors(req, res)) return;
     const { username, email, password } = req.body;
     const select = ["+password"];
@@ -40,12 +44,9 @@ const POST_Login = async (req: Request, res: Response) => {
     if (!isPasswordValid)
       return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
     user.password = undefined;
-    const response = {
-      userInfo: user,
-    };
     req.session.user = user;
     Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
-    return res.status(statusCodes.success).json(new SuccessResponse(response));
+    return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

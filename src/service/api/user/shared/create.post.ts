@@ -25,6 +25,7 @@ import { sanitizeEmailAddress } from "../../../../utils/email";
 import InviteCodeModel from "../../../../model/mongo/invite-code";
 import { generateInviteCode } from "../../../../utils/invite-code";
 import { isRoleRankHigher } from "../../../../utils/role";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const POST_CreateValidator = [
   body().isArray(),
@@ -41,6 +42,9 @@ export const POST_CreateValidator = [
 const POST_Create = async (req: Request, res: Response) => {
   let session = "";
   try {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.create", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     session = await MongoDB.startSession();
     MongoDB.startTransaction(session);

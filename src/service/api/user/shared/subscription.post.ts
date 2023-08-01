@@ -11,6 +11,7 @@ import UserModel from "../../../../model/mongo/user";
 import { hasErrors } from "../../../../utils/api";
 import { Configuration } from "../../../../singleton/configuration";
 import { flushUserInfoFromRedis } from "../../../../model/oauth";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const POST_SubscriptionValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
@@ -20,8 +21,11 @@ export const POST_SubscriptionValidator = [
 ];
 
 const POST_Subscription = async (req: Request, res: Response) => {
-  if (hasErrors(req, res)) return;
   try {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.subscription.read", res)) {
+      return;
+    };
+    if (hasErrors(req, res)) return;
     const target = req.body.target;
     const state = req.body.state;
     const tier = req.body.tier;

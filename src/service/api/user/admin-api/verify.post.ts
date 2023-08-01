@@ -8,6 +8,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const POST_VerifyValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
@@ -15,8 +16,11 @@ export const POST_VerifyValidator = [
 ];
 
 const POST_Verify = async (req: Request, res: Response) => {
-  if (hasErrors(req, res)) return;
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.admin.profile.verifications.write", res)) {
+      return;
+    };
+    if (hasErrors(req, res)) return;
     const target = req.body.target;
     const state = req.body.state;
     const query = { $set: { verified: state, verifiedDate: new Date(new Date().toUTCString()) } };

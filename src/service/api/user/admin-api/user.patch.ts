@@ -15,6 +15,7 @@ import { hasErrors } from "../../../../utils/api";
 import { PATCH_MeValidator } from "../me.patch";
 import { flushUserInfoFromRedis } from "../../../../model/oauth";
 import { isRoleRankHigher } from "../../../../utils/role";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const PATCH_UserValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
@@ -22,6 +23,9 @@ export const PATCH_UserValidator = [
 ];
 
 const PATCH_User = async (req: Request, res: Response) => {
+  if (!ScopeManager.isScopeAllowedForSession("user.admin.profile.write", res)) {
+    return;
+  };
   try {
     if (hasErrors(req, res)) return;
     const userId = req.body.target;

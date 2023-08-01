@@ -107,6 +107,11 @@ const userSchema = {
     min: 0,
     default: 0,
   },
+  scope: {
+    type: Array,
+    required: true,
+    default: ["user.delegated.all"],
+  },
   invitedBy: {
     type: Schema.Types.ObjectId,
     ref: "user",
@@ -194,6 +199,7 @@ export type IUser = {
   subscriptionExpiry: Date;
   subscriptionTier: string;
   credits: number;
+  scope: string[];
   invitedBy: string | ObjectId;
   isActive: boolean;
   deactivateDate: Date;

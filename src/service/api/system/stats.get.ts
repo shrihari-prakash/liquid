@@ -8,9 +8,13 @@ import app from "../../..";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { Configuration } from "../../../singleton/configuration";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 const GET__Stats = async (_: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSharedSession("system.<ENTITY>.all", res)) {
+      return;
+    };
     const heapTotal = process.memoryUsage().heapTotal / 1024 / 1024;
     const heapUsed = process.memoryUsage().heapUsed / 1024 / 1024;
     const stats = {

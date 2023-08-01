@@ -23,7 +23,7 @@ const AuthenticateUser = async (_: Request, res: Response, next: NextFunction) =
 const AuthenticateClient = async (_: Request, res: Response, next: NextFunction) => {
   try {
     res.locals.user = res.locals.oauth.token.user;
-    if (res.locals.user.role !== Role.INTERNAL_CLIENT) {
+    if (res.locals.user.role !== Role.INTERNAL_CLIENT && res.locals.user.role !== Role.EXTERNAL_CLIENT) {
       throw statusCodes.unauthorized;
     }
     res.locals.user.isClient = true;
