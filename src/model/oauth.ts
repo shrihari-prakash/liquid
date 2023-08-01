@@ -299,6 +299,9 @@ const OAuthModel = {
         // For client credentials grant, there is no notion of user.
         return resolve(scope);
       }
+      if (!user.scope) {
+        user.scope = ["user.delegated.all"]
+      }
       const userHasAccess = ScopeManager.canRequestScope(scope, user);
       if (userHasAccess) {
         resolve(scope);
