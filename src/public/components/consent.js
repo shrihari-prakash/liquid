@@ -1,18 +1,22 @@
 import { ConfigurationContext } from "../context/configuration.js";
+import { ThemeContext } from "../context/theme.js";
 import { prepareAuthorizationParams, getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function ConsentScreen() {
-  const submitButtonText = "Consent";
-
   const configuration = React.useContext(ConfigurationContext);
+  const theme = React.useContext(ThemeContext);
 
+  const [miniIconLoaded, setMiniIconLoaded] = React.useState(false);
   const [clientInfo, setClientInfo] = React.useState(false);
   const [permissionsInfo, setPermissionsInfo] = React.useState(false);
   const [requiredScopes, setRequiredScopes] = React.useState([]);
 
+  const submitButtonText = "Consent";
+  const appName = configuration["content.app-name"];
+  const authParams = prepareAuthorizationParams(configuration);
+
   React.useEffect(() => {
     (async () => {
-      const authParams = prepareAuthorizationParams(configuration);
       const clientInformation = await $.get("/user/client-info?id=" + authParams.client_id);
       const permissionsInformation = await $.get("/user/scopes");
       setClientInfo(clientInformation.data.client);
@@ -23,22 +27,35 @@ export default function ConsentScreen() {
   }, []);
 
   const onConsent = () => {
-    const authParams = prepareAuthorizationParams(configuration);
     const params = new URLSearchParams(authParams);
     window.location = `/oauth/authorize?${params.toString()}`;
   };
 
   const onDeny = () => {
-    const authParams = prepareAuthorizationParams(configuration);
     window.location = authParams.redirect_uri;
   };
 
-  React.useEffect(() => useTitle(configuration["content.app-name"], "Provide Your Consent"), []);
+  React.useEffect(() => useTitle(configuration["content.app-name"], "Consent Required"), []);
 
   return clientInfo && permissionsInfo ? (
     <div className="form">
       <div className="noselect">
-        <h3>Provide Your Consent</h3>
+        <h3 className="long-header">
+          Consent Required<span className="header-separator">&nbsp;&#x2022;&nbsp;</span>
+          {configuration[`assets.header-icon-${theme}`] ? (
+            <div className="app-icon-header">
+              <div style={{ display: miniIconLoaded ? "none" : "block" }} className="spinner" />
+              <img
+                style={{ display: miniIconLoaded ? "block" : "none" }}
+                onLoad={() => setMiniIconLoaded(true)}
+                alt={appName}
+                src={configuration[`assets.header-icon-${theme}`]}
+              />
+            </div>
+          ) : (
+            <strong className="app-name">{appName}</strong>
+          )}
+        </h3>
         <div className="consent-form">
           <p>
             {clientInfo.displayName} wants access your account. If you consent to this, {clientInfo.displayName} will be

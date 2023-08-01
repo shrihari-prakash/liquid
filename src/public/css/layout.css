@@ -77,14 +77,11 @@ h3 {
 }
 
 .flex {
-  display: flex;
+  display: flex !important;
 }
 
-.flex-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.noflex {
+  display: block !important;
 }
 
 .multi-action {
@@ -273,6 +270,15 @@ h3 {
   h3,
   .app-icon-header {
     font-size: 1.6rem;
+  }
+
+  .long-header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header-separator {
+    display: none;
   }
 
   .app-icon-mini {
