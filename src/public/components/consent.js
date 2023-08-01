@@ -1,5 +1,5 @@
 import { ConfigurationContext } from "../context/configuration.js";
-import { getOauthAuthorizationParams, getPlaceholder, useTitle } from "../utils/utils.js";
+import { prepareAuthorizationParams, getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function ConsentScreen() {
   const submitButtonText = "Consent";
@@ -12,7 +12,7 @@ export default function ConsentScreen() {
 
   React.useEffect(() => {
     (async () => {
-      const authParams = getOauthAuthorizationParams(configuration);
+      const authParams = prepareAuthorizationParams(configuration);
       const clientInformation = await $.get("/user/client-info?id=" + authParams.client_id);
       const permissionsInformation = await $.get("/user/scopes");
       setClientInfo(clientInformation.data.client);
@@ -23,13 +23,13 @@ export default function ConsentScreen() {
   }, []);
 
   const onConsent = () => {
-    const authParams = getOauthAuthorizationParams(configuration);
+    const authParams = prepareAuthorizationParams(configuration);
     const params = new URLSearchParams(authParams);
     window.location = `/oauth/authorize?${params.toString()}`;
   };
 
   const onDeny = () => {
-    const authParams = getOauthAuthorizationParams(configuration);
+    const authParams = prepareAuthorizationParams(configuration);
     window.location = authParams.redirect_uri;
   };
 

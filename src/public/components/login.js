@@ -1,6 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
-import { getOauthAuthorizationParams, getPlaceholder, isEmail, useTitle, uuidv4 } from "../utils/utils.js";
+import { prepareAuthorizationParams, getPlaceholder, isEmail, useTitle, uuidv4 } from "../utils/utils.js";
 
 export default function Login() {
   const submitButtonText = "Login";
@@ -49,7 +49,7 @@ export default function Login() {
     }
     $.post("/user/login", data)
       .done(async function () {
-        const authParams = getOauthAuthorizationParams(configuration)
+        const authParams = prepareAuthorizationParams(configuration)
         const params = new URLSearchParams(authParams);
         const clientInfo = await $.get("/user/client-info?id=" + authParams.client_id);
         console.log("Client role", clientInfo.data.role);

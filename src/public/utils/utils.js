@@ -18,7 +18,7 @@ export function getTheme() {
   const urlString = window.location;
   const url = new URL(urlString);
   const theme = url.searchParams.get("theme") || "dark";
-  return theme
+  return theme;
 }
 
 export function useFont(fontFace, fontUrl, onDone) {
@@ -72,12 +72,14 @@ export function getPlaceholder(text, configuration) {
   }
 }
 
-export function getOauthAuthorizationParams(configuration) {
+export function prepareAuthorizationParams(configuration) {
   const urlString = window.location;
   const url = new URL(urlString);
   const redirect = url.searchParams.get("redirect") || configuration["oauth.redirect-uri"];
   const state = url.searchParams.get("state") || uuidv4();
-  const scope = url.searchParams.get("scope") || "user.delegated.all";
+  let scope = url.searchParams.get("scope") || "user.delegated.all";
+  // Remove any duplicate scopes.
+  scope = Array.from(new Set(scope.split(","))).join(",");
   const codeChallenge = url.searchParams.get("codeChallenge");
   const codeChallengeMethod = url.searchParams.get("codeChallengeMethod");
   const clientId = url.searchParams.get("clientId") || configuration["oauth.client-id"];
@@ -87,7 +89,7 @@ export function getOauthAuthorizationParams(configuration) {
     redirect_uri: redirect,
     scope: scope,
     state: state,
-  }
+  };
   if (codeChallenge && codeChallengeMethod) {
     params.code_challenge = codeChallenge;
     params.code_challenge_method = codeChallengeMethod;
