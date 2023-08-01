@@ -1,0 +1,217 @@
+[
+  {
+    "name": "*",
+    "description": "View and manage everything in the system."
+  },
+  {
+    "name": "user.delegated.all",
+    "description": "View and manage your account.",
+    "parent": "*"
+  },
+  {
+    "name": "user.delegated.follow.all",
+    "description": "View and manage your followers and people you follow.",
+    "parent": "user.delegated.all"
+  },
+  {
+    "name": "user.delegated.follow.read",
+    "description": "View people you follow and your followers.",
+    "parent": "user.delegated.follow.all"
+  },
+  {
+    "name": "user.delegated.follow.write",
+    "description": "Manage people you follow and your followers.",
+    "parent": "user.delegated.follow.all"
+  },
+  {
+    "name": "user.delegated.follow.write.accept-follow-request",
+    "description": "Accept follow requests on your behalf.",
+    "parent": "user.delegated.follow.write"
+  },
+  {
+    "name": "user.delegated.follow.write.delete-follow-request",
+    "description": "Delete follow requests on your behalf.",
+    "parent": "user.delegated.follow.write"
+  },
+  {
+    "name": "user.delegated.follow.write.remove-follower",
+    "description": "Remove your followers on your behalf.",
+    "parent": "user.delegated.follow.write"
+  },
+  {
+    "name": "user.delegated.follow.write.follow",
+    "description": "Follow people on your behalf.",
+    "parent": "user.delegated.follow.write"
+  },
+  {
+    "name": "user.delegated.follow.unfollow",
+    "description": "Unfollow people on your behalf.",
+    "parent": "user.delegated.follow.write"
+  },
+  {
+    "name": "user.delegated.block.all",
+    "description": "Block, unblock and view people you've blocked on your behalf.",
+    "parent": "user.delegated.all"
+  },
+  {
+    "name": "user.delegated.block.read",
+    "description": "View people you've blocked.",
+    "parent": "user.delegated.block.all"
+  },
+  {
+    "name": "user.delegated.block.write",
+    "description": "Block people on your behalf.",
+    "parent": "user.delegated.block.all"
+  },
+  {
+    "name": "user.delegated.invite-code.all",
+    "description": "View and manage your invite codes.",
+    "parent": "user.delegated.all"
+  },
+  {
+    "name": "user.delegated.profile.all",
+    "description": "View and manage your profile information.",
+    "parent": "user.delegated.all"
+  },
+  {
+    "name": "user.delegated.profile.read",
+    "description": "View your profile information.",
+    "parent": "user.delegated.profile.all"
+  },
+  {
+    "name": "user.delegated.profile.write",
+    "description": "Edit your profile information.",
+    "parent": "user.delegated.profile.all"
+  },
+  {
+    "name": "user.delegated.search",
+    "description": "Search for people on your behalf.",
+    "parent": "user.delegated.all"
+  },
+  {
+    "name": "system.client.all",
+    "description": "View and manage the system.",
+    "parent": "*"
+  },
+  {
+    "name": "user.client.all",
+    "description": "View and manage your accounts in the system.",
+    "parent": "*"
+  },
+  {
+    "name": "user.client.follow.all",
+    "description": "View and manage your followers of accounts in the system.",
+    "parent": "user.client.all"
+  },
+  {
+    "name": "user.client.follow.read",
+    "description": "View accounts in the system follow and their followers.",
+    "parent": "user.client.follow.all"
+  },
+  {
+    "name": "user.client.profile.all",
+    "description": "View and manage profile information of user accounts in the system.",
+    "parent": "user.client.all"
+  },
+  {
+    "name": "user.client.profile.read",
+    "description": "View the profile information of user accounts in the system.",
+    "parent": "user.client.profile.all"
+  },
+  {
+    "name": "user.client.profile.write",
+    "description": "Edit your profile information of user accounts in the system.",
+    "parent": "user.client.profile.all"
+  },
+  {
+    "name": "user.client.profile.create",
+    "description": "Create user accounts in the system.",
+    "parent": "user.client.profile.all"
+  },
+  {
+    "name": "user.client.profile.ban.write",
+    "description": "Ban and unban user accounts in the system.",
+    "parent": "user.client.profile.all"
+  },
+  {
+    "name": "user.client.profile.restrict.write",
+    "description": "Restrict and unrestrict user accounts in the system.",
+    "parent": "user.client.profile.all"
+  },
+  {
+    "name": "user.client.profile.credits.write",
+    "description": "Modify credits of user accounts in the system.",
+    "parent": "user.client.profile.all"
+  },
+  {
+    "name": "user.client.profile.subscription.write",
+    "description": "Modify subscriptions of user accounts in the system.",
+    "parent": "user.client.profile.all"
+  },
+  {
+    "name": "user.client.block.read",
+    "description": "View people that the accounts in the sytstem have blocked.",
+    "parent": "user.client.all"
+  },
+  {
+    "name": "system.admin.all",
+    "description": "View and manage the system.",
+    "parent": "*"
+  },
+  {
+    "name": "user.admin.all",
+    "description": "View and manage user accounts in the system.",
+    "parent": "*"
+  },
+  {
+    "name": "user.admin.access.write",
+    "description": "View and manage permissions of other users and clients in the system.",
+    "parent": "user.admin.all"
+  },
+  {
+    "name": "user.admin.profile.all",
+    "description": "View and manage profile information of user accounts in the system.",
+    "parent": "user.admin.all"
+  },
+  {
+    "name": "user.admin.profile.read",
+    "description": "View the profile information of user accounts in the system.",
+    "parent": "user.admin.profile.all"
+  },
+  {
+    "name": "user.admin.profile.write",
+    "description": "Edit your profile information of user accounts in the system.",
+    "parent": "user.admin.profile.all"
+  },
+  {
+    "name": "user.admin.profile.create",
+    "description": "Create user accounts in the system.",
+    "parent": "user.admin.profile.all"
+  },
+  {
+    "name": "user.admin.profile.ban.write",
+    "description": "Ban and unban user accounts in the system.",
+    "parent": "user.admin.profile.all"
+  },
+  {
+    "name": "user.admin.profile.restrict.write",
+    "description": "Restrict and unrestrict user accounts in the system.",
+    "parent": "user.admin.profile.all"
+  },
+  {
+    "name": "user.admin.profile.credits.write",
+    "description": "Modify credits of user accounts in the system.",
+    "parent": "user.admin.profile.all"
+  },
+  {
+    "name": "user.admin.profile.subscription.write",
+    "description": "Modify subscriptions of user accounts in the system.",
+    "parent": "user.admin.profile.all"
+  },
+  {
+    "name": "user.admin.profile.verifications.write",
+    "description": "Update verification status for user accounts in the system.",
+    "parent": "user.admin.profile.all"
+  }
+]
+

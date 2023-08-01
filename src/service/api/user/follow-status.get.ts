@@ -8,11 +8,15 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import { hasErrors } from "../../../utils/api";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const GET_FollowStatusValidator = [query("target").exists().isString().isLength({ min: 8, max: 64 })];
 
 const GET_FollowStatus = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.read", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.query.target as string;

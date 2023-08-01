@@ -12,10 +12,14 @@ import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { MongoDB } from "../../../singleton/mongo-db";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 const POST_Unfollow = async (req: Request, res: Response) => {
   let session = "";
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.unfollow", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;

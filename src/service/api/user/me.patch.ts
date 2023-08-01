@@ -23,6 +23,7 @@ import {
   getPhoneValidator,
   getUsernameValidator,
 } from "../../../utils/validator/user";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 const languages = Language.map((l) => l.code);
 
@@ -45,6 +46,9 @@ export const PATCH_MeValidator = [
 
 const PATCH_Me = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.write", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const errors: any[] = [];

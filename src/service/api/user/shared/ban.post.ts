@@ -9,6 +9,7 @@ import UserModel from "../../../../model/mongo/user";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api";
 import { flushUserInfoFromRedis } from "../../../../model/oauth";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const POST_BanValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
@@ -17,8 +18,11 @@ export const POST_BanValidator = [
 ];
 
 const POST_Ban = async (req: Request, res: Response) => {
-  if (hasErrors(req, res)) return;
   try {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.ban.write", res)) {
+      return;
+    };
+    if (hasErrors(req, res)) return;
     const target = req.body.target;
     const state = req.body.state;
     const reason = req.body.reason;

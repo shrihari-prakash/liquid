@@ -8,6 +8,7 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
 import { IUser } from "../../../../model/mongo/user";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const GET_FollowStatusValidator = [
   query("source").exists().isString().isLength({ min: 8, max: 128 }),
@@ -16,6 +17,9 @@ export const GET_FollowStatusValidator = [
 
 const GET_FollowStatus = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.client.follow.read", res)) {
+      return;
+    };
     const sourceId = req.query.source as string;
     const targetId = req.query.target as string;
     const isFollowing = (await FollowModel.findOne({

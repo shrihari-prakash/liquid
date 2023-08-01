@@ -11,6 +11,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { Configuration } from "../../../singleton/configuration";
 import { S3 } from "../../../singleton/s3";
 import UserModel from "../../../model/mongo/user";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 let profilePictureMulter;
 
@@ -55,6 +56,9 @@ export const profilePicturePath = `${Configuration.get("storage.cloud-path")}/pr
 
 const PATCH_ProfilePicture = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.write", res)) {
+      return;
+    };
     uploadProfilePicture(req, res, async function (err: any) {
       if (err) {
         log.error(err);

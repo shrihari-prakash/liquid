@@ -6,6 +6,47 @@
   max-width: 45%;
 }
 
+.consent-form .scope-container {
+  user-select: none;
+  list-style: none;
+  padding: 0;
+}
+
+.consent-form .scope-item {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5em;
+  color: var(--text-color);
+  border: 1px solid var(--form-input-border-color);
+  font-weight: 300;
+  padding: calc(var(--form-input-vertical-padding) * 2) calc(var(--form-input-vertical-padding) * 2);
+  border-radius: var(--form-input-border-radius);
+}
+
+.consent-form .scope-item-desc {
+  margin-left: calc(var(--form-input-vertical-padding) * 2);
+}
+
+.circle {
+  position: relative;
+  background: var(--primary-button-color);
+  border-radius: 50%;
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.checkmark {
+  position: absolute;
+  transform: rotate(45deg) translate(-50%, -50%);
+  left: 30%;
+  top: 50%;
+  height: calc(28px / 3);
+  width: calc(28px / 6);
+  border-bottom: 3px solid var(--primary-button-text-color);
+  border-right: 3px solid var(--primary-button-text-color);
+}
+
 @media (max-width: 1199.99px) and (orientation: portrait) {
   .form {
     max-width: unset;

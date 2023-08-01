@@ -10,11 +10,15 @@ import UserModel, { IUser } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import { checkSubscription } from "../../../../utils/subscription";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const GET_UserInfoValidator = [query("targets").exists().isString()];
 
 const GET_UserInfo = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.read", res)) {
+      return;
+    };
     const targets = (req.query.targets as string).split(",");
     if (targets.length > (Configuration.get("get-user-max-items") as number)) {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));

@@ -1,7 +1,6 @@
 import express from "express";
 
 import { DelegatedAuthFlow } from "../../middleware/authenticate";
-import AuthorizeAdmin from "../../middleware/authorize-admin";
 import POST_Ban, { POST_BanValidator } from "../shared/ban.post";
 import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
 import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
@@ -16,22 +15,21 @@ import PATCH_User, { PATCH_UserValidator } from "./user.patch";
 
 const AdminApiRouter = express.Router();
 
-AdminApiRouter.get("/user-info", ...DelegatedAuthFlow, AuthorizeAdmin, GET_UserInfoValidator, GET_UserInfo);
-AdminApiRouter.post("/access", ...DelegatedAuthFlow, AuthorizeAdmin, POST_AccessValidator, POST_Access);
-AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, AuthorizeAdmin, GET_EditableFields);
-AdminApiRouter.patch("/user", ...DelegatedAuthFlow, AuthorizeAdmin, PATCH_UserValidator, PATCH_User);
-AdminApiRouter.post("/ban", ...DelegatedAuthFlow, AuthorizeAdmin, POST_BanValidator, POST_Ban);
-AdminApiRouter.post("/credits", ...DelegatedAuthFlow, AuthorizeAdmin, POST_CreditsValidator, POST_Credits);
-AdminApiRouter.post("/restrict", ...DelegatedAuthFlow, AuthorizeAdmin, POST_RestrictValidator, POST_Restrict);
-AdminApiRouter.post("/verify", ...DelegatedAuthFlow, AuthorizeAdmin, POST_VerifyValidator, POST_Verify);
+AdminApiRouter.get("/user-info", ...DelegatedAuthFlow, GET_UserInfoValidator, GET_UserInfo);
+AdminApiRouter.post("/access", ...DelegatedAuthFlow, POST_AccessValidator, POST_Access);
+AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, GET_EditableFields);
+AdminApiRouter.patch("/user", ...DelegatedAuthFlow, PATCH_UserValidator, PATCH_User);
+AdminApiRouter.post("/ban", ...DelegatedAuthFlow, POST_BanValidator, POST_Ban);
+AdminApiRouter.post("/credits", ...DelegatedAuthFlow, POST_CreditsValidator, POST_Credits);
+AdminApiRouter.post("/restrict", ...DelegatedAuthFlow, POST_RestrictValidator, POST_Restrict);
+AdminApiRouter.post("/verify", ...DelegatedAuthFlow, POST_VerifyValidator, POST_Verify);
 AdminApiRouter.post(
   "/subscription",
   ...DelegatedAuthFlow,
-  AuthorizeAdmin,
   POST_SubscriptionValidator,
   POST_Subscription
 );
-AdminApiRouter.post("/create", ...DelegatedAuthFlow, AuthorizeAdmin, POST_CreateValidator, POST_Create);
-AdminApiRouter.get("/list", ...DelegatedAuthFlow, AuthorizeAdmin, GET_List);
+AdminApiRouter.post("/create", ...DelegatedAuthFlow, POST_CreateValidator, POST_Create);
+AdminApiRouter.get("/list", ...DelegatedAuthFlow, GET_List);
 
 export default AdminApiRouter;

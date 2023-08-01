@@ -9,9 +9,13 @@ import UserModel, { IUser } from "../../../model/mongo/user";
 import { Configuration } from "../../../singleton/configuration";
 import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 const GET_Me = async (_: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.read", res)) {
+      return;
+    };
     const userId = res.locals.oauth.token.user._id;
     let user = (await UserModel.findOne({ _id: userId }).lean().exec()) as unknown as IUser;
     checkSubscription(user);

@@ -12,13 +12,17 @@ import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
 import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
 
 const redisPrefix = "search:";
 const POST_Search = async (req: Request, res: Response) => {
-  if (hasErrors(req, res)) return;
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.search", res)) {
+      return;
+    };
+    if (hasErrors(req, res)) return;
     const query = req.body.query;
     if (Configuration.get("privilege.can-use-cache")) {
       const cacheResults = await Redis.client.get(`${redisPrefix}${query}`);

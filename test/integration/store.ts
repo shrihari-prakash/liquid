@@ -7,6 +7,7 @@ const MemoryStore = {
     client_id: "application_client",
     client_secret: "secret",
     role: "internal_client",
+    scope: ["*"]
   },
   users: {
     user1: {
@@ -16,6 +17,7 @@ const MemoryStore = {
       firstName: "John",
       lastName: "Doe",
       email: "johndoe@example.com",
+      scope: ["*"]
     },
     user2: {
       _id: null,
@@ -24,6 +26,7 @@ const MemoryStore = {
       firstName: "Rick",
       lastName: "Asthley",
       email: "rickasthley@example.com",
+      scope: ["*"]
     },
   },
 };

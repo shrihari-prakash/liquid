@@ -10,12 +10,16 @@ import FollowModel from "../../../model/mongo/follow";
 import { updateFollowCount } from "../../../utils/follow";
 import { hasErrors } from "../../../utils/api";
 import { MongoDB } from "../../../singleton/mongo-db";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const PATCH_AcceptFollowRequestValidator = [body("request").exists().isString().isLength({ min: 8, max: 64 })];
 
 const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
   let session = "";
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.write.accept-follow-request", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const targetId = res.locals.oauth.token.user._id;
     const requestId = req.body.request;

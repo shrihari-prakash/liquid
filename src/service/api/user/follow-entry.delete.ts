@@ -10,12 +10,16 @@ import FollowModel from "../../../model/mongo/follow";
 import { hasErrors } from "../../../utils/api";
 import { updateFollowCount } from "../../../utils/follow";
 import { MongoDB } from "../../../singleton/mongo-db";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const DELETE_FollowEntryValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
 
 const DELETE_FollowEntry = async (req: Request, res: Response) => {
   let session = "";
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.write.remove-follower", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const entryId = req.body.target;

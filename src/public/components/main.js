@@ -5,6 +5,7 @@ import NotFound from "./not-found.js";
 import ResetPassword from "./reset-password.js";
 import SignUp from "./signup.js";
 import VerifyAccount from "./verify-account.js";
+import ConsentScreen from "./consent.js";
 
 function getRenderElement() {
     let component;
@@ -20,6 +21,8 @@ function getRenderElement() {
             return VerifyAccount;
         case "/reset-password":
             return ResetPassword;
+        case "/consent":
+            return ConsentScreen;
         default:
             return NotFound;
     }

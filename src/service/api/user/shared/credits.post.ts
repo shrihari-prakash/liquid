@@ -12,6 +12,7 @@ import { flushUserInfoFromRedis } from "../../../../model/oauth";
 import CreditTransactionModel from "../../../../model/mongo/credit-transaction";
 import { MongoDB } from "../../../../singleton/mongo-db";
 import { Configuration } from "../../../../singleton/configuration";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 const Operations = {
   INCREMENT: "increment",
@@ -26,9 +27,12 @@ export const POST_CreditsValidator = [
 ];
 
 const POST_Credits = async (req: Request, res: Response) => {
-  if (hasErrors(req, res)) return;
   let session = "";
   try {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.credits.write", res)) {
+      return;
+    };
+    if (hasErrors(req, res)) return;
     const target = req.body.target;
     let conditions: any = { _id: target };
     const query: any = {};
