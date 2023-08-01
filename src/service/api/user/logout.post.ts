@@ -17,6 +17,8 @@ const POST_Logout = async (req: Request, res: Response) => {
     await OAuthModel.revokeToken(token);
     if (req.session && req.session.destroy) {
       req.session.destroy(() => null);
+      // @ts-ignore
+      delete req.session;
     }
     Pusher.publish(new PushEvent(PushEventList.USER_LOGOUT, { user }));
     res.status(statusCodes.success).json(new SuccessResponse());
