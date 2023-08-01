@@ -49,12 +49,13 @@ export default function Login() {
     }
     $.post("/user/login", data)
       .done(async function () {
-        const authParams = prepareAuthorizationParams(configuration)
-        const params = new URLSearchParams(authParams);
-        const clientInfo = await $.get("/user/client-info?id=" + authParams.client_id);
+        let authParams = prepareAuthorizationParams(configuration);
+        const clientInfoParams = new URLSearchParams({ id: authParams.client_id });
+        const clientInfo = await $.get(`/user/client-info?${clientInfoParams.toString()}`);
         console.log("Client role", clientInfo.data.role);
         if (clientInfo.data.client.role === "internal_client") {
-          window.location = `/oauth/authorize?${params.toString()}`;
+          authParams = new URLSearchParams(authParams);
+          window.location = `/oauth/authorize?${authParams.toString()}`;
         } else {
           window.location = `/consent${window.location.search}`;
         }

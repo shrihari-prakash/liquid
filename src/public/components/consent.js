@@ -17,7 +17,8 @@ export default function ConsentScreen() {
 
   React.useEffect(() => {
     (async () => {
-      const clientInformation = await $.get("/user/client-info?id=" + authParams.client_id);
+      const params = new URLSearchParams({ id: authParams.client_id });
+      const clientInformation = await $.get(`/user/client-info?${params.toString()}`);
       const permissionsInformation = await $.get("/user/scopes");
       setClientInfo(clientInformation.data.client);
       setRequiredScopes(authParams.scope.split(","));
@@ -58,8 +59,8 @@ export default function ConsentScreen() {
         </h3>
         <div className="consent-form">
           <p>
-            {clientInfo.displayName} wants access to your account. If you consent to this, {clientInfo.displayName} will be
-            able to:
+            {clientInfo.displayName} wants access to your account. If you consent to this, {clientInfo.displayName} will
+            be able to:
           </p>
           <ul className="scope-container">
             {requiredScopes.map((scope) => (
