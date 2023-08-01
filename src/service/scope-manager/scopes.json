@@ -35,7 +35,7 @@
   },
   {
     "name": "user.delegated.follow.write.remove-follower",
-    "description": "Delete follow requests on your behalf.",
+    "description": "Remove your followers on your behalf.",
     "parent": "user.delegated.follow.write"
   },
   {
@@ -210,7 +210,7 @@
   },
   {
     "name": "user.admin.profile.verifications.write",
-    "description": "Verify user accounts in the system.",
+    "description": "Update verification status for user accounts in the system.",
     "parent": "user.admin.profile.all"
   }
 ]
