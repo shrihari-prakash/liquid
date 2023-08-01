@@ -58,7 +58,7 @@ export default function ConsentScreen() {
         </h3>
         <div className="consent-form">
           <p>
-            {clientInfo.displayName} wants access your account. If you consent to this, {clientInfo.displayName} will be
+            {clientInfo.displayName} wants access to your account. If you consent to this, {clientInfo.displayName} will be
             able to:
           </p>
           <ul className="scope-container">

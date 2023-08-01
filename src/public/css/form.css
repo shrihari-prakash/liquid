@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   margin-top: 0.5em;
-  color: var(--text-lighter-color);
+  color: var(--text-color);
   border: 1px solid var(--form-input-border-color);
   font-weight: 300;
   padding: calc(var(--form-input-vertical-padding) * 2) calc(var(--form-input-vertical-padding) * 2);
