@@ -199,6 +199,7 @@ export type IUser = {
   subscriptionExpiry: Date;
   subscriptionTier: string;
   credits: number;
+  scope: string[];
   invitedBy: string | ObjectId;
   isActive: boolean;
   deactivateDate: Date;
