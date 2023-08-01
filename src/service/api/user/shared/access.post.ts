@@ -13,25 +13,22 @@ import ClientModel from "../../../../model/mongo/client";
 
 export const POST_AccessValidator = [
   body("targets").exists().isArray().isLength({ min: 8 }),
-  body("targetType").exists().isString().isIn(['user', 'client']),
+  body("targetType").exists().isString().isIn(["user", "client"]),
   body("scope").exists().isArray().isLength({ min: 1, max: 128 }),
   body("status").exists().isBoolean(),
 ];
 
 const POST_Access = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.admin.access.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.access.write", res)) {
       return;
-    };
+    }
     if (hasErrors(req, res)) return;
-    if (
-      req.body.targets.some((t: string) => typeof t !== "string") ||
-      req.body.scope.some((s: string) => typeof s !== "string")
-    ) {
+    if (req.body.targets.some((t: string) => typeof t !== "string")) {
       const errors = [
         {
           msg: "Invalid value",
-          param: null,
+          param: "targets",
           location: "body",
         },
       ];
@@ -39,7 +36,14 @@ const POST_Access = async (req: Request, res: Response) => {
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
     }
-    if (req.body.scope.some((s: string) => typeof ScopeManager.getScopes()[s] === "undefined")) {
+    if (
+      req.body.scope.some(
+        (s: string) =>
+          typeof s !== "string" ||
+          typeof ScopeManager.getScopes()[s] === "undefined" ||
+          !ScopeManager.isScopeAllowed(s, res.locals.oauth.token.scope)
+      )
+    ) {
       const errors = [
         {
           msg: "Invalid value",

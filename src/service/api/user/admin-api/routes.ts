@@ -4,7 +4,7 @@ import { DelegatedAuthFlow } from "../../middleware/authenticate";
 import POST_Ban, { POST_BanValidator } from "../shared/ban.post";
 import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
 import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
-import POST_Access, { POST_AccessValidator } from "./access.post";
+import POST_Access, { POST_AccessValidator } from "../shared/access.post";
 import POST_Verify, { POST_VerifyValidator } from "./verify.post";
 import POST_Create, { POST_CreateValidator } from "../shared/create.post";
 import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post";

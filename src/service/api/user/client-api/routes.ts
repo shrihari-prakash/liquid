@@ -7,6 +7,7 @@ import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
 import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
 import POST_Create, { POST_CreateValidator } from "../shared/create.post";
 import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post";
+import POST_Access, { POST_AccessValidator } from "../shared/access.post";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get";
@@ -24,6 +25,7 @@ ClientApiRouter.post("/subscription", ...ClientAuthFlow, POST_SubscriptionValida
 ClientApiRouter.get("/block-status", ...ClientAuthFlow, GET_BlockStatusValidator, GET_BlockStatus);
 ClientApiRouter.post("/create", ...ClientAuthFlow, POST_CreateValidator, POST_Create);
 ClientApiRouter.get("/list", ...ClientAuthFlow, GET_List);
+ClientApiRouter.post("/access", ...ClientAuthFlow, POST_AccessValidator, POST_Access);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {
