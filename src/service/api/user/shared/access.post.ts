@@ -12,7 +12,7 @@ import { ScopeManager } from "../../../../singleton/scope-manager";
 import ClientModel from "../../../../model/mongo/client";
 
 export const POST_AccessValidator = [
-  body("targets").exists().isArray().isLength({ min: 8 }),
+  body("targets").exists().isArray(),
   body("targetType").exists().isString().isIn(["user", "client"]),
   body("scope").exists().isArray().isLength({ min: 1, max: 128 }),
   body("status").exists().isBoolean(),
