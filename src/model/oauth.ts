@@ -23,15 +23,6 @@ interface Token {
   [key: string]: any;
 }
 
-interface Code {
-  authorizationCode: string;
-  expiresAt: Date;
-  redirectUri: string;
-  codeChallenge?: string;
-  codeChallengeMethod?: string;
-  scope?: string;
-}
-
 interface Client {
   id: string;
   redirectUris?: string[];
@@ -52,9 +43,11 @@ interface AuthorizationCode {
   authorizationCode: string;
   expiresAt: Date;
   redirectUri: string;
-  scope?: Scope;
+  scope?: string | string[] | undefined;
   client: Client;
   user: User;
+  codeChallenge?: string;
+  codeChallengeMethod?: string;
   [key: string]: any;
 }
 
@@ -225,11 +218,12 @@ const OAuthModel = {
     return true;
   },
 
-  saveAuthorizationCode: async (code: Code, client: Client, user: User) => {
+  saveAuthorizationCode: async (code: AuthorizationCode, client: Client, user: User) => {
     try {
       const authorizationCode = {
         authorizationCode: code.authorizationCode,
         expiresAt: code.expiresAt,
+        redirectUri: code.redirectUri,
         client: client || {},
         user: user || {},
         codeChallenge: code.codeChallenge,
@@ -314,10 +308,12 @@ const OAuthModel = {
     });
   },
 
-  verifyScope: (token: Token, scope: string) => {
-    log.debug("Verifying scope %s for client %s", scope, token.client.id);
-    console.log(token, scope);
-    return token.scope === scope;
+  verifyScope: (token: Token, scope: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+      log.debug("Verifying scope %s for client %s", scope, token.client.id);
+      console.log(token, scope);
+      return resolve(token.scope === scope);
+    });
   },
 };
 
