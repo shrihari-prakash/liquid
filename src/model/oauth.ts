@@ -291,7 +291,11 @@ const OAuthModel = {
     return new Promise((resolve) => {
       const clientHasAccess = ScopeManager.canRequestScope(scope, client);
       if (!clientHasAccess) {
-        log.debug("Validating scope %s for client %s failed due to insufficient access.", scope, client.id);
+        log.debug(
+          "Scope validation for client %s failed due to insufficient access. Requested scope: %s",
+          client.id,
+          scope
+        );
         return resolve(false);
       }
       if (client.id === user.username) {
@@ -303,7 +307,7 @@ const OAuthModel = {
       }
       // Sometimes, the frontends do not know the scopes a user can request ahead of time.
       // Since there is usually a higher amount of trust for internal clients in the system,
-      // so it is okay to return all scopes that a user has.
+      // it is okay to return all scopes that a user has access to.
       if (client.role === Role.INTERNAL_CLIENT) {
         scope = user.scope.join(",");
         log.debug(
@@ -319,19 +323,6 @@ const OAuthModel = {
       } else {
         resolve(false);
       }
-    });
-  },
-
-  // I don't know honestly if this method is even called, I have never seen it being called.
-  verifyScope: (token: Token, scope: string): Promise<boolean> => {
-    return new Promise((resolve) => {
-      const client = token.client;
-      if (client.role === Role.INTERNAL_CLIENT) {
-        return resolve(true);
-      }
-      log.debug("Verifying scope %s for client %s", scope, token.client.id);
-      console.log(token, scope);
-      return resolve(token.scope === scope);
     });
   },
 };
