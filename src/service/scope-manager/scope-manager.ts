@@ -35,8 +35,15 @@ export class ScopeManager {
   }
 
   isScopeAllowedForSharedSession(scope: string, res: Response) {
-    return this.isScopeAllowedForSession(scope.replace("<ENTITY>", "client"), res)
-      || this.isScopeAllowedForSession(scope.replace("<ENTITY>", "admin"), res)
+    const allowedScopes = res.locals?.oauth?.token?.scope || "";
+    const isAllowedForUser = this.isScopeAllowed(scope.replace("<ENTITY>", "client"), allowedScopes);
+    const isAllowedForClient = this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), allowedScopes);
+    if (!isAllowedForUser && !isAllowedForClient) {
+      res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+      return false;
+    } else {
+      return true;
+    }
   }
 
   isScopeAllowedForSession(scope: string, res: Response) {
