@@ -26,8 +26,9 @@ const ALL_Introspect = async (req: Request, res: Response) => {
   if (errors.length) {
     return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden, { errors }));
   }
-  const tokenInfo = await OAuthModel.getAccessToken(req.query.token || req.body.token);
-  if (!tokenInfo) {
+  const token = req.query.token || req.body.token;
+  const tokenInfo = await OAuthModel.getAccessToken(token);
+  if (!tokenInfo || tokenInfo.accessToken !== token) {
     return res.status(statusCodes.success).json(new SuccessResponse({ tokenInfo: null }));
   }
   tokenInfo.authorizationCode = undefined;
