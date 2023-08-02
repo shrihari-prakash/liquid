@@ -11,8 +11,6 @@ const ALL_Introspect = async (req: Request, res: Response) => {
     return;
   }
   const errors: any[] = [];
-  console.log(req.body.token);
-  console.log(req.query.token);
   Object.keys(req.body).forEach((key) => {
     if (
       (!req.body.token && typeof req.query.token !== "string") ||
