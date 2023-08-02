@@ -29,16 +29,16 @@ const ALL_Introspect = async (req: Request, res: Response) => {
     return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden, { errors }));
   }
   const tokenInfo = await OAuthModel.getAccessToken(req.query.token || req.body.token);
-  delete tokenInfo.authorizationCode;
-  delete tokenInfo.refreshToken;
-  delete tokenInfo.refreshTokenExpiresAt;
-  delete tokenInfo.client;
+  tokenInfo.authorizationCode = undefined;
+  tokenInfo.refreshToken = undefined;
+  tokenInfo.refreshTokenExpiresAt = undefined;
+  tokenInfo.client = undefined;
   const allFields = Object.keys(tokenInfo.user);
   for (let i = 0; i < allFields.length; i++) {
     const field = allFields[i] as string;
     // @ts-ignore
     if (!IUserProjection[field]) {
-      delete tokenInfo.user[field];
+      tokenInfo.user[field] = undefined;
     }
   }
   res.status(statusCodes.success).json(new SuccessResponse({ tokenInfo }));
