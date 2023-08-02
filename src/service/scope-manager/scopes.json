@@ -94,6 +94,16 @@
     "parent": "*"
   },
   {
+    "name": "oauth.client.all",
+    "description": "View and manage OAuth information.",
+    "parent": "*"
+  },
+  {
+    "name": "oauth.client.read",
+    "description": "View OAuth information.",
+    "parent": "oauth.client.all"
+  },
+  {
     "name": "user.client.all",
     "description": "View and manage your accounts in the system.",
     "parent": "*"
@@ -214,4 +224,3 @@
     "parent": "user.admin.profile.all"
   }
 ]
-

@@ -4,6 +4,44 @@ info:
   description: Seamless authentication and user management APIs for your projects based on TypeScript, MongoDB and Redis.
   version: 0.1
 paths:
+  /oauth/introspect:
+    post:
+      summary: Validate a user token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        "200":
+          description: Returns information about the token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      tokenInfo:
+                        type: object
+                        properties:
+                          accessToken:
+                            type: string
+                          accessTokenExpiresAt:
+                            type: string
+                          scope:
+                            type: string
+                          user:
+                            $ref: "#/definitions/user"
+      tags:
+        - oauth-api
   /user/admin-api/create:
     post:
       summary: Bulk user creation.
@@ -120,7 +158,7 @@ paths:
     post:
       security:
         - bearerAuth: []
-      summary: 'Provide access to the given scope for the specified targets. Targets can be of type user or client.'
+      summary: "Provide access to the given scope for the specified targets. Targets can be of type user or client."
       requestBody:
         required: true
         content:
@@ -1374,7 +1412,7 @@ paths:
     get:
       security:
         - bearerAuth: []
-      summary: Retrives the invite codes for the logged in user. 
+      summary: Retrives the invite codes for the logged in user.
       responses:
         "200":
           description: Returns invite codes.
