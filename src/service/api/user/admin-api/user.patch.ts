@@ -40,6 +40,11 @@ const PATCH_User = async (req: Request, res: Response) => {
         });
       }
     });
+    if (errors.length) {
+      return res
+        .status(statusCodes.unauthorized)
+        .json(new ErrorResponse(errorMessages.insufficientPrivileges, { errors }));
+    }
     const currentUserRole = res.locals.user.role;
     const target = (await UserModel.findOne({ _id: userId })) as unknown as IUser;
     // Allow changing data only upto the level of the current user's role.
@@ -60,11 +65,6 @@ const PATCH_User = async (req: Request, res: Response) => {
     const password = req.body.password;
     if (password) {
       req.body.password = await bcrypt.hash(password, bcryptConfig.salt);
-    }
-    if (errors.length) {
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
     }
     await UserModel.updateOne({ _id: userId }, { $set: { ...req.body } }).exec();
     res.status(statusCodes.success).json(new SuccessResponse());
