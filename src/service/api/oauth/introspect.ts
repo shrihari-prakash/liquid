@@ -4,6 +4,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import OAuthModel from "../../../model/oauth";
 import { ScopeManager } from "../../../singleton/scope-manager";
+import { IUserProjection } from "../../../model/mongo/user";
 
 const ALL_Introspect = async (req: Request, res: Response) => {
   if (!ScopeManager.isScopeAllowedForSession("oauth.client.read", res)) {
@@ -28,9 +29,18 @@ const ALL_Introspect = async (req: Request, res: Response) => {
     return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden, { errors }));
   }
   const tokenInfo = await OAuthModel.getAccessToken(req.query.token || req.body.token);
+  delete tokenInfo.authorizationCode;
   delete tokenInfo.refreshToken;
   delete tokenInfo.refreshTokenExpiresAt;
   delete tokenInfo.client;
+  const allFields = Object.keys(tokenInfo.user);
+  for (let i = 0; i < allFields.length; i++) {
+    const field = allFields[i] as string;
+    // @ts-ignore
+    if (!IUserProjection[field]) {
+      delete tokenInfo.user[field];
+    }
+  }
   res.status(statusCodes.success).json(new SuccessResponse({ tokenInfo }));
 };
 
