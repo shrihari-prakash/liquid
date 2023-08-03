@@ -459,6 +459,15 @@
     "relatedOptions": ["user.account-creation.invites-per-person"]
   },
   {
+    "name": "user.account-creation.force-generate-invite-codes",
+    "displayName": "User Account Creation Force Generate Invite Codes",
+    "envName": "USER_ACCOUNT_CREATION_FORCE_GENERATE_INVITE_CODES",
+    "description": "Specifies if the system can generate invite codes on account creation even if `user.account-creation.enable-invite-only` option is turned off.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["user.account-creation.enable-invite-only"]
+  },
+  {
     "name": "user.account-creation.invites-per-person",
     "displayName": "User Account Creation Invites Per Person",
     "envName": "USER_ACCOUNT_CREATION_INVITES_PER_PERSON",

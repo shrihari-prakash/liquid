@@ -70,25 +70,30 @@ async function validateInviteCode(req: Request, res: Response, user: IUser) {
 }
 
 async function useInviteCode(user: IUser, code: string, sessionOptions: { session: ClientSession } | undefined) {
-  if (!Configuration.get("user.account-creation.enable-invite-only")) {
-    return true;
+  if (
+    Configuration.get("user.account-creation.enable-invite-only") ||
+    Configuration.get("user.account-creation.force-generate-invite-codes")
+  ) {
+    const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
+    const inviteCodes = [];
+    for (let j = 0; j < inviteCodeCount; j++) {
+      inviteCodes.push({
+        code: generateInviteCode(),
+        sourceId: user._id,
+      });
+    }
+    if (sessionOptions) {
+      await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
+    } else {
+      await InviteCodeModel.insertMany(inviteCodes);
+    }
+    log.debug("Invite codes generated for user %s", user.username);
   }
-  const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
-  const inviteCodes = [];
-  for (let j = 0; j < inviteCodeCount; j++) {
-    inviteCodes.push({
-      code: generateInviteCode(),
-      sourceId: user._id,
-    });
+  if (Configuration.get("user.account-creation.enable-invite-only")) {
+    const updateUsedBy = InviteCodeModel.updateOne({ code: code }, { $set: { targetId: user._id } });
+    if (sessionOptions) updateUsedBy.session(sessionOptions.session);
+    await updateUsedBy;
   }
-  if (sessionOptions) {
-    await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
-  } else {
-    await InviteCodeModel.insertMany(inviteCodes);
-  }
-  const updateUsedBy = InviteCodeModel.updateOne({ code: code }, { $set: { targetId: user._id } });
-  if (sessionOptions) updateUsedBy.session(sessionOptions.session);
-  await updateUsedBy;
 }
 
 const POST_Create = async (req: Request, res: Response) => {
