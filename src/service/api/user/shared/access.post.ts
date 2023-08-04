@@ -40,6 +40,7 @@ const POST_Access = async (req: Request, res: Response) => {
       req.body.scope.some(
         (s: string) =>
           typeof s !== "string" ||
+          !Object.keys(ScopeManager.getScopes()).includes(s) ||
           typeof ScopeManager.getScopes()[s] === "undefined" ||
           !ScopeManager.isScopeAllowed(s, res.locals.oauth.token.scope)
       )
