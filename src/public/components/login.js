@@ -51,7 +51,7 @@ export default function Login() {
       .done(async function () {
         let authParams = prepareAuthorizationParams(configuration);
         const clientInfoParams = new URLSearchParams({ id: authParams.client_id });
-        const clientInfo = await $.get(`/user/client-info?${clientInfoParams.toString()}`);
+        const clientInfo = await $.get(`/user/client?${clientInfoParams.toString()}`);
         console.log("Client role", clientInfo.data.role);
         if (clientInfo.data.client.role === "internal_client") {
           authParams = new URLSearchParams(authParams);

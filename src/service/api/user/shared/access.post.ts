@@ -39,8 +39,12 @@ const POST_Access = async (req: Request, res: Response) => {
     if (
       req.body.scope.some(
         (s: string) =>
+          /* 
+            1. If a scope value is not string.
+            2. If it is a valid scope from the list of scopes.
+            3. if the user requesting the API has access to this scope in the first place?
+          */
           typeof s !== "string" ||
-          !Object.keys(ScopeManager.getScopes()).includes(s) ||
           typeof ScopeManager.getScopes()[s] === "undefined" ||
           !ScopeManager.isScopeAllowed(s, res.locals.oauth.token.scope)
       )

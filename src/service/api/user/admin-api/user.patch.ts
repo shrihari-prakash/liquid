@@ -25,7 +25,7 @@ export const PATCH_UserValidator = [
 const PATCH_User = async (req: Request, res: Response) => {
   if (!ScopeManager.isScopeAllowedForSession("user.admin.profile.write", res)) {
     return;
-  };
+  }
   try {
     if (hasErrors(req, res)) return;
     const userId = req.body.target;
@@ -47,7 +47,7 @@ const PATCH_User = async (req: Request, res: Response) => {
     }
     const currentUserRole = res.locals.user.role;
     const target = (await UserModel.findOne({ _id: userId })) as unknown as IUser;
-    // Allow changing data only upto the level of the current user's role.
+    // Allow changing data only upto the current user's role score.
     if (!isRoleRankHigher(currentUserRole, target.role)) {
       return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
     }
