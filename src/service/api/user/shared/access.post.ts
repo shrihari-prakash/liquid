@@ -40,9 +40,10 @@ const POST_Access = async (req: Request, res: Response) => {
       req.body.scope.some(
         (s: string) =>
           /* 
+          Scope validate error conditions:
             1. If a scope value is not string.
-            2. If it is a valid scope from the list of scopes.
-            3. if the user requesting the API has access to this scope in the first place?
+            2. If it is not a valid scope from the list of scopes.
+            3. If the user requesting the API does not have access to this scope in the first place
           */
           typeof s !== "string" ||
           typeof ScopeManager.getScopes()[s] === "undefined" ||
