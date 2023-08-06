@@ -14,7 +14,7 @@ import ClientModel from "../../../../model/mongo/client";
 export const POST_AccessValidator = [
   body("targets").exists().isArray(),
   body("targetType").exists().isString().isIn(["user", "client"]),
-  body("scope").exists().isArray().isLength({ min: 1, max: 128 }),
+  body("scope").exists().isArray(),
   body("status").exists().isBoolean(),
 ];
 
