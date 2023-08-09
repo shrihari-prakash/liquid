@@ -20,19 +20,20 @@ const POST_Logout = async (req: Request, res: Response) => {
       await OAuthModel.revokeToken(token);
     }
     const sessionId = req.session?.id;
-    if (sessionId && Configuration.get("privilege.can-use-cache")) {
-      await Redis.client.del(`session_id:${sessionId}`);
-      log.debug("Deleted session id %s from Redis.", sessionId);
-    }
     if (req.session && req.session.destroy) {
-      req.session.destroy(() => null);
+      req.session.destroy(async () => {
+        if (sessionId && Configuration.get("privilege.can-use-cache")) {
+          await Redis.client.del(`session_id:${sessionId}`);
+          log.debug("Deleted session id %s from Redis.", sessionId);
+        }
+        if (user) {
+          Pusher.publish(new PushEvent(PushEventList.USER_LOGOUT, { user }));
+        }
+        res.status(statusCodes.success).json(new SuccessResponse());
+      });
       // @ts-ignore
       delete req.session;
     }
-    if (user) {
-      Pusher.publish(new PushEvent(PushEventList.USER_LOGOUT, { user }));
-    }
-    res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
