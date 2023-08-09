@@ -47,6 +47,7 @@ var sessionOptions: any = {
   secret: Configuration.get("cookie-session-secret"),
   resave: false,
   saveUninitialized: false,
+  proxy: app.get("env") === "production" && Configuration.get("system.reverse-proxy-mode"),
   cookie: {},
 };
 if (Configuration.get("privilege.can-use-cache")) {
@@ -62,7 +63,7 @@ if (app.get("env") === "production") {
   if (isReverseProxy) {
     app.set("trust proxy", true);
   }
-  sessionOptions.cookie.secure = !isReverseProxy;
+  sessionOptions.cookie.secure = true;
 }
 app.use(session(sessionOptions));
 
