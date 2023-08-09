@@ -63,7 +63,7 @@ if (app.get("env") === "production") {
   if (isReverseProxy) {
     app.set("trust proxy", true);
   }
-  sessionOptions.cookie.secure = !isReverseProxy;
+  sessionOptions.cookie.secure = true;
 }
 app.use(session(sessionOptions));
 
