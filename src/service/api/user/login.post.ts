@@ -41,6 +41,7 @@ const POST_Login = async (req: Request, res: Response) => {
       return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
     user.password = undefined;
     req.session.user = user;
+    log.debug("Assigned session id %s for user %s", req.session?.id, user._id);
     Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
     return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
   } catch (err) {
