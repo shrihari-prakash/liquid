@@ -58,8 +58,11 @@ if (Configuration.get("privilege.can-use-cache")) {
   sessionOptions.store = redisStore;
 }
 if (app.get("env") === "production") {
-  app.set("trust proxy", true);
-  sessionOptions.cookie.secure = true;
+  const isReverseProxy = Configuration.get("system.reverse-proxy-mode");
+  if (isReverseProxy) {
+    app.set("trust proxy", true);
+  }
+  sessionOptions.cookie.secure = !isReverseProxy;
 }
 app.use(session(sessionOptions));
 
