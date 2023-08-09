@@ -16,6 +16,14 @@
     "default": false
   },
   {
+    "name": "system.reverse-proxy-mode",
+    "displayName": "Reverse Proxy Mode",
+    "envName": "SYSTEM_REVERSE_PROXY_MODE",
+    "description": "Specifies if Liquid is sitting behind a reverse proxy like nginx.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "system.log-level",
     "displayName": "Log Level",
     "envName": "SYSTEM_LOG_LEVEL",
