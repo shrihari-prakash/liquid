@@ -6,6 +6,7 @@ import { Response } from "express";
 import Scopes from "./scopes.json";
 import { errorMessages, statusCodes } from "../../utils/http-status";
 import { ErrorResponse } from "../../utils/response";
+import Role from "../../enum/role";
 
 interface Scope {
   name: string;
@@ -36,8 +37,10 @@ export class ScopeManager {
 
   isScopeAllowedForSharedSession(scope: string, res: Response) {
     const allowedScopes = res.locals?.oauth?.token?.scope || "";
-    const isAllowedForUser = this.isScopeAllowed(scope.replace("<ENTITY>", "client"), allowedScopes);
-    const isAllowedForClient = this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), allowedScopes);
+    const role = res.locals?.oauth?.token?.user?.role;
+    const isAllowedForClient = this.isScopeAllowed(scope.replace("<ENTITY>", "client"), allowedScopes);
+    const isAllowedForUser =
+      this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), allowedScopes) || role === Role.SUPER_ADMIN;
     if (!isAllowedForUser && !isAllowedForClient) {
       res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       return false;

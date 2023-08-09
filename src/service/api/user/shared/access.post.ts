@@ -14,7 +14,7 @@ import ClientModel from "../../../../model/mongo/client";
 export const POST_AccessValidator = [
   body("targets").exists().isArray(),
   body("targetType").exists().isString().isIn(["user", "client"]),
-  body("scope").exists().isArray().isLength({ min: 1, max: 128 }),
+  body("scope").exists().isArray(),
   body("status").exists().isBoolean(),
 ];
 
@@ -39,6 +39,12 @@ const POST_Access = async (req: Request, res: Response) => {
     if (
       req.body.scope.some(
         (s: string) =>
+          /* 
+          Scope validate error conditions:
+            1. If a scope value is not string.
+            2. If it is not a valid scope from the list of scopes.
+            3. If the user requesting the API does not have access to this scope in the first place
+          */
           typeof s !== "string" ||
           typeof ScopeManager.getScopes()[s] === "undefined" ||
           !ScopeManager.isScopeAllowed(s, res.locals.oauth.token.scope)

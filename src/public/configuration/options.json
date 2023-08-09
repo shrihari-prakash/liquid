@@ -40,6 +40,12 @@
     "default": false
   },
   {
+    "name": "privilege.can-use-existing-session-in-login",
+    "displayName": "Can Use Existing Session In Login",
+    "description": "Specifies if users can be directly sent to authorization if there is an existing session with the server.",
+    "default": false
+  },
+  {
     "name": "assets.favicon-uri",
     "displayName": "Favicon URI",
     "description": "Specifies the URL for the favicon.",

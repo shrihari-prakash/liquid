@@ -527,6 +527,44 @@ paths:
                           $ref: "#/definitions/user"
       tags:
         - user-client-api
+  /user/client-api/access:
+    post:
+      security:
+        - bearerAuth: []
+      summary: "Provide access to the given scope for the specified targets. Targets can be of type user or client."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targets:
+                  type: array
+                  items:
+                    type: string
+                    pattern: ^[6][a-f0-9]{23}$
+                targetType:
+                  type: string
+                  enum: [user, client]
+                scope:
+                  type: array
+                  items:
+                    type: string
+                status:
+                  type: boolean
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+      tags:
+        - user-client-api
   /user/client-api/block-status:
     get:
       security:

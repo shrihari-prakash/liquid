@@ -91,13 +91,13 @@ h3 {
   justify-content: space-between;
 }
 
-.consent-loader {
+.form-loader {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.consent-loader > .spinner {
+.form-loader > .spinner {
   margin-right: 8px;
 }
 

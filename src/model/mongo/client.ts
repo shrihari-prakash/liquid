@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 
 const clientSchema = {
-  id: String,
+  id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   secret: String,
   displayName: String,
   role: String,

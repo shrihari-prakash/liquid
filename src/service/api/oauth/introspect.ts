@@ -11,18 +11,16 @@ const ALL_Introspect = async (req: Request, res: Response) => {
     return;
   }
   const errors: any[] = [];
-  Object.keys(req.body).forEach((key) => {
-    if (
-      (!req.body.token && typeof req.query.token !== "string") ||
-      (!req.query.token && typeof req.body.token !== "string") ||
-      (!req.query.token && !req.body.token)
-    ) {
-      errors.push({
-        msg: "Invalid value",
-        param: "token",
-      });
-    }
-  });
+  if (
+    (!req.body.token && typeof req.query.token !== "string") ||
+    (!req.query.token && typeof req.body.token !== "string") ||
+    (!req.query.token && !req.body.token)
+  ) {
+    errors.push({
+      msg: "Invalid value",
+      param: "token",
+    });
+  }
   if (errors.length) {
     return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden, { errors }));
   }
