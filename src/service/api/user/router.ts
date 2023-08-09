@@ -4,7 +4,7 @@ const log = Logger.getLogger().child({ from: "user-router" });
 import express from "express";
 
 import { Configuration } from "../../../singleton/configuration";
-import { DelegatedAuthFlow } from "../middleware/authenticate";
+import { AuthenticateSilent, DelegatedAuthFlow } from "../middleware/authenticate";
 import ClientApiRouter from "./client-api/routes";
 import AdminApiRouter from "./admin-api/routes";
 import POST_Create, { POST_CreateValidator } from "./create.post";
@@ -48,7 +48,7 @@ UserRouter.post("/private", ...DelegatedAuthFlow, ...POST_PrivateValidator, POST
 UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
 UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
 UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
-UserRouter.post("/logout", ...DelegatedAuthFlow, POST_Logout);
+UserRouter.post("/logout", AuthenticateSilent, POST_Logout);
 UserRouter.get("/client", GET_ClientValidator, GET_Client);
 UserRouter.get("/scopes", GET_Scopes);
 
