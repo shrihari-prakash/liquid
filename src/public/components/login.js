@@ -12,10 +12,25 @@ export default function Login() {
   const [hasError, setHasError] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [miniIconLoaded, setMiniIconLoaded] = React.useState(false);
+  const [existingSession, setExistingSession] = React.useState(null);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   const appName = configuration["content.app-name"];
 
   React.useEffect(() => useTitle(configuration["content.app-name"], "Login"), []);
+
+  React.useEffect(() => {
+    (async () => {
+      if (configuration["privilege.can-use-existing-session-in-login"]) {
+        const response = await fetch("/user/session-state");
+        if (response.ok) {
+          setIsLoggedIn(true);
+          console.log("Bypassing login screen due to an existing session...")
+          onLogin();
+        }
+      }
+    })();
+  }, [])
 
   const onSubmitError = (props) => {
     if (hasError) {
@@ -36,6 +51,19 @@ export default function Login() {
     return;
   }
 
+  async function onLogin() {
+    let authParams = prepareAuthorizationParams(configuration);
+    const clientInfoParams = new URLSearchParams({ id: authParams.client_id });
+    const clientInfo = await $.get(`/user/client?${clientInfoParams.toString()}`);
+    console.log("Client role", clientInfo.data.role);
+    if (clientInfo.data.client.role === "internal_client") {
+      authParams = new URLSearchParams(authParams);
+      window.location = `/oauth/authorize?${authParams.toString()}`;
+    } else {
+      window.location = `/consent${window.location.search}`;
+    }
+  }
+
   async function login(event) {
     event.preventDefault();
     const username = document.getElementById("username").value;
@@ -49,16 +77,7 @@ export default function Login() {
     }
     $.post("/user/login", data)
       .done(async function () {
-        let authParams = prepareAuthorizationParams(configuration);
-        const clientInfoParams = new URLSearchParams({ id: authParams.client_id });
-        const clientInfo = await $.get(`/user/client?${clientInfoParams.toString()}`);
-        console.log("Client role", clientInfo.data.role);
-        if (clientInfo.data.client.role === "internal_client") {
-          authParams = new URLSearchParams(authParams);
-          window.location = `/oauth/authorize?${authParams.toString()}`;
-        } else {
-          window.location = `/consent${window.location.search}`;
-        }
+        onLogin();
       })
       .fail(function (response) {
         if (response.responseJSON.error === "RateLimitError") {
@@ -77,6 +96,15 @@ export default function Login() {
       .always(function () {
         setSubmitting(false);
       });
+  }
+
+  if (isLoggedIn) {
+    return (
+      <div className="form-loader">
+        <div className="spinner"></div>
+        Redirecting... Please Wait...
+      </div>
+    )
   }
 
   return (

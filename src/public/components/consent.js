@@ -90,7 +90,7 @@ export default function ConsentScreen() {
       </div>
     </div>
   ) : (
-    <div className="consent-loader">
+    <div className="form-loader">
       <div className="spinner"></div>
       Loading Consent...
     </div>
