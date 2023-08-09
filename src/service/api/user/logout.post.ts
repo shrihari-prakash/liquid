@@ -10,6 +10,7 @@ import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import OAuthModel from "../../../model/oauth";
 import { Redis } from "../../../singleton/redis";
+import { Configuration } from "../../../singleton/configuration";
 
 const POST_Logout = async (req: Request, res: Response) => {
   try {
@@ -19,7 +20,7 @@ const POST_Logout = async (req: Request, res: Response) => {
       await OAuthModel.revokeToken(token);
     }
     const sessionId = req.session?.id;
-    if (sessionId) {
+    if (sessionId && Configuration.get("privilege.can-use-cache")) {
       await Redis.client.del(`session_id:${sessionId}`);
       log.debug("Deleted session id %s from Redis.", sessionId);
     }
