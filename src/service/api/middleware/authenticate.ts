@@ -46,5 +46,16 @@ const Authenticate = async (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
+export const AuthenticateSilent = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const token = await OAuthServer.server.authenticate(new OAuthRequest(req), new OAuthResponse(res));
+    res.locals.oauth = { token: token };
+    res.locals.user = res.locals?.oauth?.token?.user;
+    next();
+  } catch {
+    next();
+  }
+};
+
 export const DelegatedAuthFlow = [Authenticate, AuthenticateUser];
 export const ClientAuthFlow = [Authenticate, AuthenticateClient];
