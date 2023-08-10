@@ -32,7 +32,7 @@ import PATCH_Me, { PATCH_MeValidator } from "./me.patch";
 import PATCH_ProfilePicture from "./profile-picture.patch";
 import DELETE_FollowEntry, { DELETE_FollowEntryValidator } from "./follow-entry.delete";
 import DELETE_ProfilePicture from "./profile-picture.delete";
-import POST_Logout from "./logout.post";
+import GET_Logout from "./logout.get";
 import GET_SessionState from "./session-state.get";
 
 const UserRouter = express.Router();
@@ -48,7 +48,7 @@ UserRouter.post("/private", ...DelegatedAuthFlow, ...POST_PrivateValidator, POST
 UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
 UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
 UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
-UserRouter.post("/logout", AuthenticateSilent, POST_Logout);
+UserRouter.get("/logout", AuthenticateSilent, GET_Logout);
 UserRouter.get("/client", GET_ClientValidator, GET_Client);
 UserRouter.get("/scopes", GET_Scopes);
 
