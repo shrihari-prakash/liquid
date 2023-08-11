@@ -921,10 +921,10 @@ paths:
       tags:
         - user-api
   /user/logout:
-    post:
+    get:
       security:
         - bearerAuth: []
-      summary: Deletes user tokens and logs out the authenticated user.
+      summary: Deletes user tokens and logs out the authenticated user. Remember to set credentials to include to make sure the browser is sending the session cookie.
       responses:
         "200":
           description: Returns OK.
