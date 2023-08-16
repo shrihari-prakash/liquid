@@ -1,10 +1,19 @@
 import mongoose from "mongoose";
 
 const clientSchema = {
-  id: String,
+  id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   secret: String,
   displayName: String,
   role: String,
+  scope: {
+    type: Array,
+    required: true,
+    default: ["user.delegated.all"],
+  },
   grants: [String],
   redirectUris: [String],
 };

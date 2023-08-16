@@ -10,9 +10,13 @@ import { useFollowersQuery } from "../../../model/query/followers";
 import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
 import { getPaginationLimit } from "../../../utils/pagination";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 const GET_Followers = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.read", res)) {
+      return;
+    };
     const userId = res.locals.oauth.token.user._id;
     const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;

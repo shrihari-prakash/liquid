@@ -13,35 +13,42 @@ import { bcryptConfig } from "./create.post";
 import { hasErrors } from "../../../utils/api";
 import { Language } from "../../../enum/language";
 import { flushUserInfoFromRedis } from "../../../model/oauth";
+import {
+  getEmailValidator,
+  getFirstNameValidator,
+  getLastNameValidator,
+  getMiddleNameValidator,
+  getPasswordValidator,
+  getPhoneCountryCodeValidator,
+  getPhoneValidator,
+  getUsernameValidator,
+} from "../../../utils/validator/user";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 const languages = Language.map((l) => l.code);
 
 export const PATCH_MeValidator = [
-  body("username")
-    .optional()
-    .isString()
-    .isLength({ min: 8, max: 30 })
-    .matches(/^[a-z_][a-z0-9._]*$/i),
-  body("email").optional().isEmail(),
-  body("password").optional().isString().isLength({ min: 8, max: 128 }),
-  body("firstName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("lastName").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
+  getUsernameValidator(body, false),
+  getPasswordValidator(body, false),
+  getEmailValidator(body, false),
+  getFirstNameValidator(body, false),
+  getMiddleNameValidator(body, false),
+  getLastNameValidator(body, false),
+  getPhoneCountryCodeValidator(body, false),
+  getPhoneValidator(body, false),
   body("gender").optional().isString().isLength({ min: 2, max: 128 }),
   body("preferredLanguage").optional().isString().isAlpha().isIn(languages).isLength({ min: 2, max: 2 }),
   body("bio").optional().isString().isLength({ min: 3, max: 256 }),
   body("customLink").optional().isURL().isLength({ min: 3, max: 256 }),
   body("pronouns").optional().isString().isLength({ min: 3, max: 24 }),
   body("organization").optional().isString().isLength({ min: 3, max: 128 }),
-  body("phoneCountryCode")
-    .optional()
-    .isString()
-    .isLength({ min: 2, max: 6 })
-    .matches(/^(\+?\d{1,3}|\d{1,4})$/gm),
-  body("phone").optional().isString().isLength({ min: 10, max: 12 }),
 ];
 
 const PATCH_Me = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.write", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const errors: any[] = [];

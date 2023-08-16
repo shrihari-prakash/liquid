@@ -1,4 +1,4 @@
-# <img src="https://github.com/shrihari-prakash/liquid/blob/main/src/public/images/app-icon-mini.png" width="26" height="26"> Liquid: Seamless and highly customizable authentication and user management server for any project.
+# <img src="https://github.com/shrihari-prakash/liquid/blob/main/src/public/images/app-icon-mini-dark.png" width="26" height="26"> Liquid: Seamless and highly customizable authentication and user management server for any project.
 
 ![GitHub](https://img.shields.io/github/license/shrihari-prakash/liquid)
 [![Docker Image CI](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml)
@@ -13,9 +13,9 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 
 ### ⭐ Features
 * High degree customization capabilities. Customize and configure every part of the UI and service.
-* Out of the box support for user sign up and login.
-* Includes follow and unfollow mechanisms with support for private accounts.
-* Support for admin level and client APIs.
+* Out of the box support for mechanisms like follow - unfollow, blocking and private accounts.
+* Support for administrative APIs.
+* Battle tested APIs with support for database transactions for high reliability.
 * Quick setup.
 
 ## 📦 Dependencies
@@ -29,6 +29,7 @@ Almost everything is **optional** except MongoDB.
 | RabbitMQ                    | Yes      | No              | privilege.can-use-push-events, privilege.can-use-rabbitmq, rabbitmq.\*                                     | Yes                  |
 > **_NOTE:_** If you don't want a Redis dep, it is possible force the service into using MongoDB as a replacement by changing the option `privilege.can-use-cache` to false. However, disabling this option is highly discouraged since access tokens are deleted (although invalidated) only when the refresh token expires which is typically a really long time. Also using databases for such things might not be a great idea for performance reasons.
 
+The core OAuth logic of Liquid is powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) from [@node-oauth](https://github.com/node-oauth).
 
 ## ⚙️ Setup
 ### Production Usage
@@ -47,23 +48,35 @@ The following steps assume already you have **Redis** and **MongoDB** and **Send
   "redirectUris": ["{{frontend-redirect-uri-1}}", "{{frontend-redirect-uri-2}}"],
   "secret": "super-secure-client-secret",
   "role": "internal_client",
+  "scope": ["*"],
   "displayName": "Application Client"
 }
 ```
 
-3. In your host machine, create a file called `app-config.json` with the contents of [this file](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/public/app-config.sample.json) and edit properties `oauth.client-id` and `oauth.redirect-uri` to values from the document you just inserted into clients collection. This is the configuration file used for all your frontend stuff like UI customizations.
-4. Now go to [Liquid Option Manager](https://liquid-om.netlify.app/) and edit your backend configurations. For the most minimal setup, you will need to set:
+1. Go to [Liquid Option Manager (Frontend)](https://liquid-om.netlify.app/frontend) and edit your frontend configurations. Edit properties `oauth.client-id` and `oauth.redirect-uri` to values from the document you just inserted into clients collection and export it. Feel free to explore other options related to UI customizations.
+2. Now go to [Liquid Option Manager (Backend)](https://liquid-om.netlify.app/backend) and edit your backend configurations. For the most minimal setup, you will need to set:
    * `system.static.app-config-absolute-path` to `/environment/app-config.json`
    * `mongo-db.connection-string`
    * `sendgrid.api-key`
    * `sendgrid.outbound-email-address`
    * and options starting with `redis`. 
-5. Export the configuration and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
-6. Now open terminal in the folder that contains your app-config.json.
-7. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
-8. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
-9. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. [Click here for Swagger](https://raw.githubusercontent.com/shrihari-prakash/liquid/main/src/swagger.yaml). Checkout the other options in [Option Manager](https://liquid-om.netlify.app/) to enable optional features if they interest you. Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
-> **_NOTE:_** If you are using nginx as reverse proxy and find that cookies are not working or if you get the error `Server error: handle() did not return a user object` while logging in, add `proxy_set_header X-Forwarded-Proto $scheme;` to server -> location in your nginx config.
+3. Export the configuration and **save the file as `.env`** (preferrably put it on the same folder as your app-config.json).
+4. Now open terminal in the folder that contains your app-config.json.
+5. If you are on Windows, run `docker run -p 2000:2000 -v "%cd%":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
+6. If you are on Linux, run `docker run -p 2000:2000 -v "$(pwd)":/environment --env-file .env --name liquid -itd shrihariprakash/liquid:latest`.
+7. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. If the rest of your project is running on Node, you can use the [Liquid Node Connector](https://www.npmjs.com/package/liquid-node-connector) to authenticate users connecting to your service and also to get client tokens to interact with Liquid client APIs. [Click here for Swagger](https://shrihari-prakash.github.io/liquid-docs). Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
+
+#### Special Configurations for Nginx Reverse Proxy
+It is important that you configure the headers `X-Forwarded-Proto` and `X-Forwarded-For` as follows to ensure that the security features work properly:
+
+```
+location / {
+  # other reverse proxy configurations...
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header X-Forwarded-For $remote_addr;
+}
+```
+
 ### Development
 1. Run `npm i`.
 2. Run the following command (without brackets):
@@ -72,10 +85,10 @@ The following steps assume already you have **Redis** and **MongoDB** and **Send
  node ./scripts/create-application-client mongodbConenctionString={{mongodb_connection_string}} clientSecret={{client_secret}} redirectUrls={{comma_seperated_list_of_redirect_urls}}
 ```
 
-3. Copy and rename file `src/public/app-config.sample.json` to `app-config.json` and replace the variables (*most importantly, `oauth.client-id` and `oauth.redirect-uri` from previous step*).
-4. A large part of the service is configurable. You can find the configurable options in file [src/service/configuration/options.json](src/service/configuration/options.json). Parameters like MongoDB connection string and Redis connection settings can be changed. Simply copy the envName of the option youd like to set and put it in your `.env` with your intended value. For the most minimal setup, you probably need to change only `MONGO_DB_CONNECTION_STRING`, `REDIS_PORT`, `REDIS_HOST`, `REDIS_USERNAME` and `REDIS_PASSWORD` and set `NODE_ENV` to development. Alternatively, you could also use the [Liquid Option Manager](https://liquid-om.netlify.app/) to edit your service backend configurations and export them as `.env` to use in your setup. 
-5. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
-6. Run `npm run build` to output production ready code.
+1. Copy and rename file `src/app-config.sample.json` to `app-config.json` and replace the variables (*most importantly, `oauth.client-id` and `oauth.redirect-uri` from previous step*).
+2. A large part of the service is configurable. You can find the configurable options in file [src/service/configuration/options.json](src/service/configuration/options.json). Parameters like MongoDB connection string and Redis connection settings can be changed. Simply copy the envName of the option youd like to set and put it in your `.env` with your intended value. For the most minimal setup, you probably need to change only `MONGO_DB_CONNECTION_STRING`, `REDIS_PORT`, `REDIS_HOST`, `REDIS_USERNAME` and `REDIS_PASSWORD` and set `NODE_ENV` to development. Alternatively, you could also use the [Liquid Option Manager](https://liquid-om.netlify.app/) to edit your service backend configurations and export them as `.env` to use in your setup. 
+3. Start the server using command `npm run start:dev` (Or better yet, press the debug button if you are on VS Code). Your service should be running on http://localhost:2000.
+4. Run `npm run build` to output production ready code.
 
 ### 📖 API Documentation:
 

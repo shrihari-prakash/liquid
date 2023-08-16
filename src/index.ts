@@ -21,7 +21,8 @@ import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
 
 import YAML from "yaml";
-const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", "utf8"));
+import { ScopeManager } from "./singleton/scope-manager";
+
 const app = express();
 
 // Rate limiting
@@ -38,40 +39,6 @@ if (Configuration.get("system.stats.enable-request-counting")) {
   });
 }
 
-// Static files
-const staticFolder = Configuration.get("system.static.use-relative-path")
-  ? path.join(__dirname, Configuration.get("system.static-folder"))
-  : Configuration.get("system.static-folder");
-app.use(
-  "/",
-  express.static(staticFolder, {
-    index: false,
-    extensions: ["html"],
-  })
-);
-log.info("Static folder loaded: %s", staticFolder);
-app.get("/", function (_, res) {
-  const defaultPage = Configuration.get("system.static.use-relative-path")
-    ? path.join(__dirname, Configuration.get("system.static.default-page"))
-    : Configuration.get("system.static.default-page");
-  res.sendFile(defaultPage);
-});
-const appConfigAbsolutePath = Configuration.get("system.static.app-config-absolute-path");
-if (appConfigAbsolutePath) {
-  app.get("/app-config.json", function (_, res) {
-    res.sendFile(appConfigAbsolutePath);
-  });
-} else if (!fs.existsSync(path.join(__dirname, "/public/app-config.json"))) {
-  const source = path.join(__dirname, "/public/app-config.sample.json");
-  const target = path.join(__dirname, "/public/app-config.json");
-  fs.copyFileSync(source, target);
-  log.warn(
-    "Frontend config was auto generated. You will still need to manually configure OAuth based options in `public/app-config.json`"
-  );
-}
-if (Configuration.get("system.enable-swagger") || app.get("env") !== "production") {
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -80,6 +47,7 @@ var sessionOptions: any = {
   secret: Configuration.get("cookie-session-secret"),
   resave: false,
   saveUninitialized: false,
+  proxy: app.get("env") === "production" && Configuration.get("system.reverse-proxy-mode"),
   cookie: {},
 };
 if (Configuration.get("privilege.can-use-cache")) {
@@ -91,7 +59,10 @@ if (Configuration.get("privilege.can-use-cache")) {
   sessionOptions.store = redisStore;
 }
 if (app.get("env") === "production") {
-  app.set("trust proxy", true);
+  const isReverseProxy = Configuration.get("system.reverse-proxy-mode");
+  if (isReverseProxy) {
+    app.set("trust proxy", true);
+  }
   sessionOptions.cookie.secure = true;
 }
 app.use(session(sessionOptions));
@@ -111,6 +82,47 @@ if (app.get("env") !== "test") {
 Api.initialize(app);
 Mailer.initialize(app);
 
+// UI
+const staticFolder = Configuration.get("system.static.use-relative-path")
+  ? path.join(__dirname, Configuration.get("system.static-folder"))
+  : Configuration.get("system.static-folder");
+log.info("Static path normalized to %s", staticFolder);
+app.use(
+  "/",
+  express.static(staticFolder, {
+    index: false,
+    extensions: ["html"],
+  })
+);
+const appConfigAbsolutePath = Configuration.get("system.static.app-config-absolute-path");
+if (appConfigAbsolutePath) {
+  app.get("/app-config.json", function (_, res) {
+    res.sendFile(appConfigAbsolutePath);
+  });
+} else {
+  const localAppConfigPath = path.join(staticFolder, "configuration/app-config.json");
+  if (!fs.existsSync(localAppConfigPath)) {
+    const source = path.join(staticFolder, "configuration/app-config.sample.json");
+    const target = localAppConfigPath;
+    fs.copyFileSync(source, target);
+  }
+  app.get("/app-config.json", function (_, res) {
+    res.sendFile(localAppConfigPath);
+  });
+  log.warn("Frontend config was not found. Please configure option `system.static.app-config-absolute-path`");
+}
+if (Configuration.get("system.enable-swagger") || app.get("env") !== "production") {
+  const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", "utf8"));
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
+
+if (Configuration.get("system.static.fallback-to-index")) {
+  app.all("*", function (_, res) {
+    const index = path.join(staticFolder, "index.html");
+    res.sendFile(index);
+  });
+}
+
 if (Configuration.get("user.account-creation.allow-only-whitelisted-email-domains")) {
   log.info("Allowing only whitelisted domain names in user sign up.");
   log.info("Allowed domains: %s", Configuration.get("user.account-creation.whitelisted-email-domains"));
@@ -123,5 +135,7 @@ app.listen(Configuration.get("system.app-port"), () => {
     )}`
   );
 });
+
+ScopeManager;
 
 export default app;

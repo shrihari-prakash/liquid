@@ -8,24 +8,52 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import { hasErrors } from "../../../../utils/api";
 import UserModel from "../../../../model/mongo/user";
+import { ScopeManager } from "../../../../singleton/scope-manager";
+import ClientModel from "../../../../model/mongo/client";
 
 export const POST_AccessValidator = [
   body("targets").exists().isArray(),
-  body("permissions").exists().isArray(),
+  body("targetType").exists().isString().isIn(["user", "client"]),
+  body("scope").exists().isArray(),
   body("status").exists().isBoolean(),
 ];
 
 const POST_Access = async (req: Request, res: Response) => {
-  if (hasErrors(req, res)) return;
   try {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.access.write", res)) {
+      return;
+    }
+    if (hasErrors(req, res)) return;
+    if (req.body.targets.some((t: string) => typeof t !== "string")) {
+      const errors = [
+        {
+          msg: "Invalid value",
+          param: "targets",
+          location: "body",
+        },
+      ];
+      return res
+        .status(statusCodes.clientInputError)
+        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+    }
     if (
-      req.body.targets.some((t: string) => typeof t !== "string") ||
-      req.body.permissions.some((p: string) => typeof p !== "string")
+      req.body.scope.some(
+        (s: string) =>
+          /* 
+          Scope validate error conditions:
+            1. If a scope value is not string.
+            2. If it is not a valid scope from the list of scopes.
+            3. If the user requesting the API does not have access to this scope in the first place
+          */
+          typeof s !== "string" ||
+          typeof ScopeManager.getScopes()[s] === "undefined" ||
+          !ScopeManager.isScopeAllowed(s, res.locals.oauth.token.scope)
+      )
     ) {
       const errors = [
         {
           msg: "Invalid value",
-          param: null,
+          param: "scope",
           location: "body",
         },
       ];
@@ -39,11 +67,12 @@ const POST_Access = async (req: Request, res: Response) => {
       action = "$pull";
       arraycondition = "$in";
     }
-    await UserModel.updateMany(
+    const model = req.body.targetType === "user" ? UserModel : ClientModel;
+    await model.updateMany(
       { _id: { $in: req.body.targets } },
       {
         [action]: {
-          allowedAdminAPIs: { [arraycondition]: req.body.permissions },
+          scope: { [arraycondition]: req.body.scope },
         },
       }
     );
@@ -52,7 +81,6 @@ const POST_Access = async (req: Request, res: Response) => {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
-  res.status(statusCodes.success).json(new SuccessResponse());
 };
 
 export default POST_Access;

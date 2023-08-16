@@ -11,42 +11,58 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import { hasErrors } from "../../../../utils/api";
 import { Configuration } from "../../../../singleton/configuration";
 import { bcryptConfig } from "../create.post";
+import {
+  getEmailValidator,
+  getFirstNameValidator,
+  getLastNameValidator,
+  getPasswordValidator,
+  getPhoneCountryCodeValidator,
+  getPhoneValidator,
+  getUsernameValidator,
+} from "../../../../utils/validator/user";
+import { MongoDB } from "../../../../singleton/mongo-db";
+import { sanitizeEmailAddress } from "../../../../utils/email";
+import InviteCodeModel from "../../../../model/mongo/invite-code";
+import { generateInviteCode } from "../../../../utils/invite-code";
+import { isRoleRankHigher } from "../../../../utils/role";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const POST_CreateValidator = [
   body().isArray(),
-  body("*.username")
-    .exists()
-    .isString()
-    .isLength({ min: 8, max: 30 })
-    .matches(/^[a-z_][a-z0-9._]*$/i),
-  body("*.email").exists().isEmail(),
-  body("*.password").exists().isString().isLength({ min: 8, max: 128 }),
-  body("*.firstName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("*.lastName").exists().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("*.role").optional().isString().isAlpha().isLength({ min: 3, max: 32 }),
-  body("*.phoneCountryCode")
-    .optional()
-    .isString()
-    .isLength({ min: 2, max: 6 })
-    .matches(/^(\+?\d{1,3}|\d{1,4})$/gm),
-  body("*.phone").optional().isString().isLength({ min: 10, max: 12 }),
+  getUsernameValidator(body, true, true),
+  getPasswordValidator(body, true, true),
+  getEmailValidator(body, true, true),
+  getFirstNameValidator(body, true, true),
+  getLastNameValidator(body, true, true),
+  getPhoneCountryCodeValidator(body, false, true),
+  getPhoneValidator(body, false, true),
+  body("*.role").optional().isString().isLength({ min: 3, max: 32 }),
 ];
 
 const POST_Create = async (req: Request, res: Response) => {
+  let session = "";
   try {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.create", res)) {
+      return;
+    };
     if (hasErrors(req, res)) return;
+    session = await MongoDB.startSession();
+    MongoDB.startTransaction(session);
+    const sessionOptions = MongoDB.getSessionOptions(session);
     const sourceList = req.body;
     const existingUsers = await UserModel.find({
       $or: [
         {
-          email: { $in: sourceList.map((u: any) => u.email) },
+          email: { $in: sourceList.map((u: any) => sanitizeEmailAddress(u.email)) },
         },
         {
           username: { $in: sourceList.map((u: any) => u.username) },
         },
       ],
     }).lean();
+    log.debug("Found %d duplicate users in bulk create", existingUsers.length);
     if (existingUsers.length) {
+      await MongoDB.abortTransaction(session);
       return res
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { existingUsers }));
@@ -65,6 +81,13 @@ const POST_Create = async (req: Request, res: Response) => {
       } = sourceList[i];
       const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
       const role = roleBody || Configuration.get("system.role.default");
+      const currentUserRole = res.locals.user.role;
+      // Do not allow creation of users with more powerful roles.
+      if (!isRoleRankHigher(currentUserRole, role)) {
+        log.debug("Blocked account creation for role %s. Current user role: %s", role, currentUserRole);
+        return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+      }
+      const credits = Configuration.get("user.account-creation.initial-credit-count");
       const user: any = {
         username,
         firstName,
@@ -72,7 +95,9 @@ const POST_Create = async (req: Request, res: Response) => {
         email: email.toLowerCase(),
         role,
         password,
+        credits,
         emailVerified: true,
+        creationIp: req.ip,
       };
       if (phone) {
         user.phone = phone;
@@ -81,11 +106,36 @@ const POST_Create = async (req: Request, res: Response) => {
       }
       insertList[i] = user;
     }
-    await UserModel.insertMany(insertList);
+    let inserted;
+    if (sessionOptions) {
+      inserted = await UserModel.insertMany(insertList, sessionOptions);
+    } else {
+      inserted = await UserModel.insertMany(insertList);
+    }
+    if (Configuration.get("user.account-creation.enable-invite-only")) {
+      let inviteCodes: any[] = [];
+      const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
+      for (let i = 0; i < inserted.length; i++) {
+        const user = inserted[i];
+        for (let j = 0; j < inviteCodeCount; j++) {
+          inviteCodes.push({
+            code: generateInviteCode(),
+            sourceId: user._id,
+          });
+        }
+      }
+      if (sessionOptions) {
+        await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
+      } else {
+        await InviteCodeModel.insertMany(inviteCodes);
+      }
+    }
+    await MongoDB.commitTransaction(session);
     log.info(`${insertList.length} records inserted.`);
     return res.status(statusCodes.created).json(new SuccessResponse({ insertedCount: insertList.length }));
   } catch (err) {
     log.error(err);
+    await MongoDB.abortTransaction(session);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };

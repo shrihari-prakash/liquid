@@ -12,7 +12,7 @@ export class Configuration {
   options: any;
 
   constructor() {
-    this.options = Options.reduce((obj, item) => Object.assign(obj, { [item.name]: item }), {});
+    this.options = Options.reduce((options, option) => Object.assign(options, { [option.name]: option }), {});
   }
 
   public get(name: string, defaultValue?: any, delim = ",") {
@@ -22,6 +22,8 @@ export class Configuration {
     switch (option.type) {
       case "boolean":
         return value === "true" || value === true;
+      case "number":
+        return typeof value === "string" ? parseInt(value, 10) : value;
       case "numberArray":
         return value.split(delim).map((elem: string) => parseInt(elem));
       case "stringArray":
@@ -32,5 +34,10 @@ export class Configuration {
       default:
         return value;
     }
+  }
+
+  public set(name: string, value: any) {
+    const option: Option = this.options[name];
+    process.env[option.envName] = value + "";
   }
 }

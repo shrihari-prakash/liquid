@@ -10,11 +10,15 @@ import UserModel, { IUser } from "../../../../model/mongo/user";
 import { checkSubscription } from "../../../../utils/subscription";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { getPaginationLimit } from "../../../../utils/pagination";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const GET_UserInfoValidator = [query("targets").exists().isString()];
 
 const GET_List = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.read", res)) {
+      return;
+    };
     const query: any = {};
     const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;

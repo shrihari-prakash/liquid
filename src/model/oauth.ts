@@ -7,8 +7,10 @@ import { Configuration } from "../singleton/configuration";
 import AuthorizationCodeModel from "./mongo/authorization-code";
 import ClientModel from "./mongo/client";
 import TokenModel from "./mongo/token";
-import UserModel from "./mongo/user";
+import UserModel, { IUser } from "./mongo/user";
 import Role from "../enum/role";
+import { ScopeManager } from "../singleton/scope-manager";
+import { Falsey } from "@node-oauth/oauth2-server";
 
 interface Token {
   accessToken: string;
@@ -21,18 +23,13 @@ interface Token {
   [key: string]: any;
 }
 
-interface Code {
-  authorizationCode: string;
-  expiresAt: Date;
-  redirectUri: string;
-}
-
 interface Client {
   id: string;
   redirectUris?: string[];
   grants: string | string[];
   displayName: string;
   role: string;
+  scope: string;
   accessTokenLifetime?: number | undefined;
   refreshTokenLifetime?: number | undefined;
   [key: string]: any;
@@ -46,9 +43,11 @@ interface AuthorizationCode {
   authorizationCode: string;
   expiresAt: Date;
   redirectUri: string;
-  scope?: Scope;
+  scope?: string | string[] | undefined;
   client: Client;
   user: User;
+  codeChallenge?: string;
+  codeChallengeMethod?: string;
   [key: string]: any;
 }
 
@@ -87,6 +86,11 @@ const getUserInfo = async (userId: string) => {
   return userInfo;
 };
 
+const isApplicationClient = (user: any) => {
+  const appplicationClient = user.role === Role.INTERNAL_CLIENT || user.role === Role.EXTERNAL_CLIENT;
+  return appplicationClient;
+};
+
 const OAuthModel = {
   getClient: async function (clientId: string, clientSecret: string) {
     try {
@@ -112,14 +116,14 @@ const OAuthModel = {
       // There is no notion of users in client_credentials grant.
       // So we simply return the client id for the username.
       // See more here: https://github.com/node-oauth/node-oauth2-server/issues/71#issuecomment-1181515928
-      resolve({ username: client.id, role: client.role });
+      resolve({ _id: client._id, username: client.id, role: client.role, scope: client.scope });
     });
   },
 
   saveToken: async (token: Token, client: Client, user: User) => {
     try {
       token.client = client;
-      if (user.role !== Role.INTERNAL_CLIENT) {
+      if (!isApplicationClient(user)) {
         // No need to store the full user as _id is resolved to full object while retrieving from cache/db.
         token.user = { _id: user._id };
       } else {
@@ -158,7 +162,7 @@ const OAuthModel = {
         let cacheToken: any = await Redis.client.get(getPrefixedToken(accessToken));
         cacheToken = JSON.parse(cacheToken);
         if (!cacheToken) return null;
-        if (cacheToken.user.role !== Role.INTERNAL_CLIENT) {
+        if (!isApplicationClient(cacheToken.user)) {
           cacheToken.user = await getUserInfo(cacheToken.user._id);
         }
         cacheToken.accessTokenExpiresAt = new Date(cacheToken.accessTokenExpiresAt);
@@ -180,7 +184,7 @@ const OAuthModel = {
       let cacheToken: any = await Redis.client.get(getPrefixedToken(refreshToken));
       cacheToken = JSON.parse(cacheToken);
       if (!cacheToken) return null;
-      if (cacheToken.user.role !== Role.INTERNAL_CLIENT) {
+      if (!isApplicationClient(cacheToken.user)) {
         cacheToken.user = await getUserInfo(cacheToken.user._id);
       }
       cacheToken.refreshTokenExpiresAt = new Date(cacheToken.refreshTokenExpiresAt);
@@ -213,13 +217,17 @@ const OAuthModel = {
     return true;
   },
 
-  saveAuthorizationCode: async (code: Code, client: Client, user: User) => {
+  saveAuthorizationCode: async (code: AuthorizationCode, client: Client, user: User) => {
     try {
       const authorizationCode = {
         authorizationCode: code.authorizationCode,
         expiresAt: code.expiresAt,
+        redirectUri: code.redirectUri,
         client: client || {},
         user: user || {},
+        codeChallenge: code.codeChallenge,
+        codeChallengeMethod: code.codeChallengeMethod,
+        scope: code.scope,
       };
       if (useTokenCache) {
         await Redis.client.set(
@@ -278,10 +286,56 @@ const OAuthModel = {
     }
   },
 
-  verifyScope: (token: Token, scope: string | string[]): Promise<boolean> => {
-    /* This is where we check to make sure the client has access to this scope */
-    const userHasAccess = scope === "default"; // return true if this user / client combo has access to this resource
-    return new Promise((resolve) => resolve(userHasAccess));
+  validateScope: (user: IUser, client: Client, scope: string | string[]): Promise<string | string[] | Falsey> => {
+    log.debug("Validating scope %s for client %s and user %s.", scope, client.id, user.username);
+    return new Promise((resolve) => {
+      const clientHasAccess = ScopeManager.canRequestScope(scope, client);
+      if (!clientHasAccess) {
+        log.debug(
+          "Scope validation for client %s failed due to insufficient access. Requested scope: %s",
+          client.id,
+          scope
+        );
+        return resolve(false);
+      }
+      if (client.id === user.username) {
+        // For client credentials grant, there is no notion of user.
+        return resolve(scope);
+      }
+      if (!user.scope) {
+        user.scope = ["user.delegated.all"];
+      }
+      // Sometimes, the frontends do not know the scopes a user can request ahead of time.
+      // Since there is usually a higher amount of trust for internal clients in the system,
+      // it is okay to return all scopes that a user has access to.
+      if (client.role === Role.INTERNAL_CLIENT) {
+        scope = user.scope.join(",");
+        log.debug(
+          "Granting all allowed scopes (%s) for user %s due to request from internal client",
+          scope,
+          user.username
+        );
+        return resolve(scope);
+      }
+      const userHasAccess = ScopeManager.canRequestScope(scope, user);
+      if (userHasAccess) {
+        resolve(scope);
+      } else {
+        resolve(false);
+      }
+    });
+  },
+
+  verifyScope: (token: Token, scope: string): Promise<boolean> => {
+    log.info("Verifying scope for token %s...", token.accessToken);
+    return new Promise((resolve) => {
+      if (!token.scope) {
+        return false;
+      }
+      let requestedScopes = scope.split(",");
+      let authorizedScopes = typeof token.scope === "string" ? token.scope.split(",") : token.scope;
+      return resolve(requestedScopes.every((s) => authorizedScopes.indexOf(s) >= 0));
+    });
   },
 };
 

@@ -18,7 +18,8 @@ function createApplicationClient() {
                 redirectUris: getParam("redirectUrls").split(","),
                 secret: getParam("clientSecret"),
                 role: "internal_client",
-                displayName: "Application Client"
+                scope: ["*"],
+                displayName: "Application Client",
             };
             db.collection("clients").insertOne(client, function (err) {
                 if (err) throw err;

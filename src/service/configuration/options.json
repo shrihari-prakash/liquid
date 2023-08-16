@@ -16,6 +16,14 @@
     "default": false
   },
   {
+    "name": "system.reverse-proxy-mode",
+    "displayName": "Reverse Proxy Mode",
+    "envName": "SYSTEM_REVERSE_PROXY_MODE",
+    "description": "Specifies if Liquid is sitting behind a reverse proxy like nginx.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "system.log-level",
     "displayName": "Log Level",
     "envName": "SYSTEM_LOG_LEVEL",
@@ -61,10 +69,10 @@
     "name": "system.static.use-relative-path",
     "displayName": "Static Use Relative Path",
     "envName": "SYSTEM_STATIC_USE_RELATIVE_PATH",
-    "description": "Specifies if the path in options `system.static-folder` and `system.static.default-page` are `relative` or `absolute`.",
+    "description": "Specifies if the path in option `system.static-folder` is `relative`.",
     "type": "boolean",
     "default": true,
-    "relatedOptions": ["system.static-folder", "system.static.default-page"]
+    "relatedOptions": ["system.static-folder"]
   },
   {
     "name": "system.static-folder",
@@ -73,23 +81,23 @@
     "description": "Specifies the name of the folder that contains static HTML files. For example, if you have a file named login.html inside the folder named static in src, navigating to your-domain.com/login will render login.html.",
     "type": "string",
     "default": "public",
-    "relatedOptions": ["system.static.use-relative-path", "system.static.default-page"]
-  },
-  {
-    "name": "system.static.default-page",
-    "displayName": "Default Static Page",
-    "envName": "SYSTEM_STATIC_DEFAULT_PAGE",
-    "description": "Specifies the name of the HTML file that renders in the application's root URL.",
-    "type": "string",
-    "default": "public/login.html",
-    "relatedOptions": ["system.static.use-relative-path", "system.static-folder"]
+    "relatedOptions": ["system.static.use-relative-path", "system.static.fallback-to-index"]
   },
   {
     "name": "system.static.app-config-absolute-path",
     "displayName": "Static App Config Absolute Path",
     "envName": "SYSTEM_STATIC_APP_CONFIG_ABSOLUTE_PATH",
-    "description": "Specifies the absolute path for frontend configuration file. If not speficied 'src/public/app-config.json' is used. You usually don't need to touch this unless your hosting provider limits you from placing custom files inside a sub folder.",
+    "description": "Specifies the absolute path for frontend configuration file. If not speficied 'app-config.json' in src folder is used.",
     "type": "string"
+  },
+  {
+    "name": "system.static.fallback-to-index",
+    "displayName": "Static Falls Back to Index",
+    "envName": "SYSTEM_STATIC_FALLBACK_TO_INDEX",
+    "description": "Specifies if unhandled routes will fall back to serving index.html in static folder.",
+    "type": "boolean",
+    "default": true,
+    "relatedOptions": ["system.static-folder", "system.static.use-relative-path"]
   },
   {
     "name": "cookie-session-secret",
@@ -413,18 +421,77 @@
     "name": "privilege.can-create-account",
     "displayName": "Can Use Create Account",
     "envName": "CAN_CREATE_ACCOUNT",
-    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`.",
+    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`. Also modify `privilege.can-create-account` in your frontend config.",
     "type": "boolean",
     "default": true
+  },
+  {
+    "name": "privilege.can-use-credit-transaction-history",
+    "displayName": "Can Use Credit Transaction History",
+    "envName": "CAN_USE_CREDIT_TRANSACTION_HISTORY",
+    "description": "Specifies if the application should maintain a history of credit changes for user accounts.",
+    "type": "boolean",
+    "default": false
+  },
+  {
+    "name": "user.account-creation.username-validation-regex",
+    "displayName": "User Account Creation Username Validation Regex",
+    "envName": "USER_ACCOUNT_CREATION_USERNAME_VALIDATION_REGEX",
+    "description": "Specifies the regex to be used to validate username for user accounts.",
+    "type": "string",
+    "default": "^[a-z_][a-z0-9._]*$"
+  },
+  {
+    "name": "user.account-creation.password-validation-regex",
+    "displayName": "User Account Creation Password Validation Regex",
+    "envName": "USER_ACCOUNT_CREATION_PASSWORD_VALIDATION_REGEX",
+    "description": "Specifies the regex to be used to validate password for user accounts.",
+    "type": "string"
   },
   {
     "name": "user.account-creation.require-email-verification",
     "displayName": "User Account Creation Require Email Verification",
     "envName": "USER_ACCOUNT_CREATION_REQUIRE_EMAIL_VERIFICATION",
-    "description": "Specifies if email verification is required while signing up in the service. Also modify `general.requireEmailVerification` in your frontend app config.",
+    "description": "Specifies if email verification is required while signing up in the service. Also modify `user.account-creation.require-email-verification` in your frontend app config.",
     "type": "boolean",
     "default": true,
     "relatedOptions": ["sendgrid.*"]
+  },
+  {
+    "name": "user.account-creation.enable-invite-only",
+    "displayName": "User Account Creation Enable Invite Only",
+    "envName": "USER_ACCOUNT_CREATION_ENABLE_INVITE_ONLY",
+    "description": "Specifies if accounts can be created only using an invite code.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["user.account-creation.invites-per-person"]
+  },
+  {
+    "name": "user.account-creation.force-generate-invite-codes",
+    "displayName": "User Account Creation Force Generate Invite Codes",
+    "envName": "USER_ACCOUNT_CREATION_FORCE_GENERATE_INVITE_CODES",
+    "description": "Specifies if the system can generate invite codes on account creation even if `user.account-creation.enable-invite-only` option is turned off.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["user.account-creation.enable-invite-only"]
+  },
+  {
+    "name": "user.account-creation.invites-per-person",
+    "displayName": "User Account Creation Invites Per Person",
+    "envName": "USER_ACCOUNT_CREATION_INVITES_PER_PERSON",
+    "description": "Specifies the number of invites a person can make.",
+    "type": "number",
+    "default": 5,
+    "relatedOptions": ["user.account-creation.enable-invite-only"]
+  },
+  {
+    "name": "user.account-creation.invite-code-availability-window",
+    "displayName": "User Account Creation Invite Code Availability Window",
+    "envName": "USER_ACCOUNT_CREATION_INVITE_CODE_AVAILABILITY_WINDOW",
+    "description": "Specifies the window size in seconds to have been ellapsed since user account creation after which users can get their invite codes.",
+    "type": "number",
+    "default": 10,
+    "relatedOptions": ["user.account-creation.enable-invite-only"]
   },
   {
     "name": "user.account-creation.allow-only-whitelisted-email-domains",
@@ -469,6 +536,14 @@
     "type": "number",
     "default": 86400,
     "relatedOptions": ["user.account-creation.enable-ip-based-throttle"]
+  },
+  {
+    "name": "user.account-creation.initial-credit-count",
+    "displayName": "User Account Creation Initial Credit Count",
+    "envName": "USER_ACCOUNT_CREATION_INITIAL_CREDIT_COUNT",
+    "description": "Specifies the initial amount of credits user accounts will have after creation.",
+    "type": "number",
+    "default": 0
   },
   {
     "name": "user.profile.editable-fields",

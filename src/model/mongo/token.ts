@@ -6,6 +6,11 @@ const tokenSchema = {
   accessTokenExpiresAt: Date,
   refreshToken: String,
   refreshTokenExpiresAt: Date,
+  scope: {
+    type: Array,
+    required: true,
+    default: ["user.delegated.all"],
+  },
   client: Object,
   user: Object,
   createdAt: {

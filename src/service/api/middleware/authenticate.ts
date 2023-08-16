@@ -23,9 +23,10 @@ const AuthenticateUser = async (_: Request, res: Response, next: NextFunction) =
 const AuthenticateClient = async (_: Request, res: Response, next: NextFunction) => {
   try {
     res.locals.user = res.locals.oauth.token.user;
-    if (res.locals.user.role !== Role.INTERNAL_CLIENT) {
+    if (res.locals.user.role !== Role.INTERNAL_CLIENT && res.locals.user.role !== Role.EXTERNAL_CLIENT) {
       throw statusCodes.unauthorized;
     }
+    res.locals.user.isClient = true;
     res.locals.client = res.locals.oauth.token.client;
     return next();
   } catch (err) {
@@ -42,6 +43,17 @@ const Authenticate = async (req: Request, res: Response, next: NextFunction) => 
   } catch (err) {
     res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
     return;
+  }
+};
+
+export const AuthenticateSilent = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const token = await OAuthServer.server.authenticate(new OAuthRequest(req), new OAuthResponse(res));
+    res.locals.oauth = { token: token };
+    res.locals.user = res.locals?.oauth?.token?.user;
+    next();
+  } catch {
+    next();
   }
 };
 

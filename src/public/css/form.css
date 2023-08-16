@@ -1,0 +1,158 @@
+.form {
+  position: relative;
+  width: 100%;
+  padding: 15px;
+  width: 100%;
+  max-width: 45%;
+}
+
+.consent-form .scope-container {
+  user-select: none;
+  list-style: none;
+  padding: 0;
+}
+
+.consent-form .scope-item {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5em;
+  color: var(--text-color);
+  border: 1px solid var(--form-input-border-color);
+  font-weight: 300;
+  padding: calc(var(--form-input-vertical-padding) * 2) calc(var(--form-input-vertical-padding) * 2);
+  border-radius: var(--form-input-border-radius);
+}
+
+.consent-form .scope-item-desc {
+  margin-left: calc(var(--form-input-vertical-padding) * 2);
+}
+
+.circle {
+  position: relative;
+  background: var(--primary-button-color);
+  border-radius: 50%;
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.checkmark {
+  position: absolute;
+  transform: rotate(45deg) translate(-50%, -50%);
+  left: 30%;
+  top: 50%;
+  height: calc(28px / 3);
+  width: calc(28px / 6);
+  border-bottom: 3px solid var(--primary-button-text-color);
+  border-right: 3px solid var(--primary-button-text-color);
+}
+
+@media (max-width: 1199.99px) and (orientation: portrait) {
+  .form {
+    max-width: unset;
+    width: 100%;
+  }
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 0;
+}
+
+.form-group label {
+  font-size: 14px;
+  display: block;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  color: var(--text-lighter-color);
+  user-select: none;
+}
+
+.form-control {
+  margin: 0;
+  width: 100%;
+  border: none;
+  padding: 0;
+  font-size: 16px;
+  font-family: inherit;
+  border-radius: 0;
+  height: calc(1.5em + 0.75rem + 2px);
+}
+
+.form-control:active,
+.form-control:focus,
+.form-control:active,
+.form-control:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.form-control,
+.form-control:focus {
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+.form-control::placeholder {
+  color: var(--text-lighter-color);
+  opacity: 0.5;
+}
+
+.form-group > .form-control,
+.form-group > .form-control-multi {
+  width: calc(100% - (var(--form-input-horizontal-padding) * 2));
+  border: 1px solid var(--form-input-border-color);
+  padding-top: var(--form-input-vertical-padding);
+  padding-bottom: var(--form-input-vertical-padding);
+  padding-left: var(--form-input-horizontal-padding);
+  padding-right: var(--form-input-horizontal-padding);
+  border-radius: var(--form-input-border-radius);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+input[data-autocompleted] {
+  background-color: transparent !important;
+}
+
+.dropdown {
+  color: var(--text-color);
+  background-color: transparent !important;
+  border: none;
+  font-size: 16px;
+  width: "max-content";
+}
+
+.dropdown:focus {
+  outline: none;
+}
+
+.dropdown option {
+  color: initial;
+}
+
+.page-links {
+  line-height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin: 1rem 0 1.4rem 0;
+}
+
+.page-link {
+  line-height: 100%;
+  color: var(--text-lighter-color);
+  text-decoration: none;
+  position: relative;
+  top: 2px;
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.page-link:hover {
+  color: var(--text-color);
+}

@@ -4,6 +4,44 @@ info:
   description: Seamless authentication and user management APIs for your projects based on TypeScript, MongoDB and Redis.
   version: 0.1
 paths:
+  /oauth/introspect:
+    post:
+      summary: Validate a user token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        "200":
+          description: Returns information about the token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      tokenInfo:
+                        type: object
+                        properties:
+                          accessToken:
+                            type: string
+                          accessTokenExpiresAt:
+                            type: string
+                          scope:
+                            type: string
+                          user:
+                            $ref: "#/definitions/user"
+      tags:
+        - oauth-api
   /user/admin-api/create:
     post:
       summary: Bulk user creation.
@@ -120,7 +158,7 @@ paths:
     post:
       security:
         - bearerAuth: []
-      summary: 'Provide access to an admin API for the given users.'
+      summary: "Provide access to the given scope for the specified targets. Targets can be of type user or client."
       requestBody:
         required: true
         content:
@@ -133,11 +171,13 @@ paths:
                   items:
                     type: string
                     pattern: ^[6][a-f0-9]{23}$
-                permissions:
+                targetType:
+                  type: string
+                  enum: [user, client]
+                scope:
                   type: array
                   items:
                     type: string
-                    pattern: (GET|POST|PATCH|DELETE)_/user/admin-api/route
                 status:
                   type: boolean
       responses:
@@ -485,6 +525,44 @@ paths:
                         type: array
                         items:
                           $ref: "#/definitions/user"
+      tags:
+        - user-client-api
+  /user/client-api/access:
+    post:
+      security:
+        - bearerAuth: []
+      summary: "Provide access to the given scope for the specified targets. Targets can be of type user or client."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targets:
+                  type: array
+                  items:
+                    type: string
+                    pattern: ^[6][a-f0-9]{23}$
+                targetType:
+                  type: string
+                  enum: [user, client]
+                scope:
+                  type: array
+                  items:
+                    type: string
+                status:
+                  type: boolean
+      responses:
+        "200":
+          description: Returns OK.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
       tags:
         - user-client-api
   /user/client-api/block-status:
@@ -843,10 +921,10 @@ paths:
       tags:
         - user-api
   /user/logout:
-    post:
+    get:
       security:
         - bearerAuth: []
-      summary: Deletes user tokens and logs out the authenticated user.
+      summary: Deletes user tokens and logs out the authenticated user. Remember to set credentials to include to make sure the browser is sending the session cookie.
       responses:
         "200":
           description: Returns OK.
@@ -1366,6 +1444,35 @@ paths:
                         type: boolean
                       requested:
                         type: boolean
+      tags:
+        - user-api
+  /user/invite-codes:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrives the invite codes for the logged in user.
+      responses:
+        "200":
+          description: Returns invite codes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      inviteCodes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            targetId:
+                              type: string
       tags:
         - user-api
   /user/profile-picture:

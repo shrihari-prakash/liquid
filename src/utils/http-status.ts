@@ -15,13 +15,16 @@ export const statusCodes = {
 export const errorMessages = {
   internalError: "InternalServerError",
   clientInputError: "ClientInputError",
+  invalidInviteCode: "InvalidInviteCode",
   rateLimitError: "RateLimitError",
   conflict: "ResourceConflict",
   creationThrottled: "CreationThrottled",
+  inviteCodesHidden: "InviteCodesHidden",
   badEmailDomain: "BadEmailDomain",
   invalidFile: "InvalidFile",
   banned: "Banned",
   unauthorized: "Unauthorized",
+  insufficientPrivileges: "InsufficientPrivileges",
   forbidden: "Forbidden",
   notFound: "NotFound",
   accessDenied: "AccessDenied",
@@ -31,4 +34,5 @@ export const errorMessages = {
   resourceDoesNotExist: "ResourceDoesNotExist",
   incompleteSubmission: "IncompleteSubmission",
   resourceNotActive: "ResourceNotActive",
+  insufficientCredits: "InsufficientCredits",
 };
