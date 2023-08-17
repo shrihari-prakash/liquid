@@ -100,6 +100,14 @@
     "relatedOptions": ["system.static-folder", "system.static.use-relative-path"]
   },
   {
+    "name": "system.scope-extension-file-path",
+    "displayName": "Scope Extension File Path",
+    "envName": "SYSTEM_SCOPE_EXTENSION_FILE_PATH",
+    "description": "Specifies the path of the JSON file that contains array of scopes that need to be added to liquid in addition to the default ones.",
+    "type": "string",
+    "default": "/var/liquid/scope-extensions.json"
+  },
+  {
     "name": "cookie-session-secret",
     "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",
