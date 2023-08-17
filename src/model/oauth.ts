@@ -303,7 +303,7 @@ const OAuthModel = {
         return resolve(scope);
       }
       if (!user.scope) {
-        user.scope = ["user.delegated.all"];
+        user.scope = Configuration.get("user.account-creation.default-scope");
       }
       // Sometimes, the frontends do not know the scopes a user can request ahead of time.
       // Since there is usually a higher amount of trust for internal clients in the system,

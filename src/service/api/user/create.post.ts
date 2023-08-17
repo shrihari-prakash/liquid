@@ -169,6 +169,7 @@ const POST_Create = async (req: Request, res: Response) => {
       role,
       password,
       credits,
+      scope: Configuration.get("user.account-creation.default-scope"),
       creationIp: req.ip,
     };
     const shouldVerifyEmail = Configuration.get("user.account-creation.require-email-verification");

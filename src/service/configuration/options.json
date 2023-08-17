@@ -546,6 +546,14 @@
     "default": 0
   },
   {
+    "name": "user.account-creation.default-scope",
+    "displayName": "User Account Creation Default Scope",
+    "envName": "USER_ACCOUNT_CREATION_DEFAULT_SCOPE",
+    "description": "Comma separated scopes that should be assigned to users accounts when they are created.",
+    "type": "stringArray",
+    "default": "user.delegated.all"
+  },
+  {
     "name": "user.profile.editable-fields",
     "displayName": "Profile Editable Fields",
     "envName": "USER_PROFILE_EDITABLE_FIELDS",
