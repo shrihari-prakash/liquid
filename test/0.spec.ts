@@ -27,5 +27,4 @@ before(async () => {
   Configuration.set("mongo-db.connection-string", await mongod.getUri());
   MongoDB.connect();
   await ClientModel.deleteMany({});
-  done();
 });
