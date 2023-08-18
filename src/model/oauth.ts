@@ -176,6 +176,9 @@ const OAuthModel = {
       const dbTokenObject = await TokenModel.findOne({
         accessToken,
       }).lean();
+      if (dbTokenObject && !isApplicationClient(dbTokenObject.user)) {
+        dbTokenObject.user = await getUserInfo(dbTokenObject.user._id);
+      }
       return dbTokenObject as unknown as Token;
     } catch (err) {
       log.error("Error retrieving access token.");
@@ -199,6 +202,9 @@ const OAuthModel = {
     const dbTokenObject = await TokenModel.findOne({
       refreshToken,
     }).lean();
+    if (dbTokenObject && !isApplicationClient(dbTokenObject.user)) {
+      dbTokenObject.user = await getUserInfo(dbTokenObject.user._id);
+    }
     log.debug("Refresh token retrieved from database.");
     return dbTokenObject as unknown as Token;
   },
