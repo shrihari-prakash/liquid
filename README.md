@@ -18,8 +18,6 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 * Battle tested APIs with support for database transactions for high reliability.
 * Quick setup.
 
-Liquid Wiki: https://github.com/shrihari-prakash/liquid/wiki
-
 ## 📦 Dependencies
 Almost everything is **optional** except MongoDB.
 | Dependency                  | Optional | Used by Default | Related Options                                                                                            | Disable Recommended? |
@@ -34,6 +32,9 @@ Almost everything is **optional** except MongoDB.
 The core OAuth logic of Liquid is powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) from [@node-oauth](https://github.com/node-oauth).
 
 ## ⚙️ Setup
+
+#### The content below is simply a quickstart guide. For more detailed setup instructions and documentation, see [Liquid Wik](https://github.com/shrihari-prakash/liquid/wiki).
+
 ### Production Usage
 The following steps assume already you have **Redis** and **MongoDB** and **Sendgrid**.
 1. Pull the docker image by using command `docker pull shrihariprakash/liquid`.
