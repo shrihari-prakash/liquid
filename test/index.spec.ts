@@ -17,7 +17,6 @@ Options.forEach((option) => {
   if (typeof option.default !== "undefined") Configuration.set(option.name, option.default);
   console.log(`${option.name} =`, Configuration.get(option.name));
 });
-Configuration.set("privilege.can-use-cache", false);
 process.env.NODE_ENV = "test";
 Logger.logger.level = "error";
 chai.use(chaiHttp);
