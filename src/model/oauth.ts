@@ -70,16 +70,21 @@ export const flushUserInfoFromRedis = async (userId: string) => {
 };
 
 const getUserInfo = async (userId: string) => {
-  let userInfo = await Redis.client.get(getPrefixedUserId(userId));
+  let userInfo;
+  if (useTokenCache) {
+    userInfo = await Redis.client.get(getPrefixedUserId(userId));
+  }
   if (!userInfo) {
     userInfo = await UserModel.findById(userId).lean();
-    await Redis.client.set(
-      getPrefixedUserId(userId),
-      JSON.stringify(userInfo),
-      "EX",
-      Configuration.get("oauth.refresh-token-lifetime") as number
-    );
-    log.debug("User info for %s written to cache.", userId);
+    if (useTokenCache) {
+      await Redis.client.set(
+        getPrefixedUserId(userId),
+        JSON.stringify(userInfo),
+        "EX",
+        Configuration.get("oauth.refresh-token-lifetime") as number
+      );
+      log.debug("User info for %s written to cache.", userId);
+    }
   } else {
     userInfo = JSON.parse(userInfo);
   }
