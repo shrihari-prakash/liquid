@@ -18,6 +18,8 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 * Battle tested APIs with support for database transactions for high reliability.
 * Quick setup.
 
+  Liquid Wiki: https://github.com/shrihari-prakash/liquid/wiki
+
 ## 📦 Dependencies
 Almost everything is **optional** except MongoDB.
 | Dependency                  | Optional | Used by Default | Related Options                                                                                            | Disable Recommended? |
