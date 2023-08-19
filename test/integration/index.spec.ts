@@ -13,6 +13,7 @@ import { Logger } from "../../src/singleton/logger";
 import Options from "../../src/service/configuration/options.json";
 import { Configuration } from "../../src/singleton/configuration";
 
+console.log("Setting up tests...")
 chai.use(chaiHttp);
 
 process.env.NODE_ENV = "test";
@@ -26,7 +27,6 @@ Options.forEach((option) => {
 });
 
 before(async () => {
-  console.log("Setting up tests...")
   await mongod.start();
   Configuration.set("mongo-db.connection-string", await mongod.getUri());
   MongoDB.connect();
