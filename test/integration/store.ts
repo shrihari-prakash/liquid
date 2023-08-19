@@ -6,6 +6,7 @@ const MemoryStore = {
     grant_type: "client_credentials",
     client_id: "application_client",
     client_secret: "secret",
+    displayName: "Application Client",
     role: "internal_client",
     scope: ["*"]
   },
