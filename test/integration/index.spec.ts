@@ -13,7 +13,7 @@ import { Logger } from "../../src/singleton/logger";
 import Options from "../../src/service/configuration/options.json";
 import { Configuration } from "../../src/singleton/configuration";
 
-console.log("Setting up tests...")
+console.log("Setting up tests...");
 chai.use(chaiHttp);
 
 process.env.NODE_ENV = "test";
@@ -26,10 +26,12 @@ Options.forEach((option) => {
   console.log(`${option.name} =`, Configuration.get(option.name));
 });
 
-before(async () => {
-  await mongod.start();
-  Configuration.set("mongo-db.connection-string", await mongod.getUri());
-  MongoDB.connect();
-  await ClientModel.deleteMany({});
-  console.log("Setup complete.")
-});
+exports.mochaHooks = {
+  async beforeAll() {
+    await mongod.start();
+    Configuration.set("mongo-db.connection-string", await mongod.getUri());
+    MongoDB.connect();
+    await ClientModel.deleteMany({});
+    console.log("Setup complete.");
+  },
+};
