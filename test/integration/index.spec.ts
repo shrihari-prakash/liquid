@@ -26,8 +26,10 @@ Options.forEach((option) => {
 });
 
 before(async () => {
+  console.log("Setting up tests...")
   await mongod.start();
   Configuration.set("mongo-db.connection-string", await mongod.getUri());
   MongoDB.connect();
   await ClientModel.deleteMany({});
+  console.log("Setup complete.")
 });
