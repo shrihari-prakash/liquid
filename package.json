@@ -4,7 +4,7 @@
   "description": "Seamless and highly customizable authentication and user management server.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register test/integration/**/*.spec.ts --exit --recursive",
+    "test": "mocha -r ts-node/register test/integration/**/*.spec.ts --exit",
     "build": "npm run build:server && npm run build:static",
     "copy-files": "copyfiles -u 1 \"src/**/*.yaml\" \"src/**/*.html\" \"src/**/*.json\" build/",
     "build:server": "rimraf ./build && tsc && npm run copy-files",
