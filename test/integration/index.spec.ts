@@ -20,7 +20,6 @@ process.env.CAN_USE_CACHE = "false";
 Logger.logger.level = "error";
 
 Options.forEach((option) => {
-  // Couldn't make Redis work with the tests unfortunately :(
   if (option.name === "environment" || option.name === "privilege.can-use-cache") return;
   if (typeof option.default !== "undefined") Configuration.set(option.name, option.default);
   console.log(`${option.name} =`, Configuration.get(option.name));
