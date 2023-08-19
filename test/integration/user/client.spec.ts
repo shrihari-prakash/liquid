@@ -14,7 +14,6 @@ describe("Client", () => {
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then((res) => {
         chai.expect(res.status).to.eql(200);
-        console.log(res.body.data);
         chai.expect(res.body.data.client.client_secret).to.eql(undefined);
         chai.expect(res.body.data.client.id).to.eql("application_client");
         chai.expect(res.body.data.client.displayName).to.eql("Application Client");
@@ -31,7 +30,6 @@ describe("Client", () => {
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then((res) => {
         chai.expect(res.status).to.eql(200);
-        console.log(res.body.data);
         chai.expect(res.body.data.client).to.eql(null);
       });
   });

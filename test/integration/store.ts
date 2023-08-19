@@ -1,6 +1,7 @@
 const MemoryStore = {
   clientToken: null,
   client: {
+    _id: null,
     id: "application_client",
     grants: ["client_credentials", "authorization_code", "refresh_token"],
     grant_type: "client_credentials",
@@ -8,7 +9,7 @@ const MemoryStore = {
     client_secret: "secret",
     displayName: "Application Client",
     role: "internal_client",
-    scope: ["*"]
+    scope: ["*"],
   },
   users: {
     user1: {
@@ -18,7 +19,7 @@ const MemoryStore = {
       firstName: "John",
       lastName: "Doe",
       email: "johndoe@example.com",
-      scope: ["*"]
+      scope: ["*"],
     },
     user2: {
       _id: null,
@@ -27,7 +28,7 @@ const MemoryStore = {
       firstName: "Rick",
       lastName: "Asthley",
       email: "rickasthley@example.com",
-      scope: ["*"]
+      scope: ["*"],
     },
   },
 };

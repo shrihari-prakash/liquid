@@ -65,4 +65,6 @@ export const setupUsers = async () => {
   };
   await new TokenModel(token2).save();
   await new ClientModel(MemoryStore.client).save();
+  const client = await ClientModel.findOne({ id: MemoryStore.client.id });
+  MemoryStore.client._id = (client as unknown as any)._id;
 };
