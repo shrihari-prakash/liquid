@@ -33,7 +33,7 @@ The core OAuth logic of Liquid is powered by [node-oauth2-server](https://github
 
 ## ⚙️ Setup
 
-#### The content below is simply a quickstart guide. For more detailed setup instructions and documentation, see [Liquid Wik](https://github.com/shrihari-prakash/liquid/wiki).
+#### The content below is simply a quickstart guide. For more detailed setup instructions and documentation, see [Liquid Wiki](https://github.com/shrihari-prakash/liquid/wiki).
 
 ### Production Usage
 The following steps assume already you have **Redis** and **MongoDB** and **Sendgrid**.
