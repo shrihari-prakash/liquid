@@ -25,3 +25,11 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 ## ⚙️ Setup
 
 #### For setup instructions and documentation, see the [Liquid Wiki](https://github.com/shrihari-prakash/liquid/wiki).
+
+## License
+Liquid is released under the [MIT License](https://github.com/shrihari-prakash/liquid/blob/main/LICENSE).
+
+## Contact
+Have questions or need support? Open an issue [here](https://github.com/shrihari-prakash/liquid/issues).
+
+
