@@ -6,8 +6,59 @@ import { OAuthServer } from "../../../singleton/oauth-server";
 import { statusCodes } from "../../../utils/http-status";
 import { Configuration } from "../../../singleton/configuration";
 
+function validatePKCEParameters(req: Request) {
+  const queryParameters = req.query;
+  const bodyParameters = req.body;
+  if ("code_challenge" in queryParameters && "code_challenge" in bodyParameters) {
+    return { valid: false, error: "Cannot provide 'code_challenge' in both query and body." };
+  }
+  if ("code_challenge_method" in queryParameters && "code_challenge_method" in bodyParameters) {
+    return { valid: false, error: "Cannot provide 'code_challenge_method' in both query and body." };
+  }
+  if ("code_challenge" in queryParameters && !("code_challenge_method" in queryParameters)) {
+    return {
+      valid: false,
+      error: "If providing 'code_challenge', 'code_challenge_method' must also be provided in query.",
+    };
+  }
+  if ("code_challenge" in bodyParameters && !("code_challenge_method" in bodyParameters)) {
+    return {
+      valid: false,
+      error: "If providing 'code_challenge', 'code_challenge_method' must also be provided in body.",
+    };
+  }
+  if ("code_challenge_method" in queryParameters && !("code_challenge" in queryParameters)) {
+    return {
+      valid: false,
+      error: "Cannot provide 'code_challenge_method' without providing 'code_challenge' in query.",
+    };
+  }
+  if ("code_challenge_method" in bodyParameters && !("code_challenge" in bodyParameters)) {
+    return {
+      valid: false,
+      error: "Cannot provide 'code_challenge_method' without providing 'code_challenge' in body.",
+    };
+  }
+
+  // Check if neither code_challenge nor code_challenge_method is provided
+  if (!("code_challenge" in queryParameters) && !("code_challenge" in bodyParameters)) {
+    return { valid: false, error: "'code_challenge' must be provided in either query or body." };
+  }
+
+  return { valid: true, error: null };
+}
+
 async function ALL__Authorize(req: Request, res: Response, next: NextFunction) {
   try {
+    if (Configuration.get("oauth.authorization.require-pkce")) {
+      const validation = validatePKCEParameters(req);
+      if (!validation.valid) {
+        return res.status(statusCodes.clientInputError).json({
+          error: "invalid_pkce_request",
+          error_description: validation.error,
+        });
+      }
+    }
     const code = await OAuthServer.server.authorize(new OAuthRequest(req), new OAuthResponse(res), {
       authenticateHandler: {
         handle: (req: Request) => {

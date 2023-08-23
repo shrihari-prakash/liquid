@@ -166,6 +166,14 @@
     "default": true
   },
   {
+    "name": "oauth.authorization.require-pkce",
+    "displayName": "OAuth Authorization Require PKCE",
+    "envName": "OAUTH_AUTHORIZATION_REQUIRE_PKCE",
+    "description": "Specifies if the application should require PKCE for authorization.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "sendgrid.api-key",
     "displayName": "Sendgrid API Key",
     "envName": "SENDGRID_API_KEY",
