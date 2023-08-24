@@ -123,10 +123,10 @@
     "type": "string"
   },
   {
-    "name": "cookie.expires",
-    "displayName": "Cookie Expires",
-    "envName": "COOKIE_EXPIRES",
-    "description": "Specifies in milliseconds the expiry time for session cookies.",
+    "name": "cookie.max-age",
+    "displayName": "Cookie Max Age",
+    "envName": "COOKIE_MAX_AGE",
+    "description": "Specifies in seconds the expiry time for session cookies.",
     "type": "number"
   },
   {

@@ -69,9 +69,9 @@ if (app.get("env") === "production") {
     sessionOptions.cookie.domain = cookieDomain;
   }
 }
-const cookieExpires = Configuration.get("cookie.expires");
-if (cookieExpires) {
-  sessionOptions.cookie.expires = cookieExpires;
+const cookieMaxAge = Configuration.get("cookie.max-age");
+if (cookieMaxAge) {
+  sessionOptions.cookie.maxAge = cookieMaxAge * 1000;
 }
 app.use(session(sessionOptions));
 
