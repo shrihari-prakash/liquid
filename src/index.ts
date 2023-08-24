@@ -69,6 +69,10 @@ if (app.get("env") === "production") {
     sessionOptions.cookie.domain = cookieDomain;
   }
 }
+const cookieExpires = Configuration.get("cookie.expires");
+if (cookieExpires) {
+  sessionOptions.cookie.expires = cookieExpires;
+}
 app.use(session(sessionOptions));
 
 // CORS

@@ -123,6 +123,13 @@
     "type": "string"
   },
   {
+    "name": "cookie.expires",
+    "displayName": "Cookie Expires",
+    "envName": "COOKIE_EXPIRES",
+    "description": "Specifies in milliseconds the expiry time for session cookies.",
+    "type": "number"
+  },
+  {
     "name": "mongo-db.connection-string",
     "displayName": "MongoDB Connection String",
     "envName": "MONGO_DB_CONNECTION_STRING",
