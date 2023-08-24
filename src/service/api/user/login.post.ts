@@ -43,7 +43,13 @@ const POST_Login = async (req: Request, res: Response) => {
     req.session.user = user;
     log.debug("Assigned session id %s for user %s", req.session?.id, user._id);
     Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
-    return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
+    req.session.save(function(err) {
+      if (err) {
+        log.error(err);
+        return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+      }
+      return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
+    });
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
