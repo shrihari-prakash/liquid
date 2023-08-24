@@ -108,12 +108,19 @@
     "default": "/var/liquid/scope-extensions.json"
   },
   {
-    "name": "cookie-session-secret",
+    "name": "cookie.session-secret",
     "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",
     "description": "A random 64+ bit string to use as the session secret.",
     "type": "string",
     "default": "00000000-0000-0000-0000-000000000000"
+  },
+  {
+    "name": "cookie.domain",
+    "displayName": "Cookie Domain",
+    "envName": "COOKIE_DOMAIN",
+    "description": "Specifies the cookie domain for session cookies.",
+    "type": "string"
   },
   {
     "name": "mongo-db.connection-string",
