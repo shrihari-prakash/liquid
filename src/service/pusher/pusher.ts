@@ -44,7 +44,7 @@ export default class Pusher {
         this.queue = RabbitMQ;
         break;
       case adapters.Redis:
-        if (!Configuration.get("privilege.can-use-rabbitmq")) {
+        if (!Configuration.get("privilege.can-use-cache")) {
           log.warn(
             "Usage of push events is enabled. However, this requires option `Can Use Redis(privilege.can-use-cache)` to be true. Events will not be published until you setup Redis options."
           );
