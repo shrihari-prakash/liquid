@@ -343,6 +343,15 @@
     "relatedOptions": ["privilege.can-use-cache", "redis.*"]
   },
   {
+    "name": "redis.channel-name",
+    "displayName": "Redis Channel Name",
+    "envName": "REDIS_CHANNEL_NAME",
+    "description": "Channel name for Redis Publisher. Only set this if you use pusher events with Redis adapter.",
+    "type": "string",
+    "default": "liquid:",
+    "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-cache", "redis.*"]
+  },
+  {
     "name": "system.queue-adapter",
     "displayName": "System Queue Adapter",
     "envName": "SYSTEM_QUEUE_ADAPTER",

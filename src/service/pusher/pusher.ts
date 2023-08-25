@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Configuration } from "../../singleton/configuration";
 import { RabbitMQ } from "../../singleton/rabbitmq";
+import { RedisPublisher } from "../../singleton/redis-publisher";
 
 export class PushEvent {
   id = uuidv4();
@@ -18,12 +19,21 @@ export class PushEvent {
 
 const adapters = {
   RabbitMQ: "rabbitmq",
+  Redis: "redis",
 };
 export default class Pusher {
-  queue: typeof RabbitMQ | undefined;
+  queue: typeof RabbitMQ | typeof RedisPublisher | undefined;
 
   constructor() {
-    if (!Configuration.get("privilege.can-use-push-events")) return log.info("Usage of Events is disabled.");
+    if (!Configuration.get("privilege.can-use-push-events")) {
+      return log.info("Usage of Events is disabled.");
+    } else {
+      log.info(
+        "Push running on %s adapter for events %s.",
+        Configuration.get("system.queue-adapter"),
+        Configuration.get("system.push-events")
+      );
+    }
     switch (Configuration.get("system.queue-adapter")) {
       case adapters.RabbitMQ:
         if (!Configuration.get("privilege.can-use-rabbitmq")) {
@@ -32,6 +42,14 @@ export default class Pusher {
           );
         }
         this.queue = RabbitMQ;
+        break;
+      case adapters.Redis:
+        if (!Configuration.get("privilege.can-use-rabbitmq")) {
+          log.warn(
+            "Usage of push events is enabled. However, this requires option `Can Use Redis(privilege.can-use-cache)` to be true. Events will not be published until you setup Redis options."
+          );
+        }
+        this.queue = RedisPublisher;
         break;
     }
   }
@@ -44,7 +62,11 @@ export default class Pusher {
     switch (Configuration.get("system.queue-adapter")) {
       case adapters.RabbitMQ:
         await RabbitMQ.publish(event);
-        log.debug("Published event. %o", event);
+        log.debug("Published event to RabbitMQ. %o", event);
+        break;
+      case adapters.Redis:
+        await RedisPublisher.publish(event);
+        log.debug("Published event to Redis PubSub. %o", event);
         break;
     }
   }
