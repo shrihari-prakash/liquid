@@ -258,7 +258,7 @@ export default function SignUp() {
         }
         {termsAndConditions &&
           <>
-            &nbsp;agree to the <a href={termsAndConditions}> terms and conditions</a> of {appName}
+            &nbsp;agree to the <a href={termsAndConditions}> terms & conditions</a> of {appName}
             {!privacyPolicy && "."}
           </>
         }

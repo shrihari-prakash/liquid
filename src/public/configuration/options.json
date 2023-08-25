@@ -127,13 +127,13 @@
     "name": "content.terms-and-conditions-url",
     "displayName": "Terms and Conditions URL",
     "description": "Specifies the URL for terms and conditions of your application.",
-    "default": "#"
+    "default": null
   },
   {
     "name": "content.privacy-policy-url",
     "displayName": "Privacy Policy URL",
     "description": "Specifies the URL for privacy policies of your application.",
-    "default": "#"
+    "default": null
   },
   {
     "name": "content.sidebar.intro.description",
