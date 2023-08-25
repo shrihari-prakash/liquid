@@ -18,7 +18,7 @@ export default class RedisPublisher {
   }
 
   async publish(data: any) {
-    if (!this.redis || !this.canUseCache) return;
+    if (!this.redis?.client || !this.canUseCache) return;
     await this.redis.client.publish(this.channelName, data);
   }
 }
