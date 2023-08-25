@@ -160,6 +160,12 @@
     "default": null
   },
   {
+    "name": "theme.app-font-base-size",
+    "displayName": "Theme - App Font Base Size",
+    "description": "Specifies the base Font size to be used in static pages.",
+    "default": "15px"
+  },
+  {
     "name": "theme.light.background-color",
     "displayName": "Theme - Background Color (Light Mode)",
     "description": "Specifies the page background color.",
@@ -169,7 +175,7 @@
     "name": "theme.light.primary-button.height",
     "displayName": "Theme - Primary Button Height (Light Mode)",
     "description": "Specifies the height of the submit button in forms.",
-    "default": "52px"
+    "default": "48px"
   },
   {
     "name": "theme.light.primary-button.color",
@@ -241,7 +247,7 @@
     "name": "theme.light.form.input-vertical-padding",
     "displayName": "Theme - Form Input Vertical Padding (Light Mode)",
     "description": "Specifies the vertical padding of the input fields in forms.",
-    "default": "6px"
+    "default": "4px"
   },
   {
     "name": "theme.light.form.input-horizontal-padding",
@@ -259,7 +265,7 @@
     "name": "theme.dark.primary-button.height",
     "displayName": "Theme - Primary Button Height (Dark Mode)",
     "description": "Specifies the height of the submit button in forms.",
-    "default": "52px"
+    "default": "48px"
   },
   {
     "name": "theme.dark.primary-button.color",
@@ -331,7 +337,7 @@
     "name": "theme.dark.form.input-vertical-padding",
     "displayName": "Theme - Form Input Vertical Padding (Dark Mode)",
     "description": "Specifies the vertical padding of the input fields in forms.",
-    "default": "6px"
+    "default": "4px"
   },
   {
     "name": "theme.dark.form.input-horizontal-padding",

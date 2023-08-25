@@ -63,6 +63,7 @@ export default function Layout({ children }) {
       setStyleProperty("--form-input-padding", getThemeVariable("form.input-padding"));
       setStyleProperty("--form-input-vertical-padding", getThemeVariable("form.input-vertical-padding"));
       setStyleProperty("--form-input-horizontal-padding", getThemeVariable("form.input-horizontal-padding"));
+      setStyleProperty("--app-font-base-size", configuration["theme.app-font-base-size"]);
       if (theme === "light") {
         changeToLightVariable("--text-color");
         changeToLightVariable("--text-lighter-color");
