@@ -135,6 +135,8 @@ export default function Login() {
         <input
           type="text"
           className="form-control"
+          aria-label="Username or Email"
+          aria-required="true"
           placeholder={getPlaceholder("your_username", configuration)}
           minLength="8"
           autoComplete="username"
@@ -150,6 +152,8 @@ export default function Login() {
         <input
           type="password"
           className="form-control"
+          aria-label="Password"
+          aria-required="true"
           placeholder={getPlaceholder("********", configuration)}
           minLength="8"
           autoComplete="current-password"

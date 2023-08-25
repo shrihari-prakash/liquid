@@ -62,6 +62,8 @@ export default function GetCode() {
                 <input
                     type="email"
                     className="form-control"
+                    aria-label="Email"
+                    aria-required="true"
                     placeholder={getPlaceholder("your@email.com", configuration)}
                     minLength="8"
                     autoComplete="off"
