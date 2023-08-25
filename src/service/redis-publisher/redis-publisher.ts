@@ -5,6 +5,7 @@ export default class RedisPublisher {
   redis: Redis | undefined;
   channelName: string = Configuration.get("redis.channel-name");
   canUseCache: boolean | undefined;
+  canUsePushEvents: boolean | undefined;
 
   constructor() {
     this.connect();
@@ -12,7 +13,8 @@ export default class RedisPublisher {
 
   async connect() {
     this.canUseCache = Configuration.get("privilege.can-use-cache");
-    if (this.canUseCache && Configuration.get("environment") !== "test") {
+    this.canUsePushEvents = Configuration.get("privilege.can-use-push-events");
+    if (this.canUseCache && this.canUsePushEvents && Configuration.get("environment") !== "test") {
       this.redis = new Redis("redis-publisher");
     }
   }
