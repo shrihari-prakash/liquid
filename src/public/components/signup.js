@@ -253,7 +253,7 @@ export default function SignUp() {
         />
       </div>
       <div className="page-links">
-        <span className="page-link">
+        <span className="page-link" aria-label="Login">
           <a href={"/login" + window.location.search} className="page-link">
             Have an account? Login
           </a>

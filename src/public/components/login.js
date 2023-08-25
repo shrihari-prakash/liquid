@@ -164,14 +164,14 @@ export default function Login() {
       <div className="page-links">
         {configuration["privilege.can-create-account"] && (
           <span className="page-link">
-            <a href={"/signup" + window.location.search} className="page-link signup-link">
+            <a href={"/signup" + window.location.search} className="page-link signup-link" aria-label="Sign Up">
               Create Account
             </a>
           </span>
         )}
         {configuration["privilege.can-reset-password"] && (
           <span className="page-link">
-            <a href={"/get-code" + window.location.search} className="page-link forgot-password-link">
+            <a href={"/get-code" + window.location.search} className="page-link forgot-password-link" aria-label="Forgot Password?">
               Forgot Password?
             </a>
           </span>

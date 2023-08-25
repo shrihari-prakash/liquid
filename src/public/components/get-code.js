@@ -76,7 +76,7 @@ export default function GetCode() {
             </div>
             <div className="page-links">
                 <span className="page-link">
-                    <a href={"/login" + window.location.search} className="page-link ">
+                    <a href={"/login" + window.location.search} className="page-link" aria-label="Login">
                         Login
                     </a>
                 </span>
