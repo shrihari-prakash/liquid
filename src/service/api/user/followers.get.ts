@@ -34,6 +34,7 @@ const GET_Followers = async (req: Request, res: Response) => {
     }
     const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;
+    // If the userId param exists, loggedInUserId is set to the param value in the previous lines for the sake of the query.
     const query = useFollowersQuery(loggedInUserId, limit);
     if (offset) {
       query[0].$match.$and.push({ createdAt: { $lt: new Date(offset) } });
