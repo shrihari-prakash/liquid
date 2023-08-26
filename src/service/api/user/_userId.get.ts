@@ -10,8 +10,7 @@ import { getBlockStatus } from "../../../utils/block";
 import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
 import { ScopeManager } from "../../../singleton/scope-manager";
-import { canRequestNonFollowerInfo } from "../../../utils/user";
-import { FollowStatus } from "../../../enum/follow-status";
+import { canRequestFollowerInfo } from "../../../utils/user";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
@@ -22,15 +21,10 @@ const GET__UserId = async (req: Request, res: Response) => {
     const targetId = req.params.userId;
     // The first two parameters reversed because we need to find if the target has blocked the source.
     const isBlocked = await getBlockStatus(targetId, sourceId, res);
-    if (isBlocked)
-      return res.status(statusCodes.forbidden).json(
-        new ErrorResponse(errorMessages.forbidden, {
-          reason: FollowStatus.BLOCKED,
-        })
-      );
+    if (isBlocked) return;
     let user = (await UserModel.findOne({ _id: targetId }, IUserProjection).exec()) as unknown as IUser;
-    const nonFollowerInfoAllowed = await canRequestNonFollowerInfo(sourceId, null, user);
-    if (!nonFollowerInfoAllowed) {
+    const isFollowerInfoAllowed = await canRequestFollowerInfo({ sourceId, target: user });
+    if (!isFollowerInfoAllowed) {
       // @ts-expect-error
       user.email = undefined;
       // @ts-expect-error

@@ -6,13 +6,18 @@ import { errorMessages, statusCodes } from "./http-status";
 import { ErrorResponse } from "./response";
 import { FollowStatus } from "../enum/follow-status";
 
-export const canRequestNonFollowerInfo = async (
-  sourceId: string,
-  targetId?: string | null,
-  userObj?: IUser | null,
-  res?: Response
-): Promise<boolean> => {
-  let user = userObj;
+export const canRequestFollowerInfo = async ({
+  sourceId,
+  targetId,
+  target,
+  res,
+}: {
+  sourceId: string;
+  targetId?: string;
+  target?: IUser;
+  res?: Response;
+}): Promise<boolean> => {
+  let user = target;
   if (!user) {
     user = (await UserModel.findOne({ _id: targetId }, IUserProjection).exec()) as unknown as IUser;
   }
