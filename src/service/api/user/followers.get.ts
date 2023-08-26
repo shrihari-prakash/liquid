@@ -11,13 +11,24 @@ import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
 import { getPaginationLimit } from "../../../utils/pagination";
 import { ScopeManager } from "../../../singleton/scope-manager";
+import { getBlockStatus } from "../../../utils/block";
+import { canRequestNonFollowerInfo } from "../../../utils/user";
 
 const GET_Followers = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.read", res)) {
       return;
-    };
-    const userId = res.locals.oauth.token.user._id;
+    }
+    let userId = res.locals.oauth.token.user._id;
+    const targetId = req.params.userId;
+    if (targetId) {
+      // The first two parameters reversed because we need to find if the target has blocked the source.
+      const isBlocked = await getBlockStatus(targetId, userId, res);
+      if (isBlocked) return;
+      const nonFollowerInfoAllowed = await canRequestNonFollowerInfo(userId, targetId, null, res);
+      if (!nonFollowerInfoAllowed) return;
+      userId = targetId;
+    }
     const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;
     const query = useFollowersQuery(userId, limit);

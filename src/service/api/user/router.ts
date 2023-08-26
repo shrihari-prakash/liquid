@@ -74,6 +74,8 @@ if (canUseFollowAPIs) {
   UserRouter.post("/unfollow", ...DelegatedAuthFlow, ...POST_FollowValidator, POST_Unfollow);
   UserRouter.get("/following", ...DelegatedAuthFlow, GET_Following);
   UserRouter.get("/followers", ...DelegatedAuthFlow, GET_Followers);
+  UserRouter.get("/:userId/following", ...DelegatedAuthFlow, GET_Following);
+  UserRouter.get("/:userId/followers", ...DelegatedAuthFlow, GET_Followers);
   UserRouter.get("/follow-requests", ...DelegatedAuthFlow, GET_FollowRequests);
   UserRouter.get("/follow-status", ...DelegatedAuthFlow, GET_FollowStatusValidator, GET_FollowStatus);
   UserRouter.patch(

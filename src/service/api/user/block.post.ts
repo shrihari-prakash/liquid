@@ -71,7 +71,7 @@ const POST_Block = async (req: Request, res: Response) => {
     sendSuccess(res, FollowStatus.BLOCKED);
   } catch (err: any) {
     if (err?.message?.includes("E11000")) {
-      sendSuccess(res, FollowStatus.BLOCKED);
+      return sendSuccess(res, FollowStatus.BLOCKED);
     }
     log.error(err);
     await MongoDB.abortTransaction(session);

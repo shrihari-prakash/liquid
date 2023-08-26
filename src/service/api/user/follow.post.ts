@@ -52,19 +52,20 @@ const POST_Follow = async (req: Request, res: Response) => {
       await new FollowModel(query).save(sessionOptions);
       await MongoDB.commitTransaction(session);
       sendSuccess(res, FollowStatus.REQUESTED);
+      Pusher.publish(new PushEvent(PushEventList.USER_FOLLOW_REQUEST, { source: sourceId, target: targetId }));
     } else {
       await new FollowModel(query).save(sessionOptions);
       await updateFollowCount(sourceId, targetId, 1, sessionOptions);
       await MongoDB.commitTransaction(session);
       sendSuccess(res, FollowStatus.FOLLOWING);
+      Pusher.publish(new PushEvent(PushEventList.USER_FOLLOW, { source: sourceId, target: targetId }));
     }
-    Pusher.publish(new PushEvent(PushEventList.USER_FOLLOW, { source: sourceId, target: targetId }));
   } catch (err: any) {
+    await MongoDB.abortTransaction(session);
     if (err?.message?.includes("E11000")) {
-      sendSuccess(res, FollowStatus.DUPLICATE);
+      return sendSuccess(res, FollowStatus.DUPLICATE);
     }
     log.error(err);
-    await MongoDB.abortTransaction(session);
     return res
       .status(statusCodes.internalError)
       .json(new ErrorResponse(errorMessages.internalError, { transactionId: session }));
