@@ -1389,6 +1389,88 @@ paths:
                               $ref: "#/definitions/user"
       tags:
         - user-api
+  /user/:userId/following:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns an array of users that a given user is following.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Records per page.
+        - in: query
+          name: offset
+          schema:
+            type: string
+            format: date-time
+          description: createdAt field of last record in the previous page.
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      records:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            approved:
+                              type: boolean
+                            target:
+                              $ref: "#/definitions/user"
+      tags:
+        - user-api
+  /user/:userId/followers:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns an array of users that are following the given user.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Records per page.
+        - in: query
+          name: offset
+          schema:
+            type: string
+            format: date-time
+          description: createdAt field of last record in the previous page.
+      responses:
+        "200":
+          description: Returns list of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      records:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            approved:
+                              type: boolean
+                            source:
+                              $ref: "#/definitions/user"
+      tags:
+        - user-api
   /user/follow-requests:
     get:
       security:
@@ -1418,17 +1500,11 @@ paths:
                               $ref: "#/definitions/user"
       tags:
         - user-api
-  /user/follow-status:
+  /user/follow-status/:userId:
     get:
       security:
         - bearerAuth: []
       summary: Returns if the current user is following the given target user.
-      parameters:
-        - in: query
-          name: target
-          schema:
-            type: integer
-          description: ID of the target user.
       responses:
         "200":
           description: Returns the follow status.

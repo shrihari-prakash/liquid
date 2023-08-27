@@ -50,6 +50,7 @@ UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPas
 UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
 UserRouter.get("/logout", AuthenticateSilent, GET_Logout);
 UserRouter.get("/client", GET_ClientValidator, GET_Client);
+UserRouter.get("/client/:clientId", GET_ClientValidator, GET_Client);
 UserRouter.get("/scopes", GET_Scopes);
 
 // Invite System
@@ -78,6 +79,7 @@ if (canUseFollowAPIs) {
   UserRouter.get("/:userId/followers", ...DelegatedAuthFlow, GET_Followers);
   UserRouter.get("/follow-requests", ...DelegatedAuthFlow, GET_FollowRequests);
   UserRouter.get("/follow-status", ...DelegatedAuthFlow, GET_FollowStatusValidator, GET_FollowStatus);
+  UserRouter.get("/follow-status/:userId", ...DelegatedAuthFlow, GET_FollowStatusValidator, GET_FollowStatus);
   UserRouter.patch(
     "/accept-follow-request",
     ...DelegatedAuthFlow,

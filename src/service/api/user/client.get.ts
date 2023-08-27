@@ -9,12 +9,25 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import ClientModel from "../../../model/mongo/client";
 import { hasErrors } from "../../../utils/api";
 
-export const GET_ClientValidator = [query("id").exists().isString().isLength({ min: 3, max: 128 })];
+export const GET_ClientValidator = [query("id").optional().isString().isLength({ min: 3, max: 128 })];
 
 const GET_Client = async (req: Request, res: Response) => {
   try {
     if (hasErrors(req, res)) return;
-    const id = req.query.id;
+    if (!req.params.clientId && req.query.id) {
+      return res.status(statusCodes.clientInputError).json(
+        new ErrorResponse(errorMessages.clientInputError, {
+          errors: [
+            {
+              msg: "Invalid value",
+              param: "id",
+              location: "query",
+            },
+          ],
+        })
+      );
+    }
+    const id = req.params.clientId || req.query.id;
     const client = (await ClientModel.findOne({ id }, { id: 1, role: 1, displayName: 1, _id: 0 }).lean().exec()) as any;
     res.status(statusCodes.success).json(new SuccessResponse({ client }));
   } catch (err) {

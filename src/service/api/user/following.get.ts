@@ -22,7 +22,7 @@ const GET_Following = async (req: Request, res: Response) => {
     let loggedInUserId = res.locals.oauth.token.user._id;
     // both `/users/following` and `/users/:userId/following` share the same code. If there is a userId in params,
     // then we do some additional checks like if the target user has blocked the one requesting the API
-    // and if the requesting user is following the target user if it is not a private account.
+    // and if the requesting user is following the target user if it is a private account.
     const targetId = req.params.userId;
     if (targetId) {
       // The first two parameters reversed because we need to find if the target has blocked the source.
