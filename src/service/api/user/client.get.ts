@@ -14,7 +14,7 @@ export const GET_ClientValidator = [query("id").optional().isString().isLength({
 const GET_Client = async (req: Request, res: Response) => {
   try {
     if (hasErrors(req, res)) return;
-    if (!req.params.clientId && req.query.id) {
+    if (!req.params.clientId && !req.query.id) {
       return res.status(statusCodes.clientInputError).json(
         new ErrorResponse(errorMessages.clientInputError, {
           errors: [

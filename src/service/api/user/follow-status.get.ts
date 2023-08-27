@@ -19,7 +19,7 @@ const GET_FollowStatus = async (req: Request, res: Response) => {
     }
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
-    if (!req.params.userId && req.query.target) {
+    if (!req.params.userId && !req.query.target) {
       return res.status(statusCodes.clientInputError).json(
         new ErrorResponse(errorMessages.clientInputError, {
           errors: [
