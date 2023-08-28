@@ -19,6 +19,9 @@ import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const PATCH_UserValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 64 }),
+  body("emailVerified").optional().isBoolean(),
+  body("secondaryEmailVerified").optional().isBoolean(),
+  body("phoneVerified").optional().isBoolean(),
   ...PATCH_MeValidator,
 ];
 
