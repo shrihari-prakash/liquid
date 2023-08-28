@@ -5,20 +5,20 @@ import { Request, Response } from "express";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { Configuration } from "../../../../singleton/configuration";
+import Role from "../../../../enum/role";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 
-const GET_EditableFields = async (_: Request, res: Response) => {
+const GET_Roles = async (_: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.admin.configuration.read", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.configuration.read", res)) {
       return;
     }
-    const editableFields = Configuration.get("admin-api.user.profile.editable-fields");
-    res.status(statusCodes.success).json(new SuccessResponse({ editableFields }));
+    const roles = Object.values(Role);
+    res.status(statusCodes.success).json(new SuccessResponse({ roles }));
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
-export default GET_EditableFields;
+export default GET_Roles;

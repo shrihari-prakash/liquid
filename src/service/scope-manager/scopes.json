@@ -227,5 +227,10 @@
     "name": "user.admin.profile.verifications.write",
     "description": "Update verification status for user accounts in the system.",
     "parent": "user.admin.profile.all"
+  },
+  {
+    "name": "user.admin.configuration.read",
+    "description": "Read system configurations.",
+    "parent": "user.admin.all"
   }
 ]

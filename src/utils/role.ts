@@ -1,6 +1,6 @@
 import { Configuration } from "../singleton/configuration";
 
-const exractRank = (roleRank: string) => {
+export const exractRank = (roleRank: string) => {
   return (roleRank.match(/\(([^)]+)\)/) as string[])[1];
 };
 
