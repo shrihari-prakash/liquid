@@ -12,7 +12,7 @@ const clientSchema = {
   scope: {
     type: Array,
     required: true,
-    default: ["user.delegated.all"],
+    default: ["delegated:all"],
   },
   grants: [String],
   redirectUris: [String],

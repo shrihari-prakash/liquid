@@ -352,7 +352,7 @@ export const userSchema = {
   scope: {
     type: Array,
     required: true,
-    default: ["user.delegated.all"],
+    default: ["delegated:all"],
     willProjectForUserSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.LOW,

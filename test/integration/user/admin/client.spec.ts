@@ -17,7 +17,7 @@ describe("Client", () => {
       redirectUris: ["https://localhost:2000/health"],
       secret: "super-secure-secret",
       role: "internal_client",
-      scope: ["user.client.all"],
+      scope: ["client:all"],
       displayName: "Liquid Client",
     };
     return chai
@@ -44,7 +44,7 @@ describe("Client", () => {
       redirectUris: ["https://localhost:2000/health"],
       secret: "super-secure-secret",
       role: "external_client",
-      scope: ["user.client.all"],
+      scope: ["client:all"],
       displayName: "Liquid Client",
     };
     return chai

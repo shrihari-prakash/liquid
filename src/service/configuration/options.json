@@ -590,7 +590,7 @@
     "envName": "USER_ACCOUNT_CREATION_DEFAULT_SCOPE",
     "description": "Comma separated list of scopes that should be assigned to users accounts when they are created.",
     "type": "stringArray",
-    "default": "user.delegated.all"
+    "default": "delegated:all"
   },
   {
     "name": "user.profile.editable-fields",
