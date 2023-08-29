@@ -77,7 +77,7 @@ export function prepareAuthorizationParams(configuration) {
   const url = new URL(urlString);
   const redirect = url.searchParams.get("redirect") || configuration["oauth.redirect-uri"];
   const state = url.searchParams.get("state") || uuidv4();
-  let scope = url.searchParams.get("scope") || "user.delegated.all";
+  let scope = url.searchParams.get("scope") || "delegated:all";
   // Remove any duplicate scopes.
   scope = Array.from(new Set(scope.split(","))).join(",");
   const codeChallenge = url.searchParams.get("codeChallenge");

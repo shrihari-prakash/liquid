@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import UserModel, { IUser } from "../../../../model/mongo/user";
+import UserModel, { UserInterface, userSchema } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import Role from "../../../../enum/role";
 import { bcryptConfig } from "../create.post";
@@ -26,7 +26,7 @@ export const PATCH_UserValidator = [
 ];
 
 const PATCH_User = async (req: Request, res: Response) => {
-  if (!ScopeManager.isScopeAllowedForSession("user.admin.profile.write", res)) {
+  if (!ScopeManager.isScopeAllowedForSession("admin:profile:write", res)) {
     return;
   }
   try {
@@ -34,22 +34,36 @@ const PATCH_User = async (req: Request, res: Response) => {
     const userId = req.body.target;
     delete req.body.target;
     const errors: any[] = [];
-    Object.keys(req.body).forEach((key) => {
-      if (!Configuration.get("admin-api.user.profile.editable-fields").includes(key)) {
-        errors.push({
-          msg: "Invalid value",
-          param: key,
-          location: "body",
-        });
+    const fields = Object.keys(req.body);
+    // Any field name is invalid or is not editable by configuration value.
+    for (let i = 0; i < fields.length; i++) {
+      let field = fields[i];
+      if (!Configuration.get("admin-api.user.profile.editable-fields").includes(field)) {
+        errors.push({ msg: "Invalid value", param: field, location: "body", });
       }
-    });
+    }
     if (errors.length) {
       return res
         .status(statusCodes.unauthorized)
         .json(new ErrorResponse(errorMessages.insufficientPrivileges, { errors }));
     }
+    // Edit is not allow for any field for the current user according to the scopes.
+    for (let i = 0; i < fields.length; i++) {
+      let field = fields[i];
+      const fieldSensitivityScore = userSchema[(field as keyof typeof userSchema)]?.sensitivityScore?.write;
+      if (
+        !ScopeManager.isScopeAllowed(
+          `admin:profile:sensitive:${fieldSensitivityScore}:write`,
+          res.locals?.oauth?.token?.scope
+        )
+      ) {
+        return res
+          .status(statusCodes.unauthorized)
+          .json(new ErrorResponse(errorMessages.insufficientPrivileges, { field }));
+      }
+    }
     const currentUserRole = res.locals.user.role;
-    const target = (await UserModel.findOne({ _id: userId })) as unknown as IUser;
+    const target = (await UserModel.findOne({ _id: userId })) as unknown as UserInterface;
     // Allow changing data only upto the current user's role score.
     if (!isRoleRankHigher(currentUserRole, target.role)) {
       return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));

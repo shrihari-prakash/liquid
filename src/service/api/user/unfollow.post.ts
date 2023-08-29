@@ -17,7 +17,7 @@ import { ScopeManager } from "../../../singleton/scope-manager";
 const POST_Unfollow = async (req: Request, res: Response) => {
   let session = "";
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.unfollow", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:unfollow", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

@@ -16,7 +16,7 @@ import { canRequestFollowerInfo } from "../../../utils/user";
 
 const GET_Followers = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.read", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:read", res)) {
       return;
     }
     let loggedInUserId = res.locals.oauth.token.user._id;

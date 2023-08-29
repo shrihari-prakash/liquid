@@ -42,7 +42,7 @@ export const POST_CreateValidator = [
 const POST_Create = async (req: Request, res: Response) => {
   let session = "";
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.create", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:create:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

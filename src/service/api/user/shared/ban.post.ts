@@ -19,7 +19,7 @@ export const POST_BanValidator = [
 
 const POST_Ban = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.ban.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:ban:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

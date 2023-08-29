@@ -1,6 +1,6 @@
 import { Response } from "express";
 import FollowModel from "../model/mongo/follow";
-import UserModel, { IUser, IUserProjection } from "../model/mongo/user";
+import UserModel, { UserInterface, UserProjection } from "../model/mongo/user";
 import { Configuration } from "../singleton/configuration";
 import { errorMessages, statusCodes } from "./http-status";
 import { ErrorResponse } from "./response";
@@ -14,12 +14,12 @@ export const canRequestFollowerInfo = async ({
 }: {
   sourceId: string;
   targetId?: string;
-  target?: IUser;
+  target?: UserInterface;
   res?: Response;
 }): Promise<boolean> => {
   let user = target;
   if (!user) {
-    user = (await UserModel.findOne({ _id: targetId }, IUserProjection).exec()) as unknown as IUser;
+    user = (await UserModel.findOne({ _id: targetId }, UserProjection).exec()) as unknown as UserInterface;
   }
   if (!user.isPrivate) {
     return true;
@@ -28,7 +28,7 @@ export const canRequestFollowerInfo = async ({
     const followEntry = (await FollowModel.findOne({
       $and: [{ targetId }, { sourceId }],
     }).exec()) as any;
-    user = JSON.parse(JSON.stringify(user)) as IUser;
+    user = JSON.parse(JSON.stringify(user)) as UserInterface;
     if (!followEntry) {
       user.isFollowing = false;
     } else {

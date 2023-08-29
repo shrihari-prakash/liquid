@@ -46,7 +46,7 @@ export const PATCH_MeValidator = [
 
 const PATCH_Me = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;
@@ -54,11 +54,7 @@ const PATCH_Me = async (req: Request, res: Response) => {
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
       if (!Configuration.get("user.profile.editable-fields").includes(key)) {
-        errors.push({
-          msg: "Invalid value",
-          param: key,
-          location: "body",
-        });
+        errors.push({ msg: "Invalid value", param: key, location: "body", });
       }
     });
     const password = req.body.password;
@@ -68,18 +64,10 @@ const PATCH_Me = async (req: Request, res: Response) => {
     if (req.body.phone) {
       const errors = [];
       if (!Configuration.get("privilege.can-use-phone-number")) {
-        errors.push({
-          msg: "Invalid value",
-          param: "phone",
-          location: "body",
-        });
+        errors.push({ msg: "Invalid value", param: "phone", location: "body", });
       }
       if (!req.body.phoneCountryCode) {
-        errors.push({
-          msg: "Invalid value",
-          param: "phoneCountryCode",
-          location: "body",
-        });
+        errors.push({ msg: "Invalid value", param: "phoneCountryCode", location: "body", });
       }
       if (errors.length)
         return res

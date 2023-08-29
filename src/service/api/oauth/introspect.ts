@@ -4,10 +4,10 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import OAuthModel from "../../../model/oauth";
 import { ScopeManager } from "../../../singleton/scope-manager";
-import { IUserProjection } from "../../../model/mongo/user";
+import { UserProjection } from "../../../model/mongo/user";
 
 const ALL_Introspect = async (req: Request, res: Response) => {
-  if (!ScopeManager.isScopeAllowedForSession("oauth.client.read", res)) {
+  if (!ScopeManager.isScopeAllowedForSession("client:oauth:read", res)) {
     return;
   }
   const errors: any[] = [];
@@ -37,7 +37,7 @@ const ALL_Introspect = async (req: Request, res: Response) => {
   for (let i = 0; i < allFields.length; i++) {
     const field = allFields[i] as string;
     // @ts-ignore
-    if (!IUserProjection[field]) {
+    if (!UserProjection[field]) {
       tokenInfo.user[field] = undefined;
     }
   }

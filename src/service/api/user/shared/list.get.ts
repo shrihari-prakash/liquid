@@ -6,7 +6,7 @@ import { query } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import UserModel, { IUser } from "../../../../model/mongo/user";
+import UserModel, { UserInterface } from "../../../../model/mongo/user";
 import { checkSubscription } from "../../../../utils/subscription";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { getPaginationLimit } from "../../../../utils/pagination";
@@ -16,7 +16,7 @@ export const GET_UserInfoValidator = [query("targets").exists().isString()];
 
 const GET_List = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.read", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:read", res)) {
       return;
     };
     const query: any = {};
@@ -25,7 +25,7 @@ const GET_List = async (req: Request, res: Response) => {
     if (offset) {
       query["_id"] = { $gt: offset };
     }
-    const users = (await UserModel.find(query).limit(limit).lean().exec()) as unknown as IUser[];
+    const users = (await UserModel.find(query).limit(limit).lean().exec()) as unknown as UserInterface[];
     checkSubscription(users);
     await attachProfilePicture(users);
     res.status(statusCodes.success).json(new SuccessResponse({ users }));

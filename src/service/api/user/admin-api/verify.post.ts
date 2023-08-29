@@ -17,7 +17,7 @@ export const POST_VerifyValidator = [
 
 const POST_Verify = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.admin.profile.verifications.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("admin:profile:verifications:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

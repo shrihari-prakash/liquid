@@ -7,7 +7,7 @@ import { body } from "express-validator";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
-import UserModel, { IUser } from "../../../model/mongo/user";
+import UserModel, { UserInterface } from "../../../model/mongo/user";
 import { updateFollowCount } from "../../../utils/follow";
 import { hasErrors } from "../../../utils/api";
 import { FollowStatus } from "../../../enum/follow-status";
@@ -27,7 +27,7 @@ function sendSuccess(res: Response, status: string) {
 const POST_Follow = async (req: Request, res: Response) => {
   let session = "";
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.write.follow", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:request", res)) {
       return;
     };
     if (hasErrors(req, res)) return;
@@ -46,7 +46,7 @@ const POST_Follow = async (req: Request, res: Response) => {
     };
     const target = (await UserModel.findOne({
       _id: targetId,
-    }).exec()) as unknown as IUser;
+    }).exec()) as unknown as UserInterface;
     if (target.isPrivate) {
       query.approved = false;
       await new FollowModel(query).save(sessionOptions);

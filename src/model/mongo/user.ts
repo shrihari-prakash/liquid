@@ -1,164 +1,473 @@
-import mongoose, { ObjectId, Schema } from "mongoose";
+import { Logger } from "../../singleton/logger";
+const log = Logger.getLogger().child({ from: "user-model" });
 
-const userSchema = {
+import mongoose, { ObjectId, Schema } from "mongoose";
+import { SensitivityLevel } from "../../enum/sensitivity-level";
+
+export const userSchema = {
   username: {
     type: String,
     required: true,
     unique: true,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH
+    },
   },
   password: {
     type: String,
     required: true,
     select: false,
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.HIGH,
+      write: SensitivityLevel.HIGH
+    },
   },
   firstName: {
     type: String,
     required: true,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
   },
   middleName: {
     type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
   },
   lastName: {
     type: String,
     required: true,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
   },
-  gender: String,
+  gender: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
   preferredLanguage: {
     type: String,
     required: true,
     default: "en",
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
   },
   role: {
     type: String,
     required: true,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH
+    },
   },
-  designation: String,
-  profilePictureUrl: String,
-  profilePicturePath: String,
-  bio: String,
-  customLink: String,
-  pronouns: String,
+  designation: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
+  profilePictureUrl: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
+    },
+  },
+  profilePicturePath: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
+    },
+  },
+  bio: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
+  customLink:
+  {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
+  pronouns: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
   verified: {
     type: Boolean,
     required: true,
     default: false,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH
+    },
   },
-  verifiedDate: Date,
+  verifiedDate: {
+    type: Date,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
   followingCount: {
     type: Number,
     required: true,
     default: 0,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.READ_ONLY
+    },
   },
   followerCount: {
     type: Number,
     required: true,
     default: 0,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.READ_ONLY
+    },
   },
   isPrivate: {
     type: Boolean,
     required: true,
     default: false,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.MEDIUM
+    },
   },
   email: {
     type: String,
     required: true,
     unique: true,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
+    },
   },
   emailVerified: {
     type: Boolean,
     required: true,
     default: false,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.MEDIUM
+    },
   },
-  phone: String,
-  phoneCountryCode: String,
-  phoneVerified: Boolean,
+  phone: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
+    },
+  },
+  phoneCountryCode: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
+  phoneVerified: {
+    type: Boolean,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.MEDIUM
+    },
+  },
   secondaryEmail: {
     type: String,
     unique: true,
     sparse: true,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.MEDIUM
+    },
   },
-  secondaryEmailVerified: Boolean,
-  secondaryPhone: String,
-  secondaryPhoneCountryCode: String,
-  secondaryPhoneVerified: Boolean,
-  addressLine1: String,
-  addressLine2: String,
-  city: String,
-  country: String,
-  pincode: Number,
-  organization: String,
+  secondaryEmailVerified: {
+    type: Boolean,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.MEDIUM
+    },
+  },
+  secondaryPhone: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
+    },
+  },
+  secondaryPhoneCountryCode: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
+  secondaryPhoneVerified: {
+    type: Boolean,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.MEDIUM
+    },
+  },
+  addressLine1: {
+    type: String,
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.HIGH,
+      write: SensitivityLevel.HIGH
+    },
+  },
+  addressLine2: {
+    type: String,
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.HIGH,
+      write: SensitivityLevel.HIGH
+    },
+  },
+  city: {
+    type: String,
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.HIGH,
+      write: SensitivityLevel.HIGH
+    },
+  },
+  country: {
+    type: String,
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.HIGH,
+      write: SensitivityLevel.HIGH
+    },
+  },
+  pincode: {
+    type: Number,
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.HIGH,
+      write: SensitivityLevel.HIGH
+    },
+  },
+  organization: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
   isSubscribed: {
     type: Boolean,
     required: true,
     default: false,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
+    },
   },
   subscriptionExpiry: {
     type: Date,
     required: false,
     default: Date.now,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
+    },
   },
   subscriptionTier: {
     type: String,
     required: false,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
+    },
   },
   credits: {
     type: Number,
     required: true,
     min: 0,
     default: 0,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
+    },
   },
   scope: {
     type: Array,
     required: true,
-    default: ["user.delegated.all"],
+    default: ["delegated:all"],
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.EXTREME
+    },
   },
   invitedBy: {
     type: Schema.Types.ObjectId,
     ref: "user",
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
   },
   isActive: {
     type: Boolean,
     required: true,
     default: true,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
   },
-  deactivateDate: Date,
+  deactivateDate: {
+    type: Date,
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW
+    },
+  },
   isBanned: {
     type: Boolean,
     required: true,
     default: false,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH
+    },
   },
-  bannedDate: Date,
-  bannedReason: String,
+  bannedDate: {
+    type: Date,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH
+    },
+  },
+  bannedReason: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH
+    },
+  },
   isRestricted: {
     type: Boolean,
     required: true,
     default: false,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH
+    },
   },
-  restrictedDate: Date,
-  restrictedReason: String,
+  restrictedDate: {
+    type: Date,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH
+    },
+  },
+  restrictedReason: {
+    type: String,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH
+    },
+  },
   deleted: {
     type: Boolean,
     required: true,
     default: false,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.EXTREME
+    },
   },
-  deletedDate: Date,
-  allowedAdminAPIs: {
-    type: Array,
-    required: true,
-    default: [],
+  deletedDate: {
+    type: Date,
+    willProjectForUserSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.EXTREME
+    },
   },
   creationIp: {
     type: String,
     required: true,
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.HIGH,
+      write: SensitivityLevel.HIGH
+    },
   },
 };
 
-const schemaInstance = new mongoose.Schema(userSchema, {
-    timestamps: true,
-  }),
-  UserModel = mongoose.model("user", schemaInstance);
-
-export type IUser = {
+export type UserInterface = {
   _id: ObjectId;
   username: string;
   password?: string;
@@ -211,46 +520,30 @@ export type IUser = {
   restrictedReason: string;
   deleted: boolean;
   deletedDate: Date;
-  allowedAdminAPIs: string[];
   creationIp: string;
-  isFollowing?: boolean;
-  requested?: boolean;
   createdAt: Date;
   updatedAt: Date;
+  isFollowing?: boolean;
+  requested?: boolean;
 };
 
-export const IUserProjection = {
+// Build the user projection based on the flag `willProjectForUserSelect` in field definitions.
+export const UserProjection: any = {
   _id: 1,
-  username: 1,
-  firstName: 1,
-  middleName: 1,
-  lastName: 1,
-  gender: 1,
-  preferredLanguage: 1,
-  role: 1,
-  designation: 1,
-  bio: 1,
-  profilePictureUrl: 1,
-  profilePicturePath: 1,
-  pronouns: 1,
-  verified: 1,
-  verifiedDate: 1,
-  customLink: 1,
-  followingCount: 1,
-  followerCount: 1,
-  isPrivate: 1,
-  email: 1,
-  phone: 1,
-  organization: 1,
-  secondaryEmail: 1,
-  secondaryPhone: 1,
-  isBanned: 1,
-  isRestricted: 1,
-  isSubscribed: 1,
-  subscriptionTier: 1,
-  subscriptionExpiry: 1,
-  credits: 1,
-  invitedBy: 1,
+  createdAt: 1,
+  updatedAt: 1,
 };
+for (const field in userSchema) {
+  if (userSchema[field as keyof typeof userSchema].willProjectForUserSelect === true) {
+    UserProjection[field] = 1;
+  }
+}
+log.debug("UserProjection:");
+log.debug(UserProjection);
+
+const schemaInstance = new mongoose.Schema(userSchema, {
+  timestamps: true,
+}),
+  UserModel = mongoose.model("user", schemaInstance);
 
 export default UserModel;
