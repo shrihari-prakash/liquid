@@ -6,7 +6,7 @@ import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel, { IUser } from "../../../model/mongo/user";
+import UserModel, { UserInterface } from "../../../model/mongo/user";
 import { hasErrors } from "../../../utils/api";
 import { FollowStatus } from "../../../enum/follow-status";
 import BlockModel from "../../../model/mongo/block";
@@ -24,7 +24,7 @@ function sendSuccess(res: Response, status: string) {
 const POST_Block = async (req: Request, res: Response) => {
   let session = "";
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.block.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:block:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;
@@ -41,7 +41,7 @@ const POST_Block = async (req: Request, res: Response) => {
     };
     const target = (await UserModel.findOne({
       _id: blockedAccount,
-    }).exec()) as unknown as IUser;
+    }).exec()) as unknown as UserInterface;
     if (target) {
       await new BlockModel(query).save(sessionOptions);
       // Delete follow entry for the source person following the blocked account.

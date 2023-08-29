@@ -20,7 +20,7 @@ export const POST_AccessValidator = [
 
 const POST_Access = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.access.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:access:write", res)) {
       return;
     }
     if (hasErrors(req, res)) return;

@@ -7,7 +7,7 @@ import { Configuration } from "../singleton/configuration";
 import AuthorizationCodeModel from "./mongo/authorization-code";
 import ClientModel from "./mongo/client";
 import TokenModel from "./mongo/token";
-import UserModel, { IUser } from "./mongo/user";
+import UserModel, { UserInterface } from "./mongo/user";
 import Role from "../enum/role";
 import { ScopeManager } from "../singleton/scope-manager";
 import { Falsey } from "@node-oauth/oauth2-server";
@@ -297,7 +297,7 @@ const OAuthModel = {
     }
   },
 
-  validateScope: (user: IUser, client: Client, scope: string | string[]): Promise<string | string[] | Falsey> => {
+  validateScope: (user: UserInterface, client: Client, scope: string | string[]): Promise<string | string[] | Falsey> => {
     log.debug("Validating scope %s for client %s and user %s.", scope, client.id, user.username);
     return new Promise((resolve) => {
       const clientHasAccess = ScopeManager.canRequestScope(scope, client);

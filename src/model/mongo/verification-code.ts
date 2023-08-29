@@ -19,7 +19,7 @@ const verificationCodeSchema = {
 const schemaInstance = new mongoose.Schema(verificationCodeSchema),
   VerificationCodeModel = mongoose.model("verification-code", schemaInstance);
 
-export interface IVerificationCode extends Document {
+export interface VerificationCodeInterface extends Document {
   _id: ObjectId;
   belongsTo: ObjectId;
   verificationMethod: string;

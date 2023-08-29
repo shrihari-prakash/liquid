@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel, { IUser, IUserProjection } from "../../../model/mongo/user";
+import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
 import { body } from "express-validator";
 import { hasErrors } from "../../../utils/api";
 import { Redis } from "../../../singleton/redis";
@@ -19,7 +19,7 @@ export const POST_SearchValidator = [body("query").exists().isString().isLength(
 const redisPrefix = "search:";
 const POST_Search = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.search", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:profile:search", res)) {
       return;
     };
     if (hasErrors(req, res)) return;
@@ -44,9 +44,9 @@ const POST_Search = async (req: Request, res: Response) => {
         },
       });
     }
-    const results = (await UserModel.find({ $or }, IUserProjection).limit(
+    const results = (await UserModel.find({ $or }, UserProjection).limit(
       Configuration.get("user.search-results.limit")
-    )) as unknown as IUser[];
+    )) as unknown as UserInterface[];
     checkSubscription(results);
     await attachProfilePicture(results);
     if (Configuration.get("privilege.can-use-cache")) {

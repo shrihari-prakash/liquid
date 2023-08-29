@@ -19,7 +19,7 @@ export const POST_RestrictValidator = [
 
 const POST_Restrict = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.restrict.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:restrict:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

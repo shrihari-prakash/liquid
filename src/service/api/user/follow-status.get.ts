@@ -14,7 +14,7 @@ export const GET_FollowStatusValidator = [query("target").optional().isString().
 
 const GET_FollowStatus = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.read", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:read", res)) {
       return;
     }
     if (hasErrors(req, res)) return;

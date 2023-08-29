@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel, { IUser, IUserProjection } from "../../../model/mongo/user";
+import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
 import { getBlockStatus } from "../../../utils/block";
 import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
@@ -14,7 +14,7 @@ import { canRequestFollowerInfo } from "../../../utils/user";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.all", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:profile:read", res)) {
       return;
     }
     const sourceId = res.locals.oauth.token.user._id;
@@ -22,7 +22,7 @@ const GET__UserId = async (req: Request, res: Response) => {
     // The first two parameters reversed because we need to find if the target has blocked the source.
     const isBlocked = await getBlockStatus(targetId, sourceId, res);
     if (isBlocked) return;
-    let user = (await UserModel.findOne({ _id: targetId }, IUserProjection).exec()) as unknown as IUser;
+    let user = (await UserModel.findOne({ _id: targetId }, UserProjection).exec()) as unknown as UserInterface;
     const isFollowerInfoAllowed = await canRequestFollowerInfo({ sourceId, target: user });
     if (!isFollowerInfoAllowed) {
       // @ts-expect-error

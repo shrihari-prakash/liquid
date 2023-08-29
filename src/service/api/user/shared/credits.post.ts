@@ -29,7 +29,7 @@ export const POST_CreditsValidator = [
 const POST_Credits = async (req: Request, res: Response) => {
   let session = "";
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.credits.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:credits:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

@@ -17,7 +17,7 @@ export const PATCH_AcceptFollowRequestValidator = [body("request").exists().isSt
 const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
   let session = "";
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.write.accept-follow-request", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:accept", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

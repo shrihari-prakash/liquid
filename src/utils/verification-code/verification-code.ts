@@ -2,12 +2,12 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { v4 as uuidv4 } from "uuid";
 
-import { IUser } from "../../model/mongo/user";
+import { UserInterface } from "../../model/mongo/user";
 import VerificationCodeModel from "../../model/mongo/verification-code";
 import { Configuration } from "../../singleton/configuration";
 import { Mailer } from "../../singleton/mailer";
 
-export const generateVerificationCode = async function (user: IUser) {
+export const generateVerificationCode = async function (user: UserInterface) {
   await VerificationCodeModel.deleteMany({ belongsTo: user._id });
   const code = {
     belongsTo: user._id,

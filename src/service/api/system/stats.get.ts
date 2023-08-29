@@ -12,7 +12,7 @@ import { ScopeManager } from "../../../singleton/scope-manager";
 
 const GET__Stats = async (_: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("system.<ENTITY>.all", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:system:all", res)) {
       return;
     };
     const heapTotal = process.memoryUsage().heapTotal / 1024 / 1024;

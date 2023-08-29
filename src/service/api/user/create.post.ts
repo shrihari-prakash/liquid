@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import { body } from "express-validator";
 import moment from "moment";
 
-import UserModel, { IUser } from "../../../model/mongo/user";
+import UserModel, { UserInterface } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
@@ -45,7 +45,7 @@ export const POST_CreateValidator = [
   body("inviteCode").optional().isString(),
 ];
 
-async function validateInviteCode(req: Request, res: Response, user: IUser) {
+async function validateInviteCode(req: Request, res: Response, user: UserInterface) {
   if (!Configuration.get("user.account-creation.enable-invite-only")) {
     return true;
   }
@@ -69,7 +69,7 @@ async function validateInviteCode(req: Request, res: Response, user: IUser) {
   return true;
 }
 
-async function useInviteCode(user: IUser, code: string, sessionOptions: { session: ClientSession } | undefined) {
+async function useInviteCode(user: UserInterface, code: string, sessionOptions: { session: ClientSession } | undefined) {
   if (
     Configuration.get("user.account-creation.enable-invite-only") ||
     Configuration.get("user.account-creation.force-generate-invite-codes")
@@ -102,7 +102,7 @@ const POST_Create = async (req: Request, res: Response) => {
     if (Configuration.get("user.account-creation.enable-ip-based-throttle")) {
       const ipResult = (await UserModel.findOne({
         creationIp: req.ip,
-      }).exec()) as unknown as IUser;
+      }).exec()) as unknown as UserInterface;
       if (ipResult && ipResult.creationIp === req.ip) {
         const duration = moment.duration(moment().diff(moment(ipResult.createdAt)));
         const difference = duration.asSeconds();
@@ -140,7 +140,7 @@ const POST_Create = async (req: Request, res: Response) => {
     }
     const existingUser = (await UserModel.findOne({
       $or: [{ email: sanitizeEmailAddress(email) }, { username }],
-    }).exec()) as unknown as IUser;
+    }).exec()) as unknown as UserInterface;
     if (existingUser) {
       const duplicateFields = [];
       if (username === existingUser.username) duplicateFields.push("username");
@@ -186,7 +186,7 @@ const POST_Create = async (req: Request, res: Response) => {
       await MongoDB.abortTransaction(session);
       return;
     }
-    const newUser = (await new UserModel(toInsert).save(sessionOptions)) as unknown as IUser;
+    const newUser = (await new UserModel(toInsert).save(sessionOptions)) as unknown as UserInterface;
     if (shouldVerifyEmail) {
       await generateVerificationCode(newUser);
     }

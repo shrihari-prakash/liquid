@@ -23,7 +23,7 @@ export const POST_ClientValidator = [
 
 const POST_Client = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.admin.client.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("admin:system:client:write", res)) {
       return;
     }
     if (hasErrors(req, res)) return;

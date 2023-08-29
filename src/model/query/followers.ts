@@ -1,5 +1,5 @@
 import { mongo } from "mongoose";
-import { IUserProjection } from "../mongo/user";
+import { UserProjection } from "../mongo/user";
 
 export const useFollowersQuery: any = (userId: string, limit: number) => [
   { $match: { $and: [{ targetId: new mongo.ObjectId(userId) }, { approved: true }] } },
@@ -10,7 +10,7 @@ export const useFollowersQuery: any = (userId: string, limit: number) => [
       from: "users",
       let: { sourceId: "$sourceId" },
       as: "source",
-      pipeline: [{ $match: { $expr: { $eq: ["$$sourceId", "$_id"] } } }, { $project: IUserProjection }],
+      pipeline: [{ $match: { $expr: { $eq: ["$$sourceId", "$_id"] } } }, { $project: UserProjection }],
     },
   },
   { $unwind: "$source" },

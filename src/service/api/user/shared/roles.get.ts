@@ -11,7 +11,7 @@ import { extractRank, findRoleRank } from "../../../../utils/role";
 
 const GET_Roles = async (_: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.configuration.read", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:configuration:read", res)) {
       return;
     }
     const roles = Object.values(Role).map((role) => {
