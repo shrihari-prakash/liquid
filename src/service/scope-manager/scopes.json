@@ -156,22 +156,22 @@
   {
     "name": "client:profile:ban:write",
     "description": "Ban and unban user accounts in the system.",
-    "parent": "client:profile:write"
+    "parent": "client:profile:all"
   },
   {
     "name": "client:profile:restrict:write",
     "description": "Restrict and unrestrict user accounts in the system.",
-    "parent": "client:profile:write"
+    "parent": "client:profile:all"
   },
   {
     "name": "client:profile:credits:write",
     "description": "Modify credits of user accounts in the system.",
-    "parent": "client:profile:write"
+    "parent": "client:profile:all"
   },
   {
     "name": "client:profile:subscriptions:write",
     "description": "Modify subscriptions of user accounts in the system.",
-    "parent": "client:profile:write"
+    "parent": "client:profile:all"
   },
   {
     "name": "client:configuration:read",
@@ -216,7 +216,7 @@
   {
     "name": "admin:profile:access:write",
     "description": "View and manage permissions of other users and clients in the system.",
-    "parent": "user.admin.profile.write"
+    "parent": "admin:profile:all"
   },
   {
     "name": "admin:profile:create:write",
