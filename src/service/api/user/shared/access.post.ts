@@ -10,6 +10,7 @@ import { hasErrors } from "../../../../utils/api";
 import UserModel from "../../../../model/mongo/user";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 import ClientModel from "../../../../model/mongo/client";
+import { flushUserInfoFromRedis } from "../../../../model/oauth";
 
 export const POST_AccessValidator = [
   body("targets").exists().isArray(),
@@ -77,6 +78,7 @@ const POST_Access = async (req: Request, res: Response) => {
       }
     );
     res.status(statusCodes.success).json(new SuccessResponse());
+    flushUserInfoFromRedis(req.body.targets);
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

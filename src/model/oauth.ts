@@ -64,9 +64,15 @@ const getPrefixedCode = (code: string) => `${codePrefix}${code}`;
 const userIdPrefix = "user:";
 const getPrefixedUserId = (userId: string) => `${userIdPrefix}${userId}`;
 
-export const flushUserInfoFromRedis = async (userId: string) => {
-  await Redis.client.del(getPrefixedUserId(userId));
-  log.debug("User info for %s flushed from cache.", userId);
+export const flushUserInfoFromRedis = async (userIds: string | string[]) => {
+  if (typeof userIds === "string") {
+    userIds = [userIds];
+  }
+  for (let i = 0; i < userIds.length; i++) {
+    const key = getPrefixedUserId(userIds[i]);
+    await Redis.client.del(key);
+    log.debug("User info for %s flushed from cache.", key);
+  }
 };
 
 const getUserInfo = async (userId: string) => {
@@ -297,7 +303,11 @@ const OAuthModel = {
     }
   },
 
-  validateScope: (user: UserInterface, client: Client, scope: string | string[]): Promise<string | string[] | Falsey> => {
+  validateScope: (
+    user: UserInterface,
+    client: Client,
+    scope: string | string[]
+  ): Promise<string | string[] | Falsey> => {
     log.debug("Validating scope %s for client %s and user %s.", scope, client.id, user.username);
     return new Promise((resolve) => {
       const clientHasAccess = ScopeManager.canRequestScope(scope, client);
