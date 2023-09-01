@@ -75,14 +75,14 @@ export function getPlaceholder(text, configuration) {
 export function prepareAuthorizationParams(configuration) {
   const urlString = window.location;
   const url = new URL(urlString);
-  const redirect = url.searchParams.get("redirect") || configuration["oauth.redirect-uri"];
+  const redirect = url.searchParams.get("redirect") || url.searchParams.get("redirect_uri") || configuration["oauth.redirect-uri"];
   const state = url.searchParams.get("state") || uuidv4();
   let scope = url.searchParams.get("scope") || "delegated:all";
   // Remove any duplicate scopes.
   scope = Array.from(new Set(scope.split(","))).join(",");
-  const codeChallenge = url.searchParams.get("codeChallenge");
-  const codeChallengeMethod = url.searchParams.get("codeChallengeMethod");
-  const clientId = url.searchParams.get("clientId") || configuration["oauth.client-id"];
+  const codeChallenge = url.searchParams.get("codeChallenge") || url.searchParams.get("code_challenge");
+  const codeChallengeMethod = url.searchParams.get("codeChallengeMethod") || url.searchParams.get("code_challenge_method");
+  const clientId = url.searchParams.get("clientId") || url.searchParams.get("client_id") || configuration["oauth.client-id"];
   const params = {
     response_type: "code",
     client_id: clientId,
