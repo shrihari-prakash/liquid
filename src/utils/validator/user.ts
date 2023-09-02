@@ -38,7 +38,6 @@ export const getLastNameValidator = (fn: typeof query | typeof body, required = 
   const requiredFn = required ? "exists" : "optional";
   return fn(field)
     [requiredFn]()
-    .isString()
     .matches(/^(__unset__|[A-Za-z]+)$/)
     .isLength({ min: 3, max: 32 });
 };
