@@ -5,7 +5,7 @@ import { query, body } from "express-validator";
 
 import { Configuration } from "../../singleton/configuration";
 
-export const nameValidationRegex = /^[a-z,A-Z,á,é,í,ó,ú,â,ê,ô,ã,õ,ç,Á,É,Í,Ó,Ú,Â,Ê,Ô,Ã,Õ,Ç,ü,ñ,Ü,Ñ]+$/;
+export const nameValidationRegex = /^[\p{L}\p{M}'-]+$/;
 
 export const getUsernameValidator = (fn: typeof query | typeof body, required = false, nested = false) => {
   const field = `${nested ? "*." : ""}username`;
@@ -35,7 +35,7 @@ export const getMiddleNameValidator = (fn: typeof query | typeof body, required 
   return fn(field)
     [requiredFn]()
     .isString()
-    .matches(/^(__unset__|[a-z,A-Z,á,é,í,ó,ú,â,ê,ô,ã,õ,ç,Á,É,Í,Ó,Ú,Â,Ê,Ô,Ã,Õ,Ç,ü,ñ,Ü,Ñ]+)$/)
+    .matches(/^(__unset__|[\p{L}\p{M}'-]+)$/)
     .isLength({ min: 3, max: 32 });
 };
 
