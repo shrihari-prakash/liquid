@@ -481,17 +481,25 @@
     "default": false
   },
   {
-    "name": "user.account-creation.username-validation-regex",
-    "displayName": "User Account Creation Username Validation Regex",
-    "envName": "USER_ACCOUNT_CREATION_USERNAME_VALIDATION_REGEX",
+    "name": "user.profile.username-validation-regex",
+    "displayName": "User Profile Username Validation Regex",
+    "envName": "USER_PROFILE_USERNAME_VALIDATION_REGEX",
     "description": "Specifies the regex to be used to validate username for user accounts.",
     "type": "string",
     "default": "^[a-z_][a-z0-9._]*$"
   },
   {
-    "name": "user.account-creation.password-validation-regex",
-    "displayName": "User Account Creation Password Validation Regex",
-    "envName": "USER_ACCOUNT_CREATION_PASSWORD_VALIDATION_REGEX",
+    "name": "user.profile.name-validation-regex",
+    "displayName": "User Profile Name Validation Regex",
+    "envName": "USER_PROFILE_NAME_VALIDATION_REGEX",
+    "description": "Specifies the regex to be used to validate name for user accounts.",
+    "type": "string",
+    "default": "^[\\p{L}\\p{M}'-]+$"
+  },
+  {
+    "name": "user.profile.password-validation-regex",
+    "displayName": "User Profile Password Validation Regex",
+    "envName": "USER_PROFILE_PASSWORD_VALIDATION_REGEX",
     "description": "Specifies the regex to be used to validate password for user accounts.",
     "type": "string"
   },
