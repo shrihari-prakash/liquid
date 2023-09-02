@@ -39,7 +39,10 @@ const PATCH_User = async (req: Request, res: Response) => {
     for (let i = 0; i < fields.length; i++) {
       let field = fields[i];
       if (!Configuration.get("admin-api.user.profile.editable-fields").includes(field)) {
-        errors.push({ msg: "Invalid value", param: field, location: "body", });
+        errors.push({ msg: "Invalid value", param: field, location: "body" });
+      }
+      if (req.body[field] === "__unset__") {
+        req.body[field] = null;
       }
     }
     if (errors.length) {
@@ -50,7 +53,7 @@ const PATCH_User = async (req: Request, res: Response) => {
     // Edit is not allow for any field for the current user according to the scopes.
     for (let i = 0; i < fields.length; i++) {
       let field = fields[i];
-      const fieldSensitivityScore = userSchema[(field as keyof typeof userSchema)]?.sensitivityScore?.write;
+      const fieldSensitivityScore = userSchema[field as keyof typeof userSchema]?.sensitivityScore?.write;
       if (
         !ScopeManager.isScopeAllowed(
           `admin:profile:sensitive:${fieldSensitivityScore}:write`,
