@@ -9,7 +9,7 @@ import { Configuration } from "../../../singleton/configuration";
 
 const GET__Settings = async (_: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("delegated:system:settings", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("delegated:system:settings:read", res)) {
       return;
     }
     const settings: any = {};

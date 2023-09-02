@@ -10,13 +10,18 @@
   },
   {
     "name": "delegated:system:all",
-    "description": "View and manage system settings.",
+    "description": "View and manage the system.",
     "parent": "delegated:all"
   },
   {
-    "name": "delegated:system:settings",
-    "description": "View system settings.",
+    "name": "delegated:system:settings:all",
+    "description": "View and manage system settings.",
     "parent": "delegated:system:all"
+  },
+  {
+    "name": "delegated:system:settings:read",
+    "description": "View system settings.",
+    "parent": "delegated:system:settings:all"
   },
   {
     "name": "delegated:profile:all",
