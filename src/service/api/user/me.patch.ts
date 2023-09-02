@@ -27,6 +27,20 @@ import { ScopeManager } from "../../../singleton/scope-manager";
 
 const languages = Language.map((l) => l.code);
 
+const alphaRegex = /^(__unset__|[A-Za-z]+)$/;
+
+const urlValidator = (value: string) => {
+  if (value === "__unset__") {
+    return true;
+  }
+  try {
+    new URL(value);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
+
 export const PATCH_MeValidator = [
   getUsernameValidator(body, false),
   getPasswordValidator(body, false),
@@ -36,12 +50,12 @@ export const PATCH_MeValidator = [
   getLastNameValidator(body, false),
   getPhoneCountryCodeValidator(body, false),
   getPhoneValidator(body, false),
-  body("gender").optional().isString().isLength({ min: 2, max: 128 }),
+  body("gender").optional().isString().matches(alphaRegex).isLength({ min: 2, max: 128 }),
   body("preferredLanguage").optional().isString().isAlpha().isIn(languages).isLength({ min: 2, max: 2 }),
-  body("bio").optional().isString().isLength({ min: 3, max: 256 }),
-  body("customLink").optional().isURL().isLength({ min: 3, max: 256 }),
-  body("pronouns").optional().isString().isLength({ min: 3, max: 24 }),
-  body("organization").optional().isString().isLength({ min: 3, max: 128 }),
+  body("bio").optional().isString().matches(alphaRegex).isLength({ min: 3, max: 256 }),
+  body("customLink").optional().custom(urlValidator).isURL().isLength({ max: 256 }),
+  body("pronouns").optional().isString().matches(alphaRegex).isLength({ min: 3, max: 24 }),
+  body("organization").optional().isString().matches(alphaRegex).isLength({ min: 3, max: 128 }),
 ];
 
 const PATCH_Me = async (req: Request, res: Response) => {
