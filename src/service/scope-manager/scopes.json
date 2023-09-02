@@ -9,6 +9,16 @@
     "parent": "*"
   },
   {
+    "name": "delegated:system:all",
+    "description": "View and manage system settings.",
+    "parent": "delegated:all"
+  },
+  {
+    "name": "delegated:system:settings",
+    "description": "View system settings.",
+    "parent": "delegated:system:all"
+  },
+  {
     "name": "delegated:profile:all",
     "description": "View and manage your profile information.",
     "parent": "delegated:all"
