@@ -755,13 +755,5 @@
     "type": "stringArray",
     "default": "super_admin(1),admin(2),internal_client(2),external_client(3),user(4)",
     "relatedOptions": ["system.role.extended-roles"]
-  },
-  {
-    "name": "system.role.editor-roles",
-    "displayName": "Editor Roles",
-    "envName": "SYSTEM_ROLE_EDITOR_ROLES",
-    "description": "Comma specified list of roles which can edit roles of other users.",
-    "type": "stringArray",
-    "default": "super_admin,admin,internal_client"
   }
 ]

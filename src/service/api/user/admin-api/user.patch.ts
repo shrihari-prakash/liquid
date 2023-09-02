@@ -65,17 +65,16 @@ const PATCH_User = async (req: Request, res: Response) => {
     const currentUserRole = res.locals.user.role;
     const target = (await UserModel.findOne({ _id: userId })) as unknown as UserInterface;
     // Allow changing data only upto the current user's role score.
-    if (!isRoleRankHigher(currentUserRole, target.role)) {
+    if (!isRoleRankHigher(currentUserRole, target.role) && currentUserRole !== Role.SUPER_ADMIN) {
       return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
     }
     const role = req.body.role;
     if (role) {
       const allRoles = Object.values(Role);
-      const editorRoles = Configuration.get("system.role.editor-roles");
       if (!allRoles.includes(role)) {
         return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
       }
-      if (!editorRoles.includes(currentUserRole) || !isRoleRankHigher(currentUserRole, role)) {
+      if (!isRoleRankHigher(currentUserRole, role) && currentUserRole !== Role.SUPER_ADMIN) {
         return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       }
     }
