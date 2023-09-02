@@ -12,5 +12,8 @@ export const findRoleRank = (role: string) => {
 export const isRoleRankHigher = (currentRole: string, comparisonRole: string) => {
   const currentRoleRank = extractRank(findRoleRank(currentRole));
   const comparisonRoleRank = extractRank(findRoleRank(comparisonRole));
+  if (Configuration.get("admin-api.user.profile.can-edit-peer-data")) {
+    return parseInt(currentRoleRank) <= parseInt(comparisonRoleRank);
+  }
   return parseInt(currentRoleRank) < parseInt(comparisonRoleRank);
 };

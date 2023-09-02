@@ -609,6 +609,14 @@
     "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName,bio,pronouns,customLink,organization,designation,gender,preferredLanguage"
   },
   {
+    "name": "admin-api.user.profile.can-edit-peer-data",
+    "displayName": "Profile Can Edit Peer Profile Data (Admin API)",
+    "envName": "ADMIN_API_USER_PROFILE_CAN_EDIT_PEER_DATA",
+    "description": "Specifies if roles with equal rank can edit profile data of each other.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "user.search.search-fields",
     "displayName": "User Search Fields",
     "envName": "USER_SEARCH_SEARCH_FIELDS",
