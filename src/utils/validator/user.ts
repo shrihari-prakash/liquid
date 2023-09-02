@@ -30,16 +30,17 @@ export const getFirstNameValidator = (fn: typeof query | typeof body, required =
 export const getMiddleNameValidator = (fn: typeof query | typeof body, required = false, nested = false) => {
   const field = `${nested ? "*." : ""}middleName`;
   const requiredFn = required ? "exists" : "optional";
-  return fn(field)[requiredFn]().isString().isAlpha().isLength({ min: 3, max: 32 });
+  return fn(field)
+    [requiredFn]()
+    .isString()
+    .matches(/^(__unset__|[A-Za-z]+)$/)
+    .isLength({ min: 3, max: 32 });
 };
 
 export const getLastNameValidator = (fn: typeof query | typeof body, required = false, nested = false) => {
   const field = `${nested ? "*." : ""}lastName`;
   const requiredFn = required ? "exists" : "optional";
-  return fn(field)
-    [requiredFn]()
-    .matches(/^(__unset__|[A-Za-z]+)$/)
-    .isLength({ min: 3, max: 32 });
+  return fn(field)[requiredFn]().isString().isAlpha().isLength({ min: 3, max: 32 });
 };
 
 const passwordRegex = Configuration.get("user.account-creation.password-validation-regex");
