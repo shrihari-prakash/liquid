@@ -30,7 +30,7 @@ export const getFirstNameValidator = (fn: typeof query | typeof body, required =
 export const getMiddleNameValidator = (fn: typeof query | typeof body, required = false, nested = false) => {
   const field = `${nested ? "*." : ""}middleName`;
   const requiredFn = required ? "exists" : "optional";
-  return fn(field)[requiredFn]().isString().isAlpha().isLength({ min: 3, max: 32 });
+  return fn(field)[requiredFn]().isString().isAlpha().isLength({ max: 32 });
 };
 
 export const getLastNameValidator = (fn: typeof query | typeof body, required = false, nested = false) => {

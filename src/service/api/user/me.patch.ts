@@ -36,25 +36,25 @@ export const PATCH_MeValidator = [
   getLastNameValidator(body, false),
   getPhoneCountryCodeValidator(body, false),
   getPhoneValidator(body, false),
-  body("gender").optional().isString().isLength({ min: 2, max: 128 }),
+  body("gender").optional().isString().isLength({ max: 128 }),
   body("preferredLanguage").optional().isString().isAlpha().isIn(languages).isLength({ min: 2, max: 2 }),
-  body("bio").optional().isString().isLength({ min: 3, max: 256 }),
-  body("customLink").optional().isURL().isLength({ min: 3, max: 256 }),
-  body("pronouns").optional().isString().isLength({ min: 3, max: 24 }),
-  body("organization").optional().isString().isLength({ min: 3, max: 128 }),
+  body("bio").optional().isString().isLength({ max: 256 }),
+  body("customLink").optional().isURL().isLength({ max: 256 }),
+  body("pronouns").optional().isString().isLength({ max: 24 }),
+  body("organization").optional().isString().isLength({ max: 128 }),
 ];
 
 const PATCH_Me = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
-    };
+    }
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
       if (!Configuration.get("user.profile.editable-fields").includes(key)) {
-        errors.push({ msg: "Invalid value", param: key, location: "body", });
+        errors.push({ msg: "Invalid value", param: key, location: "body" });
       }
     });
     const password = req.body.password;
@@ -64,10 +64,10 @@ const PATCH_Me = async (req: Request, res: Response) => {
     if (req.body.phone) {
       const errors = [];
       if (!Configuration.get("privilege.can-use-phone-number")) {
-        errors.push({ msg: "Invalid value", param: "phone", location: "body", });
+        errors.push({ msg: "Invalid value", param: "phone", location: "body" });
       }
       if (!req.body.phoneCountryCode) {
-        errors.push({ msg: "Invalid value", param: "phoneCountryCode", location: "body", });
+        errors.push({ msg: "Invalid value", param: "phoneCountryCode", location: "body" });
       }
       if (errors.length)
         return res
