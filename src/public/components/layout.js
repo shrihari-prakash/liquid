@@ -14,22 +14,31 @@ export default function Layout({ children }) {
   }
 
   React.useEffect(() => {
-    const allOptions = fetch("./configuration/options.json");
-    const appConfig = fetch("/app-config.json");
+    const metadataPromise = fetch("./configuration/options.json");
+    const frontendConfigPromise = fetch("/app-config.json");
+    const backendConfigPromise = fetch("/system/settings-insecure");
     const startTime = +new Date();
-    Promise.all([allOptions, appConfig]).then(async (results) => {
-      const [optionsResponse, confResponse] = results;
-      const options = await optionsResponse.json();
-      const conf = await confResponse.json();
-      console.log(Object.keys(options).length + " options loaded.", options);
-      console.log(Object.keys(conf).length + " options configured.", conf);
-      options.forEach((option) => {
-        if (typeof conf[option.name] === "undefined") {
-          conf[option.name] = option.default;
+    Promise.all([metadataPromise, frontendConfigPromise, backendConfigPromise]).then(async (results) => {
+      const [metadataResponse, frontendConfigResponse, backendConfigResponse] = results;
+      const metadata = await metadataResponse.json();
+      const frontendConfig = await frontendConfigResponse.json();
+      const backendConfig = (await backendConfigResponse.json()).data.settings;
+      console.log(Object.keys(metadata).length + " options loaded.");
+      console.log(Object.keys(frontendConfig).length + " options configured.", frontendConfig);
+      console.log(Object.keys(backendConfig).length + " settings loaded.", backendConfig);
+      for (const option in backendConfig) {
+        if (!(option in frontendConfig)) {
+          console.log(option + " set from backend settings.");
+          frontendConfig[option] = backendConfig[option];
+        }
+      }
+      metadata.forEach((option) => {
+        if (!(option.name in frontendConfig)) {
+          frontendConfig[option.name] = option.default;
         }
       });
-      console.log("Full configuration:", conf);
-      setConfiguration(conf);
+      console.log("Full configuration:", frontendConfig);
+      setConfiguration(frontendConfig);
       console.log("Static page loaded in " + (+new Date() - startTime) + "ms");
     });
   }, []);

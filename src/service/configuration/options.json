@@ -460,7 +460,15 @@
     "name": "privilege.can-create-account",
     "displayName": "Can Use Create Account",
     "envName": "CAN_CREATE_ACCOUNT",
-    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`. Also modify `privilege.can-create-account` in your frontend config.",
+    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`.",
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "name": "privilege.can-reset-password",
+    "displayName": "Can Reset Password",
+    "envName": "CAN_RESET_PASSWORD",
+    "description": "Specifies if users can reset their passwords using forgot password option.",
     "type": "boolean",
     "default": true
   },
@@ -788,7 +796,9 @@
     "default": [
       "privilege.can-create-account",
       "privilege.can-use-phone-number",
-      "user.account-creation.enable-invite-only"
+      "user.account-creation.enable-invite-only",
+      "user.account-creation.require-email-verification",
+      "privilege.can-reset-password"
     ]
   }
 ]
