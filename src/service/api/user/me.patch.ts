@@ -36,12 +36,12 @@ export const PATCH_MeValidator = [
   getLastNameValidator(body, false),
   getPhoneCountryCodeValidator(body, false),
   getPhoneValidator(body, false),
-  body("gender").optional().isString().isLength({ max: 128 }),
+  body("gender").optional().isString().isLength({ min: 2, max: 128 }),
   body("preferredLanguage").optional().isString().isAlpha().isIn(languages).isLength({ min: 2, max: 2 }),
-  body("bio").optional().isString().isLength({ max: 256 }),
-  body("customLink").optional().isURL().isLength({ max: 256 }),
-  body("pronouns").optional().isString().isLength({ max: 24 }),
-  body("organization").optional().isString().isLength({ max: 128 }),
+  body("bio").optional().isString().isLength({ min: 3, max: 256 }),
+  body("customLink").optional().isURL().isLength({ min: 3, max: 256 }),
+  body("pronouns").optional().isString().isLength({ min: 3, max: 24 }),
+  body("organization").optional().isString().isLength({ min: 3, max: 128 }),
 ];
 
 const PATCH_Me = async (req: Request, res: Response) => {
@@ -55,6 +55,9 @@ const PATCH_Me = async (req: Request, res: Response) => {
     Object.keys(req.body).forEach((key) => {
       if (!Configuration.get("user.profile.editable-fields").includes(key)) {
         errors.push({ msg: "Invalid value", param: key, location: "body" });
+      }
+      if (req.body[key] === "__unset__") {
+        req.body[key] = null;
       }
     });
     const password = req.body.password;
