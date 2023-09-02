@@ -5,6 +5,8 @@ import { query, body } from "express-validator";
 
 import { Configuration } from "../../singleton/configuration";
 
+export const nameValidationRegex = /^[a-z,A-Z,á,é,í,ó,ú,â,ê,ô,ã,õ,ç,Á,É,Í,Ó,Ú,Â,Ê,Ô,Ã,Õ,Ç,ü,ñ,Ü,Ñ]+$/;
+
 export const getUsernameValidator = (fn: typeof query | typeof body, required = false, nested = false) => {
   const field = `${nested ? "*." : ""}username`;
   const requiredFn = required ? "exists" : "optional";
@@ -24,7 +26,7 @@ export const getEmailValidator = (fn: typeof query | typeof body, required = fal
 export const getFirstNameValidator = (fn: typeof query | typeof body, required = false, nested = false) => {
   const field = `${nested ? "*." : ""}firstName`;
   const requiredFn = required ? "exists" : "optional";
-  return fn(field)[requiredFn]().isString().isAlpha().isLength({ min: 3, max: 32 });
+  return fn(field)[requiredFn]().isString().matches(nameValidationRegex).isLength({ min: 3, max: 32 });
 };
 
 export const getMiddleNameValidator = (fn: typeof query | typeof body, required = false, nested = false) => {
@@ -33,14 +35,14 @@ export const getMiddleNameValidator = (fn: typeof query | typeof body, required 
   return fn(field)
     [requiredFn]()
     .isString()
-    .matches(/^(__unset__|[A-Za-z]+)$/)
+    .matches(/^(__unset__|[a-z,A-Z,á,é,í,ó,ú,â,ê,ô,ã,õ,ç,Á,É,Í,Ó,Ú,Â,Ê,Ô,Ã,Õ,Ç,ü,ñ,Ü,Ñ]+)$/)
     .isLength({ min: 3, max: 32 });
 };
 
 export const getLastNameValidator = (fn: typeof query | typeof body, required = false, nested = false) => {
   const field = `${nested ? "*." : ""}lastName`;
   const requiredFn = required ? "exists" : "optional";
-  return fn(field)[requiredFn]().isString().isAlpha().isLength({ min: 3, max: 32 });
+  return fn(field)[requiredFn]().isString().matches(nameValidationRegex).isLength({ min: 3, max: 32 });
 };
 
 const passwordRegex = Configuration.get("user.account-creation.password-validation-regex");
