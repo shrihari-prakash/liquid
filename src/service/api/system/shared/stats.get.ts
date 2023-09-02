@@ -1,14 +1,14 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/code" });
 
 import { Request, Response } from "express";
 import * as os from "os";
 
-import app from "../../..";
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { Configuration } from "../../../singleton/configuration";
-import { ScopeManager } from "../../../singleton/scope-manager";
+import app from "../../../..";
+import { errorMessages, statusCodes } from "../../../../utils/http-status";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
+import { Configuration } from "../../../../singleton/configuration";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 
 const GET__Stats = async (_: Request, res: Response) => {
   try {
