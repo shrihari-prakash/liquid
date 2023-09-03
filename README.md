@@ -15,13 +15,13 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 * **Plug & Play:** With the Liquid docker package, say goodbye to complex environment setup.
 * **High degree customization capabilities:** Customize and configure every part of the UI and service so login pages can look like your own.
 * **OAuth based authentication:** Secure and seamless authentication based on a battle tested OAuth core powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) from [@node-oauth](https://github.com/node-oauth).
-* **Social Features:** Liquid comes with out of the box support for social features like follow - unfollow, private accounts and blocking.
-* **Gamification Support:** Includes APIs for reward points mechanisms and subscription tiers.
-* **Admin APIs:** Empower administrators with the ability to manage users effectively by editing profile informations, banning and restricting accounts when necessary.
+* **Social Features:** Liquid is more than just an authentication screen. Liquid comes with out of the box support for social features like follow - unfollow, private accounts and blocking.
+* **Admin APIs:** Support for elevated administrative APIs that let you effectively manage users by editing profile informations, banning and restricting accounts when necessary.
 * **Profile Pictures:** Provide users with the option to personalize their profiles with profile pictures.
 * **Microservice Integration:** Seamlessly integrate Liquid into your project, allowing other microservices to utilize its robust authentication and user management capabilities.
-* **Advanced Scope Management:** Offer granular access control to APIs through Liquid's sophisticated scope management solution. Liquid also lets you add your own scopes into it so you can also use scopes in your other microservices.
-* **Invite-Only Access:** Liquid offers an optional invite-only system to elevate your product's perceived value by positioning it as a limited-access network, attracting interest and engagement. Also doubles as a spam account prevention system by ensuring a controlled userbase growth.
+* **Advanced Scope Management:** Granular access control to APIs through Liquid's sophisticated scope management solution. Liquid also lets you add your own scopes into it so you can also use scopes in your other microservices.
+* **Gamification Support:** Includes APIs for reward points mechanisms. This can be used for inroducing features like loyalty points, or in-app virtual money.
+* **Invite-Only Access:** Using invite-only sign-ups can be an effective way to create virality because it encourages existing users to invite their network to join the product. This also doubles as a spam account prevention system by ensuring a controlled userbase growth.
 
 ## ⚙️ Setup
 
