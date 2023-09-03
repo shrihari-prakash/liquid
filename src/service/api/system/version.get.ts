@@ -6,8 +6,9 @@ import fs from "fs";
 
 import { statusCodes } from "../../../utils/http-status";
 import { SuccessResponse } from "../../../utils/response";
+import path from "path";
 
-const version = fs.readFileSync("VERSION", { encoding: "utf8" });
+const version = fs.readFileSync(path.join(__dirname, "../../../", "VERSION"), { encoding: "utf8" });
 log.info("Liquid version %s", version);
 
 const GET__Version = async (_: Request, res: Response) => {
