@@ -11,31 +11,25 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import { hasErrors } from "../../../../utils/api";
 import { Configuration } from "../../../../singleton/configuration";
 import { bcryptConfig } from "../create.post";
-import {
-  getEmailValidator,
-  getFirstNameValidator,
-  getLastNameValidator,
-  getPasswordValidator,
-  getPhoneCountryCodeValidator,
-  getPhoneValidator,
-  getUsernameValidator,
-} from "../../../../utils/validator/user";
 import { MongoDB } from "../../../../singleton/mongo-db";
 import { sanitizeEmailAddress } from "../../../../utils/email";
 import InviteCodeModel from "../../../../model/mongo/invite-code";
 import { generateInviteCode } from "../../../../utils/invite-code";
 import { isRoleRankHigher } from "../../../../utils/role";
 import { ScopeManager } from "../../../../singleton/scope-manager";
+import UserValidator from "../../../../validator/user";
+
+const userValidator = new UserValidator(body);
 
 export const POST_CreateValidator = [
   body().isArray(),
-  getUsernameValidator(body, true, true),
-  getPasswordValidator(body, true, true),
-  getEmailValidator(body, true, true),
-  getFirstNameValidator(body, true, true),
-  getLastNameValidator(body, true, true),
-  getPhoneCountryCodeValidator(body, false, true),
-  getPhoneValidator(body, false, true),
+  userValidator.username(true, true),
+  userValidator.password(true, true),
+  userValidator.email(true, true),
+  userValidator.firstName(true, true),
+  userValidator.lastName(true, true),
+  userValidator.phoneCountryCode(false, true),
+  userValidator.phone(false, true),
   body("*.role").optional().isString().isLength({ min: 3, max: 32 }),
 ];
 
@@ -44,7 +38,7 @@ const POST_Create = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:create:write", res)) {
       return;
-    };
+    }
     if (hasErrors(req, res)) return;
     session = await MongoDB.startSession();
     MongoDB.startTransaction(session);

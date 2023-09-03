@@ -11,51 +11,27 @@ import UserModel from "../../../model/mongo/user";
 import { Configuration } from "../../../singleton/configuration";
 import { bcryptConfig } from "./create.post";
 import { hasErrors } from "../../../utils/api";
-import { Language } from "../../../enum/language";
 import { flushUserInfoFromRedis } from "../../../model/oauth";
-import {
-  getEmailValidator,
-  getFirstNameValidator,
-  getLastNameValidator,
-  getMiddleNameValidator,
-  getPasswordValidator,
-  getPhoneCountryCodeValidator,
-  getPhoneValidator,
-  getUsernameValidator,
-} from "../../../utils/validator/user";
 import { ScopeManager } from "../../../singleton/scope-manager";
+import UserValidator from "../../../validator/user";
 
-const languages = Language.map((l) => l.code);
-
-const alphaRegex = /^(__unset__|[A-Za-z]+)$/;
-
-const urlValidator = (value: string) => {
-  if (value === "__unset__") {
-    return true;
-  }
-  try {
-    new URL(value);
-    return true;
-  } catch (_) {
-    return false;
-  }
-};
+const userValidator = new UserValidator(body);
 
 export const PATCH_MeValidator = [
-  getUsernameValidator(body, false),
-  getPasswordValidator(body, false),
-  getEmailValidator(body, false),
-  getFirstNameValidator(body, false),
-  getMiddleNameValidator(body, false),
-  getLastNameValidator(body, false),
-  getPhoneCountryCodeValidator(body, false),
-  getPhoneValidator(body, false),
-  body("gender").optional().isString().matches(alphaRegex).isLength({ min: 2, max: 128 }),
-  body("preferredLanguage").optional().isString().isAlpha().isIn(languages).isLength({ min: 2, max: 2 }),
-  body("bio").optional().isString().matches(alphaRegex).isLength({ min: 3, max: 256 }),
-  body("customLink").optional().custom(urlValidator).isURL().isLength({ max: 256 }),
-  body("pronouns").optional().isString().matches(alphaRegex).isLength({ min: 3, max: 24 }),
-  body("organization").optional().isString().matches(alphaRegex).isLength({ min: 3, max: 128 }),
+  userValidator.username(false),
+  userValidator.password(false),
+  userValidator.email(false),
+  userValidator.firstName(false),
+  userValidator.middleName(false),
+  userValidator.lastName(false),
+  userValidator.phoneCountryCode(false),
+  userValidator.phone(false),
+  userValidator.gender(false),
+  userValidator.preferredLanguage(false),
+  userValidator.bio(false),
+  userValidator.customLink(false),
+  userValidator.pronouns(false),
+  userValidator.organization(false),
 ];
 
 const PATCH_Me = async (req: Request, res: Response) => {

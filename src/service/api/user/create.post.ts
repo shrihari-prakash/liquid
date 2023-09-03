@@ -16,32 +16,26 @@ import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { Configuration } from "../../../singleton/configuration";
 import { sanitizeEmailAddress } from "../../../utils/email";
-import {
-  getEmailValidator,
-  getFirstNameValidator,
-  getLastNameValidator,
-  getPasswordValidator,
-  getPhoneCountryCodeValidator,
-  getPhoneValidator,
-  getUsernameValidator,
-} from "../../../utils/validator/user";
 import InviteCodeModel from "../../../model/mongo/invite-code";
 import { MongoDB } from "../../../singleton/mongo-db";
 import { ClientSession } from "mongoose";
 import { generateInviteCode } from "../../../utils/invite-code";
+import UserValidator from "../../../validator/user";
 
 export const bcryptConfig = {
   salt: 10,
 };
 
+const userValidator = new UserValidator(body);
+
 export const POST_CreateValidator = [
-  getUsernameValidator(body, true),
-  getPasswordValidator(body, true),
-  getEmailValidator(body, true),
-  getFirstNameValidator(body, true),
-  getLastNameValidator(body, true),
-  getPhoneCountryCodeValidator(body, false),
-  getPhoneValidator(body, false),
+  userValidator.username(true),
+  userValidator.password(true),
+  userValidator.email(true),
+  userValidator.firstName(true),
+  userValidator.lastName(true),
+  userValidator.phoneCountryCode(false),
+  userValidator.phone(false),
   body("inviteCode").optional().isString(),
 ];
 
@@ -69,7 +63,11 @@ async function validateInviteCode(req: Request, res: Response, user: UserInterfa
   return true;
 }
 
-async function useInviteCode(user: UserInterface, code: string, sessionOptions: { session: ClientSession } | undefined) {
+async function useInviteCode(
+  user: UserInterface,
+  code: string,
+  sessionOptions: { session: ClientSession } | undefined
+) {
   if (
     Configuration.get("user.account-creation.enable-invite-only") ||
     Configuration.get("user.account-creation.force-generate-invite-codes")
