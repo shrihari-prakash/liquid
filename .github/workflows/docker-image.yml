@@ -1,6 +1,4 @@
 name: Docker Image CI
-env:
-  CI_VERSION: "1.0.${{github.run_number}}"
 on:
   push:
     branches: [ release ]
@@ -15,6 +13,10 @@ jobs:
     needs: test
     steps:
     - uses: actions/checkout@v3
+    - name: Set variables
+      run: |
+        CI_VERSION=$(cat VERSION)
+        echo "VERSION=$CI_VERSION" >> $GITHUB_ENV
     - name: docker login
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
