@@ -34,8 +34,8 @@ export const POST_CreateValidator = [
   userValidator.email(true),
   userValidator.firstName(true),
   userValidator.lastName(true),
-  userValidator.phoneCountryCode(false),
-  userValidator.phone(false),
+  userValidator.phoneCountryCode(),
+  userValidator.phone(),
   body("inviteCode").optional().isString(),
 ];
 

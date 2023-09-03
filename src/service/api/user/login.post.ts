@@ -18,8 +18,8 @@ import UserValidator from "../../../validator/user";
 const userValidator = new UserValidator(body);
 
 export const POST_LoginValidator = [
-  userValidator.username(false),
-  userValidator.email(false),
+  userValidator.username(),
+  userValidator.email(),
   userValidator.password(true),
 ];
 
