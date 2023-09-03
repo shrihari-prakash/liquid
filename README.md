@@ -14,6 +14,7 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 ## ⭐ Features
 * **Plug & Play:** With the Liquid docker package, say goodbye to complex environment setup.
 * **High degree customization capabilities:** Customize and configure every part of the UI and service so login pages can look like your own.
+![Liquid Login Page](images/liquid-customizations.png)
 * **OAuth based authentication:** Secure and seamless authentication based on a battle tested OAuth core powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) from [@node-oauth](https://github.com/node-oauth).
 * **Social Features:** Liquid is more than just an authentication screen. Liquid comes with out of the box support for social features like follow - unfollow, private accounts and blocking.
 * **Admin APIs:** Support for elevated administrative APIs that let you effectively manage users by editing profile informations, banning and restricting accounts when necessary.
