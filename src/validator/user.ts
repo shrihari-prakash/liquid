@@ -51,6 +51,24 @@ class UserValidator {
     return this.fn(field)[requiredFn]().isEmail();
   }
 
+  emailVerified(required = false, nested = false) {
+    const field = this.makeFieldName("emailVerified", nested);
+    const requiredFn = required ? "exists" : "optional";
+    return this.fn(field)[requiredFn]().isBoolean();
+  }
+
+  secondaryEmail(required = false, nested = false) {
+    const field = this.makeFieldName("email", nested);
+    const requiredFn = required ? "exists" : "optional";
+    return this.fn(field)[requiredFn]().isEmail();
+  }
+
+  secondaryEmailVerified(required = false, nested = false) {
+    const field = this.makeFieldName("emailVerified", nested);
+    const requiredFn = required ? "exists" : "optional";
+    return this.fn(field)[requiredFn]().isBoolean();
+  }
+
   firstName(required = false, nested = false) {
     const field = this.makeFieldName("firstName", nested);
     const requiredFn = required ? "exists" : "optional";
@@ -104,6 +122,12 @@ class UserValidator {
       .isString()
       .isLength({ min: 2, max: 6 })
       .matches(/^(\+?\d{1,3}|\d{1,4})$/gm);
+  }
+
+  phoneVerified(required = false, nested = false) {
+    const field = this.makeFieldName("phoneVerified", nested);
+    const requiredFn = required ? "exists" : "optional";
+    return this.fn(field)[requiredFn]().isBoolean();
   }
 
   gender(required = false, nested = false) {
