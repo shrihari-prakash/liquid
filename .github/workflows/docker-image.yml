@@ -16,7 +16,7 @@ jobs:
     - name: Set variables
       run: |
         CI_VERSION=$(cat VERSION)
-        echo "VERSION=$CI_VERSION" >> $GITHUB_ENV
+        echo "CI_VERSION=$CI_VERSION" >> $GITHUB_ENV
     - name: docker login
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
