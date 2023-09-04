@@ -178,8 +178,9 @@ paths:
                   type: array
                   items:
                     type: string
-                status:
-                  type: boolean
+                operation:
+                  type: string
+                  enum: [add, del, set]
       responses:
         "200":
           description: Returns OK.

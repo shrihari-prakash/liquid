@@ -12,11 +12,17 @@ import { ScopeManager } from "../../../../singleton/scope-manager";
 import ClientModel from "../../../../model/mongo/client";
 import { flushUserInfoFromRedis } from "../../../../model/oauth";
 
+const Operations = {
+  ADD: "add",
+  DEL: "del",
+  SET: "set",
+};
+
 export const POST_AccessValidator = [
   body("targets").exists().isArray(),
   body("targetType").exists().isString().isIn(["user", "client"]),
   body("scope").exists().isArray(),
-  body("status").exists().isBoolean(),
+  body("operation").exists().isString().isIn(Object.values(Operations)),
 ];
 
 const POST_Access = async (req: Request, res: Response) => {
@@ -62,21 +68,31 @@ const POST_Access = async (req: Request, res: Response) => {
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
     }
-    let action = "$addToSet";
-    let arraycondition = "$each";
-    if (req.body.status === false) {
-      action = "$pull";
-      arraycondition = "$in";
+    let query: any = null;
+    switch (req.body.operation) {
+      case Operations.ADD:
+        query = {
+          $addToSet: {
+            scope: { $each: req.body.scope },
+          },
+        };
+        break;
+      case Operations.DEL:
+        query = {
+          $pull: {
+            scope: { $in: req.body.scope },
+          },
+        };
+        break;
+      case Operations.SET:
+        query = {
+          $set: {
+            scope: req.body.scope,
+          },
+        };
     }
     const model = req.body.targetType === "user" ? UserModel : ClientModel;
-    await model.updateMany(
-      { _id: { $in: req.body.targets } },
-      {
-        [action]: {
-          scope: { [arraycondition]: req.body.scope },
-        },
-      }
-    );
+    await model.updateMany({ _id: { $in: req.body.targets } }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
     flushUserInfoFromRedis(req.body.targets);
   } catch (err) {

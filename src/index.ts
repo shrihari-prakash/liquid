@@ -1,15 +1,6 @@
 import { Logger } from "./singleton/logger";
 const log = Logger.getLogger().child({ from: "main" });
 
-const banner = `
-   __         __     ______     __  __     __     _____
-  /\\ \\       /\\ \\   /\\  __ \\   /\\ \\/\\ \\   /\\ \\   /\\  __-.
-  \\ \\ \\____  \\ \\ \\  \\ \\ \\/\\_\\  \\ \\ \\_\\ \\  \\ \\ \\  \\ \\ \\/\\ \\
-   \\ \\_____\\  \\ \\_\\  \\ \\___\\_\\  \\ \\_____\\  \\ \\_\\  \\ \\____-
-    \\/_____/   \\/_/   \\/___/_/   \\/_____/   \\/_/   \\/____/
-`;
-log.info(banner);
-
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -22,6 +13,18 @@ import RedisStore from "connect-redis";
 import session from "express-session";
 import bodyParser from "body-parser";
 import YAML from "yaml";
+
+const version = fs.readFileSync(path.join(__dirname, "VERSION"), { encoding: "utf8" });
+const banner = `
+   __         __     ______     __  __     __     _____
+  /\\ \\       /\\ \\   /\\  __ \\   /\\ \\/\\ \\   /\\ \\   /\\  __-.
+  \\ \\ \\____  \\ \\ \\  \\ \\ \\/\\_\\  \\ \\ \\_\\ \\  \\ \\ \\  \\ \\ \\/\\ \\
+   \\ \\_____\\  \\ \\_\\  \\ \\___\\_\\  \\ \\_____\\  \\ \\_\\  \\ \\____-
+    \\/_____/   \\/_/   \\/___/_/   \\/_____/   \\/_/   \\/____/
+  
+  Version ${version}
+`;
+log.info(banner);
 
 import { Configuration } from "./singleton/configuration";
 import { MongoDB } from "./singleton/mongo-db";

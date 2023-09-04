@@ -18,24 +18,19 @@ describe("Access", () => {
         targets: [MemoryStore.users.user2._id],
         targetType: "user",
         scope: ["delegated:social:follow:read", "delegated:profile:write"],
-        status: true,
+        operation: "add",
       })
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
         chai.expect(res.status).to.eql(200);
-        const user2 = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as IUser[];
-        // @ts-ignore
+        const user2: any = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as IUser[];
         chai.expect(user2.scope.includes("delegated:social:follow:read")).to.eql(true);
-        // @ts-ignore
         chai.expect(user2.scope.includes("delegated:profile:write")).to.eql(true);
       });
   });
 
   it("[POST] should remove passed access from users", async () => {
-    await UserModel.updateOne(
-      { _id: MemoryStore.users.user2._id },
-      { $set: { scope: ["delegated:profile:write"] } }
-    );
+    await UserModel.updateOne({ _id: MemoryStore.users.user2._id }, { $set: { scope: ["delegated:profile:write"] } });
     return chai
       .request(app)
       .post(`/user/admin-api/access`)
@@ -43,16 +38,33 @@ describe("Access", () => {
         targets: [MemoryStore.users.user2._id],
         targetType: "user",
         scope: ["delegated:social:follow:read"],
-        status: false,
+        operation: "del",
       })
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
         chai.expect(res.status).to.eql(200);
-        const user2 = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as IUser[];
-        // @ts-ignore
+        const user2: any = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as IUser[];
         chai.expect(user2.scope.includes("delegated:social:follow:read")).to.eql(false);
-        // @ts-ignore
         chai.expect(user2.scope.includes("delegated:profile:write")).to.eql(true);
+      });
+  });
+
+  it("[POST] should replace scope", async () => {
+    await UserModel.updateOne({ _id: MemoryStore.users.user2._id }, { $set: { scope: ["delegated:profile:write"] } });
+    return chai
+      .request(app)
+      .post(`/user/admin-api/access`)
+      .send({
+        targets: [MemoryStore.users.user2._id],
+        targetType: "user",
+        scope: ["delegated:all", "admin:profile:write"],
+        operation: "set",
+      })
+      .set({ Authorization: `Bearer john_doe_access_token` })
+      .then(async (res) => {
+        chai.expect(res.status).to.eql(200);
+        const user2: any = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as IUser[];
+        chai.expect(user2.scope).to.eql(["delegated:all", "admin:profile:write"]);
       });
   });
 
@@ -64,7 +76,7 @@ describe("Access", () => {
         targets: [MemoryStore.users.user2._id],
         targetType: "user",
         scope: ["invalid_scope"],
-        status: true,
+        operation: "set",
       })
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
@@ -84,7 +96,7 @@ describe("Access", () => {
         targets: [MemoryStore.users.user2._id],
         targetType: "user",
         scope: ["admin:all"],
-        status: true,
+        operation: "add",
       })
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
@@ -101,7 +113,7 @@ describe("Access", () => {
         targets: [MemoryStore.client._id],
         targetType: "client",
         scope: ["client:all"],
-        status: true,
+        operation: "add",
       })
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
