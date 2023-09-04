@@ -1560,7 +1560,7 @@ paths:
       summary: Updates a user's profile picture.
       parameters:
         - in: formData
-          name: profile-picture
+          name: profilePicture
           type: file
           description: PNG image file.
       responses:
