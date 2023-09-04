@@ -1,6 +1,15 @@
 import { Logger } from "./singleton/logger";
 const log = Logger.getLogger().child({ from: "main" });
 
+const banner = `
+   __         __     ______     __  __     __     _____
+  /\\ \\       /\\ \\   /\\  __ \\   /\\ \\/\\ \\   /\\ \\   /\\  __-.
+  \\ \\ \\____  \\ \\ \\  \\ \\ \\/\\_\\  \\ \\ \\_\\ \\  \\ \\ \\  \\ \\ \\/\\ \\
+   \\ \\_____\\  \\ \\_\\  \\ \\___\\_\\  \\ \\_____\\  \\ \\_\\  \\ \\____-
+    \\/_____/   \\/_/   \\/___/_/   \\/_____/   \\/_/   \\/____/
+`;
+log.info(banner);
+
 import * as dotenv from "dotenv";
 dotenv.config();
 
