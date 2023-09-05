@@ -25,5 +25,7 @@ jobs:
       run: docker push shrihariprakash/liquid --all-tags
     - name: GHCR Login
       run: docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} -p ${{ secrets.GHCR_TOKEN }}
-    - name: GHCR Push
-      run: docker push ghcr.io/shrihari-prakash/liquid --all-tags
+    - name: GHCR Push Latest
+      run: docker push ghcr.io/shrihari-prakash/liquid:latest
+    - name: GHCR Push $CI_VERSION
+      run: docker push ghcr.io/shrihari-prakash/liquid:$CI_VERSION
