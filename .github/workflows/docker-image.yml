@@ -17,13 +17,13 @@ jobs:
       run: |
         CI_VERSION=$(cat ./src/VERSION)
         echo "CI_VERSION=$CI_VERSION" >> $GITHUB_ENV
-    - name: Docker Login
-      env:
-        DOCKER_USER: ${{secrets.DOCKER_USER}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      run: |
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag shrihariprakash/liquid:$CI_VERSION -t "shrihariprakash/liquid:latest"
-    - name: Docker Push
+    - name: Docker Hub Login
+      run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+    - name: Docker Hub Push
       run: docker push shrihariprakash/liquid --all-tags
+    - name: GHCR Login
+      run: docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} -p ${{ secrets.GHCR_TOKEN }}
+    - name: GHCR Push
+      run: docker push ghcr.io/shrihariprakash/liquid --all-tags
