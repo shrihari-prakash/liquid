@@ -18,7 +18,7 @@ jobs:
         CI_VERSION=$(cat ./src/VERSION)
         echo "CI_VERSION=$CI_VERSION" >> $GITHUB_ENV
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag shrihariprakash/liquid:$CI_VERSION -t "shrihariprakash/liquid:latest"
+      run: docker build . --file Dockerfile -t shrihariprakash/liquid:$CI_VERSION -t "shrihariprakash/liquid:latest" -t ghcr.io/shrihariprakash/liquid:$CI_VERSION -t "ghcr.io/shrihariprakash/liquid:latest"
     - name: Docker Hub Login
       run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
     - name: Docker Hub Push
