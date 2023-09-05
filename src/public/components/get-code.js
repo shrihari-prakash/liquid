@@ -55,7 +55,7 @@ export default function GetCode() {
                 <h3>
                     Verify your identity
                 </h3>
-                <p className="app-tagline">A verification code was sent to your email address.</p>
+                <p className="app-tagline">Enter your email address to recover your account.</p>
             </div>
             <div className="form-group first last">
                 <label className="noselect" htmlFor="email">Email</label>
