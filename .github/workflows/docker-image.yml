@@ -27,5 +27,5 @@ jobs:
       run: docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} -p ${{ secrets.GHCR_TOKEN }}
     - name: GHCR Push Latest
       run: docker push ghcr.io/shrihari-prakash/liquid:latest
-    - name: GHCR Push $CI_VERSION
+    - name: GHCR Push Version
       run: docker push ghcr.io/shrihari-prakash/liquid:$CI_VERSION
