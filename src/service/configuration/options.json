@@ -188,6 +188,14 @@
     "default": false
   },
   {
+    "name": "oauth.external-client.allow-introspection",
+    "displayName": "OAuth External Client Allow Introspection",
+    "envName": "OAUTH_EXTERNAL_CLIENT_ALLOW_INTROSPECTION",
+    "description": "Specifies if external clients can use token introspection.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "sendgrid.api-key",
     "displayName": "Sendgrid API Key",
     "envName": "SENDGRID_API_KEY",
