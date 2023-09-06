@@ -124,8 +124,8 @@
     "parent": "client:all"
   },
   {
-    "name": "client:oauth:read",
-    "description": "View OAuth information.",
+    "name": "client:oauth:introspect",
+    "description": "Introspect access tokens of users.",
     "parent": "client:oauth:all"
   },
   {
