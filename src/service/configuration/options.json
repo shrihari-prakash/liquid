@@ -638,7 +638,7 @@
     "envName": "USER_SEARCH_SEARCH_FIELDS",
     "description": "Specifies the field names that can be used to search for users",
     "type": "stringArray",
-    "default": "username,firstName,lastName"
+    "default": "_id,username,firstName,lastName"
   },
   {
     "name": "privilege.user.search.can-use-fullname",
