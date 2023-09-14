@@ -207,8 +207,8 @@ export const userSchema = {
     type: String,
     willProjectForUserSelect: true,
     sensitivityScore: {
-      read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
     },
   },
   phoneVerified: {
@@ -249,8 +249,8 @@ export const userSchema = {
     type: String,
     willProjectForUserSelect: true,
     sensitivityScore: {
-      read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM
     },
   },
   secondaryPhoneVerified: {
