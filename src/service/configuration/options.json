@@ -130,6 +130,14 @@
     "type": "number"
   },
   {
+    "name": "cookie.secure",
+    "displayName": "Cookie Secure",
+    "envName": "COOKIE_SECURE",
+    "description": "Specifies if cookies sshould be secure.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "mongo-db.connection-string",
     "displayName": "MongoDB Connection String",
     "envName": "MONGO_DB_CONNECTION_STRING",
