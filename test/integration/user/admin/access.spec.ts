@@ -2,7 +2,7 @@ import chai from "chai";
 
 import app from "../../../../src";
 import MemoryStore from "../../store";
-import UserModel, { IUser } from "../../../../src/model/mongo/user";
+import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
 import { setupUsers } from "../../utils/records";
 import TokenModel from "../../../../src/model/mongo/token";
 import ClientModel from "../../../../src/model/mongo/client";
@@ -23,7 +23,7 @@ describe("Access", () => {
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
         chai.expect(res.status).to.eql(200);
-        const user2: any = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as IUser[];
+        const user2: any = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as UserInterface[];
         chai.expect(user2.scope.includes("delegated:social:follow:read")).to.eql(true);
         chai.expect(user2.scope.includes("delegated:profile:write")).to.eql(true);
       });
@@ -43,7 +43,7 @@ describe("Access", () => {
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
         chai.expect(res.status).to.eql(200);
-        const user2: any = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as IUser[];
+        const user2: any = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as UserInterface[];
         chai.expect(user2.scope.includes("delegated:social:follow:read")).to.eql(false);
         chai.expect(user2.scope.includes("delegated:profile:write")).to.eql(true);
       });
@@ -63,7 +63,7 @@ describe("Access", () => {
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
         chai.expect(res.status).to.eql(200);
-        const user2: any = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as IUser[];
+        const user2: any = (await UserModel.findOne({ _id: MemoryStore.users.user2._id })) as unknown as UserInterface[];
         chai.expect(user2.scope).to.eql(["delegated:all", "admin:profile:write"]);
       });
   });
