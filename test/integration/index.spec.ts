@@ -26,6 +26,8 @@ Options.forEach((option) => {
   console.log(`${option.name} =`, Configuration.get(option.name));
 });
 
+Configuration.set("system.email-adapter", "print");
+
 exports.mochaHooks = {
   async beforeAll() {
     await mongod.start();
