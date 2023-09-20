@@ -27,6 +27,10 @@ const banner = `
 log.info(banner);
 
 import { Configuration } from "./singleton/configuration";
+const environment = Configuration.get("environment");
+process.env.NODE_ENV = environment;
+log.info("Environment: %s", environment);
+
 import { MongoDB } from "./singleton/mongo-db";
 import { Api } from "./singleton/api/api";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
@@ -36,7 +40,7 @@ import { Redis } from "./singleton/redis";
 const app = express();
 
 // ********** Rate Limiting ********** //
-if (app.get("env") !== "test") {
+if (environment !== "test") {
   activateRateLimiters(app);
 }
 if (Configuration.get("system.stats.enable-request-counting")) {
@@ -58,7 +62,7 @@ var sessionOptions: any = {
   secret: Configuration.get("cookie.session-secret"),
   resave: false,
   saveUninitialized: false,
-  proxy: app.get("env") === "production" && Configuration.get("system.reverse-proxy-mode"),
+  proxy: environment === "production" && Configuration.get("system.reverse-proxy-mode"),
   cookie: {},
 };
 if (Configuration.get("privilege.can-use-cache")) {
@@ -69,8 +73,8 @@ if (Configuration.get("privilege.can-use-cache")) {
   });
   sessionOptions.store = redisStore;
 }
-if(Configuration.get("cookie.secure")) {
-   sessionOptions.cookie.secure = true;
+if (Configuration.get("cookie.secure")) {
+  sessionOptions.cookie.secure = true;
 }
 const cookieDomain = Configuration.get("cookie.domain");
 if (cookieDomain) {
@@ -93,7 +97,7 @@ app.use(
 // ********** End CORS ********** //
 
 // ********** Singleton Init ********** //
-if (app.get("env") !== "test") {
+if (environment !== "test") {
   MongoDB.connect();
 }
 Api.initialize(app);
@@ -129,7 +133,7 @@ if (appConfigAbsolutePath) {
   });
   log.warn("Frontend config was not found. Please configure option `system.static.app-config-absolute-path`");
 }
-if (Configuration.get("system.enable-swagger") || app.get("env") !== "production") {
+if (Configuration.get("system.enable-swagger") || environment !== "production") {
   const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", "utf8"));
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }

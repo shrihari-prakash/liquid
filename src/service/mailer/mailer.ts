@@ -27,7 +27,7 @@ export class Mailer {
   mode = Modes.PRINT;
 
   public initialize(app: any) {
-    if (app.get("env") === "production" || Configuration.get("sendgrid.force-send-emails")) {
+    if (Configuration.get("environment") === "production" || Configuration.get("sendgrid.force-send-emails")) {
       this.mode = Modes.EMAIL;
       sgMail.setApiKey(Configuration.get("sendgrid.api-key") as string);
     }
