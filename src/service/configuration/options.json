@@ -204,12 +204,12 @@
     "relatedOptions": ["sendgrid.*"]
   },
   {
-    "name": "sendgrid.force-send-emails",
-    "displayName": "Sendgrid Force Send Emails (For Development Mode)",
-    "envName": "SENDGRID_FORCE_SEND_EMAILS",
-    "description": "Specifies if emails have to be sent even in development mode.",
-    "type": "boolean",
-    "default": false,
+    "name": "system.email-adapter",
+    "displayName": "System Email Adapter",
+    "envName": "SYSTEM_EMAIL_ADAPTER",
+    "description": "Specifies the adapter to use to send emails to users. Possible values are `sendgrid`, `print`",
+    "type": "string",
+    "default": "sendgrid",
     "relatedOptions": ["sendgrid.*"]
   },
   {

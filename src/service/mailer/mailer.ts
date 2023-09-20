@@ -7,7 +7,7 @@ import { Configuration } from "../../singleton/configuration";
 
 const Modes = {
   PRINT: "print",
-  EMAIL: "email",
+  SENDGRID: "sendgrid",
 };
 
 interface Email {
@@ -27,8 +27,8 @@ export class Mailer {
   mode = Modes.PRINT;
 
   public initialize(app: any) {
-    if (Configuration.get("environment") === "production" || Configuration.get("sendgrid.force-send-emails")) {
-      this.mode = Modes.EMAIL;
+    if (Configuration.get("system.email-adapter") === "sendgrid") {
+      this.mode = Modes.SENDGRID;
       sgMail.setApiKey(Configuration.get("sendgrid.api-key") as string);
     }
     log.info("Mailer initialized in %s mode ", this.mode);
@@ -40,7 +40,7 @@ export class Mailer {
       const emailAddress = Configuration.get("sendgrid.outbound-email-address") as string;
       email.from = { email: emailAddress, name };
     }
-    if (this.mode === Modes.EMAIL) {
+    if (this.mode === Modes.SENDGRID) {
       await sgMail.send(email as any);
     } else {
       log.info("%o", email);
