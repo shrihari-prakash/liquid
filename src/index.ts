@@ -69,7 +69,9 @@ if (Configuration.get("privilege.can-use-cache")) {
   });
   sessionOptions.store = redisStore;
 }
-sessionOptions.cookie.secure = Configuration.get("cookie.secure");
+if(Configuration.get("cookie.secure")) {
+   sessionOptions.cookie.secure = true;
+}
 const cookieDomain = Configuration.get("cookie.domain");
 if (cookieDomain) {
   sessionOptions.cookie.domain = cookieDomain;
