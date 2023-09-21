@@ -11,11 +11,11 @@
   --spinner-primary-color__light: #000000;
   --spinner-secondary-color__light: #dbf2ff;
   /* Dark Theme */
-  --background-color: #191414;
+  --background-color: #0a0a0a;
   --text-color: #ffffff;
   --text-lighter-color: #b3b3b3;
   --glass-color: #00000030;
-  --spinner-background-color: #191414;
+  --spinner-background-color: #0a0a0a;
   --spinner-primary-color: #ffffff40;
   --spinner-secondary-color: #2b2b2b;
 }
