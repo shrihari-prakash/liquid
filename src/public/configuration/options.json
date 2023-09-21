@@ -259,7 +259,7 @@
     "name": "theme.dark.background-color",
     "displayName": "Theme - Background Color (Dark Mode)",
     "description": "Specifies the page background color.",
-    "default": "#191414"
+    "default": "#0a0a0a"
   },
   {
     "name": "theme.dark.primary-button.height",
@@ -331,7 +331,7 @@
     "name": "theme.dark.form.input-border-color",
     "displayName": "Theme - Form Input Border Color (Dark Mode)",
     "description": "Specifies the border colors used in form input fields.",
-    "default": "#424242"
+    "default": "#27272a"
   },
   {
     "name": "theme.dark.form.input-vertical-padding",
