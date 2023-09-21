@@ -9,7 +9,7 @@ const tokenSchema = {
   scope: {
     type: Array,
     required: true,
-    default: ["user.delegated.all"],
+    default: ["delegated:all"],
   },
   client: Object,
   user: Object,

@@ -2,7 +2,7 @@ import app from "../../../src/index";
 import chai from "chai";
 import MemoryStore from "../store";
 import FollowModel from "../../../src/model/mongo/follow";
-import UserModel, { IUser } from "../../../src/model/mongo/user";
+import UserModel, { UserInterface } from "../../../src/model/mongo/user";
 import { setupUsers } from "../utils/records";
 
 describe("Follow", () => {
@@ -28,7 +28,7 @@ describe("Follow", () => {
             chai.expect(followObject).to.not.be.undefined;
             chai.expect(followObject).to.not.be.null;
             chai.expect(followObject?.approved).to.be.false;
-            const users = (await UserModel.find({})) as unknown as IUser[];
+            const users = (await UserModel.find({})) as unknown as UserInterface[];
             chai.expect(users[0].followingCount).to.be.eq(0);
             chai.expect(users[0].followerCount).to.be.eq(0);
             chai.expect(users[1].followingCount).to.be.eq(0);
@@ -63,7 +63,7 @@ describe("Follow", () => {
             chai.expect(followObject).to.not.be.undefined;
             chai.expect(followObject).to.not.be.null;
             chai.expect(followObject?.approved).to.be.true;
-            const users = (await UserModel.find({})) as unknown as IUser[];
+            const users = (await UserModel.find({})) as unknown as UserInterface[];
             chai.expect(users[0].followingCount).to.be.eq(1);
             chai.expect(users[0].followerCount).to.be.eq(0);
             chai.expect(users[1].followingCount).to.be.eq(0);
@@ -99,7 +99,7 @@ describe("Follow", () => {
             chai.expect(followObject).to.not.be.undefined;
             chai.expect(followObject).to.not.be.null;
             chai.expect(followObject?.approved).to.be.true;
-            const users = (await UserModel.find({})) as unknown as IUser[];
+            const users = (await UserModel.find({})) as unknown as UserInterface[];
             chai.expect(users[0].followingCount).to.be.eq(1);
             chai.expect(users[0].followerCount).to.be.eq(0);
             chai.expect(users[1].followingCount).to.be.eq(0);

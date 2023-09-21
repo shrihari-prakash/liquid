@@ -1,7 +1,7 @@
 import moment from "moment";
-import UserModel, { IUser } from "../model/mongo/user";
+import UserModel, { UserInterface } from "../model/mongo/user";
 
-export const checkSubscription = (input: IUser | IUser[]) => {
+export const checkSubscription = (input: UserInterface | UserInterface[]) => {
   if (Array.isArray(input)) {
     const toUpdate = [];
     const users = input;

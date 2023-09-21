@@ -61,6 +61,8 @@ export default function ResetPassword() {
                 <input
                     type="text"
                     class="form-control"
+                    aria-label="Verification Code"
+                    aria-required="true"
                     placeholder={getPlaceholder("Verification code", configuration)}
                     minLength="8"
                     autoComplete="off"
@@ -73,6 +75,8 @@ export default function ResetPassword() {
                 <input
                     type="password"
                     class="form-control"
+                    aria-label="Password"
+                    aria-required="true"
                     placeholder={getPlaceholder("********", configuration)}
                     minLength="8"
                     autoComplete="new-password"

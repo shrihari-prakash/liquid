@@ -12,7 +12,7 @@ import { ScopeManager } from "../../../singleton/scope-manager";
 
 const DELETE_ProfilePicture = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
     };
     const userId = req.res?.locals.oauth.token.user._id;

@@ -127,13 +127,13 @@
     "name": "content.terms-and-conditions-url",
     "displayName": "Terms and Conditions URL",
     "description": "Specifies the URL for terms and conditions of your application.",
-    "default": "#"
+    "default": null
   },
   {
     "name": "content.privacy-policy-url",
     "displayName": "Privacy Policy URL",
     "description": "Specifies the URL for privacy policies of your application.",
-    "default": "#"
+    "default": null
   },
   {
     "name": "content.sidebar.intro.description",
@@ -160,6 +160,12 @@
     "default": null
   },
   {
+    "name": "theme.app-font-base-size",
+    "displayName": "Theme - App Font Base Size",
+    "description": "Specifies the base Font size to be used in static pages.",
+    "default": "15px"
+  },
+  {
     "name": "theme.light.background-color",
     "displayName": "Theme - Background Color (Light Mode)",
     "description": "Specifies the page background color.",
@@ -169,7 +175,7 @@
     "name": "theme.light.primary-button.height",
     "displayName": "Theme - Primary Button Height (Light Mode)",
     "description": "Specifies the height of the submit button in forms.",
-    "default": "52px"
+    "default": "48px"
   },
   {
     "name": "theme.light.primary-button.color",
@@ -241,7 +247,7 @@
     "name": "theme.light.form.input-vertical-padding",
     "displayName": "Theme - Form Input Vertical Padding (Light Mode)",
     "description": "Specifies the vertical padding of the input fields in forms.",
-    "default": "6px"
+    "default": "4px"
   },
   {
     "name": "theme.light.form.input-horizontal-padding",
@@ -253,13 +259,13 @@
     "name": "theme.dark.background-color",
     "displayName": "Theme - Background Color (Dark Mode)",
     "description": "Specifies the page background color.",
-    "default": "#191414"
+    "default": "#0a0a0a"
   },
   {
     "name": "theme.dark.primary-button.height",
     "displayName": "Theme - Primary Button Height (Dark Mode)",
     "description": "Specifies the height of the submit button in forms.",
-    "default": "52px"
+    "default": "48px"
   },
   {
     "name": "theme.dark.primary-button.color",
@@ -325,13 +331,13 @@
     "name": "theme.dark.form.input-border-color",
     "displayName": "Theme - Form Input Border Color (Dark Mode)",
     "description": "Specifies the border colors used in form input fields.",
-    "default": "#424242"
+    "default": "#27272a"
   },
   {
     "name": "theme.dark.form.input-vertical-padding",
     "displayName": "Theme - Form Input Vertical Padding (Dark Mode)",
     "description": "Specifies the vertical padding of the input fields in forms.",
-    "default": "6px"
+    "default": "4px"
   },
   {
     "name": "theme.dark.form.input-horizontal-padding",

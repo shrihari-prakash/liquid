@@ -1,3 +1,6 @@
+import { Logger } from "../singleton/logger";
+const log = Logger.getLogger().child({ from: "follow-util" });
+
 import UserModel from "../model/mongo/user";
 
 export function updateFollowCount(sourceId: string, targetId: string, count: number, opts?: { session: any } | null) {
@@ -11,7 +14,11 @@ export function updateFollowCount(sourceId: string, targetId: string, count: num
       p2.session(opts.session);
     }
     Promise.all([p1, p2])
-      .then(() => resolve())
+      .then((results) => {
+        log.debug("Follow count update results:");
+        log.debug(results);
+        resolve();
+      })
       .catch(() => reject());
   });
 }

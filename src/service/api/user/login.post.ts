@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { body } from "express-validator";
 
-import UserModel, { IUser } from "../../../model/mongo/user";
+import UserModel, { UserInterface } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
@@ -13,12 +13,14 @@ import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { sanitizeEmailAddress } from "../../../utils/email";
-import { getEmailValidator, getPasswordValidator, getUsernameValidator } from "../../../utils/validator/user";
+import UserValidator from "../../../validator/user";
+
+const userValidator = new UserValidator(body);
 
 export const POST_LoginValidator = [
-  getUsernameValidator(body, false),
-  getEmailValidator(body, false),
-  getPasswordValidator(body, true),
+  userValidator.username(),
+  userValidator.email(),
+  userValidator.password(true),
 ];
 
 const POST_Login = async (req: Request, res: Response) => {
@@ -32,7 +34,7 @@ const POST_Login = async (req: Request, res: Response) => {
     } else {
       query.username = username;
     }
-    const user = (await UserModel.findOne(query, select).exec()) as unknown as IUser;
+    const user = (await UserModel.findOne(query, select).exec()) as unknown as UserInterface;
     if (!user) return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
     if (!user.emailVerified)
       return res.status(statusCodes.resourceNotActive).json(new ErrorResponse(errorMessages.resourceNotActive));
@@ -43,7 +45,13 @@ const POST_Login = async (req: Request, res: Response) => {
     req.session.user = user;
     log.debug("Assigned session id %s for user %s", req.session?.id, user._id);
     Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
-    return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
+    req.session.save(function (err) {
+      if (err) {
+        log.error(err);
+        return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+      }
+      return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
+    });
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

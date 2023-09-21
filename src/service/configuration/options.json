@@ -100,12 +100,42 @@
     "relatedOptions": ["system.static-folder", "system.static.use-relative-path"]
   },
   {
-    "name": "cookie-session-secret",
+    "name": "system.scope-extension-file-path",
+    "displayName": "Scope Extension File Path",
+    "envName": "SYSTEM_SCOPE_EXTENSION_FILE_PATH",
+    "description": "Specifies the path of the JSON file that contains array of scopes that need to be added to liquid in addition to the default ones.",
+    "type": "string",
+    "default": "/var/liquid/scope-extensions.json"
+  },
+  {
+    "name": "cookie.session-secret",
     "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",
     "description": "A random 64+ bit string to use as the session secret.",
     "type": "string",
     "default": "00000000-0000-0000-0000-000000000000"
+  },
+  {
+    "name": "cookie.domain",
+    "displayName": "Cookie Domain",
+    "envName": "COOKIE_DOMAIN",
+    "description": "Specifies the cookie domain for session cookies.",
+    "type": "string"
+  },
+  {
+    "name": "cookie.max-age",
+    "displayName": "Cookie Max Age",
+    "envName": "COOKIE_MAX_AGE",
+    "description": "Specifies in seconds the expiry time for session cookies.",
+    "type": "number"
+  },
+  {
+    "name": "cookie.secure",
+    "displayName": "Cookie Secure",
+    "envName": "COOKIE_SECURE",
+    "description": "Specifies if cookies sshould be secure.",
+    "type": "boolean",
+    "default": true
   },
   {
     "name": "mongo-db.connection-string",
@@ -158,6 +188,14 @@
     "default": true
   },
   {
+    "name": "oauth.authorization.require-pkce",
+    "displayName": "OAuth Authorization Require PKCE",
+    "envName": "OAUTH_AUTHORIZATION_REQUIRE_PKCE",
+    "description": "Specifies if the application should require PKCE for authorization.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "sendgrid.api-key",
     "displayName": "Sendgrid API Key",
     "envName": "SENDGRID_API_KEY",
@@ -166,12 +204,12 @@
     "relatedOptions": ["sendgrid.*"]
   },
   {
-    "name": "sendgrid.force-send-emails",
-    "displayName": "Sendgrid Force Send Emails (For Development Mode)",
-    "envName": "SENDGRID_FORCE_SEND_EMAILS",
-    "description": "Specifies if emails have to be sent even in development mode.",
-    "type": "boolean",
-    "default": false,
+    "name": "system.email-adapter",
+    "displayName": "System Email Adapter",
+    "envName": "SYSTEM_EMAIL_ADAPTER",
+    "description": "Specifies the adapter to use to send emails to users. Possible values are `sendgrid`, `print`",
+    "type": "string",
+    "default": "sendgrid",
     "relatedOptions": ["sendgrid.*"]
   },
   {
@@ -313,6 +351,15 @@
     "relatedOptions": ["privilege.can-use-cache", "redis.*"]
   },
   {
+    "name": "redis.channel-name",
+    "displayName": "Redis Channel Name",
+    "envName": "REDIS_CHANNEL_NAME",
+    "description": "Channel name for Redis Publisher. Only set this if you use pusher events with Redis adapter.",
+    "type": "string",
+    "default": "liquid:",
+    "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-cache", "redis.*"]
+  },
+  {
     "name": "system.queue-adapter",
     "displayName": "System Queue Adapter",
     "envName": "SYSTEM_QUEUE_ADAPTER",
@@ -421,7 +468,15 @@
     "name": "privilege.can-create-account",
     "displayName": "Can Use Create Account",
     "envName": "CAN_CREATE_ACCOUNT",
-    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`. Also modify `privilege.can-create-account` in your frontend config.",
+    "description": "Specifies if users can signup into the service. If false, users can be created using the bulk create api at `users/admin-api/create` or `users/client-api/create`.",
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "name": "privilege.can-reset-password",
+    "displayName": "Can Reset Password",
+    "envName": "CAN_RESET_PASSWORD",
+    "description": "Specifies if users can reset their passwords using forgot password option.",
     "type": "boolean",
     "default": true
   },
@@ -434,17 +489,25 @@
     "default": false
   },
   {
-    "name": "user.account-creation.username-validation-regex",
-    "displayName": "User Account Creation Username Validation Regex",
-    "envName": "USER_ACCOUNT_CREATION_USERNAME_VALIDATION_REGEX",
+    "name": "user.profile.username-validation-regex",
+    "displayName": "User Profile Username Validation Regex",
+    "envName": "USER_PROFILE_USERNAME_VALIDATION_REGEX",
     "description": "Specifies the regex to be used to validate username for user accounts.",
     "type": "string",
     "default": "^[a-z_][a-z0-9._]*$"
   },
   {
-    "name": "user.account-creation.password-validation-regex",
-    "displayName": "User Account Creation Password Validation Regex",
-    "envName": "USER_ACCOUNT_CREATION_PASSWORD_VALIDATION_REGEX",
+    "name": "user.profile.name-validation-regex",
+    "displayName": "User Profile Name Validation Regex",
+    "envName": "USER_PROFILE_NAME_VALIDATION_REGEX",
+    "description": "Specifies the regex to be used to validate name for user accounts.",
+    "type": "string",
+    "default": "^[\\p{L}\\p{M}'-]+$"
+  },
+  {
+    "name": "user.profile.password-validation-regex",
+    "displayName": "User Profile Password Validation Regex",
+    "envName": "USER_PROFILE_PASSWORD_VALIDATION_REGEX",
     "description": "Specifies the regex to be used to validate password for user accounts.",
     "type": "string"
   },
@@ -546,6 +609,14 @@
     "default": 0
   },
   {
+    "name": "user.account-creation.default-scope",
+    "displayName": "User Account Creation Default Scope",
+    "envName": "USER_ACCOUNT_CREATION_DEFAULT_SCOPE",
+    "description": "Comma separated list of scopes that should be assigned to users accounts when they are created.",
+    "type": "stringArray",
+    "default": "delegated:all"
+  },
+  {
     "name": "user.profile.editable-fields",
     "displayName": "Profile Editable Fields",
     "envName": "USER_PROFILE_EDITABLE_FIELDS",
@@ -562,12 +633,20 @@
     "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName,bio,pronouns,customLink,organization,designation,gender,preferredLanguage"
   },
   {
+    "name": "admin-api.user.profile.can-edit-peer-data",
+    "displayName": "Profile Can Edit Peer Profile Data (Admin API)",
+    "envName": "ADMIN_API_USER_PROFILE_CAN_EDIT_PEER_DATA",
+    "description": "Specifies if roles with equal rank can edit profile data of each other.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "user.search.search-fields",
     "displayName": "User Search Fields",
     "envName": "USER_SEARCH_SEARCH_FIELDS",
     "description": "Specifies the field names that can be used to search for users",
     "type": "stringArray",
-    "default": "username,firstName,lastName"
+    "default": "_id,username,firstName,lastName"
   },
   {
     "name": "privilege.user.search.can-use-fullname",
@@ -710,11 +789,32 @@
     "relatedOptions": ["system.role.extended-roles"]
   },
   {
-    "name": "system.role.editor-roles",
-    "displayName": "Editor Roles",
-    "envName": "SYSTEM_ROLE_EDITOR_ROLES",
-    "description": "Comma specified list of roles which can edit roles of other users.",
+    "name": "system.exposed-options",
+    "displayName": "System Exposed Options",
+    "envName": "SYSTEM_EXPOSED_OPTIONS",
+    "description": "Comma separated list of options that a user can have access to after logging in. This will also include insecure settings.",
     "type": "stringArray",
-    "default": "super_admin,admin,internal_client"
+    "default": [
+      "admin-api.user.profile.can-edit-peer-data",
+      "system.role.extended-roles",
+      "pagination.default-limit",
+      "pagination.max-limit",
+      "user.account-creation.invites-per-person",
+      "user.account-creation.invite-code-availability-window"
+    ]
+  },
+  {
+    "name": "system.exposed-options.insecure",
+    "displayName": "System Exposed Options (Public)",
+    "envName": "SYSTEM_EXPOSED_OPTIONS_INSECURE",
+    "description": "Comma separated list of options that a user can have access to before logging in.",
+    "type": "stringArray",
+    "default": [
+      "privilege.can-create-account",
+      "privilege.can-use-phone-number",
+      "user.account-creation.enable-invite-only",
+      "user.account-creation.require-email-verification",
+      "privilege.can-reset-password"
+    ]
   }
 ]

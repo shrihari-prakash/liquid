@@ -17,7 +17,7 @@ export const POST_PrivateValidator = [body("state").exists().isBoolean()];
 const POST_Private = async (req: Request, res: Response) => {
   let session = "";
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

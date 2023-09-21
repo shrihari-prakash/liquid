@@ -27,6 +27,9 @@ export class Configuration {
       case "numberArray":
         return value.split(delim).map((elem: string) => parseInt(elem));
       case "stringArray":
+        if (Array.isArray(value)) {
+          return value;
+        }
         const parsed = value.split(delim);
         return parsed[0] !== "" ? parsed : [];
       case "booleanArray":

@@ -13,7 +13,7 @@ import { ScopeManager } from "../../../singleton/scope-manager";
 
 const GET_FollowRequests = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.read", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:read", res)) {
       return;
     };
     const userId = res.locals.oauth.token.user._id;

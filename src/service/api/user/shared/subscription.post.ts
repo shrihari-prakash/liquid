@@ -22,7 +22,7 @@ export const POST_SubscriptionValidator = [
 
 const POST_Subscription = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.<ENTITY>.profile.subscription.read", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:subscriptions:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

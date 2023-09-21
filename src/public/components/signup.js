@@ -130,7 +130,8 @@ export default function SignUp() {
           className="form-control"
           placeholder={getPlaceholder("your_username", configuration)}
           minLength="8"
-          autoComplete="username"
+          aria-label="Username"
+          aria-required="true"
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck="false"
@@ -146,6 +147,8 @@ export default function SignUp() {
           <input
             type="text"
             className="form-control"
+            aria-label="Invite Code"
+            aria-required="true"
             placeholder={getPlaceholder("YOUR-INVITE-CODE", configuration)}
             spellCheck="false"
             autoComplete="off"
@@ -161,6 +164,8 @@ export default function SignUp() {
         <input
           type="text"
           className="form-control"
+          aria-label="First Name"
+          aria-required="true"
           placeholder={getPlaceholder("Your First Name", configuration)}
           minLength="3"
           autoCorrect="off"
@@ -177,6 +182,8 @@ export default function SignUp() {
         <input
           type="text"
           className="form-control"
+          aria-label="Last Name"
+          aria-required="true"
           placeholder={getPlaceholder("Your Last Name", configuration)}
           minLength="3"
           autoCorrect="off"
@@ -193,6 +200,8 @@ export default function SignUp() {
         <input
           type="email"
           className="form-control"
+          aria-label="Email"
+          aria-required="true"
           placeholder={getPlaceholder("your@email.com", configuration)}
           spellCheck="false"
           id="email"
@@ -221,6 +230,8 @@ export default function SignUp() {
             <input
               type="tel"
               className="form-control"
+              aria-label="Phone"
+              aria-required="true"
               placeholder={getPlaceholder("0000000000", configuration)}
               spellCheck="false"
               id="phone"
@@ -232,6 +243,8 @@ export default function SignUp() {
         <input
           type="password"
           className="form-control"
+          aria-label="Password"
+          aria-required="true"
           placeholder={getPlaceholder("********", configuration)}
           minLength="8"
           autoComplete="new-password"
@@ -240,7 +253,7 @@ export default function SignUp() {
         />
       </div>
       <div className="page-links">
-        <span className="page-link">
+        <span className="page-link" aria-label="Login">
           <a href={"/login" + window.location.search} className="page-link">
             Have an account? Login
           </a>
@@ -252,13 +265,13 @@ export default function SignUp() {
         className={"button" + (hasError ? " shake" : "")}
         value={buttonText}
       />
-      <div class="fineprint">
+      <div className="fineprint">
         {(termsAndConditions || privacyPolicy) &&
           "By clicking on Create Account, you"
         }
         {termsAndConditions &&
           <>
-            &nbsp;agree to the <a href={termsAndConditions}> terms and conditions</a> of {appName}
+            &nbsp;agree to the <a href={termsAndConditions}> terms & conditions</a> of {appName}
             {!privacyPolicy && "."}
           </>
         }

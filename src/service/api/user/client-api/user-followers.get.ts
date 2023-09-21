@@ -17,7 +17,7 @@ export const GET_UserFollowersValidator = [query("target").exists().isString().i
 
 const GET_UserFollowers = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.client.follow.read", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("client:social:follow:read", res)) {
       return;
     };
     const userId = req.query.target as string;

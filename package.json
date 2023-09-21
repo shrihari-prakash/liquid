@@ -4,9 +4,9 @@
   "description": "Seamless and highly customizable authentication and user management server.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register test/**/*.spec.ts --exit",
+    "test": "mocha -r ts-node/register 'test/integration/**/*.spec.ts' --exit --recursive --require test/integration/index.spec.ts",
     "build": "npm run build:server && npm run build:static",
-    "copy-files": "copyfiles -u 1 \"src/**/*.yaml\" \"src/**/*.html\" \"src/**/*.json\" build/",
+    "copy-files": "copyfiles -u 1 \"src/**/*.yaml\" \"src/**/*.html\" \"src/**/*.json\" \"src/VERSION\" build/",
     "build:server": "rimraf ./build && tsc && npm run copy-files",
     "build:static": "gulp static_build",
     "start:dev": "concurrently \"nodemon --inspect\" \"npx babel --watch ./src/public/components --out-dir ./src/public/compiled --presets @babel/preset-react\"",
@@ -46,12 +46,12 @@
     "prettier": "^2.8.3",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
-    "typescript": "^4.8.4"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.294.0",
-    "@aws-sdk/s3-request-presigner": "^3.294.0",
-    "@node-oauth/oauth2-server": "^5.0.0-rc.2",
+    "@aws-sdk/client-s3": "^3.405.0",
+    "@aws-sdk/s3-request-presigner": "^3.405.0",
+    "@node-oauth/oauth2-server": "^5.0.0-rc.3",
     "@sendgrid/mail": "^7.7.0",
     "amqplib": "^0.10.3",
     "bcrypt": "^5.1.0",

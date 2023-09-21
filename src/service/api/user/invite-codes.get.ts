@@ -8,9 +8,13 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import InviteCodeModel from "../../../model/mongo/invite-code";
 import { Configuration } from "../../../singleton/configuration";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 const GET_InviteCodes = async (_: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:invite-code:read", res)) {
+      return;
+    };
     const user = res.locals.oauth.token.user;
     const durationSinceCreation = moment.duration(moment().diff(moment(user.createdAt)));
     const difference = durationSinceCreation.asSeconds();

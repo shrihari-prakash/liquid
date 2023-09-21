@@ -17,7 +17,7 @@ export const DELETE_FollowEntryValidator = [body("target").exists().isString().i
 const DELETE_FollowEntry = async (req: Request, res: Response) => {
   let session = "";
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.follow.write.remove-follower", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:remove", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

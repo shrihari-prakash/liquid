@@ -53,8 +53,7 @@ export default function Login() {
 
   async function onLogin() {
     let authParams = prepareAuthorizationParams(configuration);
-    const clientInfoParams = new URLSearchParams({ id: authParams.client_id });
-    const clientInfo = await $.get(`/user/client?${clientInfoParams.toString()}`);
+    const clientInfo = await $.get(`/user/client/${authParams.client_id}`);
     console.log("Client role", clientInfo.data.role);
     if (clientInfo.data.client.role === "internal_client") {
       authParams = new URLSearchParams(authParams);
@@ -135,6 +134,8 @@ export default function Login() {
         <input
           type="text"
           className="form-control"
+          aria-label="Username or Email"
+          aria-required="true"
           placeholder={getPlaceholder("your_username", configuration)}
           minLength="8"
           autoComplete="username"
@@ -150,6 +151,8 @@ export default function Login() {
         <input
           type="password"
           className="form-control"
+          aria-label="Password"
+          aria-required="true"
           placeholder={getPlaceholder("********", configuration)}
           minLength="8"
           autoComplete="current-password"
@@ -160,14 +163,14 @@ export default function Login() {
       <div className="page-links">
         {configuration["privilege.can-create-account"] && (
           <span className="page-link">
-            <a href={"/signup" + window.location.search} className="page-link signup-link">
+            <a href={"/signup" + window.location.search} className="page-link signup-link" aria-label="Sign Up">
               Create Account
             </a>
           </span>
         )}
         {configuration["privilege.can-reset-password"] && (
           <span className="page-link">
-            <a href={"/get-code" + window.location.search} className="page-link forgot-password-link">
+            <a href={"/get-code" + window.location.search} className="page-link forgot-password-link" aria-label="Forgot Password?">
               Forgot Password?
             </a>
           </span>

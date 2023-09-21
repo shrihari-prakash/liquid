@@ -7,7 +7,7 @@ import { Configuration } from "../singleton/configuration";
 import AuthorizationCodeModel from "./mongo/authorization-code";
 import ClientModel from "./mongo/client";
 import TokenModel from "./mongo/token";
-import UserModel, { IUser } from "./mongo/user";
+import UserModel, { UserInterface } from "./mongo/user";
 import Role from "../enum/role";
 import { ScopeManager } from "../singleton/scope-manager";
 import { Falsey } from "@node-oauth/oauth2-server";
@@ -64,22 +64,33 @@ const getPrefixedCode = (code: string) => `${codePrefix}${code}`;
 const userIdPrefix = "user:";
 const getPrefixedUserId = (userId: string) => `${userIdPrefix}${userId}`;
 
-export const flushUserInfoFromRedis = async (userId: string) => {
-  await Redis.client.del(getPrefixedUserId(userId));
-  log.debug("User info for %s flushed from cache.", userId);
+export const flushUserInfoFromRedis = async (userIds: string | string[]) => {
+  if (typeof userIds === "string") {
+    userIds = [userIds];
+  }
+  for (let i = 0; i < userIds.length; i++) {
+    const key = getPrefixedUserId(userIds[i]);
+    await Redis.client.del(key);
+    log.debug("User info for %s flushed from cache.", key);
+  }
 };
 
 const getUserInfo = async (userId: string) => {
-  let userInfo = await Redis.client.get(getPrefixedUserId(userId));
+  let userInfo;
+  if (useTokenCache) {
+    userInfo = await Redis.client.get(getPrefixedUserId(userId));
+  }
   if (!userInfo) {
     userInfo = await UserModel.findById(userId).lean();
-    await Redis.client.set(
-      getPrefixedUserId(userId),
-      JSON.stringify(userInfo),
-      "EX",
-      Configuration.get("oauth.refresh-token-lifetime") as number
-    );
-    log.debug("User info for %s written to cache.", userId);
+    if (useTokenCache) {
+      await Redis.client.set(
+        getPrefixedUserId(userId),
+        JSON.stringify(userInfo),
+        "EX",
+        Configuration.get("oauth.refresh-token-lifetime") as number
+      );
+      log.debug("User info for %s written to cache.", userId);
+    }
   } else {
     userInfo = JSON.parse(userInfo);
   }
@@ -171,6 +182,9 @@ const OAuthModel = {
       const dbTokenObject = await TokenModel.findOne({
         accessToken,
       }).lean();
+      if (dbTokenObject && !isApplicationClient(dbTokenObject.user)) {
+        dbTokenObject.user = await getUserInfo(dbTokenObject.user._id);
+      }
       return dbTokenObject as unknown as Token;
     } catch (err) {
       log.error("Error retrieving access token.");
@@ -194,6 +208,9 @@ const OAuthModel = {
     const dbTokenObject = await TokenModel.findOne({
       refreshToken,
     }).lean();
+    if (dbTokenObject && !isApplicationClient(dbTokenObject.user)) {
+      dbTokenObject.user = await getUserInfo(dbTokenObject.user._id);
+    }
     log.debug("Refresh token retrieved from database.");
     return dbTokenObject as unknown as Token;
   },
@@ -286,7 +303,11 @@ const OAuthModel = {
     }
   },
 
-  validateScope: (user: IUser, client: Client, scope: string | string[]): Promise<string | string[] | Falsey> => {
+  validateScope: (
+    user: UserInterface,
+    client: Client,
+    scope: string | string[]
+  ): Promise<string | string[] | Falsey> => {
     log.debug("Validating scope %s for client %s and user %s.", scope, client.id, user.username);
     return new Promise((resolve) => {
       const clientHasAccess = ScopeManager.canRequestScope(scope, client);
@@ -303,7 +324,7 @@ const OAuthModel = {
         return resolve(scope);
       }
       if (!user.scope) {
-        user.scope = ["user.delegated.all"];
+        user.scope = Configuration.get("user.account-creation.default-scope");
       }
       // Sometimes, the frontends do not know the scopes a user can request ahead of time.
       // Since there is usually a higher amount of trust for internal clients in the system,

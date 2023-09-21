@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import { body } from "express-validator";
 import moment from "moment";
 
-import UserModel, { IUser } from "../../../model/mongo/user";
+import UserModel, { UserInterface } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
@@ -16,36 +16,30 @@ import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { Configuration } from "../../../singleton/configuration";
 import { sanitizeEmailAddress } from "../../../utils/email";
-import {
-  getEmailValidator,
-  getFirstNameValidator,
-  getLastNameValidator,
-  getPasswordValidator,
-  getPhoneCountryCodeValidator,
-  getPhoneValidator,
-  getUsernameValidator,
-} from "../../../utils/validator/user";
 import InviteCodeModel from "../../../model/mongo/invite-code";
 import { MongoDB } from "../../../singleton/mongo-db";
 import { ClientSession } from "mongoose";
 import { generateInviteCode } from "../../../utils/invite-code";
+import UserValidator from "../../../validator/user";
 
 export const bcryptConfig = {
   salt: 10,
 };
 
+const userValidator = new UserValidator(body);
+
 export const POST_CreateValidator = [
-  getUsernameValidator(body, true),
-  getPasswordValidator(body, true),
-  getEmailValidator(body, true),
-  getFirstNameValidator(body, true),
-  getLastNameValidator(body, true),
-  getPhoneCountryCodeValidator(body, false),
-  getPhoneValidator(body, false),
+  userValidator.username(true),
+  userValidator.password(true),
+  userValidator.email(true),
+  userValidator.firstName(true),
+  userValidator.lastName(true),
+  userValidator.phoneCountryCode(),
+  userValidator.phone(),
   body("inviteCode").optional().isString(),
 ];
 
-async function validateInviteCode(req: Request, res: Response, user: IUser) {
+async function validateInviteCode(req: Request, res: Response, user: UserInterface) {
   if (!Configuration.get("user.account-creation.enable-invite-only")) {
     return true;
   }
@@ -69,7 +63,11 @@ async function validateInviteCode(req: Request, res: Response, user: IUser) {
   return true;
 }
 
-async function useInviteCode(user: IUser, code: string, sessionOptions: { session: ClientSession } | undefined) {
+async function useInviteCode(
+  user: UserInterface,
+  code: string,
+  sessionOptions: { session: ClientSession } | undefined
+) {
   if (
     Configuration.get("user.account-creation.enable-invite-only") ||
     Configuration.get("user.account-creation.force-generate-invite-codes")
@@ -102,7 +100,7 @@ const POST_Create = async (req: Request, res: Response) => {
     if (Configuration.get("user.account-creation.enable-ip-based-throttle")) {
       const ipResult = (await UserModel.findOne({
         creationIp: req.ip,
-      }).exec()) as unknown as IUser;
+      }).exec()) as unknown as UserInterface;
       if (ipResult && ipResult.creationIp === req.ip) {
         const duration = moment.duration(moment().diff(moment(ipResult.createdAt)));
         const difference = duration.asSeconds();
@@ -140,7 +138,7 @@ const POST_Create = async (req: Request, res: Response) => {
     }
     const existingUser = (await UserModel.findOne({
       $or: [{ email: sanitizeEmailAddress(email) }, { username }],
-    }).exec()) as unknown as IUser;
+    }).exec()) as unknown as UserInterface;
     if (existingUser) {
       const duplicateFields = [];
       if (username === existingUser.username) duplicateFields.push("username");
@@ -169,6 +167,7 @@ const POST_Create = async (req: Request, res: Response) => {
       role,
       password,
       credits,
+      scope: Configuration.get("user.account-creation.default-scope"),
       creationIp: req.ip,
     };
     const shouldVerifyEmail = Configuration.get("user.account-creation.require-email-verification");
@@ -185,7 +184,7 @@ const POST_Create = async (req: Request, res: Response) => {
       await MongoDB.abortTransaction(session);
       return;
     }
-    const newUser = (await new UserModel(toInsert).save(sessionOptions)) as unknown as IUser;
+    const newUser = (await new UserModel(toInsert).save(sessionOptions)) as unknown as UserInterface;
     if (shouldVerifyEmail) {
       await generateVerificationCode(newUser);
     }

@@ -59,6 +59,8 @@ export default function VerifyAccount() {
                 <input
                     type="text"
                     className="form-control"
+                    aria-label="Verification Code"
+                    aria-required="true"
                     placeholder={getPlaceholder("Your Verification Code", configuration)}
                     minLength="4"
                     autoComplete="off"

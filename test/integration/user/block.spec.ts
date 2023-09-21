@@ -2,7 +2,7 @@ import app from "../../../src/index";
 import chai from "chai";
 import MemoryStore from "../store";
 import BlockModel from "../../../src/model/mongo/block";
-import UserModel, { IUser } from "../../../src/model/mongo/user";
+import UserModel, { UserInterface } from "../../../src/model/mongo/user";
 import { setupUsers } from "../utils/records";
 
 describe("Block", () => {
@@ -24,7 +24,7 @@ describe("Block", () => {
               .send({ target: (MemoryStore.users.user2 as any)._id })
               .then(async () => {
                 try {
-                  const users = (await UserModel.find({})) as unknown as IUser[];
+                  const users = (await UserModel.find({})) as unknown as UserInterface[];
                   chai.expect(users[0].followingCount).to.be.eq(1);
                   chai.expect(users[0].followerCount).to.be.eq(1);
                   chai.expect(users[1].followingCount).to.be.eq(1);
@@ -56,7 +56,7 @@ describe("Block", () => {
               }).exec();
               chai.expect(blockObject).to.not.be.undefined;
               chai.expect(blockObject).to.not.be.null;
-              const users = (await UserModel.find({})) as unknown as IUser[];
+              const users = (await UserModel.find({})) as unknown as UserInterface[];
               chai.expect(users[0].followingCount).to.be.eq(0);
               chai.expect(users[0].followerCount).to.be.eq(0);
               chai.expect(users[1].followingCount).to.be.eq(0);

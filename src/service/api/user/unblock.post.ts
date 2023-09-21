@@ -14,7 +14,7 @@ export const POST_UnblockValidator = [body("target").exists().isString().isLengt
 
 const POST_Unblock = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.block.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:social:block:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;

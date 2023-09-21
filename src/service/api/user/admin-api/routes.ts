@@ -12,6 +12,7 @@ import POST_Client, { POST_ClientValidator } from "./client.post";
 import GET_List from "../shared/list.get";
 import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_EditableFields from "./editable-fields.get";
+import GET_Roles from "../shared/roles.get";
 import PATCH_User, { PATCH_UserValidator } from "./user.patch";
 
 const AdminApiRouter = express.Router();
@@ -20,6 +21,7 @@ AdminApiRouter.get("/user-info", ...DelegatedAuthFlow, GET_UserInfoValidator, GE
 AdminApiRouter.post("/access", ...DelegatedAuthFlow, POST_AccessValidator, POST_Access);
 AdminApiRouter.post("/client", ...DelegatedAuthFlow, POST_ClientValidator, POST_Client);
 AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, GET_EditableFields);
+AdminApiRouter.get("/roles", ...DelegatedAuthFlow, GET_Roles);
 AdminApiRouter.patch("/user", ...DelegatedAuthFlow, PATCH_UserValidator, PATCH_User);
 AdminApiRouter.post("/ban", ...DelegatedAuthFlow, POST_BanValidator, POST_Ban);
 AdminApiRouter.post("/credits", ...DelegatedAuthFlow, POST_CreditsValidator, POST_Credits);

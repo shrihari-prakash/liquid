@@ -12,21 +12,35 @@ import express from "express";
 import RedisStore from "connect-redis";
 import session from "express-session";
 import bodyParser from "body-parser";
+import YAML from "yaml";
+
+const version = fs.readFileSync(path.join(__dirname, "VERSION"), { encoding: "utf8" });
+const banner = `
+   __         __     ______     __  __     __     _____
+  /\\ \\       /\\ \\   /\\  __ \\   /\\ \\/\\ \\   /\\ \\   /\\  __-.
+  \\ \\ \\____  \\ \\ \\  \\ \\ \\/\\_\\  \\ \\ \\_\\ \\  \\ \\ \\  \\ \\ \\/\\ \\
+   \\ \\_____\\  \\ \\_\\  \\ \\___\\_\\  \\ \\_____\\  \\ \\_\\  \\ \\____-
+    \\/_____/   \\/_/   \\/___/_/   \\/_____/   \\/_/   \\/____/
+  
+  Version ${version}
+`;
+log.info(banner);
 
 import { Configuration } from "./singleton/configuration";
+const environment = Configuration.get("environment");
+process.env.NODE_ENV = environment;
+log.info("Environment: %s", environment);
+
 import { MongoDB } from "./singleton/mongo-db";
 import { Api } from "./singleton/api/api";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
 import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
 
-import YAML from "yaml";
-import { ScopeManager } from "./singleton/scope-manager";
-
 const app = express();
 
-// Rate limiting
-if (app.get("env") !== "test") {
+// ********** Rate Limiting ********** //
+if (environment !== "test") {
   activateRateLimiters(app);
 }
 if (Configuration.get("system.stats.enable-request-counting")) {
@@ -38,16 +52,17 @@ if (Configuration.get("system.stats.enable-request-counting")) {
     next();
   });
 }
+// ********** End Rate Limiting ********** //
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Session stuff
+// ********** Sessions ********** //
 var sessionOptions: any = {
-  secret: Configuration.get("cookie-session-secret"),
+  secret: Configuration.get("cookie.session-secret"),
   resave: false,
   saveUninitialized: false,
-  proxy: app.get("env") === "production" && Configuration.get("system.reverse-proxy-mode"),
+  proxy: environment === "production" && Configuration.get("system.reverse-proxy-mode"),
   cookie: {},
 };
 if (Configuration.get("privilege.can-use-cache")) {
@@ -58,31 +73,38 @@ if (Configuration.get("privilege.can-use-cache")) {
   });
   sessionOptions.store = redisStore;
 }
-if (app.get("env") === "production") {
-  const isReverseProxy = Configuration.get("system.reverse-proxy-mode");
-  if (isReverseProxy) {
-    app.set("trust proxy", true);
-  }
+if (Configuration.get("cookie.secure")) {
   sessionOptions.cookie.secure = true;
 }
+const cookieDomain = Configuration.get("cookie.domain");
+if (cookieDomain) {
+  sessionOptions.cookie.domain = cookieDomain;
+}
+const cookieMaxAge = Configuration.get("cookie.max-age");
+if (cookieMaxAge) {
+  sessionOptions.cookie.maxAge = cookieMaxAge * 1000;
+}
 app.use(session(sessionOptions));
+// ********** End Sessions ********** //
 
-// CORS
+// ********** CORS ********** //
 app.use(
   cors({
     credentials: true,
     origin: Configuration.get("cors.allowed-origins"),
   })
 );
+// ********** End CORS ********** //
 
-//Singleton services.
-if (app.get("env") !== "test") {
+// ********** Singleton Init ********** //
+if (environment !== "test") {
   MongoDB.connect();
 }
 Api.initialize(app);
 Mailer.initialize(app);
+// ********** End Singleton Init ********** //
 
-// UI
+// ********** UI / Static Pages ********** //
 const staticFolder = Configuration.get("system.static.use-relative-path")
   ? path.join(__dirname, Configuration.get("system.static-folder"))
   : Configuration.get("system.static-folder");
@@ -111,17 +133,24 @@ if (appConfigAbsolutePath) {
   });
   log.warn("Frontend config was not found. Please configure option `system.static.app-config-absolute-path`");
 }
-if (Configuration.get("system.enable-swagger") || app.get("env") !== "production") {
+if (Configuration.get("system.enable-swagger") || environment !== "production") {
   const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", "utf8"));
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
-
 if (Configuration.get("system.static.fallback-to-index")) {
   app.all("*", function (_, res) {
     const index = path.join(staticFolder, "index.html");
     res.sendFile(index);
   });
 }
+// ********** End UI / Static Pages ********** //
+
+// ********** Reverse Proxy Setup ********** //
+const isReverseProxy = Configuration.get("system.reverse-proxy-mode");
+if (isReverseProxy) {
+  app.set("trust proxy", true);
+}
+// ********** End Reverse Proxy Setup ********** //
 
 if (Configuration.get("user.account-creation.allow-only-whitelisted-email-domains")) {
   log.info("Allowing only whitelisted domain names in user sign up.");
@@ -135,7 +164,5 @@ app.listen(Configuration.get("system.app-port"), () => {
     )}`
   );
 });
-
-ScopeManager;
 
 export default app;

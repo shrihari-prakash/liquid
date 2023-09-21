@@ -2,11 +2,13 @@ import { Logger } from "../../singleton/logger";
 const log = Logger.getLogger().child({ from: "scope-manager" });
 
 import { Response } from "express";
+import fs from "fs";
 
 import Scopes from "./scopes.json";
 import { errorMessages, statusCodes } from "../../utils/http-status";
 import { ErrorResponse } from "../../utils/response";
 import Role from "../../enum/role";
+import { Configuration } from "../../singleton/configuration";
 
 interface Scope {
   name: string;
@@ -19,8 +21,22 @@ export class ScopeManager {
   constructor() {
     const startTime = +new Date();
     log.debug("Initializing scopes...");
-    log.debug(this.getScopeTree(Scopes));
-    this.scopes = Scopes.reduce((scopes, scope) => Object.assign(scopes, { [scope.name]: scope }), {});
+    let scopes = Scopes;
+    const scopeExtensionsPath = Configuration.get("system.scope-extension-file-path");
+    if (fs.existsSync(scopeExtensionsPath)) {
+      try {
+        log.debug("Scope extensions detected, extending system scopes...");
+        const extendedScopes = JSON.parse(fs.readFileSync(scopeExtensionsPath, "utf8"));
+        scopes = [...Scopes, ...extendedScopes];
+      } catch (e) {
+        log.error("Error parsing scope extensions.");
+        log.error(e);
+      }
+    } else {
+      log.debug("No scope extensions detected.");
+    }
+    log.debug(this.getScopeTree(scopes));
+    this.scopes = scopes.reduce((scopes, scope) => Object.assign(scopes, { [scope.name]: scope }), {});
     const milliseconds = +new Date() - startTime;
     log.info("Scopes initialized in %s ms", milliseconds);
   }

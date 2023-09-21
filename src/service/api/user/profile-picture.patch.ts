@@ -50,13 +50,13 @@ if (Configuration.get("privilege.can-use-cloud-storage")) {
   };
 }
 
-const uploadProfilePicture = profilePictureMulter.single("profile-picture");
+const uploadProfilePicture = profilePictureMulter.single("profilePicture");
 
 export const profilePicturePath = `${Configuration.get("storage.cloud-path")}/profile-pictures`;
 
 const PATCH_ProfilePicture = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
     };
     uploadProfilePicture(req, res, async function (err: any) {

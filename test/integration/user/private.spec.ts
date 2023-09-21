@@ -1,7 +1,7 @@
 import app from "../../../src/index";
 import chai from "chai";
 import MemoryStore from "../store";
-import UserModel, { IUser } from "../../../src/model/mongo/user";
+import UserModel, { UserInterface } from "../../../src/model/mongo/user";
 import { setupUsers } from "../utils/records";
 
 describe("Private", () => {
@@ -17,7 +17,7 @@ describe("Private", () => {
         .then(async (res) => {
           try {
             chai.expect(res.status).to.eql(200);
-            const user = (await UserModel.findOne({ _id: MemoryStore.users.user1._id }).exec()) as unknown as IUser;
+            const user = (await UserModel.findOne({ _id: MemoryStore.users.user1._id }).exec()) as unknown as UserInterface;
             chai.expect(user.isPrivate).to.be.eq(true);
             return resolve();
           } catch (e) {
@@ -37,7 +37,7 @@ describe("Private", () => {
         .then(async (res) => {
           try {
             chai.expect(res.status).to.eql(200);
-            const user = (await UserModel.findOne({ _id: MemoryStore.users.user1._id }).exec()) as unknown as IUser;
+            const user = (await UserModel.findOne({ _id: MemoryStore.users.user1._id }).exec()) as unknown as UserInterface;
             chai.expect(user.isPrivate).to.be.eq(false);
             return resolve();
           } catch (e) {

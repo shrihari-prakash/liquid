@@ -11,54 +11,47 @@ import UserModel from "../../../model/mongo/user";
 import { Configuration } from "../../../singleton/configuration";
 import { bcryptConfig } from "./create.post";
 import { hasErrors } from "../../../utils/api";
-import { Language } from "../../../enum/language";
 import { flushUserInfoFromRedis } from "../../../model/oauth";
-import {
-  getEmailValidator,
-  getFirstNameValidator,
-  getLastNameValidator,
-  getMiddleNameValidator,
-  getPasswordValidator,
-  getPhoneCountryCodeValidator,
-  getPhoneValidator,
-  getUsernameValidator,
-} from "../../../utils/validator/user";
 import { ScopeManager } from "../../../singleton/scope-manager";
+import UserValidator from "../../../validator/user";
 
-const languages = Language.map((l) => l.code);
+const userValidator = new UserValidator(body);
 
 export const PATCH_MeValidator = [
-  getUsernameValidator(body, false),
-  getPasswordValidator(body, false),
-  getEmailValidator(body, false),
-  getFirstNameValidator(body, false),
-  getMiddleNameValidator(body, false),
-  getLastNameValidator(body, false),
-  getPhoneCountryCodeValidator(body, false),
-  getPhoneValidator(body, false),
-  body("gender").optional().isString().isLength({ min: 2, max: 128 }),
-  body("preferredLanguage").optional().isString().isAlpha().isIn(languages).isLength({ min: 2, max: 2 }),
-  body("bio").optional().isString().isLength({ min: 3, max: 256 }),
-  body("customLink").optional().isURL().isLength({ min: 3, max: 256 }),
-  body("pronouns").optional().isString().isLength({ min: 3, max: 24 }),
-  body("organization").optional().isString().isLength({ min: 3, max: 128 }),
+  userValidator.username(),
+  userValidator.password(),
+  userValidator.email(),
+  userValidator.emailVerified(),
+  userValidator.secondaryEmail(),
+  userValidator.secondaryEmailVerified(),
+  userValidator.firstName(),
+  userValidator.middleName(),
+  userValidator.lastName(),
+  userValidator.phoneCountryCode(),
+  userValidator.phone(),
+  userValidator.phoneVerified(),
+  userValidator.gender(),
+  userValidator.preferredLanguage(),
+  userValidator.bio(),
+  userValidator.customLink(),
+  userValidator.pronouns(),
+  userValidator.organization(),
 ];
 
 const PATCH_Me = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.delegated.profile.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
-    };
+    }
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
       if (!Configuration.get("user.profile.editable-fields").includes(key)) {
-        errors.push({
-          msg: "Invalid value",
-          param: key,
-          location: "body",
-        });
+        errors.push({ msg: "Invalid value", param: key, location: "body" });
+      }
+      if (req.body[key] === "__unset__") {
+        req.body[key] = null;
       }
     });
     const password = req.body.password;
@@ -68,18 +61,10 @@ const PATCH_Me = async (req: Request, res: Response) => {
     if (req.body.phone) {
       const errors = [];
       if (!Configuration.get("privilege.can-use-phone-number")) {
-        errors.push({
-          msg: "Invalid value",
-          param: "phone",
-          location: "body",
-        });
+        errors.push({ msg: "Invalid value", param: "phone", location: "body" });
       }
       if (!req.body.phoneCountryCode) {
-        errors.push({
-          msg: "Invalid value",
-          param: "phoneCountryCode",
-          location: "body",
-        });
+        errors.push({ msg: "Invalid value", param: "phoneCountryCode", location: "body" });
       }
       if (errors.length)
         return res

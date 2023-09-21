@@ -9,6 +9,7 @@ import UserModel from "../../../../model/mongo/user";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api";
 import { ScopeManager } from "../../../../singleton/scope-manager";
+import { flushUserInfoFromRedis } from "../../../../model/oauth";
 
 export const POST_VerifyValidator = [
   body("target").exists().isString().isLength({ min: 8, max: 128 }),
@@ -17,7 +18,7 @@ export const POST_VerifyValidator = [
 
 const POST_Verify = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.admin.profile.verifications.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("admin:profile:verifications:write", res)) {
       return;
     };
     if (hasErrors(req, res)) return;
@@ -26,6 +27,7 @@ const POST_Verify = async (req: Request, res: Response) => {
     const query = { $set: { verified: state, verifiedDate: new Date(new Date().toUTCString()) } };
     await UserModel.updateOne({ _id: target }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
+    flushUserInfoFromRedis(target);
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

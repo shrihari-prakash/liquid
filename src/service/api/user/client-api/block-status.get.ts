@@ -16,7 +16,7 @@ export const GET_BlockStatusValidator = [
 
 const GET_BlockStatus = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("user.client.block.read", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("client:social:block:read", res)) {
       return;
     };
     const sourceId = req.query.source as string;

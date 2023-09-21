@@ -13,7 +13,7 @@ import { hasErrors } from "../../../../utils/api";
 
 export const POST_ClientValidator = [
   body("id").exists().isString().isLength({ min: 8, max: 96 }),
-  body("grants").exists().isArray(),
+  body("grants").exists().isArray().isIn(["client_credentials", "authorization_code", "refresh_token", "password"]),
   body("redirectUris").exists().isArray(),
   body("secret").exists().isString().isLength({ min: 8, max: 256 }),
   body("role").exists().isString().isIn([Role.INTERNAL_CLIENT, Role.EXTERNAL_CLIENT]),
@@ -23,7 +23,7 @@ export const POST_ClientValidator = [
 
 const POST_Client = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSharedSession("user.admin.client.write", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("admin:system:client:write", res)) {
       return;
     }
     if (hasErrors(req, res)) return;
