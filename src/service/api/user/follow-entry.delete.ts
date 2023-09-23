@@ -22,7 +22,7 @@ const DELETE_FollowEntry = async (req: Request, res: Response) => {
     };
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
-    const entryId = req.body.target;
+    const entryId = req.body.entry || req.body.target;
     const query: any = { $and: [{ _id: entryId }] };
     const requestObject = (await FollowModel.findOne(query)) as any;
     if (!requestObject.sourceId.equals(userId) && !requestObject.targetId.equals(userId)) {
