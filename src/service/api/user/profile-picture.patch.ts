@@ -50,7 +50,7 @@ if (Configuration.get("privilege.can-use-cloud-storage")) {
   };
 }
 
-const uploadProfilePicture = profilePictureMulter.single("profile-picture");
+const uploadProfilePicture = profilePictureMulter.single("profilePicture");
 
 export const profilePicturePath = `${Configuration.get("storage.cloud-path")}/profile-pictures`;
 
