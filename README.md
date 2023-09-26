@@ -32,5 +32,3 @@ Liquid is released under the [MIT License](https://github.com/shrihari-prakash/l
 
 ## ❗ Issues
 Have questions or need support? Open an issue [here](https://github.com/shrihari-prakash/liquid/issues).
-
-
