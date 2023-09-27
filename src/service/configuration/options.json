@@ -291,7 +291,7 @@
     "name": "sendgrid.outbound-email-address (DEPRECATED)",
     "displayName": "Sendgrid Outbound Email Address",
     "envName": "SENDGRID_OUTBOUND_EMAIL_ADDRESS",
-    "description": "Email address to be used for outgoing emails from Sendgrid.",
+    "description": "Email address to be used for outgoing emails from Sendgrid. This option is deprecated. Use `email.outbound-address` instead.",
     "type": "string",
     "default": "liquid@example.com",
     "relatedOptions": ["sendgrid.*", "system.email-adapter"]
