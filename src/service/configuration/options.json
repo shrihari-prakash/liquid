@@ -196,20 +196,68 @@
     "default": false
   },
   {
+    "name": "system.email-adapter",
+    "displayName": "System Email Adapter",
+    "envName": "SYSTEM_EMAIL_ADAPTER",
+    "description": "Specifies the adapter to use to send emails to users. Possible values are `nodemailer`, `sendgrid`, `print`",
+    "type": "string",
+    "default": "sendgrid",
+    "relatedOptions": ["nodemailer.*", "sendgrid.*"]
+  },
+  {
+    "name": "nodemailer.service-name",
+    "displayName": "Nodemailer Service Name",
+    "envName": "NODEMAILER_SERVICE_NAME",
+    "description": "Service name for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*"]
+  },
+  {
+    "name": "nodemailer.host",
+    "displayName": "Nodemailer Host",
+    "envName": "NODEMAILER_HOST",
+    "description": "Host for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*"]
+  },
+  {
+    "name": "nodemailer.port",
+    "displayName": "Nodemailer Port",
+    "envName": "NODEMAILER_PORT",
+    "description": "Port for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*"]
+  },
+  {
+    "name": "nodemailer.secure",
+    "displayName": "Nodemailer Secure",
+    "envName": "NODEMAILER_SECURE",
+    "description": "Specifies if nodemailer should be secure.",
+    "type": "boolean",
+    "relatedOptions": ["nodemailer.*"]
+  },
+  {
+    "name": "nodemailer.username",
+    "displayName": "Nodemailer Username",
+    "envName": "NODEMAILER_USERNAME",
+    "description": "Username for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*"]
+  },
+  {
+    "name": "nodemailer.password",
+    "displayName": "Nodemailer Password",
+    "envName": "NODEMAILER_PASSWORD",
+    "description": "Password for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*"]
+  },
+  {
     "name": "sendgrid.api-key",
     "displayName": "Sendgrid API Key",
     "envName": "SENDGRID_API_KEY",
     "description": "API key for sendgrid.",
     "type": "string",
-    "relatedOptions": ["sendgrid.*"]
-  },
-  {
-    "name": "system.email-adapter",
-    "displayName": "System Email Adapter",
-    "envName": "SYSTEM_EMAIL_ADAPTER",
-    "description": "Specifies the adapter to use to send emails to users. Possible values are `sendgrid`, `print`",
-    "type": "string",
-    "default": "sendgrid",
     "relatedOptions": ["sendgrid.*"]
   },
   {

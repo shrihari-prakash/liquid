@@ -2,6 +2,7 @@ import { Logger } from "../../singleton/logger";
 const log = Logger.getLogger().child({ from: "mailer" });
 
 import sgMail from "@sendgrid/mail";
+import nodemailer from "nodemailer";
 import * as path from "path";
 import * as fs from "fs";
 import { v4 as uuidv4 } from "uuid";
@@ -13,6 +14,7 @@ import VerificationCodeModel from "../../model/mongo/verification-code";
 const Modes = {
   PRINT: "print",
   SENDGRID: "sendgrid",
+  NODEMAILER: "nodemailer",
 };
 
 interface Email {
@@ -30,13 +32,42 @@ interface Email {
 
 export class Mailer {
   mode = Modes.PRINT;
+  transporter?: ReturnType<typeof nodemailer.createTransport>;
+  adapter = Configuration.get("system.email-adapter");
 
   public initialize(app: any) {
-    if (Configuration.get("system.email-adapter") === "sendgrid") {
+    if (this.adapter === Modes.SENDGRID) {
       this.mode = Modes.SENDGRID;
       sgMail.setApiKey(Configuration.get("sendgrid.api-key") as string);
+    } else if (this.adapter === Modes.NODEMAILER) {
+      this.mode = Modes.NODEMAILER;
+      this.transporter = nodemailer.createTransport({
+        service: Configuration.get("nodemailer.service-name"),
+        host: Configuration.get("nodemailer.host"),
+        port: Configuration.get("nodemailer.port"),
+        secure: Configuration.get("nodemailer.secure"),
+        auth: {
+          user: Configuration.get("nodemailer.username"),
+          pass: Configuration.get("nodemailer.password"),
+        },
+        logger: true,
+        debug: true,
+        requireTLS: true,
+        tls: {
+          ciphers: "SSLv3",
+          rejectUnauthorized: false,
+        },
+      });
+      this.transporter.verify(function (error: any) {
+        if (error) {
+          log.error("Verification failed");
+          log.error(error);
+        } else {
+          log.info("Nodemailer is ready.");
+        }
+      });
     }
-    log.info("Mailer initialized in %s mode ", this.mode);
+    log.info("Mailer initialized in %s mode. ", this.mode);
   }
 
   public async send(email: Email) {
@@ -47,6 +78,9 @@ export class Mailer {
     }
     if (this.mode === Modes.SENDGRID) {
       await sgMail.send(email as any);
+    } else if (this.mode === Modes.NODEMAILER) {
+      (email.from as any) = `${email.from.name} <${email.from.email}>`;
+      await (this.transporter as ReturnType<typeof nodemailer.createTransport>).sendMail(email as any);
     } else {
       log.info("%o", email);
     }
