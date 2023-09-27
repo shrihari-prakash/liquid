@@ -52,8 +52,8 @@ export class Mailer {
         },
         requireTLS: true,
         tls: {
-          ciphers: "SSLv3",
-          rejectUnauthorized: false,
+          ciphers: Configuration.get("nodemailer.ciphers"),
+          rejectUnauthorized: Configuration.get("nodemailer.reject-unauthorized"),
         },
       });
       this.transporter.verify(function (error: any) {

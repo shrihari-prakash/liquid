@@ -253,6 +253,24 @@
     "relatedOptions": ["nodemailer.*", "system.email-adapter"]
   },
   {
+    "name": "nodemailer.ciphers",
+    "displayName": "Nodemailer Ciphers",
+    "envName": "NODEMAILER_CIPHERS",
+    "description": "Ciphers for nodemailer.",
+    "type": "string",
+    "default": "SSLv3",
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
+    "name": "nodemailer.reject-unauthorized",
+    "displayName": "Nodemailer Reject Unauthorized",
+    "envName": "NODEMAILER_REJECT_UNAUTHORIZED",
+    "description": "Specifies if nodemailer should reject unauthorized.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
     "name": "sendgrid.api-key",
     "displayName": "Sendgrid API Key",
     "envName": "SENDGRID_API_KEY",
