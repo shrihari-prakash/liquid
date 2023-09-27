@@ -50,8 +50,6 @@ export class Mailer {
           user: Configuration.get("nodemailer.username"),
           pass: Configuration.get("nodemailer.password"),
         },
-        logger: true,
-        debug: true,
         requireTLS: true,
         tls: {
           ciphers: "SSLv3",
@@ -73,7 +71,8 @@ export class Mailer {
   public async send(email: Email) {
     if (!email.from) {
       const name = Configuration.get("system.app-name") as string;
-      const emailAddress = Configuration.get("sendgrid.outbound-email-address") as string;
+      const emailAddress =
+        Configuration.get("email.outbound-address") || Configuration.get("sendgrid.outbound-email-address");
       email.from = { email: emailAddress, name };
     }
     if (this.mode === Modes.SENDGRID) {

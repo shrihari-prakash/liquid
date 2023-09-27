@@ -210,7 +210,7 @@
     "envName": "NODEMAILER_SERVICE_NAME",
     "description": "Service name for nodemailer.",
     "type": "string",
-    "relatedOptions": ["nodemailer.*"]
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
   },
   {
     "name": "nodemailer.host",
@@ -218,7 +218,7 @@
     "envName": "NODEMAILER_HOST",
     "description": "Host for nodemailer.",
     "type": "string",
-    "relatedOptions": ["nodemailer.*"]
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
   },
   {
     "name": "nodemailer.port",
@@ -226,7 +226,7 @@
     "envName": "NODEMAILER_PORT",
     "description": "Port for nodemailer.",
     "type": "string",
-    "relatedOptions": ["nodemailer.*"]
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
   },
   {
     "name": "nodemailer.secure",
@@ -234,7 +234,7 @@
     "envName": "NODEMAILER_SECURE",
     "description": "Specifies if nodemailer should be secure.",
     "type": "boolean",
-    "relatedOptions": ["nodemailer.*"]
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
   },
   {
     "name": "nodemailer.username",
@@ -242,7 +242,7 @@
     "envName": "NODEMAILER_USERNAME",
     "description": "Username for nodemailer.",
     "type": "string",
-    "relatedOptions": ["nodemailer.*"]
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
   },
   {
     "name": "nodemailer.password",
@@ -250,7 +250,7 @@
     "envName": "NODEMAILER_PASSWORD",
     "description": "Password for nodemailer.",
     "type": "string",
-    "relatedOptions": ["nodemailer.*"]
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
   },
   {
     "name": "sendgrid.api-key",
@@ -258,7 +258,7 @@
     "envName": "SENDGRID_API_KEY",
     "description": "API key for sendgrid.",
     "type": "string",
-    "relatedOptions": ["sendgrid.*"]
+    "relatedOptions": ["sendgrid.*", "system.email-adapter"]
   },
   {
     "name": "sendgrid.verification-email-template-id",
@@ -267,16 +267,25 @@
     "description": "Specifies the template ID of verification email template. Leave blank if you want to use plain text. Variables that will be replaced on template: `app_name`, `person_name`, `verification_code`",
     "type": "string",
     "default": "",
-    "relatedOptions": ["sendgrid.*"]
+    "relatedOptions": ["sendgrid.*", "system.email-adapter"]
   },
   {
-    "name": "sendgrid.outbound-email-address",
+    "name": "sendgrid.outbound-email-address (DEPRECATED)",
     "displayName": "Sendgrid Outbound Email Address",
     "envName": "SENDGRID_OUTBOUND_EMAIL_ADDRESS",
     "description": "Email address to be used for outgoing emails from Sendgrid.",
     "type": "string",
     "default": "liquid@example.com",
-    "relatedOptions": ["sendgrid.*"]
+    "relatedOptions": ["sendgrid.*", "system.email-adapter"]
+  },
+  {
+    "name": "email.outbound-address",
+    "displayName": "Email Outbound Address",
+    "envName": "EMAIL_OUTBOUND_ADDRESS",
+    "description": "Email address to be used for outgoing emails from the system. This option is preferred over `sendgrid.outbound-email-address`",
+    "type": "string",
+    "default": "liquid@example.com",
+    "relatedOptions": ["nodemailer.*", "sendgrid.*", "system.email-adapter"]
   },
   {
     "name": "email.verification-template",
