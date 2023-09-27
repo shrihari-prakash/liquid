@@ -216,7 +216,7 @@
     "name": "sendgrid.verification-email-template-id",
     "displayName": "Sendgrid Verification Email Template ID",
     "envName": "SENDGRID_VERIFICATION_EMAIL_TEMPLATE_ID",
-    "description": "Specifies the template ID of verification email template. Leave blank if you want to use plain text. Variables that will be replaced on template: `app_name`, `code`",
+    "description": "Specifies the template ID of verification email template. Leave blank if you want to use plain text. Variables that will be replaced on template: `app_name`, `person_name`, `verification_code`",
     "type": "string",
     "default": "",
     "relatedOptions": ["sendgrid.*"]
@@ -229,6 +229,13 @@
     "type": "string",
     "default": "liquid@example.com",
     "relatedOptions": ["sendgrid.*"]
+  },
+  {
+    "name": "email.verification-template",
+    "displayName": "Verification Email Template File Path",
+    "envName": "EMAIL_VERIFICATION_TEMPLATE",
+    "description": "Specifies the absolute path for the HTML template to be used for sending verification emails. Variables to be included in the template: `%app_name%`, `%person_name%`, `%verification_code%`. Ignore if you are using a Sendgrid template or the default verification template.",
+    "type": "string"
   },
   {
     "name": "storage.cloud-path",
