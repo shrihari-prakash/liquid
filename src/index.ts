@@ -38,6 +38,7 @@ import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
 
 const app = express();
+app.disable('x-powered-by');
 
 // ********** Rate Limiting ********** //
 if (environment !== "test") {
