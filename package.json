@@ -73,6 +73,7 @@
     "nodemailer": "^6.9.5",
     "pino": "^8.7.0",
     "pino-pretty": "^9.1.1",
+    "rate-limit-redis": "^4.0.0",
     "swagger-ui-express": "^4.6.0",
     "uuid": "^9.0.0",
     "yaml": "^2.2.2"
