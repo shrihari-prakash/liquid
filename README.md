@@ -22,6 +22,7 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 * **Advanced Scope Management:** Granular access control to APIs through Liquid's sophisticated scope management solution. Liquid also lets you add your own scopes into it so you can also use scopes in your other microservices.
 * **Gamification Support:** Includes APIs for reward points mechanisms. This can be used for inroducing features like loyalty points, or in-app virtual money.
 * **Invite-Only Access:** Using invite-only sign-ups can be an effective way to create virality because it encourages existing users to invite their network to join the product. This also doubles as a spam account prevention system by ensuring a controlled userbase growth.
+* **Small Image Size:** Tiny ~66MB Docker image.
 
 ## ⚙️ Setup
 
