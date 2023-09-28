@@ -35,6 +35,5 @@ export function activateRateLimiters(app: any) {
   app.post("/user/login", RateLimiter.HEAVY);
   app.get("/user/code", RateLimiter.EXTREME);
 
-  app.use("/user/client-api", RateLimiter.LIGHT);
   app.use("/user/admin-api", RateLimiter.LIGHT);
 }
