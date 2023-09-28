@@ -10,7 +10,6 @@ import UserModel, { UserInterface } from "../../../model/mongo/user";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
-import { generateVerificationCode } from "../../../utils/verification-code/verification-code";
 import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
@@ -21,6 +20,7 @@ import { MongoDB } from "../../../singleton/mongo-db";
 import { ClientSession } from "mongoose";
 import { generateInviteCode } from "../../../utils/invite-code";
 import UserValidator from "../../../validator/user";
+import { Mailer } from "../../../singleton/mailer";
 
 export const bcryptConfig = {
   salt: 10,
@@ -146,7 +146,7 @@ const POST_Create = async (req: Request, res: Response) => {
       if (existingUser.emailVerified)
         return res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
       else {
-        await generateVerificationCode(existingUser);
+        await Mailer.generateAndSendEmailVerification(existingUser);
         const response = {
           userInfo: existingUser,
         };
@@ -186,7 +186,7 @@ const POST_Create = async (req: Request, res: Response) => {
     }
     const newUser = (await new UserModel(toInsert).save(sessionOptions)) as unknown as UserInterface;
     if (shouldVerifyEmail) {
-      await generateVerificationCode(newUser);
+      await Mailer.generateAndSendEmailVerification(newUser);
     }
     await useInviteCode(newUser, req.body.inviteCode, sessionOptions);
     newUser.password = undefined;

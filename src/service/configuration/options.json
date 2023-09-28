@@ -196,39 +196,121 @@
     "default": false
   },
   {
+    "name": "system.email-adapter",
+    "displayName": "System Email Adapter",
+    "envName": "SYSTEM_EMAIL_ADAPTER",
+    "description": "Specifies the adapter to use to send emails to users. Possible values are `nodemailer`, `sendgrid`, `print`",
+    "type": "string",
+    "default": "sendgrid",
+    "relatedOptions": ["nodemailer.*", "sendgrid.*"]
+  },
+  {
+    "name": "nodemailer.service-name",
+    "displayName": "Nodemailer Service Name",
+    "envName": "NODEMAILER_SERVICE_NAME",
+    "description": "Service name for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
+    "name": "nodemailer.host",
+    "displayName": "Nodemailer Host",
+    "envName": "NODEMAILER_HOST",
+    "description": "Host for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
+    "name": "nodemailer.port",
+    "displayName": "Nodemailer Port",
+    "envName": "NODEMAILER_PORT",
+    "description": "Port for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
+    "name": "nodemailer.secure",
+    "displayName": "Nodemailer Secure",
+    "envName": "NODEMAILER_SECURE",
+    "description": "Specifies if nodemailer should be secure.",
+    "type": "boolean",
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
+    "name": "nodemailer.username",
+    "displayName": "Nodemailer Username",
+    "envName": "NODEMAILER_USERNAME",
+    "description": "Username for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
+    "name": "nodemailer.password",
+    "displayName": "Nodemailer Password",
+    "envName": "NODEMAILER_PASSWORD",
+    "description": "Password for nodemailer.",
+    "type": "string",
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
+    "name": "nodemailer.ciphers",
+    "displayName": "Nodemailer Ciphers",
+    "envName": "NODEMAILER_CIPHERS",
+    "description": "Ciphers for nodemailer.",
+    "type": "string",
+    "default": "SSLv3",
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
+    "name": "nodemailer.reject-unauthorized",
+    "displayName": "Nodemailer Reject Unauthorized",
+    "envName": "NODEMAILER_REJECT_UNAUTHORIZED",
+    "description": "Specifies if nodemailer should reject unauthorized.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["nodemailer.*", "system.email-adapter"]
+  },
+  {
     "name": "sendgrid.api-key",
     "displayName": "Sendgrid API Key",
     "envName": "SENDGRID_API_KEY",
     "description": "API key for sendgrid.",
     "type": "string",
-    "relatedOptions": ["sendgrid.*"]
-  },
-  {
-    "name": "system.email-adapter",
-    "displayName": "System Email Adapter",
-    "envName": "SYSTEM_EMAIL_ADAPTER",
-    "description": "Specifies the adapter to use to send emails to users. Possible values are `sendgrid`, `print`",
-    "type": "string",
-    "default": "sendgrid",
-    "relatedOptions": ["sendgrid.*"]
+    "relatedOptions": ["sendgrid.*", "system.email-adapter"]
   },
   {
     "name": "sendgrid.verification-email-template-id",
     "displayName": "Sendgrid Verification Email Template ID",
     "envName": "SENDGRID_VERIFICATION_EMAIL_TEMPLATE_ID",
-    "description": "Specifies the template ID of verification email template. Leave blank if you want to use plain text. Variables that will be replaced on template: `app_name`, `code`",
+    "description": "Specifies the template ID of verification email template. Leave blank if you want to use plain text. Variables that will be replaced on template: `app_name`, `person_name`, `verification_code`",
     "type": "string",
     "default": "",
-    "relatedOptions": ["sendgrid.*"]
+    "relatedOptions": ["sendgrid.*", "system.email-adapter"]
   },
   {
-    "name": "sendgrid.outbound-email-address",
+    "name": "sendgrid.outbound-email-address (DEPRECATED)",
     "displayName": "Sendgrid Outbound Email Address",
     "envName": "SENDGRID_OUTBOUND_EMAIL_ADDRESS",
-    "description": "Email address to be used for outgoing emails from Sendgrid.",
+    "description": "Email address to be used for outgoing emails from Sendgrid. This option is deprecated. Use `email.outbound-address` instead.",
     "type": "string",
     "default": "liquid@example.com",
-    "relatedOptions": ["sendgrid.*"]
+    "relatedOptions": ["sendgrid.*", "system.email-adapter"]
+  },
+  {
+    "name": "email.outbound-address",
+    "displayName": "Email Outbound Address",
+    "envName": "EMAIL_OUTBOUND_ADDRESS",
+    "description": "Email address to be used for outgoing emails from the system. This option is preferred over `sendgrid.outbound-email-address`",
+    "type": "string",
+    "default": "liquid@example.com",
+    "relatedOptions": ["nodemailer.*", "sendgrid.*", "system.email-adapter"]
+  },
+  {
+    "name": "email.verification-template",
+    "displayName": "Verification Email Template File Path",
+    "envName": "EMAIL_VERIFICATION_TEMPLATE",
+    "description": "Specifies the absolute path for the HTML template to be used for sending verification emails. Variables to be included in the template: `%app_name%`, `%person_name%`, `%verification_code%`. Ignore if you are using a Sendgrid template or the default verification template.",
+    "type": "string"
   },
   {
     "name": "storage.cloud-path",
