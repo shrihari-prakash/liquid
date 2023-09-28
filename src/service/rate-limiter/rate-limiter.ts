@@ -29,11 +29,10 @@ export const RateLimiter = {
 
 export function activateRateLimiters(app: any) {
   app.use(/\/system\/(?!client-api|admin-api).*/, RateLimiter.MEDIUM);
-  app.use(/\/oauth\/(?!client-api|admin-api).*/, RateLimiter.MEDIUM);
+  app.use(/\/oauth\/(?!introspect).*/, RateLimiter.MEDIUM);
   app.use(/\/user\/(?!client-api|admin-api).*/, RateLimiter.MEDIUM);
 
   app.use("/system/admin-api", RateLimiter.LIGHT);
-  app.use("/oauth/admin-api", RateLimiter.LIGHT);
   app.use("/user/admin-api", RateLimiter.LIGHT);
 
   app.post("/user/create", RateLimiter.EXTREME);
