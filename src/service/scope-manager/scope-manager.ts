@@ -75,10 +75,8 @@ export class ScopeManager {
     }
   }
 
-  canRequestScope(scopes: any, entity: any) {
-    if (scopes) {
-      scopes = scopes.split(",");
-    } else {
+  canRequestScope(scopes: string[], entity: any) {
+    if (!scopes) {
       log.debug("Scope not specified %s", scopes);
       return false;
     }
