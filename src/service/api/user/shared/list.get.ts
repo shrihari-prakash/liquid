@@ -2,7 +2,6 @@ import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/common-api/get-user-info" });
 
 import { Request, Response } from "express";
-import { query } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
@@ -11,8 +10,6 @@ import { checkSubscription } from "../../../../utils/subscription";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { getPaginationLimit } from "../../../../utils/pagination";
 import { ScopeManager } from "../../../../singleton/scope-manager";
-
-export const GET_UserInfoValidator = [query("targets").exists().isString()];
 
 const GET_List = async (req: Request, res: Response) => {
   try {

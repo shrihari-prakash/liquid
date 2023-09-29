@@ -10,18 +10,7 @@ import TokenModel from "./mongo/token";
 import UserModel, { UserInterface } from "./mongo/user";
 import Role from "../enum/role";
 import { ScopeManager } from "../singleton/scope-manager";
-import { Falsey } from "@node-oauth/oauth2-server";
-
-interface Token {
-  accessToken: string;
-  accessTokenExpiresAt?: Date | undefined;
-  refreshToken?: string | undefined;
-  refreshTokenExpiresAt?: Date | undefined;
-  scope?: Scope;
-  client: Client;
-  user: User;
-  [key: string]: any;
-}
+import { AuthorizationCode, Falsey, Token } from "@node-oauth/oauth2-server";
 
 interface Client {
   id: string;
@@ -38,20 +27,6 @@ interface Client {
 interface User {
   [key: string]: any;
 }
-
-interface AuthorizationCode {
-  authorizationCode: string;
-  expiresAt: Date;
-  redirectUri: string;
-  scope?: string | string[] | undefined;
-  client: Client;
-  user: User;
-  codeChallenge?: string;
-  codeChallengeMethod?: string;
-  [key: string]: any;
-}
-
-type Scope = string | string[] | undefined;
 
 const useTokenCache = Configuration.get("privilege.can-use-cache");
 
@@ -159,7 +134,7 @@ const OAuthModel = {
       }
       const dbToken = new TokenModel(token);
       await dbToken.save();
-      return dbToken.toObject() as unknown as Token;
+      return dbToken.toObject() as unknown as Token
     } catch (err) {
       log.error("Error saving token.");
       log.error(err);
@@ -303,11 +278,7 @@ const OAuthModel = {
     }
   },
 
-  validateScope: (
-    user: UserInterface,
-    client: Client,
-    scope: string | string[]
-  ): Promise<string | string[] | Falsey> => {
+  validateScope: (user: UserInterface, client: Client, scope: string[]): Promise<string[] | Falsey> => {
     log.debug("Validating scope %s for client %s and user %s.", scope, client.id, user.username);
     return new Promise((resolve) => {
       const clientHasAccess = ScopeManager.canRequestScope(scope, client);
@@ -330,7 +301,7 @@ const OAuthModel = {
       // Since there is usually a higher amount of trust for internal clients in the system,
       // it is okay to return all scopes that a user has access to.
       if (client.role === Role.INTERNAL_CLIENT) {
-        scope = user.scope.join(",");
+        scope = user.scope;
         log.debug(
           "Granting all allowed scopes (%s) for user %s due to request from internal client",
           scope,
@@ -347,15 +318,14 @@ const OAuthModel = {
     });
   },
 
-  verifyScope: (token: Token, scope: string): Promise<boolean> => {
+  verifyScope: (token: Token, requestedScopes: string[]): Promise<boolean> => {
     log.info("Verifying scope for token %s...", token.accessToken);
     return new Promise((resolve) => {
-      if (!token.scope) {
+      const authorizedScopes = token.scope;
+      if (!authorizedScopes) {
         return false;
       }
-      let requestedScopes = scope.split(",");
-      let authorizedScopes = typeof token.scope === "string" ? token.scope.split(",") : token.scope;
-      return resolve(requestedScopes.every((s) => authorizedScopes.indexOf(s) >= 0));
+      return resolve(requestedScopes.every((s: string) => authorizedScopes.indexOf(s) >= 0));
     });
   },
 };
