@@ -10,7 +10,16 @@ import TokenModel from "./mongo/token";
 import UserModel, { UserInterface } from "./mongo/user";
 import Role from "../enum/role";
 import { ScopeManager } from "../singleton/scope-manager";
-import { AuthorizationCode, Falsey, Token } from "@node-oauth/oauth2-server";
+import {
+  AuthorizationCode,
+  AuthorizationCodeModel as OAuthAuthorizationCodeModel,
+  ClientCredentialsModel,
+  ExtensionModel,
+  Falsey,
+  PasswordModel,
+  RefreshTokenModel,
+  Token,
+} from "@node-oauth/oauth2-server";
 
 interface Client {
   id: string;
@@ -27,6 +36,13 @@ interface Client {
 interface User {
   [key: string]: any;
 }
+
+type OAuthModel =
+  | OAuthAuthorizationCodeModel
+  | ClientCredentialsModel
+  | RefreshTokenModel
+  | PasswordModel
+  | ExtensionModel;
 
 const useTokenCache = Configuration.get("privilege.can-use-cache");
 
@@ -77,7 +93,7 @@ const isApplicationClient = (user: any) => {
   return appplicationClient;
 };
 
-const OAuthModel = {
+const OAuthModel: OAuthModel = {
   getClient: async function (clientId: string, clientSecret: string) {
     try {
       let query: any = {};
@@ -134,7 +150,7 @@ const OAuthModel = {
       }
       const dbToken = new TokenModel(token);
       await dbToken.save();
-      return dbToken.toObject() as unknown as Token
+      return dbToken.toObject() as unknown as Token;
     } catch (err) {
       log.error("Error saving token.");
       log.error(err);
