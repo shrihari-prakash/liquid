@@ -11,13 +11,14 @@ import { PushEventList } from "../../../enum/push-events";
 import OAuthModel from "../../../model/oauth";
 import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
+import { Token } from "@node-oauth/oauth2-server";
 
 const POST_Logout = async (req: Request, res: Response) => {
   try {
     const token = res.locals?.oauth?.token;
     const user = token ? { ...res.locals.oauth.token.user } : null;
     if (token) {
-      await OAuthModel.revokeToken(token);
+      await (OAuthModel as any).revokeToken(token as Token);
     }
     const sessionId = req.session?.id;
     if (req.session && req.session.destroy) {
