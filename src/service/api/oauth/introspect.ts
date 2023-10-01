@@ -32,6 +32,7 @@ const ALL_Introspect = async (req: Request, res: Response) => {
   tokenInfo.authorizationCode = undefined;
   tokenInfo.refreshToken = undefined;
   tokenInfo.refreshTokenExpiresAt = undefined;
+  // @ts-expect-error: Temporary client object removal for sending response to client.
   tokenInfo.client = undefined;
   const allFields = Object.keys(tokenInfo.user);
   for (let i = 0; i < allFields.length; i++) {
