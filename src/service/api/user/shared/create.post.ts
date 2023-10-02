@@ -61,6 +61,7 @@ const POST_Create = async (req: Request, res: Response) => {
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { existingUsers }));
     }
+    log.debug("Bulk create started. Assembling %s records.", sourceList.length);
     const insertList: any[] = [];
     for (let i = 0; i < sourceList.length; i++) {
       const {
@@ -99,7 +100,11 @@ const POST_Create = async (req: Request, res: Response) => {
         user.phoneVerified = true;
       }
       insertList[i] = user;
+      if (i === 0 || i % 100 === 0) {
+        log.debug("Assembled %s records.", i);
+      }
     }
+    log.debug("Assembled %s records. Inserting to database.", insertList.length);
     let inserted;
     if (sessionOptions) {
       inserted = await UserModel.insertMany(insertList, sessionOptions);

@@ -38,7 +38,7 @@ import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
 
 const app = express();
-app.disable('x-powered-by');
+app.disable("x-powered-by");
 
 // ********** Rate Limiting ********** //
 if (environment !== "test") {
@@ -55,7 +55,7 @@ if (Configuration.get("system.stats.enable-request-counting")) {
 }
 // ********** End Rate Limiting ********** //
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "500mb" }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // ********** Sessions ********** //
