@@ -726,15 +726,23 @@
     "name": "user.search.search-fields",
     "displayName": "User Search Fields",
     "envName": "USER_SEARCH_SEARCH_FIELDS",
-    "description": "Specifies the field names that can be used to search for users",
+    "description": "Specifies the field names that can be used to search for users.",
     "type": "stringArray",
-    "default": "_id,username,firstName,lastName"
+    "default": "username,firstName,lastName,email"
+  },
+  {
+    "name": "privilege.user.search.can-use-id",
+    "displayName": "Can Use ID for User Search",
+    "envName": "USER_SEARCH_CAN_USE_ID",
+    "description": "Specifies if _id field of records can be used to search for users.",
+    "type": "boolean",
+    "default": true
   },
   {
     "name": "privilege.user.search.can-use-fullname",
     "displayName": "Can Use Fullname for User Search",
     "envName": "USER_SEARCH_CAN_USE_FULLNAME",
-    "description": "Specifies if firstName and lastName fields can be concatenated and used to search for users",
+    "description": "Specifies if firstName and lastName fields can be concatenated and used to search for users.",
     "type": "boolean",
     "default": true
   },
@@ -742,7 +750,7 @@
     "name": "user.search-results.cache-lifetime",
     "displayName": "User Search Results Cache Lifetime",
     "envName": "USER_SEARCH_RESULTS_CACHE_LIFETIME",
-    "description": "Specifies in seconds the amount of time for which results for a search query will be cached",
+    "description": "Specifies in seconds the amount of time for which results for a search query will be cached.",
     "type": "number",
     "default": 30,
     "relatedOptions": ["privilege.can-use-cache"]
@@ -759,7 +767,7 @@
     "name": "user.block-status.cache-lifetime",
     "displayName": "User Block Status Cache Lifetime",
     "envName": "USER_BLOCK_STATUS_CACHE_LIFETIME",
-    "description": "Specifies in seconds the amount of time for which block status will be cached",
+    "description": "Specifies in seconds the amount of time for which block status will be cached.",
     "type": "number",
     "default": 60,
     "relatedOptions": ["privilege.can-use-cache"]

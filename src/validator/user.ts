@@ -72,7 +72,7 @@ class UserValidator {
   firstName(required = false, nested = false) {
     const field = this.makeFieldName("firstName", nested);
     const requiredFn = required ? "exists" : "optional";
-    return this.fn(field)[requiredFn]().isString().matches(this.nameValidationRegex).isLength({ min: 3, max: 32 });
+    return this.fn(field)[requiredFn]().isString().matches(this.nameValidationRegex).isLength({ min: 1, max: 32 });
   }
 
   middleName(required = false, nested = false) {
@@ -88,13 +88,13 @@ class UserValidator {
     let combinedRegex: string | RegExp = `^(__unset__|${nameValidationRawRegex})$`;
     log.debug("Middle name validation Regex: %s", combinedRegex);
     combinedRegex = new RegExp(combinedRegex, "u");
-    return this.fn(field)[requiredFn]().isString().matches(combinedRegex).isLength({ min: 3, max: 32 });
+    return this.fn(field)[requiredFn]().isString().matches(combinedRegex).isLength({ min: 1, max: 32 });
   }
 
   lastName(required = false, nested = false) {
     const field = this.makeFieldName("lastName", nested);
     const requiredFn = required ? "exists" : "optional";
-    return this.fn(field)[requiredFn]().isString().matches(this.nameValidationRegex).isLength({ min: 3, max: 32 });
+    return this.fn(field)[requiredFn]().isString().matches(this.nameValidationRegex).isLength({ min: 1, max: 32 });
   }
 
   password(required = false, nested = false) {
