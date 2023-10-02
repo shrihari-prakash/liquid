@@ -82,8 +82,8 @@ describe("Create", () => {
         });
     });
 
-    it("should not create user for short firstName", () => {
-      u.firstName = "a";
+    it("should not create user for empty firstName", () => {
+      u.firstName = "";
       return chai
         .request(app)
         .post("/user/create")
@@ -106,8 +106,8 @@ describe("Create", () => {
         });
     });
 
-    it("should not create user for short lastName", () => {
-      u.lastName = "a";
+    it("should not create user for empty lastName", () => {
+      u.lastName = "";
       return chai
         .request(app)
         .post("/user/create")

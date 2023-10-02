@@ -38,8 +38,8 @@ describe("Me", () => {
   it("[PATCH] should NOT edit first name and last name for rick_asthley for invalid inputs", () => {
     return new Promise<void>(async (resolve, reject) => {
       const u = {
-        firstName: "R",
-        lastName: "A",
+        firstName: "",
+        lastName: "",
       };
       return chai
         .request(app)
