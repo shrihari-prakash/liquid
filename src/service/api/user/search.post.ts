@@ -25,6 +25,7 @@ const POST_Search = async (req: Request, res: Response) => {
     }
     if (hasErrors(req, res)) return;
     const query = req.body.query;
+    const startTime = +new Date();
     if (Configuration.get("privilege.can-use-cache")) {
       const cacheResults = await Redis.client.get(`${redisPrefix}${query}`);
       if (cacheResults) {
@@ -64,6 +65,8 @@ const POST_Search = async (req: Request, res: Response) => {
         Configuration.get("user.search-results.cache-lifetime") as number
       );
     }
+    const milliseconds = +new Date() - startTime;
+    log.info("Search for query `%s` completed in %s ms", query, milliseconds);
     res.status(statusCodes.success).json(new SuccessResponse({ results }));
   } catch (err) {
     log.error(err);
