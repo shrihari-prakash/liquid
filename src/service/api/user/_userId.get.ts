@@ -11,6 +11,7 @@ import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { canRequestFollowerInfo } from "../../../utils/user";
+import { isValidObjectId } from "mongoose";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
@@ -19,6 +20,15 @@ const GET__UserId = async (req: Request, res: Response) => {
     }
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.params.userId;
+    if (!isValidObjectId(targetId)) {
+      return res.status(statusCodes.clientInputError).json(
+        new ErrorResponse(errorMessages.clientInputError, {
+          msg: "Invalid value",
+          param: "userId",
+          location: "param",
+        })
+      );
+    }
     // The first two parameters reversed because we need to find if the target has blocked the source.
     const isBlocked = await getBlockStatus(targetId, sourceId, res);
     if (isBlocked) return;
