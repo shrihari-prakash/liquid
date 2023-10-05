@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  liquid:
+    image: shrihariprakash/liquid:latest
+    container_name: liquid
+    ports:
+      - "2000:2000"
+    volumes:
+      - .:/environment # Replace . with the folder that contains app-config.json and .env
+    env_file:
+      - .env
+    networks:
+      - liquid-network
+  liquid_redis:
+    image: redis:latest
+    container_name: liquid_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - liquid-network
+  liquid_mongodb:
+    image: mongo:latest
+    container_name: liquid_mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - liquid-network
+
+networks:
+  liquid-network:
