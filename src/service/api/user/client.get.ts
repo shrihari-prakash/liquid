@@ -9,7 +9,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import ClientModel from "../../../model/mongo/client";
 import { hasErrors } from "../../../utils/api";
 
-export const GET_ClientValidator = [query("id").optional().isString().isLength({ min: 3, max: 128 })];
+export const GET_ClientValidator = [query("id").optional().isString().isLength({ min: 3, max: 256 })];
 
 const GET_Client = async (req: Request, res: Response) => {
   try {

@@ -3,6 +3,7 @@ const log = Logger.getLogger().child({ from: "client-api/user-following" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
@@ -10,7 +11,7 @@ import FollowModel from "../../../model/mongo/follow";
 import { hasErrors } from "../../../utils/api";
 import { ScopeManager } from "../../../singleton/scope-manager";
 
-export const GET_FollowStatusValidator = [query("target").optional().isString().isLength({ min: 8, max: 64 })];
+export const GET_FollowStatusValidator = [query("target").optional().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
 const GET_FollowStatus = async (req: Request, res: Response) => {
   try {

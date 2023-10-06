@@ -2,6 +2,7 @@ import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/common-api/ban" });
 
 import { Request, Response } from "express";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
@@ -12,7 +13,7 @@ import { flushUserInfoFromRedis } from "../../../../model/oauth";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const POST_BanValidator = [
-  body("target").exists().isString().isLength({ min: 8, max: 128 }),
+  body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
   body("state").exists().isBoolean(),
   body("reason").optional().isString().isLength({ min: 8, max: 128 }),
 ];

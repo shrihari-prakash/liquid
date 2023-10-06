@@ -3,6 +3,7 @@ const log = Logger.getLogger().child({ from: "user/unblock" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
@@ -10,7 +11,7 @@ import { hasErrors } from "../../../utils/api";
 import BlockModel from "../../../model/mongo/block";
 import { ScopeManager } from "../../../singleton/scope-manager";
 
-export const POST_UnblockValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
+export const POST_UnblockValidator = [body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
 const POST_Unblock = async (req: Request, res: Response) => {
   try {

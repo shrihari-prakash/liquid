@@ -3,6 +3,7 @@ const log = Logger.getLogger().child({ from: "user/common-api/credits" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
@@ -21,7 +22,7 @@ const Operations = {
 };
 
 export const POST_CreditsValidator = [
-  body("target").exists().isString().isLength({ min: 8, max: 128 }),
+  body("target").exists().isString().isLength({ max: 128 }).custom(isValidObjectId),
   body("type").exists().isString().isIn([Operations.INCREMENT, Operations.DECREMENT, Operations.SET]),
   body("value").exists().isInt({ min: 0 }),
 ];
