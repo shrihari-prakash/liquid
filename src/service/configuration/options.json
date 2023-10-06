@@ -66,6 +66,14 @@
     "relatedOptions": ["system.stats.enable-request-counting"]
   },
   {
+    "name": "system.request-body.json.max-size",
+    "displayName": "System Request Body Max Size (JSON)",
+    "envName": "SYSTEM_REQUEST_BODY_JSON_MAX_SIZE",
+    "description": "Specifies maximum size limit for request body for JSON requests.",
+    "type": "string",
+    "default": "1mb"
+  },
+  {
     "name": "system.static.use-relative-path",
     "displayName": "Static Use Relative Path",
     "envName": "SYSTEM_STATIC_USE_RELATIVE_PATH",
@@ -908,3 +916,4 @@
     ]
   }
 ]
+

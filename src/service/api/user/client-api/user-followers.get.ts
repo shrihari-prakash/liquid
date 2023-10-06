@@ -3,6 +3,7 @@ const log = Logger.getLogger().child({ from: "client-api/user-followers" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
@@ -13,7 +14,7 @@ import { checkSubscription } from "../../../../utils/subscription";
 import { getPaginationLimit } from "../../../../utils/pagination";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 
-export const GET_UserFollowersValidator = [query("target").exists().isString().isLength({ min: 8, max: 128 })];
+export const GET_UserFollowersValidator = [query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
 const GET_UserFollowers = async (req: Request, res: Response) => {
   try {

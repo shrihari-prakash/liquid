@@ -3,6 +3,7 @@ const log = Logger.getLogger().child({ from: "user/admin-api/access" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
@@ -31,7 +32,7 @@ const POST_Access = async (req: Request, res: Response) => {
       return;
     }
     if (hasErrors(req, res)) return;
-    if (req.body.targets.some((t: string) => typeof t !== "string")) {
+    if (req.body.targets.some((t: string) => typeof t !== "string" || !isValidObjectId(t))) {
       const errors = [
         {
           msg: "Invalid value",
