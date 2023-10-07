@@ -1,0 +1,4 @@
+{
+  "oauth.client-id": "application_client",
+  "oauth.redirect-uri": "http://localhost:2000/health"
+}

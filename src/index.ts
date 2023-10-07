@@ -55,7 +55,7 @@ if (Configuration.get("system.stats.enable-request-counting")) {
 }
 // ********** End Rate Limiting ********** //
 
-app.use(bodyParser.json({ limit: "500mb" }));
+app.use(bodyParser.json({ limit: Configuration.get("system.request-body.json.max-size") }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // ********** Sessions ********** //

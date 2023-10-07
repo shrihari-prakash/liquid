@@ -3,6 +3,7 @@ const log = Logger.getLogger().child({ from: "user/block" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
@@ -15,7 +16,7 @@ import { updateFollowCount } from "../../../utils/follow";
 import { MongoDB } from "../../../singleton/mongo-db";
 import { ScopeManager } from "../../../singleton/scope-manager";
 
-export const POST_BlockValidator = [body("target").exists().isString().isLength({ min: 8, max: 64 })];
+export const POST_BlockValidator = [body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
 function sendSuccess(res: Response, status: string) {
   res.status(statusCodes.success).json(new SuccessResponse({ status }));

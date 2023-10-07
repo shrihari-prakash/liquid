@@ -2,6 +2,7 @@ import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/admin-api/verify" });
 
 import { Request, Response } from "express";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
@@ -12,7 +13,7 @@ import { ScopeManager } from "../../../../singleton/scope-manager";
 import { flushUserInfoFromRedis } from "../../../../model/oauth";
 
 export const POST_VerifyValidator = [
-  body("target").exists().isString().isLength({ min: 8, max: 128 }),
+  body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
   body("state").exists().isBoolean(),
 ];
 
