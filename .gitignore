@@ -1,6 +1,8 @@
 node_modules
 app-config.json
+!quickstart/app-config.json
 docker-compose.yml
 build
 compiled
 .env
+!quickstart/.env

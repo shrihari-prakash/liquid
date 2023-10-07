@@ -1,9 +1,8 @@
 .form {
   position: relative;
-  width: 100%;
   padding: 15px;
-  width: 100%;
-  max-width: 45%;
+  width: 45%;
+  max-width: 580px;
 }
 
 .consent-form .scope-container {

@@ -4,6 +4,7 @@ const log = Logger.getLogger().child({ from: "user/patch" });
 import { Request, Response } from "express";
 import { body } from "express-validator";
 import bcrypt from "bcrypt";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
@@ -18,7 +19,7 @@ import { isRoleRankHigher } from "../../../../utils/role";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const PATCH_UserValidator = [
-  body("target").exists().isString().isLength({ min: 8, max: 64 }),
+  body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
   ...PATCH_MeValidator,
 ];
 
