@@ -64,10 +64,22 @@ async function ALL__Authorize(req: Request, res: Response, next: NextFunction) {
       return res.json({ code: code.authorizationCode, state: (req.query.state as string) || uuidv4() });
     }
   } catch (error: any) {
+    const redirectUri = new URL(req.query.redirect_uri as string);
+    redirectUri.searchParams.append("state", req.query.state as string);
     if (!error.name) {
-      return res.json({ error: "unknown_error" });
+      if (Configuration.get("oauth.authorization.enable-redirect")) {
+        redirectUri.searchParams.append("error", "server_error");
+        redirectUri.searchParams.append("error_description", "Server error");
+        return res.redirect(redirectUri.toString());
+      }
+      return res.json({ error: "server_error" });
     }
-    res.status(statusCodes.unauthorized).json({ error: error.name, error_description: error.message });
+    if (Configuration.get("oauth.authorization.enable-redirect")) {
+      redirectUri.searchParams.append("error", error.name);
+      redirectUri.searchParams.append("error_description", error.message);
+      return res.redirect(redirectUri.toString());
+    }
+    return res.status(statusCodes.unauthorized).json({ error: error.name, error_description: error.message });
   }
 }
 
