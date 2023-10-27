@@ -1,35 +1,29 @@
-import GetCode from "./get-code.js";
 import Layout from "./layout.js";
-import Login from "./login.js";
-import NotFound from "./not-found.js";
-import ResetPassword from "./reset-password.js";
-import SignUp from "./signup.js";
-import VerifyAccount from "./verify-account.js";
-import ConsentScreen from "./consent.js";
 
-function getRenderElement() {
-    let component;
-    switch (window.location.pathname) {
-        case "/":
-        case "/login":
-            return Login;
-        case "/signup":
-            return SignUp;
-        case "/get-code":
-            return GetCode;
-        case "/verify-account":
-            return VerifyAccount;
-        case "/reset-password":
-            return ResetPassword;
-        case "/consent":
-            return ConsentScreen;
-        default:
-            return NotFound;
-    }
+async function getRenderElement() {
+  switch (window.location.pathname) {
+    case "/":
+    case "/login":
+      return (await import("./login.js")).default;
+    case "/signup":
+      return (await import("./signup.js")).default;
+    case "/get-code":
+      return (await import("./get-code.js")).default;
+    case "/verify-account":
+      return (await import("./verify-account.js")).default;
+    case "/reset-password":
+      return (await import("./reset-password.js")).default;
+    case "/consent":
+      return (await import("./consent.js")).default;
+    default:
+      return (await import("./not-found.js")).default;
+  }
 }
 
+async function main() {
+  const domContainer = document.querySelector("#root");
+  const root = ReactDOM.createRoot(domContainer);
+  root.render(React.createElement(Layout, {}, React.createElement(await getRenderElement())));
+}
 
-
-const domContainer = document.querySelector("#root");
-const root = ReactDOM.createRoot(domContainer);
-root.render(React.createElement(Layout, {}, React.createElement(getRenderElement())));
+main();

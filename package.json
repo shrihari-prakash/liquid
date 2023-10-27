@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Seamless and highly customizable authentication and user management server.",
   "main": "index.js",
+  "browserslist": "> 0.25%, not dead",
   "scripts": {
     "test": "mocha -r ts-node/register 'test/integration/**/*.spec.ts' --exit --recursive --require test/integration/index.spec.ts",
     "build": "npm run build:server && npm run build:static",

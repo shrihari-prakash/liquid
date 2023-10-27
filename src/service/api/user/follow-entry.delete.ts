@@ -13,7 +13,7 @@ import { updateFollowCount } from "../../../utils/follow";
 import { MongoDB } from "../../../singleton/mongo-db";
 import { ScopeManager } from "../../../singleton/scope-manager";
 
-export const DELETE_FollowEntryValidator = [body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
+export const DELETE_FollowEntryValidator = [body("entry").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
 const DELETE_FollowEntry = async (req: Request, res: Response) => {
   let session = "";
@@ -23,7 +23,7 @@ const DELETE_FollowEntry = async (req: Request, res: Response) => {
     };
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
-    const entryId = req.body.entry || req.body.target;
+    const entryId = req.body.entry;
     const query: any = { $and: [{ _id: entryId }] };
     const requestObject = (await FollowModel.findOne(query)) as any;
     if (!requestObject.sourceId.equals(userId) && !requestObject.targetId.equals(userId)) {
