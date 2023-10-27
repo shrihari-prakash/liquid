@@ -32,7 +32,11 @@ export default function ConsentScreen() {
   };
 
   const onDeny = () => {
-    window.location = authParams.redirect_uri;
+    const redirectUri = new URL(authParams.redirect_uri);
+    redirectUri.searchParams.append('error', 'access_denied');
+    redirectUri.searchParams.append('error_description', 'Access was denied by the user');
+    redirectUri.searchParams.append('state', authParams.state);
+    window.location = redirectUri;
   };
 
   React.useEffect(() => useTitle(configuration["content.app-name"], "Consent Required"), []);
