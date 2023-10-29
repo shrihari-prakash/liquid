@@ -9,7 +9,7 @@ import { Language } from "../enum/language";
 class UserValidator {
   nameValidationRegex = new RegExp(Configuration.get("user.profile.name-validation-regex"), "u");
   passwordRegex = Configuration.get("user.profile.password-validation-regex");
-  alphaRegex = /^(__unset__|[A-Za-z]+)$/;
+  alphaRegex = /^(__unset__|[A-Za-z ]+)$/;
   fn: typeof query | typeof body;
 
   urlValidator = (value: string) => {
@@ -158,7 +158,7 @@ class UserValidator {
   pronouns(required = false, nested = false) {
     const field = this.makeFieldName("pronouns", nested);
     const requiredFn = required ? "exists" : "optional";
-    return this.fn(field)[requiredFn]().isString().matches(this.alphaRegex).isLength({ min: 3, max: 24 });
+    return this.fn(field)[requiredFn]().isString().isLength({ min: 3, max: 24 });
   }
 
   organization(required = false, nested = false) {
