@@ -14,6 +14,7 @@ import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_EditableFields from "./editable-fields.get";
 import GET_Roles from "../shared/roles.get";
 import PATCH_User, { PATCH_UserValidator } from "./user.patch";
+import GET_SubscriptionTiers from "../shared/subscription-tiers.get";
 
 const AdminApiRouter = express.Router();
 
@@ -28,6 +29,7 @@ AdminApiRouter.post("/credits", ...DelegatedAuthFlow, POST_CreditsValidator, POS
 AdminApiRouter.post("/restrict", ...DelegatedAuthFlow, POST_RestrictValidator, POST_Restrict);
 AdminApiRouter.post("/verify", ...DelegatedAuthFlow, POST_VerifyValidator, POST_Verify);
 AdminApiRouter.post("/subscription", ...DelegatedAuthFlow, POST_SubscriptionValidator, POST_Subscription);
+AdminApiRouter.get("/subscription-tiers", ...DelegatedAuthFlow, GET_SubscriptionTiers);
 AdminApiRouter.post("/create", ...DelegatedAuthFlow, POST_CreateValidator, POST_Create);
 AdminApiRouter.get("/list", ...DelegatedAuthFlow, GET_List);
 
