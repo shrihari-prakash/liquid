@@ -1,7 +1,7 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
 import { countryCodes } from "../utils/country-codes.js";
-import { getPlaceholder, useTitle } from "../utils/utils.js";
+import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function SignUp() {
   const submitButtonText = "Create Account";
@@ -29,7 +29,7 @@ export default function SignUp() {
     setTimeout(() => {
       setButtonText(submitButtonText);
       setHasError(false);
-    }, 2000);
+    }, errorTextTimeout);
   };
 
   function onFieldError({ response }) {

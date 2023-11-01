@@ -96,3 +96,5 @@ export function prepareAuthorizationParams(configuration) {
   }
   return params;
 }
+
+export const errorTextTimeout = 6000;

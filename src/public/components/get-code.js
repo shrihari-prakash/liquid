@@ -1,5 +1,5 @@
 import { ConfigurationContext } from "../context/configuration.js";
-import { getPlaceholder, useTitle } from "../utils/utils.js";
+import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function GetCode() {
     const submitButtonText = "Get Code";
@@ -21,7 +21,7 @@ export default function GetCode() {
         setTimeout(() => {
             setButtonText(submitButtonText);
             setHasError(false);
-        }, 2000);
+        }, errorTextTimeout);
     };
 
     function getCode(event) {
