@@ -1,6 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
-import { prepareAuthorizationParams, getPlaceholder, isEmail, useTitle, uuidv4 } from "../utils/utils.js";
+import { prepareAuthorizationParams, getPlaceholder, isEmail, useTitle, uuidv4, errorTextTimeout } from "../utils/utils.js";
 
 export default function Login() {
   const submitButtonText = "Login";
@@ -41,7 +41,7 @@ export default function Login() {
     setTimeout(() => {
       setButtonText(submitButtonText);
       setHasError(false);
-    }, 2000);
+    }, errorTextTimeout);
   };
 
   function onFieldError({ response, buttonText }) {

@@ -1,5 +1,5 @@
 import { ConfigurationContext } from "../context/configuration.js";
-import { getPlaceholder, useTitle } from "../utils/utils.js";
+import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function ResetPassword() {
     const submitButtonText = "Change Password";
@@ -21,7 +21,7 @@ export default function ResetPassword() {
         setTimeout(() => {
             setButtonText(submitButtonText);
             setHasError(false);
-        }, 2000);
+        }, errorTextTimeout);
     };
 
     function resetPassword(event) {
