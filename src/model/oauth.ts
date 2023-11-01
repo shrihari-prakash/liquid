@@ -19,6 +19,7 @@ import {
   PasswordModel,
   RefreshTokenModel,
   Token,
+  RefreshToken,
 } from "@node-oauth/oauth2-server";
 
 interface Client {
@@ -206,7 +207,7 @@ const OAuthModel: OAuthModel = {
     return dbTokenObject as unknown as Token;
   },
 
-  revokeToken: async (token: Token) => {
+  revokeToken: async (token: RefreshToken) => {
     if (!token) return false;
     if (useTokenCache) {
       if (token.refreshToken) {
