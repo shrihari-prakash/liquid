@@ -42,7 +42,7 @@ export default function VerifyAccount() {
             });
     }
 
-    if (!configuration["privilege.can-reset-password"]) {
+    if (!configuration["user.account-creation.require-email-verification"]) {
         return null;
     }
 
