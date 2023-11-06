@@ -16,12 +16,12 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 ![Liquid Login Page](images/liquid-customizations.png)
 * **OAuth Based Authentication:** Secure and seamless authentication based on a battle tested OAuth core powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) from [@node-oauth](https://github.com/node-oauth).
 * **Social Features:** Liquid is more than just an authentication screen. Liquid comes with out of the box support for social features like follow - unfollow, private accounts and blocking.
+* **Invite-Only Access:** Using the optional invite-only sign-up feature can be an effective way to create virality because it encourages existing users to invite their network to join the product. This also doubles as a spam account prevention system by ensuring a controlled userbase growth.
 * **Admin APIs:** Support for elevated administrative APIs that let you effectively manage users by editing profile information, banning and restricting accounts when necessary.
 * **Profile Pictures:** Provide users with the option to personalize their profiles with profile pictures.
 * **Microservice Integration:** Seamlessly integrate Liquid into your project, allowing other microservices to utilize its robust authentication and user management capabilities.
 * **Advanced Scope Management:** Granular access control to APIs through Liquid's sophisticated scope management solution. Liquid also lets you add your own scopes into it so you can also use scopes in your other microservices.
 * **Gamification Support:** Includes APIs for reward points mechanisms. This can be used for inroducing features like loyalty points, or in-app virtual money.
-* **Invite-Only Access:** Using invite-only sign-ups can be an effective way to create virality because it encourages existing users to invite their network to join the product. This also doubles as a spam account prevention system by ensuring a controlled userbase growth.
 * **Small Image Size:** Tiny ~66MB image download.
 
 ## ⚙️ Setup
