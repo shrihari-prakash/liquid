@@ -35,7 +35,7 @@ jobs:
     needs: build
     steps:
       - name: Call Acceptance workflow
-        uses: convictional/trigger-workflow-and-wait@1.6.1
+        uses: convictional/trigger-workflow-and-wait@v1
         with:
           owner: gopalcs1988
           repo: liquid-acceptance-tests
