@@ -98,9 +98,7 @@ const POST_Create = async (req: Request, res: Response) => {
   let session = "";
   try {
     if (Configuration.get("user.account-creation.enable-ip-based-throttle")) {
-      const ipResult = (await UserModel.findOne({
-        creationIp: req.ip,
-      }).exec()) as unknown as UserInterface;
+      const ipResult = (await UserModel.findOne({ creationIp: req.ip }, { sort: { $natural: -1 } }).exec()) as unknown as UserInterface;
       if (ipResult && ipResult.creationIp === req.ip) {
         const duration = moment.duration(moment().diff(moment(ipResult.createdAt)));
         const difference = duration.asSeconds();
