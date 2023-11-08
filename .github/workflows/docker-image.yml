@@ -34,9 +34,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Call Acceptance workflow
-        uses: actions/github@v6
-        with:
-          repository: gopalcs1988/liquid-acceptance-tests
-          workflow: Acceptance Tests
-          token: ${{ secrets.ACCEPTANCE_TOKEN }}
+    - uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.ACCEPTANCE_TOKEN }}
+        script: |
+          await github.rest.actions.createWorkflowDispatch({
+           owner: 'gopalcs1988',
+           repo: 'liquid-acceptance-tests',
+           workflow_id: main.yml',
+           ref: 'main'
+          })
