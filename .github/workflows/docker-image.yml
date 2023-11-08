@@ -34,15 +34,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Call Acceptance workflow
-        uses: convictional/trigger-workflow-and-wait@v1
-        with:
-          owner: gopalcs1988
-          repo: liquid-acceptance-tests
-          github_token: ${{ secrets.ACCEPTANCE_TOKEN }}
-          workflow_file_name: main.yml
-          ref: main
-          wait_interval: 10
-          propogate_failure: true
-          trigger_workflow: true
-          wait_workflow: true
+    - uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.ACCEPTANCE_TOKEN }}
+        script: |
+          await github.rest.actions.createWorkflowDispatch({
+           owner: 'gopalcs1988',
+           repo: 'liquid-acceptance-tests',
+           workflow_id: main.yml',
+           ref: 'main'
+          })
