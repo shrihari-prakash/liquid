@@ -3,6 +3,7 @@
 ![GitHub](https://img.shields.io/github/license/shrihari-prakash/liquid)
 [![Docker Image CI](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml)
 [![Integration Tests CI](https://github.com/shrihari-prakash/liquid/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/integration-tests.yml)
+[![Acceptance Tests CI](https://github.com/gopalcs1988/liquid-acceptance-tests/actions/workflows/main.yml/badge.svg)](https://github.com/gopalcs1988/liquid-acceptance-tests/actions/workflows/main.yml)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shrihari-prakash/liquid)
 ![GitHub Repo stars](https://img.shields.io/github/stars/shrihari-prakash/liquid?style=social)
 
@@ -16,12 +17,12 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 ![Liquid Login Page](images/liquid-customizations.png)
 * **OAuth Based Authentication:** Secure and seamless authentication based on a battle tested OAuth core powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) from [@node-oauth](https://github.com/node-oauth).
 * **Social Features:** Liquid is more than just an authentication screen. Liquid comes with out of the box support for social features like follow - unfollow, private accounts and blocking.
-* **Admin APIs:** Support for elevated administrative APIs that let you effectively manage users by editing profile informations, banning and restricting accounts when necessary.
+* **Invite-Only Access:** Using the optional invite-only sign-up feature can be an effective way to create virality because it encourages existing users to invite their network to join the product. This also doubles as a spam account prevention system by ensuring a controlled userbase growth.
+* **Admin APIs:** Support for elevated administrative APIs that let you effectively manage users by editing profile information, banning and restricting accounts when necessary.
 * **Profile Pictures:** Provide users with the option to personalize their profiles with profile pictures.
 * **Microservice Integration:** Seamlessly integrate Liquid into your project, allowing other microservices to utilize its robust authentication and user management capabilities.
 * **Advanced Scope Management:** Granular access control to APIs through Liquid's sophisticated scope management solution. Liquid also lets you add your own scopes into it so you can also use scopes in your other microservices.
 * **Gamification Support:** Includes APIs for reward points mechanisms. This can be used for inroducing features like loyalty points, or in-app virtual money.
-* **Invite-Only Access:** Using invite-only sign-ups can be an effective way to create virality because it encourages existing users to invite their network to join the product. This also doubles as a spam account prevention system by ensuring a controlled userbase growth.
 * **Small Image Size:** Tiny ~66MB image download.
 
 ## ⚙️ Setup
