@@ -23,6 +23,10 @@ const banner = `
     \\/_____/   \\/_/   \\/___/_/   \\/_____/   \\/_/   \\/____/
   
   Version ${version}
+  Copyright (c) 2022 - ${new Date().getFullYear()} Shrihari Prakasam
+
+  View License: https://github.com/shrihari-prakash/liquid/blob/main/LICENSE
+  Sponsor: https://github.com/sponsors/shrihari-prakash
 `;
 log.info(banner);
 
