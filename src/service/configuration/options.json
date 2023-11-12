@@ -707,6 +707,14 @@
     "default": "delegated:all"
   },
   {
+    "name": "user.account-creation.verificaton-code-lifetime",
+    "displayName": "User Account Creation Verificaton Code Lifetime",
+    "envName": "USER_ACCOUNT_CREATION_VERIFICATION_CODE_LIFETIME",
+    "description": "Expiry time in seconds for verification codes.",
+    "type": "number",
+    "default": 3600
+  },
+  {
     "name": "user.profile.editable-fields",
     "displayName": "Profile Editable Fields",
     "envName": "USER_PROFILE_EDITABLE_FIELDS",
@@ -916,4 +924,3 @@
     ]
   }
 ]
-
