@@ -27,8 +27,11 @@ export default function VerifyAccount() {
     function verifyAccount(event) {
         event.preventDefault();
         const code = document.getElementById("code").value;
+        const urlParams = new URLSearchParams(window.location.search);
+        const target = urlParams.get("target");
         setSubmitting(true);
         $.get("/user/verify-email", {
+            target,
             code,
         })
             .done(function () {
@@ -62,7 +65,7 @@ export default function VerifyAccount() {
                     aria-label="Verification Code"
                     aria-required="true"
                     placeholder={getPlaceholder("Your Verification Code", configuration)}
-                    minLength="4"
+                    minLength="6"
                     autoComplete="off"
                     autoCorrect="off"
                     autoCapitalize="off"

@@ -23,7 +23,7 @@ const GET_Code = async (req: Request, res: Response) => {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     } else {
       await Mailer.generateAndSendEmailVerification(existingUser);
-      return res.status(statusCodes.created).json(new SuccessResponse());
+      return res.status(statusCodes.created).json(new SuccessResponse({ target: existingUser._id }));
     }
   } catch (err) {
     log.error(err);

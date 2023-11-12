@@ -5,7 +5,6 @@ import sgMail from "@sendgrid/mail";
 import nodemailer from "nodemailer";
 import * as path from "path";
 import * as fs from "fs";
-import { v4 as uuidv4 } from "uuid";
 
 import { Configuration } from "../../singleton/configuration";
 import { UserInterface } from "../../model/mongo/user";
@@ -87,7 +86,11 @@ export class Mailer {
 
   public async generateAndSendEmailVerification(user: UserInterface) {
     await VerificationCodeModel.deleteMany({ belongsTo: user._id });
-    const code = { belongsTo: user._id, verificationMethod: "email", code: uuidv4() };
+    const code = {
+      belongsTo: user._id,
+      verificationMethod: "email",
+      code: Math.floor(100000 + Math.random() * 900000) + "",
+    };
     await new VerificationCodeModel(code).save();
     const appName = Configuration.get("system.app-name") as string;
     const fullName = `${user.firstName} ${user.lastName}`;
