@@ -149,7 +149,7 @@ describe("Create", () => {
     });
   });
 
-  let codeCache = null;
+  let codeCache: any = null;
 
   it("should verify email for john_doe", async () => {
     const code = (await VerificationCodeModel.findOne({}).exec()) as any;
@@ -157,18 +157,18 @@ describe("Create", () => {
     return chai
       .request(app)
       .get("/user/verify-email")
-      .query({ code: code.code })
+      .query({ target: code.belongsTo.toString(), code: code.code })
       .then((res) => {
         chai.expect(res.status).to.eql(200);
       });
   });
 
-  it("should verify email for john_doe with same code for the second time", async () => {
+  it("should NOT verify email for john_doe with same code for the second time", async () => {
     const code = (await VerificationCodeModel.findOne({}).exec()) as any;
     return chai
       .request(app)
       .get("/user/verify-email")
-      .query({ code: codeCache })
+      .query({ target: codeCache.belongsTo.toString(), code: codeCache.code })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
       });

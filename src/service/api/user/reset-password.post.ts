@@ -4,6 +4,7 @@ const log = Logger.getLogger().child({ from: "user/reset-password" });
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { body } from "express-validator";
+import { isValidObjectId } from "mongoose";
 
 import UserModel from "../../../model/mongo/user";
 import VerificationCodeModel from "../../../model/mongo/verification-code";
@@ -13,6 +14,7 @@ import { bcryptConfig } from "./create.post";
 import { hasErrors } from "../../../utils/api";
 
 export const POST_ResetPasswordValidator = [
+  body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
   body("code").exists().isString().isLength({ min: 3, max: 128 }),
   body("password").exists().isString().isLength({ min: 8, max: 128 }),
 ];
@@ -20,8 +22,8 @@ export const POST_ResetPasswordValidator = [
 const POST_ResetPassword = async (req: Request, res: Response) => {
   try {
     if (hasErrors(req, res)) return;
-    const { code, password: passwordBody } = req.body;
-    const dbCode = await VerificationCodeModel.findOne({ code }).exec();
+    const { code, password: passwordBody, target } = req.body;
+    const dbCode = await VerificationCodeModel.findOne({ $and: [{ belongsTo: target }, { code }] }).exec();
     if (!dbCode) {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }

@@ -63,9 +63,12 @@ export default function SignUp() {
     }
     setSubmitting(true);
     $.post("/user/create", user)
-      .done(function () {
+      .done(function (response) {
+        console.log(response);
         if (configuration["user.account-creation.require-email-verification"]) {
-          window.location = `/verify-account${window.location.search}`;
+          const urlParams = new URLSearchParams(window.location.search);
+          urlParams.set('target', response.data.user._id);
+          window.location = `/verify-account?${urlParams.toString()}`;
         } else {
           window.location = `/login${window.location.search}`;
         }

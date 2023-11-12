@@ -146,7 +146,7 @@ const POST_Create = async (req: Request, res: Response) => {
       else {
         await Mailer.generateAndSendEmailVerification(existingUser);
         const response = {
-          userInfo: existingUser,
+          user: existingUser,
         };
         return res.status(statusCodes.created).json(new SuccessResponse(response));
       }

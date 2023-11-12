@@ -31,8 +31,10 @@ export default function GetCode() {
         $.get("/user/code", {
             email,
         })
-            .done(function () {
-                window.location = `/reset-password${window.location.search}`;
+            .done(function (response) {
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('target', response.data.target);
+                window.location = `/reset-password?${urlParams.toString()}`;
             })
             .fail(function (response) {
                 if (response.responseJSON.additionalInfo && response.status === 400) {
