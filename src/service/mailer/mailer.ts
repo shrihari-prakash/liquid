@@ -98,7 +98,12 @@ export class Mailer {
     const templateId = Configuration.get("sendgrid.verification-email-template-id");
     if (templateId) {
       msg.templateId = templateId;
-      msg.dynamicTemplateData = { person_name: fullName, app_name: appName, verification_code: code.code };
+      msg.dynamicTemplateData = {
+        person_id: user._id.toString(),
+        person_name: fullName,
+        app_name: appName,
+        verification_code: code.code,
+      };
       await this.send(msg);
       return code;
     }
@@ -109,6 +114,7 @@ export class Mailer {
     const html = template
       .replaceAll("%app_name%", appName)
       .replaceAll("%person_name%", fullName)
+      .replaceAll("%person_id%", user._id.toString())
       .replaceAll("%verification_code%", code.code);
     msg.html = html;
     await this.send(msg);
