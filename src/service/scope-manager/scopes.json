@@ -206,12 +206,22 @@
   {
     "name": "admin:system:all",
     "description": "View and manage the system.",
-    "parent": "*"
+    "parent": "admin:all"
+  },
+  {
+    "name": "admin:system:client:all",
+    "description": "View and manage clients in the system.",
+    "parent": "admin:system:all"
+  },
+  {
+    "name": "admin:system:client:read",
+    "description": "View clients in the system.",
+    "parent": "admin:system:client:all"
   },
   {
     "name": "admin:system:client:write",
-    "description": "View and manage clients in the system.",
-    "parent": "admin:all"
+    "description": "Manage clients in the system.",
+    "parent": "admin:system:client:all"
   },
   {
     "name": "admin:profile:all",
