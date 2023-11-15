@@ -15,12 +15,14 @@ import GET_EditableFields from "./editable-fields.get";
 import GET_Roles from "../shared/roles.get";
 import PATCH_User, { PATCH_UserValidator } from "./user.patch";
 import GET_SubscriptionTiers from "../shared/subscription-tiers.get";
+import GET_Client_List from "./client.list.get";
 
 const AdminApiRouter = express.Router();
 
 AdminApiRouter.get("/user-info", ...DelegatedAuthFlow, GET_UserInfoValidator, GET_UserInfo);
 AdminApiRouter.post("/access", ...DelegatedAuthFlow, POST_AccessValidator, POST_Access);
 AdminApiRouter.post("/client", ...DelegatedAuthFlow, POST_ClientValidator, POST_Client);
+AdminApiRouter.get("/client/list", ...DelegatedAuthFlow, GET_Client_List);
 AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, GET_EditableFields);
 AdminApiRouter.get("/roles", ...DelegatedAuthFlow, GET_Roles);
 AdminApiRouter.patch("/user", ...DelegatedAuthFlow, PATCH_UserValidator, PATCH_User);

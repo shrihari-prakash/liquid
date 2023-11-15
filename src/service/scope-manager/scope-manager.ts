@@ -83,7 +83,7 @@ export class ScopeManager {
     return scopes.every((requestedScope: string) => this.isScopeAllowed(requestedScope, entity.scope));
   }
 
-  isScopeAllowed(scope: string, allowedScopes: string): boolean {
+  isScopeAllowed(scope: string, allowedScopes: string[]): boolean {
     const scopeObject = this.scopes[scope];
     if (!scopeObject) {
       log.debug("No scope object found for %s", scope);
