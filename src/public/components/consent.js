@@ -17,7 +17,7 @@ export default function ConsentScreen() {
 
   React.useEffect(() => {
     (async () => {
-      const clientInformation = await $.get(`/user/client/${authParams.client_id}`);
+      const clientInformation = await $.get(`/client/${authParams.client_id}`);
       const permissionsInformation = await $.get("/user/scopes");
       setClientInfo(clientInformation.data.client);
       setRequiredScopes(authParams.scope.split(","));

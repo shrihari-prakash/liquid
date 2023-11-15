@@ -25,7 +25,6 @@ import GET_VerifyEmail, { GET_VerifyEmailValidator } from "./verify-email.get";
 import GET_FollowRequests from "./follow-requests.get";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 import GET_InviteCodes from "./invite-codes.get";
-import GET_Client, { GET_ClientValidator } from "./client.get";
 import GET_Scopes from "./scopes.get";
 import GET_Logout from "./logout.get";
 import GET_SessionState from "./session-state.get";
@@ -49,8 +48,6 @@ UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
 UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
 UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
 UserRouter.get("/logout", AuthenticateSilent, GET_Logout);
-UserRouter.get("/client", GET_ClientValidator, GET_Client);
-UserRouter.get("/client/:clientId", GET_ClientValidator, GET_Client);
 UserRouter.get("/scopes", GET_Scopes);
 
 // Invite System

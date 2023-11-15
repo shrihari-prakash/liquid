@@ -7,7 +7,7 @@ describe("Client", () => {
   it("[GET] should get client details", () => {
     return chai
       .request(app)
-      .get(`/user/client`)
+      .get(`/client`)
       .query({
         id: MemoryStore.client.id,
       })
@@ -23,7 +23,7 @@ describe("Client", () => {
   it("[GET] should NOT get client details for invalid client id", () => {
     return chai
       .request(app)
-      .get(`/user/client`)
+      .get(`/client`)
       .query({
         id: "whatever",
       })
