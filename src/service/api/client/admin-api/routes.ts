@@ -1,7 +1,7 @@
 import express from "express";
 import { DelegatedAuthFlow } from "../../middleware/authenticate";
 import POST_Client, { POST_ClientValidator } from "./client.post";
-import GET_Client_List from "./client.list.get";
+import GET_Client_List from "./list.get";
 
 const ClientAdminRouter = express.Router();
 
