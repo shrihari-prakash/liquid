@@ -1,4 +1,5 @@
 import mongoose, { ObjectId, Schema, Document } from "mongoose";
+import { Configuration } from "../../singleton/configuration";
 
 const verificationCodeSchema = {
   belongsTo: {
@@ -16,8 +17,17 @@ const verificationCodeSchema = {
     required: true,
   },
 };
-const schemaInstance = new mongoose.Schema(verificationCodeSchema),
+const schemaInstance = new mongoose.Schema(verificationCodeSchema, {
+    timestamps: true,
+  }),
   VerificationCodeModel = mongoose.model("verification-code", schemaInstance);
+
+schemaInstance.index(
+  { createdAt: 1 },
+  {
+    expireAfterSeconds: Configuration.get("user.account-creation.verificaton-code-lifetime"),
+  }
+);
 
 export interface VerificationCodeInterface extends Document {
   _id: ObjectId;

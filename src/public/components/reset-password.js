@@ -28,8 +28,11 @@ export default function ResetPassword() {
         event.preventDefault();
         const code = document.getElementById("code").value;
         const password = document.getElementById("password").value;
+        const urlParams = new URLSearchParams(window.location.search);
+        const target = urlParams.get("target");
         setSubmitting(true);
         $.post("/user/reset-password", {
+            target,
             code,
             password,
         })
@@ -56,25 +59,25 @@ export default function ResetPassword() {
                 </h3>
                 <p className="app-tagline">A verification code was sent to your email address.</p>
             </div>
-            <div class="form-group first">
-                <label for="code">Verification Code</label>
+            <div className="form-group first">
+                <label htmlFor="code">Verification Code</label>
                 <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     aria-label="Verification Code"
                     aria-required="true"
                     placeholder={getPlaceholder("Verification code", configuration)}
-                    minLength="8"
+                    minLength="6"
                     autoComplete="off"
                     id="code"
                     required
                 />
             </div>
-            <div class="form-group mb-3 last">
-                <label for="password">New Password</label>
+            <div className="form-group mb-3 last">
+                <label htmlFor="password">New Password</label>
                 <input
                     type="password"
-                    class="form-control"
+                    className="form-control"
                     aria-label="Password"
                     aria-required="true"
                     placeholder={getPlaceholder("********", configuration)}

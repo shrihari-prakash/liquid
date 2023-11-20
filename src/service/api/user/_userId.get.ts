@@ -2,6 +2,7 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/:userId" });
 
 import { Request, Response } from "express";
+import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
@@ -11,7 +12,6 @@ import { checkSubscription } from "../../../utils/subscription";
 import { attachProfilePicture } from "../../../utils/profile-picture";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { canRequestFollowerInfo } from "../../../utils/user";
-import { isValidObjectId } from "mongoose";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {

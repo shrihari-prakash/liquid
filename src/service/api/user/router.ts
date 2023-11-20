@@ -25,15 +25,14 @@ import GET_VerifyEmail, { GET_VerifyEmailValidator } from "./verify-email.get";
 import GET_FollowRequests from "./follow-requests.get";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 import GET_InviteCodes from "./invite-codes.get";
-import GET_Client, { GET_ClientValidator } from "./client.get";
 import GET_Scopes from "./scopes.get";
+import GET_Logout from "./logout.get";
+import GET_SessionState from "./session-state.get";
 import PATCH_AcceptFollowRequest, { PATCH_AcceptFollowRequestValidator } from "./accept-follow-request.patch";
 import PATCH_Me, { PATCH_MeValidator } from "./me.patch";
 import PATCH_ProfilePicture from "./profile-picture.patch";
 import DELETE_FollowEntry, { DELETE_FollowEntryValidator } from "./follow-entry.delete";
 import DELETE_ProfilePicture from "./profile-picture.delete";
-import GET_Logout from "./logout.get";
-import GET_SessionState from "./session-state.get";
 
 const UserRouter = express.Router();
 
@@ -49,8 +48,6 @@ UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
 UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
 UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
 UserRouter.get("/logout", AuthenticateSilent, GET_Logout);
-UserRouter.get("/client", GET_ClientValidator, GET_Client);
-UserRouter.get("/client/:clientId", GET_ClientValidator, GET_Client);
 UserRouter.get("/scopes", GET_Scopes);
 
 // Invite System
@@ -99,6 +96,7 @@ UserRouter.use("/admin-api", AdminApiRouter);
 UserRouter.get("/me", ...DelegatedAuthFlow, GET_Me);
 UserRouter.patch("/me", ...DelegatedAuthFlow, PATCH_MeValidator, PATCH_Me);
 UserRouter.get("/:userId", ...DelegatedAuthFlow, GET__UserId);
+UserRouter.get("/info/:userId", ...DelegatedAuthFlow, GET__UserId);
 
 // Block - Unblock
 UserRouter.post("/block", ...DelegatedAuthFlow, POST_BlockValidator, POST_Block);

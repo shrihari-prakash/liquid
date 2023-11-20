@@ -1,5 +1,5 @@
 # First Stage: Install Dependencies
-FROM node:20-alpine AS base
+FROM node:21-alpine AS base
 WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
@@ -11,7 +11,7 @@ RUN npm run build
 RUN npm prune --production
 
 # Second Stage: Run Application
-FROM node:20-alpine AS production
+FROM node:21-alpine AS production
 WORKDIR /app
 COPY --from=base /app .
 EXPOSE 2000
