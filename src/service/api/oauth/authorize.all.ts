@@ -64,7 +64,12 @@ async function ALL__Authorize(req: Request, res: Response, next: NextFunction) {
       return res.json({ code: code.authorizationCode, state: (req.query.state as string) || uuidv4() });
     }
   } catch (error: any) {
-    const redirectUri = new URL(req.query.redirect_uri as string);
+    let redirectUri;
+    try {
+      redirectUri = new URL(req.query.redirect_uri as string);
+    } catch (error) {
+      return res.status(statusCodes.unauthorized).json({ error: "unknown_error", error_description: "Unknown error" });
+    }
     redirectUri.searchParams.append("state", req.query.state as string);
     if (!error.name) {
       if (Configuration.get("oauth.authorization.enable-redirect")) {
