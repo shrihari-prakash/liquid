@@ -11,7 +11,7 @@ import Role from "../../../../enum/role";
 import ClientModel from "../../../../model/mongo/client";
 import { hasErrors } from "../../../../utils/api";
 
-export const POST_ClientValidator = [
+export const POST_CreateValidator = [
   body("id").exists().isString().isLength({ min: 8, max: 96 }),
   body("grants").exists().isArray().isIn(["client_credentials", "authorization_code", "refresh_token", "password"]),
   body("redirectUris").exists().isArray(),
@@ -21,7 +21,7 @@ export const POST_ClientValidator = [
   body("displayName").exists().isString().isLength({ min: 8, max: 96 }),
 ];
 
-const POST_Client = async (req: Request, res: Response) => {
+const POST_Create = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("admin:system:client:write", res)) {
       return;
@@ -46,4 +46,4 @@ const POST_Client = async (req: Request, res: Response) => {
   }
 };
 
-export default POST_Client;
+export default POST_Create;

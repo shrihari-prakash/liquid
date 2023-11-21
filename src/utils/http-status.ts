@@ -22,6 +22,8 @@ export const errorMessages = {
   inviteCodesHidden: "InviteCodesHidden",
   badEmailDomain: "BadEmailDomain",
   invalidFile: "InvalidFile",
+  invalidTarget: "InvalidTarget",
+  generationTargetExceededForRequest: "GenerationTargetExceededForRequest",
   banned: "Banned",
   unauthorized: "Unauthorized",
   insufficientPrivileges: "InsufficientPrivileges",

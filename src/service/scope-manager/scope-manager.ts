@@ -52,12 +52,25 @@ export class ScopeManager {
   }
 
   isScopeAllowedForSharedSession(scope: string, res: Response) {
-    const allowedScopes = res.locals?.oauth?.token?.scope || "";
-    const role = res.locals?.oauth?.token?.user?.role;
+    const token = res.locals?.oauth?.token;
+    const allowedScopes = token?.scope || [];
+    const clientAllowedScopes = token?.client.scope || [];
+    const role = token?.user?.role;
     const isAllowedForClient = this.isScopeAllowed(scope.replace("<ENTITY>", "client"), allowedScopes);
+    log.debug(
+      "Shared session scope check. Scopes allowed: %o, client scopes allowed: %o.",
+      allowedScopes,
+      clientAllowedScopes
+    );
+    /* When checking permissions for a user, also check if the same permission is allowed for the client
+    that the user is having a session with. Many times, it might be possible that the user has elevated permissions,
+    but the client is not granted those permissions. This is especially the case with third party connected apps. */
     const isAllowedForUser =
-      this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), allowedScopes) || role === Role.SUPER_ADMIN;
+      (this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), allowedScopes) &&
+        this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), clientAllowedScopes)) ||
+      role === Role.SUPER_ADMIN;
     if (!isAllowedForUser && !isAllowedForClient) {
+      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.clientId);
       res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       return false;
     } else {
@@ -66,10 +79,14 @@ export class ScopeManager {
   }
 
   isScopeAllowedForSession(scope: string, res: Response) {
-    const allowedScopes = res.locals?.oauth?.token?.scope || "";
-    if (this.isScopeAllowed(scope, allowedScopes)) {
+    const token = res.locals?.oauth?.token;
+    const allowedScopes = token?.scope || [];
+    const clientAllowedScopes = token?.client.scope || [];
+    log.debug("Scopes allowed: %o, client scopes allowed: %o", allowedScopes, clientAllowedScopes);
+    if (this.isScopeAllowed(scope, allowedScopes) && this.isScopeAllowed(scope, clientAllowedScopes)) {
       return true;
     } else {
+      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.clientId);
       res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       return false;
     }

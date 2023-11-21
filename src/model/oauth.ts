@@ -168,6 +168,16 @@ const OAuthModel: OAuthModel = {
         if (!isApplicationClient(cacheToken.user)) {
           cacheToken.user = await getUserInfo(cacheToken.user._id);
         }
+        const hasNegativeScopeDiff = cacheToken.scope.some((scope: string) => {
+          return !ScopeManager.isScopeAllowed(scope, cacheToken.user.scope);
+        });
+        if (hasNegativeScopeDiff) {
+          log.debug(
+            "Some scopes were revoked for user %s since last token grant. Token has been invalidated.",
+            cacheToken.user.username
+          );
+          return null;
+        }
         cacheToken.accessTokenExpiresAt = new Date(cacheToken.accessTokenExpiresAt);
         return cacheToken;
       }
