@@ -135,7 +135,7 @@
   },
   {
     "name": "client:social:follow:all",
-    "description": "View and manage your followers of accounts in the system.",
+    "description": "View and manage followers of accounts in the system.",
     "parent": "client:social:all"
   },
   {
@@ -147,6 +147,21 @@
     "name": "client:social:block:read",
     "description": "View people that the accounts in the sytstem have blocked.",
     "parent": "client:social:all"
+  },
+  {
+    "name": "client:social:invite-code:all",
+    "description": "View and manage invite codes of user accounts.",
+    "parent": "client:social:all"
+  },
+  {
+    "name": "client:social:invite-code:read",
+    "description": "Read invite codes of user accounts.",
+    "parent": "client:social:invite-code:all"
+  },
+  {
+    "name": "client:social:invite-code:write",
+    "description": "Manage invite codes of user accounts in the system.",
+    "parent": "client:social:invite-code:all"
   },
   {
     "name": "client:profile:all",
@@ -274,6 +289,26 @@
     "parent": "admin:profile:all"
   },
   {
+    "name": "admin:social:all",
+    "description": "View and manage social features in the system.",
+    "parent": "admin:all"
+  },
+  {
+    "name": "admin:social:invite-code:all",
+    "description": "View and manage invite codes of user accounts.",
+    "parent": "admin:social:all"
+  },
+  {
+    "name": "admin:social:invite-code:read",
+    "description": "Read invite codes of user accounts in the system.",
+    "parent": "admin:social:invite-code:all"
+  },
+  {
+    "name": "admin:social:invite-code:write",
+    "description": "Manage invite codes of user accounts in the system.",
+    "parent": "admin:social:invite-code:all"
+  },
+  {
     "name": "admin:configuration:read",
     "description": "Read system configurations.",
     "parent": "admin:all"
@@ -314,3 +349,4 @@
     "parent": "admin:profile:sensitive:write"
   }
 ]
+

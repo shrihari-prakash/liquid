@@ -8,12 +8,14 @@ import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscri
 import POST_Create, { POST_CreateValidator } from "../shared/create.post";
 import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post";
 import POST_Access, { POST_AccessValidator } from "../shared/access.post";
+import POST_InviteCodes, { POST_InviteCodesValidator } from "../shared/invite-codes.post";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get";
 import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get";
 import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
 import GET_List from "../shared/list.get";
+import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get";
 
 const ClientApiRouter = express.Router();
 
@@ -34,5 +36,11 @@ if (canUseFollowAPIs) {
   ClientApiRouter.get("/user-followers", ...ClientAuthFlow, GET_UserFollowersValidator, GET_UserFollowers);
 }
 
+const canUseInviteOnly = Configuration.get("user.account-creation.enable-invite-only") ||
+  Configuration.get("user.account-creation.force-generate-invite-codes");
+if (canUseInviteOnly) {
+  ClientApiRouter.get("/invite-codes", ...ClientAuthFlow, GET_InviteCodesValidator, GET_InviteCodes);
+  ClientApiRouter.post("/invite-codes", ...ClientAuthFlow, POST_InviteCodesValidator, POST_InviteCodes);
+}
 
 export default ClientApiRouter;
