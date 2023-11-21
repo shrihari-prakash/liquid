@@ -9,7 +9,7 @@ import { getPaginationLimit } from "../../../../utils/pagination";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 import ClientModel from "../../../../model/mongo/client";
 
-const GET_Client_List = async (req: Request, res: Response) => {
+const GET_List = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("admin:system:client:read", res)) {
       return;
@@ -28,4 +28,4 @@ const GET_Client_List = async (req: Request, res: Response) => {
   }
 };
 
-export default GET_Client_List;
+export default GET_List;
