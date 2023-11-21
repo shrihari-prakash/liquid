@@ -22,7 +22,7 @@ describe("Client", () => {
     };
     return chai
       .request(app)
-      .post(`/client/admin-api`)
+      .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
@@ -49,7 +49,7 @@ describe("Client", () => {
     };
     return chai
       .request(app)
-      .post(`/client/admin-api`)
+      .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
@@ -76,7 +76,7 @@ describe("Client", () => {
     };
     return chai
       .request(app)
-      .post(`/client/admin-api`)
+      .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
@@ -98,7 +98,7 @@ describe("Client", () => {
     };
     return chai
       .request(app)
-      .post(`/client/admin-api`)
+      .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
@@ -120,7 +120,7 @@ describe("Client", () => {
     };
     return chai
       .request(app)
-      .post(`/client/admin-api`)
+      .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then(async (res) => {
