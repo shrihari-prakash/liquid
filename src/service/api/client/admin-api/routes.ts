@@ -5,7 +5,7 @@ import GET_List from "./list.get";
 
 const ClientAdminRouter = express.Router();
 
-ClientAdminRouter.post("/", ...DelegatedAuthFlow, POST_ClientValidator, POST_Client);
+ClientAdminRouter.post("/create", ...DelegatedAuthFlow, POST_ClientValidator, POST_Client);
 ClientAdminRouter.get("/list", ...DelegatedAuthFlow, GET_List);
 
 export default ClientAdminRouter;
