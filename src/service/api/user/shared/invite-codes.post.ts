@@ -31,6 +31,9 @@ const POST_InviteCodes = async (req: Request, res: Response) => {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidTarget));
     }
     const inviteCodeCount = parseInt(req.body.count) || Configuration.get("user.account-creation.invites-per-person");
+    if (inviteCodeCount > Configuration.get("invite-only.code-generation.max-limit-per-request")) {
+      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.generationTargetExceededForRequest));
+    }
     const inviteCodes = [];
     for (let j = 0; j < inviteCodeCount; j++) {
       inviteCodes.push({

@@ -629,6 +629,14 @@
     "relatedOptions": ["user.account-creation.enable-invite-only"]
   },
   {
+    "name": "invite-only.code-generation.max-limit-per-request",
+    "displayName": "Invite Only Code Generation Max Limit Per Request",
+    "envName": "INVITE_CODE_CODE_GENERATION_MAX_LIMIT_PER_REQUEST",
+    "description": "Specifies the maximum number of invite codes that can be generated for a user per request from admin and client APIs.",
+    "type": "number",
+    "default": 15
+  },
+  {
     "name": "user.account-creation.invite-code-availability-window",
     "displayName": "User Account Creation Invite Code Availability Window",
     "envName": "USER_ACCOUNT_CREATION_INVITE_CODE_AVAILABILITY_WINDOW",
