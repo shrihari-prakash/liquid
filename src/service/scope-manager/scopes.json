@@ -239,6 +239,11 @@
     "parent": "admin:system:client:all"
   },
   {
+    "name": "admin:system:client:delete",
+    "description": "Delete clients in the system.",
+    "parent": "admin:system:client:all"
+  },
+  {
     "name": "admin:profile:all",
     "description": "View and manage profile information of user accounts in the system.",
     "parent": "admin:all"
