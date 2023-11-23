@@ -17,7 +17,7 @@ export const POST_CreateValidator = [
   body("redirectUris").exists().isArray(),
   body("secret").exists().isString().isLength({ min: 8, max: 256 }),
   body("role").exists().isString().isIn([Role.INTERNAL_CLIENT, Role.EXTERNAL_CLIENT]),
-  body("scope").exists().isArray().isIn(Object.keys(ScopeManager.getScopes())),
+  body("scope").optional().isArray().isIn(Object.keys(ScopeManager.getScopes())),
   body("displayName").exists().isString().isLength({ min: 8, max: 96 }),
 ];
 
@@ -33,13 +33,13 @@ const POST_Create = async (req: Request, res: Response) => {
       redirectUris: req.body.redirectUris,
       secret: req.body.secret,
       role: req.body.role,
-      scope: req.body.scope,
+      scope: req.body.scope || [],
       displayName: req.body.displayName,
     };
     const inserted = await new ClientModel(client).save();
     log.debug("Client created successfully.");
     log.debug(inserted);
-    res.status(statusCodes.success).json(new SuccessResponse());
+    res.status(statusCodes.success).json(new SuccessResponse({ client: inserted }));
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
