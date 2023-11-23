@@ -11,7 +11,9 @@ import { ScopeManager } from "../../../../singleton/scope-manager";
 import ClientModel from "../../../../model/mongo/client";
 import { hasErrors } from "../../../../utils/api";
 
-export const POST_CreateValidator = [body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
+export const DELETE_DeleteValidator = [
+  body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
+];
 
 const DELETE_Delete = async (req: Request, res: Response) => {
   try {
