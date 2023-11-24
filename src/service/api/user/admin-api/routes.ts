@@ -24,7 +24,7 @@ AdminApiRouter.get("/user-info", ...DelegatedAuthFlow, GET_UserInfoValidator, GE
 AdminApiRouter.post("/access", ...DelegatedAuthFlow, POST_AccessValidator, POST_Access);
 AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, GET_EditableFields);
 AdminApiRouter.get("/roles", ...DelegatedAuthFlow, GET_Roles);
-AdminApiRouter.patch("/user", ...DelegatedAuthFlow, PATCH_UserValidator, PATCH_User);
+AdminApiRouter.patch("/update", ...DelegatedAuthFlow, PATCH_UserValidator, PATCH_User);
 AdminApiRouter.post("/ban", ...DelegatedAuthFlow, POST_BanValidator, POST_Ban);
 AdminApiRouter.post("/credits", ...DelegatedAuthFlow, POST_CreditsValidator, POST_Credits);
 AdminApiRouter.post("/restrict", ...DelegatedAuthFlow, POST_RestrictValidator, POST_Restrict);
