@@ -9,7 +9,7 @@ const ClientAdminRouter = express.Router();
 
 ClientAdminRouter.post("/create", ...DelegatedAuthFlow, POST_CreateValidator, POST_Create);
 ClientAdminRouter.get("/list", ...DelegatedAuthFlow, GET_List);
-ClientAdminRouter.post("/update", ...DelegatedAuthFlow, PATCH_UpdateValidator, PATCH_Update);
+ClientAdminRouter.patch("/update", ...DelegatedAuthFlow, PATCH_UpdateValidator, PATCH_Update);
 ClientAdminRouter.delete("/delete", ...DelegatedAuthFlow, DELETE_DeleteValidator, DELETE_Delete);
 
 export default ClientAdminRouter;

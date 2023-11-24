@@ -31,6 +31,8 @@ const PATCH_Update = async (req: Request, res: Response) => {
     }
     if (hasErrors(req, res)) return;
     const errors = [];
+    const target = req.body.target;
+    delete req.body.target;
     const fields = Object.keys(req.body);
     // Any field name is invalid.
     for (let i = 0; i < fields.length; i++) {
@@ -42,14 +44,11 @@ const PATCH_Update = async (req: Request, res: Response) => {
     if (errors.length) {
       return res
         .status(statusCodes.unauthorized)
-        .json(new ErrorResponse(errorMessages.insufficientPrivileges, { errors }));
+        .json(new ErrorResponse(errorMessages.invalidField, { errors }));
     }
-    const target = req.body.target;
-    const inserted = await ClientModel.updateOne({ _id: target }, req.body);
-    log
-      .debug("Client updated successfully.");
-    log.debug(inserted);
-    res.status(statusCodes.success).json(new SuccessResponse({ client: inserted }));
+    await ClientModel.updateOne({ _id: target }, req.body);
+    log.debug("Client updated successfully.");
+    res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
