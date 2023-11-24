@@ -12,7 +12,7 @@ describe("Client", () => {
 
   it("should create internal client", () => {
     const client = {
-      id: "liquid-client",
+      id: "liquid_client",
       grants: ["client_credentials", "authorization_code", "refresh_token", "password"],
       redirectUris: ["https://localhost:2000/health"],
       secret: "super-secure-secret",
@@ -39,7 +39,7 @@ describe("Client", () => {
 
   it("should create external client", () => {
     const client = {
-      id: "liquid-client",
+      id: "liquid_client",
       grants: ["client_credentials", "authorization_code", "refresh_token", "password"],
       redirectUris: ["https://localhost:2000/health"],
       secret: "super-secure-secret",
@@ -66,7 +66,7 @@ describe("Client", () => {
 
   it("should reject invalid role", () => {
     const client = {
-      id: "liquid-client",
+      id: "liquid_client",
       grants: ["client_credentials", "authorization_code", "refresh_token", "password"],
       redirectUris: ["https://localhost:2000/health"],
       secret: "super-secure-secret",
@@ -88,7 +88,7 @@ describe("Client", () => {
 
   it("should reject invalid grant", () => {
     const client = {
-      id: "liquid-client",
+      id: "liquid_client",
       grants: ["invalid_grant"],
       redirectUris: ["https://localhost:2000/health"],
       secret: "super-secure-secret",
@@ -110,7 +110,7 @@ describe("Client", () => {
 
   it("should reject invalid scope", () => {
     const client = {
-      id: "liquid-client",
+      id: "liquid_client",
       grants: ["client_credentials"],
       redirectUris: ["https://localhost:2000/health"],
       secret: "super-secure-secret",
