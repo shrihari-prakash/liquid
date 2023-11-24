@@ -18,12 +18,12 @@ import { flushUserInfoFromRedis } from "../../../../model/oauth";
 import { isRoleRankHigher } from "../../../../utils/role";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 
-export const PATCH_UserValidator = [
+export const PATCH_UpdateValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
   ...PATCH_MeValidator,
 ];
 
-const PATCH_User = async (req: Request, res: Response) => {
+const PATCH_Update = async (req: Request, res: Response) => {
   if (!ScopeManager.isScopeAllowedForSession("admin:profile:write", res)) {
     return;
   }
@@ -99,4 +99,4 @@ const PATCH_User = async (req: Request, res: Response) => {
   }
 };
 
-export default PATCH_User;
+export default PATCH_Update;

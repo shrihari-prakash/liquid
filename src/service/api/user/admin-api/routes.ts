@@ -14,7 +14,7 @@ import GET_List from "../shared/list.get";
 import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
 import GET_EditableFields from "./editable-fields.get";
 import GET_Roles from "../shared/roles.get";
-import PATCH_User, { PATCH_UserValidator } from "./user.patch";
+import PATCH_Update, { PATCH_UpdateValidator } from "./update.patch";
 import GET_SubscriptionTiers from "../shared/subscription-tiers.get";
 import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get";
 
@@ -24,7 +24,7 @@ AdminApiRouter.get("/user-info", ...DelegatedAuthFlow, GET_UserInfoValidator, GE
 AdminApiRouter.post("/access", ...DelegatedAuthFlow, POST_AccessValidator, POST_Access);
 AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, GET_EditableFields);
 AdminApiRouter.get("/roles", ...DelegatedAuthFlow, GET_Roles);
-AdminApiRouter.patch("/update", ...DelegatedAuthFlow, PATCH_UserValidator, PATCH_User);
+AdminApiRouter.patch("/update", ...DelegatedAuthFlow, PATCH_UpdateValidator, PATCH_Update);
 AdminApiRouter.post("/ban", ...DelegatedAuthFlow, POST_BanValidator, POST_Ban);
 AdminApiRouter.post("/credits", ...DelegatedAuthFlow, POST_CreditsValidator, POST_Credits);
 AdminApiRouter.post("/restrict", ...DelegatedAuthFlow, POST_RestrictValidator, POST_Restrict);

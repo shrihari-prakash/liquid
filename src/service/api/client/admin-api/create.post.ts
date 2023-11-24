@@ -1,5 +1,5 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "admin-api/editable-fields" });
+const log = Logger.getLogger().child({ from: "client/admin-api/create" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
@@ -10,9 +10,10 @@ import { ScopeManager } from "../../../../singleton/scope-manager";
 import Role from "../../../../enum/role";
 import ClientModel from "../../../../model/mongo/client";
 import { hasErrors } from "../../../../utils/api";
+import { Configuration } from "../../../../singleton/configuration";
 
 export const POST_CreateValidator = [
-  body("id").exists().isString().isLength({ min: 8, max: 96 }),
+  body("id").exists().isString().isLength({ min: 8, max: 30 }).matches(new RegExp(Configuration.get("client.id-validation-regex"), "i")),
   body("grants").exists().isArray().isIn(["client_credentials", "authorization_code", "refresh_token", "password"]),
   body("redirectUris").exists().isArray(),
   body("secret").exists().isString().isLength({ min: 8, max: 256 }),

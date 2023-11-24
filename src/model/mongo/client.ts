@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const clientSchema = {
+export const clientSchema = {
   id: {
     type: String,
     required: true,
