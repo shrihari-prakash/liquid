@@ -730,6 +730,14 @@
     "default": "username,email,password,isBanned,isRestricted,deleted,role,firstName,lastName,middleName,bio,pronouns,customLink,organization,designation,gender,preferredLanguage"
   },
   {
+    "name": "client.id-validation-regex",
+    "displayName": "Client ID Validation Regex",
+    "envName": "CLIENT_ID_VALIDATION_REGEX",
+    "description": "Specifies the regex to be used to validate id for clients.",
+    "type": "string",
+    "default": "^[a-z_][a-z0-9._]*$"
+  },
+  {
     "name": "admin-api.user.profile.can-edit-peer-data",
     "displayName": "Profile Can Edit Peer Profile Data (Admin API)",
     "envName": "ADMIN_API_USER_PROFILE_CAN_EDIT_PEER_DATA",
