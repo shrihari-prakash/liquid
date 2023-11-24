@@ -94,14 +94,14 @@ app.use(session(sessionOptions));
 // ********** End Sessions ********** //
 
 // ********** CORS ********** //
-let origins = Configuration.get("cors.allowed-origins") as string[];
-log.debug("CORS origins %o", origins);
+export let systemCORS = Configuration.get("cors.allowed-origins") as string[];
+log.debug("CORS origins %o", systemCORS);
 app.use(
   cors({
     credentials: true,
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
-      if (origins.indexOf(origin) === -1) {
+      if (systemCORS.indexOf(origin) === -1) {
         var msg = 'The CORS policy for this site does not ' +
           'allow access from the specified Origin.';
         return callback(new Error(msg), false);
@@ -112,7 +112,7 @@ app.use(
 );
 
 (async () => {
-  if (Configuration.get("cors.auto-sync")) {
+  if (Configuration.get("cors.startup-sync")) {
     const clients = await ClientModel.find();
     clients.forEach((client) => {
       const newOrigins: string[] = [];
@@ -124,10 +124,10 @@ app.use(
           log.debug("Skipped URI %s in cors addition.", uri);
         }
       });
-      origins = origins.concat(origins, newOrigins);
+      systemCORS = systemCORS.concat(systemCORS, newOrigins);
     });
-    origins = Array.from(new Set(origins));
-    log.debug("Final CORS origins %o", origins);
+    systemCORS = Array.from(new Set(systemCORS));
+    log.debug("Final CORS origins %o", systemCORS);
   }
 })()
 
