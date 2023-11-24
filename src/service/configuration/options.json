@@ -485,10 +485,10 @@
     "default": "http://localhost:3000"
   },
   {
-    "name": "cors.auto-sync",
-    "displayName": "CORS Auto Sync",
-    "envName": "CORS_AUTO_SYNC",
-    "description": "Specifies if all clients in the system should be fetched and their redirect origins should be added to CORS automatically.",
+    "name": "cors.startup-sync",
+    "displayName": "CORS Startup Sync",
+    "envName": "CORS_STARTUP_SYNC",
+    "description": "Specifies if all clients in the system should be fetched and their redirect origins should be added to CORS automatically on system startup.",
     "type": "boolean",
     "default": true
   },
