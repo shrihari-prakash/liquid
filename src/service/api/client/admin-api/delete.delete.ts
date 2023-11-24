@@ -10,6 +10,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 import ClientModel from "../../../../model/mongo/client";
 import { hasErrors } from "../../../../utils/api";
+import Role from "../../../../enum/role";
 
 export const DELETE_DeleteValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -17,11 +18,14 @@ export const DELETE_DeleteValidator = [
 
 const DELETE_Delete = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("admin:system:client:delete", res)) {
-      return;
-    }
     if (hasErrors(req, res)) return;
     const target = req.body.target;
+    const client = await ClientModel.findOne({ _id: target });
+    if (!client) return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidTarget));
+    const requiredScope = client.role === Role.INTERNAL_CLIENT ? "admin:system:internal-client:delete" : "admin:system:external-client:delete"
+    if (!ScopeManager.isScopeAllowedForSession(requiredScope, res)) {
+      return;
+    }
     const deleted = await ClientModel.deleteOne({ _id: target });
     log.debug("Client deleted successfully.");
     log.debug(deleted);

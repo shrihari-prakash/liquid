@@ -24,7 +24,8 @@ export const POST_CreateValidator = [
 
 const POST_Create = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("admin:system:client:write", res)) {
+    const requiredScope = req.body.role === Role.INTERNAL_CLIENT ? "admin:system:internal-client:write" : "admin:system:external-client:write"
+    if (!ScopeManager.isScopeAllowedForSession(requiredScope, res)) {
       return;
     }
     if (hasErrors(req, res)) return;

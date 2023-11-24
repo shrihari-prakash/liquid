@@ -26,13 +26,16 @@ export const PATCH_UpdateValidator = [
 
 const PATCH_Update = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("admin:system:client:write", res)) {
-      return;
-    }
     if (hasErrors(req, res)) return;
     const errors = [];
     const target = req.body.target;
     delete req.body.target;
+    const client = await ClientModel.findOne({ _id: target });
+    if (!client) return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidTarget));
+    const requiredScope = client.role === Role.INTERNAL_CLIENT ? "admin:system:internal-client:write" : "admin:system:external-client:write"
+    if (!ScopeManager.isScopeAllowedForSession(requiredScope, res)) {
+      return;
+    }
     const fields = Object.keys(req.body);
     // Any field name is invalid.
     for (let i = 0; i < fields.length; i++) {
