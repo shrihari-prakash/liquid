@@ -485,6 +485,14 @@
     "default": "http://localhost:3000"
   },
   {
+    "name": "cors.auto-sync",
+    "displayName": "CORS Auto Sync",
+    "envName": "CORS_AUTO_SYNC",
+    "description": "Specifies if all clients in the system should be fetched and their redirect origins should be added to CORS automatically.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "privilege.can-use-cache",
     "displayName": "Can Use Cache",
     "envName": "CAN_USE_CACHE",
@@ -931,3 +939,4 @@
     ]
   }
 ]
+
