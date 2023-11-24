@@ -234,14 +234,34 @@
     "parent": "admin:system:client:all"
   },
   {
-    "name": "admin:system:client:write",
-    "description": "Manage clients in the system.",
+    "name": "admin:system:internal-client:all",
+    "description": "View and manage first party clients in the system.",
     "parent": "admin:system:client:all"
   },
   {
-    "name": "admin:system:client:delete",
-    "description": "Delete clients in the system.",
+    "name": "admin:system:internal-client:write",
+    "description": "Manage first party clients in the system.",
+    "parent": "admin:system:internal-client:all"
+  },
+  {
+    "name": "admin:system:internal-client:delete",
+    "description": "Delete first party clients in the system.",
+    "parent": "admin:system:internal-client:all"
+  },
+  {
+    "name": "admin:system:external-client:all",
+    "description": "View and manage third party clients in the system.",
     "parent": "admin:system:client:all"
+  },
+  {
+    "name": "admin:system:external-client:write",
+    "description": "Manage third party clients in the system.",
+    "parent": "admin:system:external-client:all"
+  },
+  {
+    "name": "admin:system:external-client:delete",
+    "description": "Delete third party clients in the system.",
+    "parent": "admin:system:external-client:all"
   },
   {
     "name": "admin:profile:all",
