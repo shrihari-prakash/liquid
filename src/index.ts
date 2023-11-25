@@ -93,7 +93,7 @@ app.use(session(sessionOptions));
 // ********** End Sessions ********** //
 
 // ********** CORS ********** //
-export let systemCORS = Configuration.get("cors.allowed-origins") as string[];
+const systemCORS = Configuration.get("cors.allowed-origins") as string[];
 log.debug("CORS origins %o", systemCORS);
 app.use(
   cors({
