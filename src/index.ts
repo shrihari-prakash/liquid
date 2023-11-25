@@ -102,8 +102,7 @@ app.use(
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
       if (systemCORS.indexOf(origin) === -1) {
-        var msg = 'The CORS policy for this site does not ' +
-          'allow access from the specified Origin.';
+        var msg = "The CORS policy for this site does not allow access from the origin " + origin;
         return callback(new Error(msg), false);
       }
       return callback(null, true);
@@ -116,7 +115,7 @@ app.use(
     const clients = await ClientModel.find();
     clients.forEach((client) => {
       const newOrigins: string[] = [];
-      client.redirectUris.forEach(uri => {
+      client.redirectUris.forEach((uri) => {
         try {
           const parsedUrl = new URL(uri);
           newOrigins.push(parsedUrl.origin);
@@ -129,7 +128,7 @@ app.use(
     systemCORS = Array.from(new Set(systemCORS));
     log.debug("Final CORS origins %o", systemCORS);
   }
-})()
+})();
 
 // ********** End CORS ********** //
 
