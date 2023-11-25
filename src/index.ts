@@ -7,12 +7,10 @@ dotenv.config();
 import * as path from "path";
 import * as fs from "fs";
 import cors from "cors";
-import swaggerUi from "swagger-ui-express";
 import express from "express";
 import RedisStore from "connect-redis";
 import session from "express-session";
 import bodyParser from "body-parser";
-import YAML from "yaml";
 
 const version = fs.readFileSync(path.join(__dirname, "VERSION"), { encoding: "utf8" });
 const banner = `
@@ -140,10 +138,6 @@ if (appConfigAbsolutePath) {
     res.sendFile(localAppConfigPath);
   });
   log.warn("Frontend config was not found. Please configure option `system.static.app-config-absolute-path`");
-}
-if (Configuration.get("system.enable-swagger") || environment !== "production") {
-  const swaggerDocument = YAML.parse(fs.readFileSync(__dirname + "/swagger.yaml", "utf8"));
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 if (Configuration.get("system.static.fallback-to-index")) {
   app.all("*", function (_, res) {
