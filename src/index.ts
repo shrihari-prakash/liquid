@@ -40,7 +40,6 @@ import { Api } from "./singleton/api/api";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
 import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
-import ClientModel from "./model/mongo/client";
 
 const app = express();
 app.disable("x-powered-by");
@@ -99,36 +98,9 @@ log.debug("CORS origins %o", systemCORS);
 app.use(
   cors({
     credentials: true,
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (systemCORS.indexOf(origin) === -1) {
-        var msg = "The CORS policy for this site does not allow access from the origin " + origin;
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
+    origin: systemCORS,
   })
 );
-
-(async () => {
-  if (Configuration.get("cors.startup-sync")) {
-    const clients = await ClientModel.find();
-    clients.forEach((client) => {
-      const newOrigins: string[] = [];
-      client.redirectUris.forEach((uri) => {
-        try {
-          const parsedUrl = new URL(uri);
-          newOrigins.push(parsedUrl.origin);
-        } catch (e) {
-          log.debug("Skipped URI %s in cors addition.", uri);
-        }
-      });
-      systemCORS = systemCORS.concat(systemCORS, newOrigins);
-    });
-    systemCORS = Array.from(new Set(systemCORS));
-    log.debug("Final CORS origins %o", systemCORS);
-  }
-})();
 
 // ********** End CORS ********** //
 
