@@ -15,7 +15,7 @@ const GET_List = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:read", res)) {
       return;
-    };
+    }
     const query: any = {};
     const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;
@@ -25,7 +25,8 @@ const GET_List = async (req: Request, res: Response) => {
     const users = (await UserModel.find(query).limit(limit).lean().exec()) as unknown as UserInterface[];
     checkSubscription(users);
     await attachProfilePicture(users);
-    res.status(statusCodes.success).json(new SuccessResponse({ users }));
+    const totalUsers = await UserModel.estimatedDocumentCount();
+    res.status(statusCodes.success).json(new SuccessResponse({ users, totalUsers }));
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
