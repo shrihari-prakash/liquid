@@ -8,6 +8,9 @@ const isSubscribed = (user: UserInterface) => {
   if (!user.subscriptionTier || user.subscriptionTier === baseTier) {
     return false;
   }
+  if (!user.isSubscribed) {
+    return false;
+  }
   if (user.isSubscribed && moment().isAfter(moment(user.subscriptionExpiry))) {
     return false;
   }
