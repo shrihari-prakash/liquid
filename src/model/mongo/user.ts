@@ -287,7 +287,7 @@ export const userSchema = {
   },
   country: {
     type: String,
-    willProjectForUserSelect: false,
+    willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
       write: SensitivityLevel.HIGH
