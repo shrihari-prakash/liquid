@@ -104,6 +104,7 @@ app.use(
 
 // ********** Response Compression ********** //
 if (Configuration.get("system.enable-response-compression")) {
+  log.info("Response compression is enabled.");
   app.use(compression());
 }
 // ********** End Response Compression ********** //
