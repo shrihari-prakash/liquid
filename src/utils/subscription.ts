@@ -5,7 +5,7 @@ import { Configuration } from "../singleton/configuration";
 const baseTier = Configuration.get("user.subscription.base-tier");
 
 const isSubscribed = (user: UserInterface) => {
-  if (user.subscriptionTier === baseTier) {
+  if (!user.subscriptionTier || user.subscriptionTier === baseTier) {
     return false;
   }
   if (user.isSubscribed && moment().isAfter(moment(user.subscriptionExpiry))) {
