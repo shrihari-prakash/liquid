@@ -2,16 +2,30 @@ import moment from "moment";
 import UserModel, { UserInterface } from "../model/mongo/user";
 import { Configuration } from "../singleton/configuration";
 
+const baseTier = Configuration.get("user.subscription.base-tier");
+
+const isSubscribed = (user: UserInterface) => {
+  if (user.subscriptionTier === baseTier) {
+    return false;
+  }
+  if (user.isSubscribed && moment().isAfter(moment(user.subscriptionExpiry))) {
+    return false;
+  }
+  return true;
+};
+
 export const checkSubscription = (input: UserInterface | UserInterface[]) => {
-  const baseTier = Configuration.get("user.subscription.base-tier");
   if (Array.isArray(input)) {
     const toUpdate = [];
     const users = input;
     for (let i = 0; i < users.length; i++) {
-      if (users[i].isSubscribed && moment().isAfter(moment(users[i].subscriptionExpiry))) {
+      const wasSubscribed = users[i].isSubscribed;
+      if (!isSubscribed(users[i])) {
         users[i].isSubscribed = false;
         users[i].subscriptionTier = baseTier;
-        toUpdate.push(users[i]._id);
+        if (wasSubscribed) {
+          toUpdate.push(users[i]._id);
+        }
       }
     }
     toUpdate.length &&
@@ -19,10 +33,13 @@ export const checkSubscription = (input: UserInterface | UserInterface[]) => {
     return users;
   } else {
     const user = input;
-    if (user.isSubscribed && moment().isAfter(moment(user.subscriptionExpiry))) {
+    const wasSubscribed = user.isSubscribed;
+    if (!isSubscribed(user)) {
       user.isSubscribed = false;
       user.subscriptionTier = baseTier;
-      UserModel.updateOne({ _id: user._id }, { $set: { isSubscribed: false, subscriptionTier: baseTier } });
+      if (wasSubscribed) {
+        UserModel.updateOne({ _id: user._id }, { $set: { isSubscribed: false, subscriptionTier: baseTier } });
+      }
     }
     return user;
   }
