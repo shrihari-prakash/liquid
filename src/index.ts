@@ -11,6 +11,7 @@ import express from "express";
 import RedisStore from "connect-redis";
 import session from "express-session";
 import bodyParser from "body-parser";
+import compression from "compression";
 
 const version = fs.readFileSync(path.join(__dirname, "VERSION"), { encoding: "utf8" });
 const banner = `
@@ -99,8 +100,13 @@ app.use(
     origin: systemCORS,
   })
 );
-
 // ********** End CORS ********** //
+
+// ********** Response Compression ********** //
+if (Configuration.get("system.can-use-response-compression")) {
+  app.use(compression());
+}
+// ********** End Response Compression ********** //
 
 // ********** Singleton Init ********** //
 if (environment !== "test") {
