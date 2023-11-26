@@ -121,7 +121,7 @@
     "envName": "SYSTEM_CAN_USE_RESPONSE_COMPRESSION",
     "description": "Specifies if liquid can gzip HTTP responses.",
     "type": "boolean",
-    "default": true
+    "default": false
   },
   {
     "name": "cookie.session-secret",
