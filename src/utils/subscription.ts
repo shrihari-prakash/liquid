@@ -15,18 +15,14 @@ export const checkSubscription = (input: UserInterface | UserInterface[]) => {
       }
     }
     toUpdate.length &&
-      UserModel.updateMany(
-        { _id: { $in: toUpdate } },
-        { $set: { isSubscribed: false, subscriptionTier: baseTier } },
-        () => {}
-      );
+      UserModel.updateMany({ _id: { $in: toUpdate } }, { $set: { isSubscribed: false, subscriptionTier: baseTier } });
     return users;
   } else {
     const user = input;
     if (user.isSubscribed && moment().isAfter(moment(user.subscriptionExpiry))) {
       user.isSubscribed = false;
       user.subscriptionTier = baseTier;
-      UserModel.updateOne({ _id: user._id }, { $set: { isSubscribed: false, subscriptionTier: baseTier } }, () => {});
+      UserModel.updateOne({ _id: user._id }, { $set: { isSubscribed: false, subscriptionTier: baseTier } });
     }
     return user;
   }
