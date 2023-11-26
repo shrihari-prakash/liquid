@@ -169,7 +169,7 @@ class UserValidator {
   }
 
   country(required = false, nested = false) {
-    const field = this.makeFieldName("organization", nested);
+    const field = this.makeFieldName("country", nested);
     const requiredFn = required ? "exists" : "optional";
     return this.fn(field)[requiredFn]().isString().isIn(countryISOCodes);
   }
