@@ -15,9 +15,10 @@ const GET_SubscriptionTiers = async (_: Request, res: Response) => {
     }
     const subscriptionTiersFromConfiguration = Configuration.get("user.subscription.tier-list");
     const subscriptionTiers = [];
+    const baseTier = Configuration.get("user.subscription.base-tier");
     for (let i = 0; i < subscriptionTiersFromConfiguration.length; i++) {
       const tier = subscriptionTiersFromConfiguration[i];
-      subscriptionTiers.push({ name: tier });
+      subscriptionTiers.push({ name: tier, isBaseTier: baseTier === tier });
     }
     res.status(statusCodes.success).json(new SuccessResponse({ subscriptionTiers: subscriptionTiers }));
   } catch (err) {
