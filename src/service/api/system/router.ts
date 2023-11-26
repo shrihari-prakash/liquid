@@ -6,12 +6,14 @@ import { DelegatedAuthFlow } from "../middleware/authenticate";
 import GET__Settings from "./settings.get";
 import GET__SettingsInsecure from "./settings-insecure.get";
 import GET__Version from "./version.get";
+import GET__CountriesInsecure from "./countries-insecure.get";
 
 const SystemRouter = express.Router();
 
 // Delegated APIs
 SystemRouter.get("/settings", ...DelegatedAuthFlow, GET__Settings);
 SystemRouter.get("/settings-insecure", GET__SettingsInsecure);
+SystemRouter.get("/countries-insecure", GET__CountriesInsecure);
 SystemRouter.get("/version", GET__Version);
 
 // Admin APIs

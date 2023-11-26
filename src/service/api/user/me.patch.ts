@@ -36,6 +36,7 @@ export const PATCH_MeValidator = [
   userValidator.customLink(),
   userValidator.pronouns(),
   userValidator.organization(),
+  userValidator.country(),
 ];
 
 const PATCH_Me = async (req: Request, res: Response) => {

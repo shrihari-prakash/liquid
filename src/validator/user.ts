@@ -5,6 +5,7 @@ import { query, body } from "express-validator";
 
 import { Configuration } from "../singleton/configuration";
 import { Language } from "../enum/language";
+import { countryISOCodes } from "../utils/country-codes";
 
 class UserValidator {
   nameValidationRegex = new RegExp(Configuration.get("user.profile.name-validation-regex"), "u");
@@ -165,6 +166,12 @@ class UserValidator {
     const field = this.makeFieldName("organization", nested);
     const requiredFn = required ? "exists" : "optional";
     return this.fn(field)[requiredFn]().isString().matches(this.alphaRegex).isLength({ min: 3, max: 128 });
+  }
+
+  country(required = false, nested = false) {
+    const field = this.makeFieldName("organization", nested);
+    const requiredFn = required ? "exists" : "optional";
+    return this.fn(field)[requiredFn]().isString().isIn(countryISOCodes);
   }
 }
 
