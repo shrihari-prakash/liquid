@@ -116,6 +116,14 @@
     "default": "/var/liquid/scope-extensions.json"
   },
   {
+    "name": "system.can-use-response-compression",
+    "displayName": "Can Use Response Compression",
+    "envName": "SYSTEM_CAN_USE_RESPONSE_COMPRESSION",
+    "description": "Specifies if liquid can gzip HTTP responses.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "cookie.session-secret",
     "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",
@@ -931,4 +939,3 @@
     ]
   }
 ]
-
