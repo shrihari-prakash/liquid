@@ -116,10 +116,10 @@
     "default": "/var/liquid/scope-extensions.json"
   },
   {
-    "name": "system.can-use-response-compression",
-    "displayName": "Can Use Response Compression",
-    "envName": "SYSTEM_CAN_USE_RESPONSE_COMPRESSION",
-    "description": "Specifies if liquid can gzip HTTP responses.",
+    "name": "system.enable-response-compression",
+    "displayName": "Enable Response Compression",
+    "envName": "SYSTEM_ENABLE_RESPONSE_COMPRESSION",
+    "description": "Specifies if liquid can GZip HTTP responses.",
     "type": "boolean",
     "default": false
   },

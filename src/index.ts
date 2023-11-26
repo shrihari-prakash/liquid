@@ -103,7 +103,7 @@ app.use(
 // ********** End CORS ********** //
 
 // ********** Response Compression ********** //
-if (Configuration.get("system.can-use-response-compression")) {
+if (Configuration.get("system.enable-response-compression")) {
   app.use(compression());
 }
 // ********** End Response Compression ********** //
