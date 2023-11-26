@@ -812,6 +812,14 @@
     "default": "basic,pro"
   },
   {
+    "name": "user.subscription.base-tier",
+    "displayName": "User Subscription Base Tier",
+    "envName": "USER_SUBSCRIPTION_BASE_TIER",
+    "description": "Specifies the basic tier of the subscription. When a user's subscription expires, they will be reverted to the base tier.",
+    "type": "string",
+    "default": "basic"
+  },
+  {
     "name": "user.profile-picture.max-file-size",
     "displayName": "User Profile Picture Max File Size",
     "envName": "USER_PROFILE_PICTURE_MAX_FILE_SIZE",
