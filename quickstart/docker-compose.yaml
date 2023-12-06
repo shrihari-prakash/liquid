@@ -12,6 +12,16 @@ services:
       - .env
     networks:
       - liquid-network
+  nitrogen:
+    image: shrihariprakash/nitrogen:latest
+    container_name: nitrogen
+    ports:
+      - "2001:80"
+    environment:
+      - LIQUID_HOST=http://localhost:2000
+      - LIQUID_CLIENT_ID=application_client
+    networks:
+      - liquid-network
   liquid_redis:
     image: redis:latest
     container_name: liquid_redis
