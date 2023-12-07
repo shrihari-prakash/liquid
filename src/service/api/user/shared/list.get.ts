@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import UserModel, { UserInterface } from "../../../../model/mongo/user";
+import UserModel, { UserAdminProjection, UserClientProjection, UserInterface } from "../../../../model/mongo/user";
 import { checkSubscription } from "../../../../utils/subscription";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { getPaginationLimit } from "../../../../utils/pagination";
@@ -22,7 +22,11 @@ const GET_List = async (req: Request, res: Response) => {
     if (offset) {
       query["_id"] = { $gt: offset };
     }
-    const users = (await UserModel.find(query).limit(limit).lean().exec()) as unknown as UserInterface[];
+    const isClient = res.locals.user.isClient;
+    const users = (await UserModel.find(query, isClient ? UserClientProjection : UserAdminProjection)
+      .limit(limit)
+      .lean()
+      .exec()) as unknown as UserInterface[];
     checkSubscription(users);
     await attachProfilePicture(users);
     const totalUsers = await UserModel.estimatedDocumentCount();

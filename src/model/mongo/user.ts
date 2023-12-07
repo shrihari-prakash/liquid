@@ -10,6 +10,8 @@ export const userSchema = {
     required: true,
     unique: true,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.HIGH,
@@ -20,6 +22,8 @@ export const userSchema = {
     required: true,
     select: false,
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
       write: SensitivityLevel.HIGH,
@@ -29,6 +33,8 @@ export const userSchema = {
     type: String,
     required: true,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -37,6 +43,8 @@ export const userSchema = {
   middleName: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -46,6 +54,8 @@ export const userSchema = {
     type: String,
     required: true,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -54,6 +64,8 @@ export const userSchema = {
   gender: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -64,6 +76,8 @@ export const userSchema = {
     required: true,
     default: "en",
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -73,6 +87,8 @@ export const userSchema = {
     type: String,
     required: true,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.HIGH,
@@ -81,6 +97,8 @@ export const userSchema = {
   designation: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -89,6 +107,8 @@ export const userSchema = {
   profilePictureUrl: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -97,6 +117,8 @@ export const userSchema = {
   profilePicturePath: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -105,6 +127,8 @@ export const userSchema = {
   bio: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -113,6 +137,8 @@ export const userSchema = {
   customLink: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -121,6 +147,8 @@ export const userSchema = {
   pronouns: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -131,6 +159,8 @@ export const userSchema = {
     required: true,
     default: false,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.HIGH,
@@ -139,6 +169,8 @@ export const userSchema = {
   verifiedDate: {
     type: Date,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -148,6 +180,8 @@ export const userSchema = {
     type: Schema.Types.ObjectId,
     ref: "user",
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -158,6 +192,8 @@ export const userSchema = {
     required: true,
     default: 0,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.READ_ONLY,
@@ -168,6 +204,8 @@ export const userSchema = {
     required: true,
     default: 0,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.READ_ONLY,
@@ -178,6 +216,8 @@ export const userSchema = {
     required: true,
     default: false,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.MEDIUM,
@@ -188,6 +228,8 @@ export const userSchema = {
     required: true,
     unique: true,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -198,6 +240,8 @@ export const userSchema = {
     required: true,
     default: false,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.MEDIUM,
@@ -206,6 +250,8 @@ export const userSchema = {
   phone: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -214,6 +260,8 @@ export const userSchema = {
   phoneCountryCode: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -222,6 +270,8 @@ export const userSchema = {
   phoneVerified: {
     type: Boolean,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.MEDIUM,
@@ -232,6 +282,8 @@ export const userSchema = {
     unique: true,
     sparse: true,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.MEDIUM,
@@ -240,6 +292,8 @@ export const userSchema = {
   secondaryEmailVerified: {
     type: Boolean,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.MEDIUM,
@@ -248,6 +302,8 @@ export const userSchema = {
   secondaryPhone: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -256,6 +312,8 @@ export const userSchema = {
   secondaryPhoneCountryCode: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -264,6 +322,8 @@ export const userSchema = {
   secondaryPhoneVerified: {
     type: Boolean,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.MEDIUM,
@@ -272,6 +332,8 @@ export const userSchema = {
   addressLine1: {
     type: String,
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
       write: SensitivityLevel.HIGH,
@@ -280,6 +342,8 @@ export const userSchema = {
   addressLine2: {
     type: String,
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
       write: SensitivityLevel.HIGH,
@@ -288,6 +352,8 @@ export const userSchema = {
   city: {
     type: String,
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
       write: SensitivityLevel.HIGH,
@@ -296,6 +362,8 @@ export const userSchema = {
   country: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
       write: SensitivityLevel.HIGH,
@@ -304,6 +372,8 @@ export const userSchema = {
   pincode: {
     type: Number,
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
       write: SensitivityLevel.HIGH,
@@ -312,6 +382,8 @@ export const userSchema = {
   organization: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -322,6 +394,8 @@ export const userSchema = {
     required: true,
     default: false,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -332,6 +406,8 @@ export const userSchema = {
     required: false,
     default: Date.now,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -341,6 +417,8 @@ export const userSchema = {
     type: String,
     required: false,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -352,6 +430,8 @@ export const userSchema = {
     min: 0,
     default: 0,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
       write: SensitivityLevel.MEDIUM,
@@ -362,6 +442,8 @@ export const userSchema = {
     required: true,
     default: ["delegated:all"],
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.EXTREME,
@@ -371,6 +453,8 @@ export const userSchema = {
     type: Schema.Types.ObjectId,
     ref: "user",
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -381,6 +465,8 @@ export const userSchema = {
     required: true,
     default: true,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -389,6 +475,8 @@ export const userSchema = {
   deactivateDate: {
     type: Date,
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -399,6 +487,8 @@ export const userSchema = {
     required: true,
     default: false,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.HIGH,
@@ -407,6 +497,8 @@ export const userSchema = {
   bannedDate: {
     type: Date,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.HIGH,
@@ -416,6 +508,8 @@ export const userSchema = {
     type: Schema.Types.ObjectId,
     ref: "user",
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -424,6 +518,8 @@ export const userSchema = {
   bannedReason: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.HIGH,
@@ -434,6 +530,8 @@ export const userSchema = {
     required: true,
     default: false,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.HIGH,
@@ -442,6 +540,8 @@ export const userSchema = {
   restrictedDate: {
     type: Date,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.HIGH,
@@ -451,6 +551,8 @@ export const userSchema = {
     type: Schema.Types.ObjectId,
     ref: "user",
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
@@ -459,6 +561,8 @@ export const userSchema = {
   restrictedReason: {
     type: String,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.HIGH,
@@ -469,6 +573,8 @@ export const userSchema = {
     required: true,
     default: false,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.EXTREME,
@@ -477,6 +583,8 @@ export const userSchema = {
   deletedDate: {
     type: Date,
     willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.EXTREME,
@@ -486,6 +594,8 @@ export const userSchema = {
     type: String,
     required: true,
     willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
       write: SensitivityLevel.HIGH,
@@ -562,13 +672,34 @@ export const UserProjection: any = {
   createdAt: 1,
   updatedAt: 1,
 };
+
+export const UserAdminProjection: any = {
+  _id: 1,
+  createdAt: 1,
+  updatedAt: 1,
+};
+
+export const UserClientProjection: any = {
+  _id: 1,
+  createdAt: 1,
+  updatedAt: 1,
+};
+
 for (const field in userSchema) {
   if (userSchema[field as keyof typeof userSchema].willProjectForUserSelect === true) {
     UserProjection[field] = 1;
   }
+  if (userSchema[field as keyof typeof userSchema].willProjectForUserAdminSelect === true) {
+    UserAdminProjection[field] = 1;
+  }
+  if (userSchema[field as keyof typeof userSchema].willProjectForUserClientSelect === true) {
+    UserClientProjection[field] = 1;
+  }
 }
-log.debug("UserProjection:");
-log.debug(UserProjection);
+
+log.debug("User Projection: %o", UserProjection);
+log.debug("User Admin Projection: %o", UserAdminProjection);
+log.debug("User Client Projection: %o", UserClientProjection);
 
 const schemaInstance = new mongoose.Schema(userSchema, {
     timestamps: true,
