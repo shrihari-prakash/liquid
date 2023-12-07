@@ -39,6 +39,8 @@ import { Api } from "./singleton/api/api";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
 import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
+import { errorMessages, statusCodes } from "./utils/http-status";
+import { ErrorResponse } from "./utils/response";
 
 const app = express();
 app.disable("x-powered-by");
@@ -122,13 +124,13 @@ const staticFolder = Configuration.get("system.static.use-relative-path")
   ? path.join(__dirname, Configuration.get("system.static-folder"))
   : Configuration.get("system.static-folder");
 log.info("Static path normalized to %s", staticFolder);
-app.use(
-  "/",
-  express.static(staticFolder, {
-    index: false,
-    extensions: ["html"],
-  })
-);
+const staticRoutes = ["/", "/login", "/signup", "/consent", "/get-code", "/reset-password"];
+// Static pages
+app.get(staticRoutes, function (_, res) {
+  // index.html will route to the respective static pages.
+  const index = path.join(staticFolder, "index.html");
+  res.sendFile(index);
+});
 const appConfigAbsolutePath = Configuration.get("system.static.app-config-absolute-path");
 if (appConfigAbsolutePath) {
   app.get("/app-config.json", function (_, res) {
@@ -146,13 +148,19 @@ if (appConfigAbsolutePath) {
   });
   log.warn("Frontend config was not found. Please configure option `system.static.app-config-absolute-path`");
 }
-if (Configuration.get("system.static.fallback-to-index")) {
-  app.all("*", function (_, res) {
-    const index = path.join(staticFolder, "index.html");
-    res.sendFile(index);
-  });
-}
+// Static files. App config JSON files, image files, etc.
+app.get(
+  /^.*\.\w+$/,
+  express.static(staticFolder, {
+    index: false,
+    extensions: ["html"],
+  })
+);
 // ********** End UI / Static Pages ********** //
+
+app.all("*", function (_, res) {
+  res.status(statusCodes.notFound).json(new ErrorResponse(errorMessages.notFound));
+});
 
 // ********** Reverse Proxy Setup ********** //
 const isReverseProxy = Configuration.get("system.reverse-proxy-mode");
