@@ -6,7 +6,7 @@ import { query } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import UserModel, { UserInterface } from "../../../../model/mongo/user";
+import UserModel, { UserAdminProjection, UserClientProjection, UserInterface } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
 import { checkSubscription } from "../../../../utils/subscription";
 import { attachProfilePicture } from "../../../../utils/profile-picture";
@@ -18,14 +18,18 @@ const GET_UserInfo = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:read", res)) {
       return;
-    };
+    }
     const targets = (req.query.targets as string).split(",");
+    const isClient = res.locals.user.isClient;
     if (targets.length > (Configuration.get("get-user-max-items") as number)) {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }
-    const users = (await UserModel.find({
-      _id: { $in: targets },
-    })
+    const users = (await UserModel.find(
+      {
+        _id: { $in: targets },
+      },
+      isClient ? UserClientProjection : UserAdminProjection
+    )
       .lean()
       .exec()) as unknown as UserInterface[];
     checkSubscription(users);
