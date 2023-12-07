@@ -23,6 +23,7 @@ describe("Restrict", () => {
           _id: MemoryStore.users.user2._id,
         })) as unknown as UserInterface[];
         chai.expect(user2.isRestricted).to.eql(true);
+        chai.expect(user2.restrictedBy).to.eql(MemoryStore.users.user1._id);
       });
   });
 
@@ -41,6 +42,7 @@ describe("Restrict", () => {
           _id: MemoryStore.users.user2._id,
         })) as unknown as UserInterface[];
         chai.expect(user2.isRestricted).to.eql(false);
+        chai.expect(user2.restrictedBy).to.eql(MemoryStore.users.user1._id);
       });
   });
 });

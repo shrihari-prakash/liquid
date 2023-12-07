@@ -24,6 +24,7 @@ describe("Banning", () => {
           _id: MemoryStore.users.user2._id,
         })) as unknown as UserInterface[];
         chai.expect(user2.isBanned).to.eql(true);
+        chai.expect(user2.bannedBy).to.eql(MemoryStore.users.user1._id);
       });
   });
 
@@ -42,6 +43,7 @@ describe("Banning", () => {
           _id: MemoryStore.users.user2._id,
         })) as unknown as UserInterface[];
         chai.expect(user2.isBanned).to.eql(false);
+        chai.expect(user2.bannedBy).to.eql(MemoryStore.users.user1._id);
       });
   });
 });

@@ -22,16 +22,18 @@ const POST_Restrict = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:restrict:write", res)) {
       return;
-    };
+    }
     if (hasErrors(req, res)) return;
     const target = req.body.target;
     const state = req.body.state;
     const reason = req.body.reason;
+    const myId = res.locals.oauth.token.user._id;
     const query = {
       $set: {
         isRestricted: state,
         restrictedDate: new Date(new Date().toUTCString()),
         restrictedReason: reason || null,
+        restrictedBy: myId,
       },
     };
     await UserModel.updateOne({ _id: target }, query);
