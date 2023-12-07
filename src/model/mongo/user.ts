@@ -12,7 +12,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   password: {
@@ -22,7 +22,7 @@ export const userSchema = {
     willProjectForUserSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   firstName: {
@@ -31,7 +31,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   middleName: {
@@ -39,7 +39,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   lastName: {
@@ -48,7 +48,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   gender: {
@@ -56,7 +56,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   preferredLanguage: {
@@ -66,7 +66,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   role: {
@@ -75,7 +75,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   designation: {
@@ -83,7 +83,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   profilePictureUrl: {
@@ -91,7 +91,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   profilePicturePath: {
@@ -99,7 +99,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   bio: {
@@ -107,16 +107,15 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
-  customLink:
-  {
+  customLink: {
     type: String,
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   pronouns: {
@@ -124,7 +123,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   verified: {
@@ -134,7 +133,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   verifiedDate: {
@@ -142,7 +141,16 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
+    },
+  },
+  verifiedBy: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW,
     },
   },
   followingCount: {
@@ -152,7 +160,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.READ_ONLY
+      write: SensitivityLevel.READ_ONLY,
     },
   },
   followerCount: {
@@ -162,7 +170,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.READ_ONLY
+      write: SensitivityLevel.READ_ONLY,
     },
   },
   isPrivate: {
@@ -172,7 +180,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   email: {
@@ -182,7 +190,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   emailVerified: {
@@ -192,7 +200,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   phone: {
@@ -200,7 +208,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   phoneCountryCode: {
@@ -208,7 +216,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   phoneVerified: {
@@ -216,7 +224,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   secondaryEmail: {
@@ -226,7 +234,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   secondaryEmailVerified: {
@@ -234,7 +242,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   secondaryPhone: {
@@ -242,7 +250,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   secondaryPhoneCountryCode: {
@@ -250,7 +258,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   secondaryPhoneVerified: {
@@ -258,7 +266,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   addressLine1: {
@@ -266,7 +274,7 @@ export const userSchema = {
     willProjectForUserSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   addressLine2: {
@@ -274,7 +282,7 @@ export const userSchema = {
     willProjectForUserSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   city: {
@@ -282,7 +290,7 @@ export const userSchema = {
     willProjectForUserSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   country: {
@@ -290,7 +298,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   pincode: {
@@ -298,7 +306,7 @@ export const userSchema = {
     willProjectForUserSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   organization: {
@@ -306,7 +314,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   isSubscribed: {
@@ -316,7 +324,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   subscriptionExpiry: {
@@ -326,7 +334,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   subscriptionTier: {
@@ -335,7 +343,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   credits: {
@@ -346,7 +354,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.MEDIUM,
-      write: SensitivityLevel.MEDIUM
+      write: SensitivityLevel.MEDIUM,
     },
   },
   scope: {
@@ -356,7 +364,7 @@ export const userSchema = {
     willProjectForUserSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.EXTREME
+      write: SensitivityLevel.EXTREME,
     },
   },
   invitedBy: {
@@ -365,7 +373,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   isActive: {
@@ -375,7 +383,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   deactivateDate: {
@@ -383,7 +391,7 @@ export const userSchema = {
     willProjectForUserSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.LOW
+      write: SensitivityLevel.LOW,
     },
   },
   isBanned: {
@@ -393,7 +401,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   bannedDate: {
@@ -401,7 +409,16 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
+    },
+  },
+  bannedBy: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW,
     },
   },
   bannedReason: {
@@ -409,7 +426,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   isRestricted: {
@@ -419,7 +436,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   restrictedDate: {
@@ -427,7 +444,16 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
+    },
+  },
+  restrictedBy: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    willProjectForUserSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW,
     },
   },
   restrictedReason: {
@@ -435,7 +461,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
   deleted: {
@@ -445,7 +471,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.EXTREME
+      write: SensitivityLevel.EXTREME,
     },
   },
   deletedDate: {
@@ -453,7 +479,7 @@ export const userSchema = {
     willProjectForUserSelect: true,
     sensitivityScore: {
       read: SensitivityLevel.LOW,
-      write: SensitivityLevel.EXTREME
+      write: SensitivityLevel.EXTREME,
     },
   },
   creationIp: {
@@ -462,7 +488,7 @@ export const userSchema = {
     willProjectForUserSelect: false,
     sensitivityScore: {
       read: SensitivityLevel.HIGH,
-      write: SensitivityLevel.HIGH
+      write: SensitivityLevel.HIGH,
     },
   },
 };
@@ -485,6 +511,7 @@ export type UserInterface = {
   pronouns: string;
   verified: boolean;
   verifiedDate: Date;
+  verifiedBy: string;
   customLink: string;
   followerCount: string;
   isPrivate: boolean;
@@ -514,9 +541,11 @@ export type UserInterface = {
   deactivateDate: Date;
   isBanned: boolean;
   bannedDate: Date;
+  bannedBy: string;
   bannedReason: string;
   isRestricted: boolean;
   restrictedDate: Date;
+  restrictedBy: string;
   restrictedReason: string;
   deleted: boolean;
   deletedDate: Date;
@@ -542,8 +571,8 @@ log.debug("UserProjection:");
 log.debug(UserProjection);
 
 const schemaInstance = new mongoose.Schema(userSchema, {
-  timestamps: true,
-}),
+    timestamps: true,
+  }),
   UserModel = mongoose.model("user", schemaInstance);
 
 export default UserModel;

@@ -21,11 +21,12 @@ const POST_Verify = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("admin:profile:verifications:write", res)) {
       return;
-    };
+    }
     if (hasErrors(req, res)) return;
     const target = req.body.target;
     const state = req.body.state;
-    const query = { $set: { verified: state, verifiedDate: new Date(new Date().toUTCString()) } };
+    const myId = res.locals.oauth.token.user._id;
+    const query = { $set: { verified: state, verifiedDate: new Date(new Date().toUTCString()), verifiedBy: myId } };
     await UserModel.updateOne({ _id: target }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
     flushUserInfoFromRedis(target);
