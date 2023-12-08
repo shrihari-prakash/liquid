@@ -148,7 +148,7 @@ if (appConfigAbsolutePath) {
   });
   log.warn("Frontend config was not found. Please configure option `system.static.app-config-absolute-path`");
 }
-// Static files. App config JSON files, image files, etc.
+// Static files. Stylesheets, images, etc.
 app.get(
   /^.*\.\w+$/,
   express.static(staticFolder, {
