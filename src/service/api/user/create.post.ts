@@ -21,6 +21,7 @@ import { ClientSession } from "mongoose";
 import { generateInviteCode } from "../../../utils/invite-code";
 import UserValidator from "../../../validator/user";
 import { Mailer } from "../../../singleton/mailer";
+import { VerificationCodeType } from "../../../enum/verification-code";
 
 export const bcryptConfig = {
   salt: 10,
@@ -98,7 +99,9 @@ const POST_Create = async (req: Request, res: Response) => {
   let session = "";
   try {
     if (Configuration.get("user.account-creation.enable-ip-based-throttle")) {
-      const ipResult = (await UserModel.findOne({ creationIp: req.ip }).sort({ $natural: -1 }).exec()) as unknown as UserInterface;
+      const ipResult = (await UserModel.findOne({ creationIp: req.ip })
+        .sort({ $natural: -1 })
+        .exec()) as unknown as UserInterface;
       if (ipResult && ipResult.creationIp === req.ip) {
         const duration = moment.duration(moment().diff(moment(ipResult.createdAt)));
         const difference = duration.asSeconds();
@@ -144,7 +147,7 @@ const POST_Create = async (req: Request, res: Response) => {
       if (existingUser.emailVerified)
         return res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
       else {
-        await Mailer.generateAndSendEmailVerification(existingUser);
+        await Mailer.generateAndSendEmailVerification(existingUser, VerificationCodeType.SIGNUP);
         const response = {
           user: existingUser,
         };
@@ -184,7 +187,7 @@ const POST_Create = async (req: Request, res: Response) => {
     }
     const newUser = (await new UserModel(toInsert).save(sessionOptions)) as unknown as UserInterface;
     if (shouldVerifyEmail) {
-      await Mailer.generateAndSendEmailVerification(newUser);
+      await Mailer.generateAndSendEmailVerification(newUser, VerificationCodeType.SIGNUP);
     }
     await useInviteCode(newUser, req.body.inviteCode, sessionOptions);
     newUser.password = undefined;

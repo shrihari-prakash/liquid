@@ -1,6 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
-import { prepareAuthorizationParams, getPlaceholder, isEmail, useTitle, uuidv4, errorTextTimeout } from "../utils/utils.js";
+import { prepareAuthorizationParams, getPlaceholder, isEmail, useTitle, uuidv4, errorTextTimeout, afterLogin } from "../utils/utils.js";
 
 export default function Login() {
   const submitButtonText = "Login";
@@ -51,15 +51,13 @@ export default function Login() {
     return;
   }
 
-  async function onLogin() {
-    let authParams = prepareAuthorizationParams(configuration);
-    const clientInfo = await $.get(`/client/${authParams.client_id}`);
-    console.log("Client role", clientInfo.data.role);
-    if (clientInfo.data.client.role === "internal_client") {
-      authParams = new URLSearchParams(authParams);
-      window.location = `/oauth/authorize?${authParams.toString()}`;
+  async function onLogin(data) {
+    if (data["2faEnabled"]) {
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set('target', data.userInfo._id);
+      window.location = `/2fa?${urlParams.toString()}`;
     } else {
-      window.location = `/consent${window.location.search}`;
+      afterLogin(configuration);
     }
   }
 
@@ -75,8 +73,8 @@ export default function Login() {
       data.username = username;
     }
     $.post("/user/login", data)
-      .done(async function () {
-        onLogin();
+      .done(async function (response) {
+        onLogin(response.data);
       })
       .fail(function (response) {
         if (response.responseJSON.error === "RateLimitError") {

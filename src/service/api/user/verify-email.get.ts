@@ -10,6 +10,7 @@ import VerificationCodeModel from "../../../model/mongo/verification-code";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { hasErrors } from "../../../utils/api";
+import { VerificationCodeType } from "../../../enum/verification-code";
 
 export const GET_VerifyEmailValidator = [
   query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -22,7 +23,7 @@ const GET_VerifyEmail = async (req: Request, res: Response) => {
     const target: string = req.query.target as string;
     const code: string = req.query.code as string;
     const dbCode = await VerificationCodeModel.findOne({ $and: [{ belongsTo: target }, { code }] }).exec();
-    if (!dbCode) {
+    if (!dbCode || dbCode.type !== VerificationCodeType.SIGNUP) {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }
     await UserModel.updateOne({ _id: dbCode.belongsTo }, { $set: { emailVerified: true } });

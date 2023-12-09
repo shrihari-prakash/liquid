@@ -84,12 +84,13 @@ export class Mailer {
     }
   }
 
-  public async generateAndSendEmailVerification(user: UserInterface) {
+  public async generateAndSendEmailVerification(user: UserInterface, type: string) {
     await VerificationCodeModel.deleteMany({ belongsTo: user._id });
     const code = {
       belongsTo: user._id,
       verificationMethod: "email",
       code: Math.floor(100000 + Math.random() * 900000) + "",
+      type,
     };
     await new VerificationCodeModel(code).save();
     const appName = Configuration.get("system.app-name") as string;

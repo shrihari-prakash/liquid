@@ -97,4 +97,16 @@ export function prepareAuthorizationParams(configuration) {
   return params;
 }
 
+export async function afterLogin(configuration) {
+  let authParams = prepareAuthorizationParams(configuration);
+  const clientInfo = await $.get(`/client/${authParams.client_id}`);
+  console.log("Client role", clientInfo.data.role);
+  if (clientInfo.data.client.role === "internal_client") {
+    authParams = new URLSearchParams(authParams);
+    window.location = `/oauth/authorize?${authParams.toString()}`;
+  } else {
+    window.location = `/consent${window.location.search}`;
+  }
+}
+
 export const errorTextTimeout = 6000;
