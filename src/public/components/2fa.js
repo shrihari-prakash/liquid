@@ -10,7 +10,7 @@ export default function TwoFactorAuthentication() {
     const [hasError, setHasError] = React.useState(false);
     const [submitting, setSubmitting] = React.useState(false);
 
-    React.useEffect(() => useTitle(configuration["content.app-name"], "2 Factor Authentication"), []);
+    React.useEffect(() => useTitle(configuration["content.app-name"], "2FA"), []);
 
     const onSubmitError = (props) => {
         if (hasError) {
@@ -53,7 +53,7 @@ export default function TwoFactorAuthentication() {
         <form className="form" onSubmit={submit2fa}>
             <div className="noselect">
                 <h3>
-                    2 Factor Authentication
+                    Two-Step Verification
                 </h3>
                 <p className="app-tagline">To login, enter the verification code sent to your email address.</p>
             </div>
@@ -73,6 +73,6 @@ export default function TwoFactorAuthentication() {
             </div>
             <div className="page-links"></div>
             <input type="submit" disabled={submitting} className={"button" + (hasError ? " shake" : "")} value={buttonText} />
-        </form>
+        </form >
     );
 }
