@@ -27,6 +27,7 @@ Options.forEach((option) => {
 });
 
 Configuration.set("system.email-adapter", "print");
+Configuration.set("2fa.email.enabled", true);
 
 exports.mochaHooks = {
   async beforeAll() {

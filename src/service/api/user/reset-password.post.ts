@@ -12,6 +12,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { bcryptConfig } from "./create.post";
 import { hasErrors } from "../../../utils/api";
+import { VerificationCodeType } from "../../../enum/verification-code";
 
 export const POST_ResetPasswordValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -24,7 +25,7 @@ const POST_ResetPassword = async (req: Request, res: Response) => {
     if (hasErrors(req, res)) return;
     const { code, password: passwordBody, target } = req.body;
     const dbCode = await VerificationCodeModel.findOne({ $and: [{ belongsTo: target }, { code }] }).exec();
-    if (!dbCode) {
+    if (!dbCode || dbCode.type !== VerificationCodeType.PASSWORD_RESET) {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);

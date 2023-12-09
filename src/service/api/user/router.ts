@@ -16,6 +16,8 @@ import POST_Search, { POST_SearchValidator } from "./search.post";
 import POST_ResetPassword, { POST_ResetPasswordValidator } from "./reset-password.post";
 import POST_Block, { POST_BlockValidator } from "./block.post";
 import POST_Unblock, { POST_UnblockValidator } from "./unblock.post";
+import POST_2FA, { POST_2FAValidator } from "./2fa.post";
+import POST_Do2FA, { POST_Do2FAValidator } from "./do-2fa.post";
 import GET_Code, { GET_CodeValidator } from "./code.get";
 import GET_Followers from "./followers.get";
 import GET_Following from "./following.get";
@@ -101,5 +103,11 @@ UserRouter.get("/info/:userId", ...DelegatedAuthFlow, GET__UserId);
 // Block - Unblock
 UserRouter.post("/block", ...DelegatedAuthFlow, POST_BlockValidator, POST_Block);
 UserRouter.post("/unblock", ...DelegatedAuthFlow, POST_UnblockValidator, POST_Unblock);
+
+// 2FA
+if (Configuration.get("2fa.email.enabled")) {
+  UserRouter.post("/2fa", ...DelegatedAuthFlow, POST_2FAValidator, POST_2FA);
+  UserRouter.post("/do-2fa", POST_Do2FAValidator, POST_Do2FA);
+}
 
 export default UserRouter;

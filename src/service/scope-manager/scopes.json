@@ -39,6 +39,16 @@
     "parent": "delegated:profile:all"
   },
   {
+    "name": "delegated:profile:2fa:all",
+    "description": "View and manage Two-Factor Authentication for your account.",
+    "parent": "delegated:profile:all"
+  },
+  {
+    "name": "delegated:profile:2fa:write",
+    "description": "Manage Two-Factor Authentication for your account.",
+    "parent": "delegated:profile:2fa:all"
+  },
+  {
     "name": "delegated:profile:search",
     "description": "Search for people on your behalf.",
     "parent": "delegated:profile:all"
@@ -374,4 +384,3 @@
     "parent": "admin:profile:sensitive:write"
   }
 ]
-

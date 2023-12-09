@@ -872,7 +872,7 @@
     "envName": "SYSTEM_RATE_LIMIT_HEAVY_API_MAX_LIMIT",
     "description": "Specifies the rate limit for heavy APIs for the specified window size.",
     "type": "number",
-    "default": 25
+    "default": 30
   },
   {
     "name": "system.rate-limit.extreme-api-max-limit",
@@ -880,7 +880,7 @@
     "envName": "SYSTEM_RATE_LIMIT_EXTREME_API_MAX_LIMIT",
     "description": "Specifies the rate limit for extreme APIs for the specified window size.",
     "type": "number",
-    "default": 15
+    "default": 20
   },
   {
     "name": "system.role.default",
@@ -907,6 +907,24 @@
     "type": "stringArray",
     "default": "super_admin(1),admin(2),internal_client(2),external_client(3),user(4)",
     "relatedOptions": ["system.role.extended-roles"]
+  },
+  {
+    "name": "2fa.email.enabled",
+    "displayName": "2FA Enabled",
+    "envName": "2FA_EMAIL_ENABLED",
+    "description": "Specifies if users can enable 2 factor authentication.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["2fa.email.enforce"]
+  },
+  {
+    "name": "2fa.email.enforce",
+    "displayName": "2FA Enforce",
+    "envName": "2FA_EMAIL_ENFORCE",
+    "description": "Specifies if users are enforced to authenticate with 2 factor authentication.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["2fa.email.enabled"]
   },
   {
     "name": "system.exposed-options",

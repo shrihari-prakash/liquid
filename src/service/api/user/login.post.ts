@@ -14,14 +14,13 @@ import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
 import { sanitizeEmailAddress } from "../../../utils/email";
 import UserValidator from "../../../validator/user";
+import { Mailer } from "../../../singleton/mailer";
+import { VerificationCodeType } from "../../../enum/verification-code";
+import { Configuration } from "../../../singleton/configuration";
 
 const userValidator = new UserValidator(body);
 
-export const POST_LoginValidator = [
-  userValidator.username(),
-  userValidator.email(),
-  userValidator.password(true),
-];
+export const POST_LoginValidator = [userValidator.username(), userValidator.email(), userValidator.password(true)];
 
 const POST_Login = async (req: Request, res: Response) => {
   try {
@@ -45,13 +44,23 @@ const POST_Login = async (req: Request, res: Response) => {
     req.session.user = user;
     log.debug("Assigned session id %s for user %s", req.session?.id, user._id);
     Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
-    req.session.save(function (err) {
-      if (err) {
-        log.error(err);
-        return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
-      }
-      return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
-    });
+    if (Configuration.get("2fa.email.enforce") || (user["2faEnabled"] && user["2faMedium"] === "email")) {
+      await Mailer.generateAndSendEmailVerification(user, VerificationCodeType.LOGIN);
+      const userInfo = {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+      };
+      return res.status(statusCodes.success).json(new SuccessResponse({ "2faEnabled": true, userInfo }));
+    } else {
+      req.session.save(function (err) {
+        if (err) {
+          log.error(err);
+          return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+        }
+        return res.status(statusCodes.success).json(new SuccessResponse({ "2faEnabled": false, userInfo: user }));
+      });
+    }
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

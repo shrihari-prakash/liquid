@@ -29,6 +29,28 @@ export const userSchema = {
       write: SensitivityLevel.HIGH,
     },
   },
+  "2faEnabled": {
+    type: Boolean,
+    required: true,
+    default: false,
+    willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH,
+    },
+  },
+  "2faMedium": {
+    type: String,
+    willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH,
+    },
+  },
   firstName: {
     type: String,
     required: true,
@@ -607,6 +629,8 @@ export type UserInterface = {
   _id: ObjectId;
   username: string;
   password?: string;
+  "2faEnabled": string;
+  "2faMedium": string;
   firstName: string;
   middleName?: string;
   lastName: string;
