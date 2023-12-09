@@ -872,7 +872,7 @@
     "envName": "SYSTEM_RATE_LIMIT_HEAVY_API_MAX_LIMIT",
     "description": "Specifies the rate limit for heavy APIs for the specified window size.",
     "type": "number",
-    "default": 25
+    "default": 30
   },
   {
     "name": "system.rate-limit.extreme-api-max-limit",
@@ -880,7 +880,7 @@
     "envName": "SYSTEM_RATE_LIMIT_EXTREME_API_MAX_LIMIT",
     "description": "Specifies the rate limit for extreme APIs for the specified window size.",
     "type": "number",
-    "default": 15
+    "default": 20
   },
   {
     "name": "system.role.default",

@@ -40,4 +40,5 @@ export function activateRateLimiters(app: any) {
   app.post("/user/create", RateLimiter.EXTREME);
   app.post("/user/login", RateLimiter.HEAVY);
   app.get("/user/code", RateLimiter.EXTREME);
+  app.get("/user/do-2fa", RateLimiter.EXTREME);
 }
