@@ -8,11 +8,15 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel from "../../../model/mongo/user";
 import { hasErrors } from "../../../utils/api";
+import { ScopeManager } from "../../../singleton/scope-manager";
 
 export const POST_2FAValidator = [body("state").exists().isBoolean()];
 
 const POST_2FA = async (req: Request, res: Response) => {
   try {
+    if (!ScopeManager.isScopeAllowedForSession("delegated:profile:2fa:write", res)) {
+      return;
+    }
     if (hasErrors(req, res)) return;
     const userId = res.locals.oauth.token.user._id;
     const state = req.body.state;
