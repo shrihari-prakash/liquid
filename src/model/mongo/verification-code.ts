@@ -16,6 +16,10 @@ const verificationCodeSchema = {
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+    required: true,
+  },
 };
 const schemaInstance = new mongoose.Schema(verificationCodeSchema, {
     timestamps: true,

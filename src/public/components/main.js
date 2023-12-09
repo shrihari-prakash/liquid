@@ -13,6 +13,8 @@ async function getRenderElement() {
       return (await import("./verify-account.js")).default;
     case "/reset-password":
       return (await import("./reset-password.js")).default;
+    case "/2fa":
+      return (await import("./2fa.js")).default;
     case "/consent":
       return (await import("./consent.js")).default;
     default:
