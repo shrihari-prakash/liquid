@@ -909,6 +909,24 @@
     "relatedOptions": ["system.role.extended-roles"]
   },
   {
+    "name": "2fa.email.enabled",
+    "displayName": "2FA Enabled",
+    "envName": "2FA_EMAIL_ENABLED",
+    "description": "Specifies if users can enable 2 factor authentication.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["2fa.email.enforce"]
+  },
+  {
+    "name": "2fa.email.enforce",
+    "displayName": "2FA Enforce",
+    "envName": "2FA_EMAIL_ENFORCE",
+    "description": "Specifies if users are enforced to authenticate with 2 factor authentication.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["2fa.email.enabled"]
+  },
+  {
     "name": "system.exposed-options",
     "displayName": "System Exposed Options",
     "envName": "SYSTEM_EXPOSED_OPTIONS",

@@ -124,7 +124,7 @@ const staticFolder = Configuration.get("system.static.use-relative-path")
   ? path.join(__dirname, Configuration.get("system.static-folder"))
   : Configuration.get("system.static-folder");
 log.info("Static path normalized to %s", staticFolder);
-const staticRoutes = ["/", "/login", "/signup", "/get-code", "/verify-account", "/reset-password", "/consent"];
+const staticRoutes = ["/", "/login", "/signup", "/get-code", "/verify-account", "/reset-password", "/consent", "/2fa"];
 // Static pages
 app.get(staticRoutes, function (_, res) {
   // index.html will route to the respective static pages.

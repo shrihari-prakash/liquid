@@ -9,6 +9,7 @@ import { hasErrors } from "../../../utils/api";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { Mailer } from "../../../singleton/mailer";
+import { VerificationCodeType } from "../../../enum/verification-code";
 
 export const GET_CodeValidator = [query("email").exists().isEmail()];
 
@@ -22,7 +23,7 @@ const GET_Code = async (req: Request, res: Response) => {
     if (!existingUser) {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     } else {
-      await Mailer.generateAndSendEmailVerification(existingUser);
+      await Mailer.generateAndSendEmailVerification(existingUser, VerificationCodeType.PASSWORD_RESET);
       return res.status(statusCodes.created).json(new SuccessResponse({ target: existingUser._id }));
     }
   } catch (err) {
