@@ -26,6 +26,7 @@ const POST_Do2FA = async (req: Request, res: Response) => {
     if (!dbCode || dbCode.type !== VerificationCodeType.LOGIN) {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }
+    await VerificationCodeModel.deleteOne({ code });
     const user = (await UserModel.findOne({ _id: target }).exec()) as unknown as UserInterface;
     req.session.save(function (err) {
       if (err) {
