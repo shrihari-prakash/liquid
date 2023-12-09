@@ -19,7 +19,7 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 - **OAuth Based Authentication:** Secure and seamless authentication based on a battle tested OAuth core powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) from [@node-oauth](https://github.com/node-oauth).
 - **Social Features:** Liquid is more than just an authentication screen. Liquid comes with out of the box support for social features like follow - unfollow, private accounts and blocking.
 - **Invite-Only Access:** Using the optional invite-only sign-up feature can be an effective way to create virality because it encourages existing users to invite their network to join the product. This also doubles as a spam account prevention system by ensuring a controlled userbase growth.
-- **2FA:** Secure user logins with 2 factor authentication based on EMail.
+- **2FA:** Secure user logins with email based 2 factor authentication.
 - **Admin Controls:** With [Liquid Nitrogen](https://github.com/shrihari-prakash/nitrogen), spinning up an admin panel takes minutes, but if you want to build your own, Liquid offers administrative APIs that let you edit profile information, ban users, restrict accounts and do a lot more.
 - **Profile Pictures:** Provide users with the option to personalize their profiles with profile pictures.
 - **Microservice Integration:** Seamlessly integrate Liquid into your project, allowing other microservices to utilize its robust authentication and user management capabilities.
