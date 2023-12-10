@@ -10,7 +10,7 @@ export default function TwoFactorAuthentication() {
     const [hasError, setHasError] = React.useState(false);
     const [submitting, setSubmitting] = React.useState(false);
 
-    React.useEffect(() => useTitle(configuration["content.app-name"], "2FA"), []);
+    React.useEffect(() => useTitle(configuration["content.app-name"], "Two-Step Verification"), []);
 
     const onSubmitError = (props) => {
         if (hasError) {
