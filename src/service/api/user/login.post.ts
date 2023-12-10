@@ -45,13 +45,14 @@ const POST_Login = async (req: Request, res: Response) => {
     log.debug("Assigned session id %s for user %s", req.session?.id, user._id);
     Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
     if (Configuration.get("2fa.email.enforce") || (user["2faEnabled"] && user["2faMedium"] === "email")) {
-      await Mailer.generateAndSendEmailVerification(user, VerificationCodeType.LOGIN);
+      const code = await Mailer.generateAndSendEmailVerification(user, VerificationCodeType.LOGIN);
       const userInfo = {
         _id: user._id,
         username: user.username,
         email: user.email,
       };
-      return res.status(statusCodes.success).json(new SuccessResponse({ "2faEnabled": true, userInfo }));
+      const sessionHash = code.sessionHash;
+      return res.status(statusCodes.success).json(new SuccessResponse({ "2faEnabled": true, sessionHash, userInfo }));
     } else {
       req.session.save(function (err) {
         if (err) {

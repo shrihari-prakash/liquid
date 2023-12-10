@@ -9,6 +9,8 @@ import * as fs from "fs";
 import { Configuration } from "../../singleton/configuration";
 import { UserInterface } from "../../model/mongo/user";
 import VerificationCodeModel from "../../model/mongo/verification-code";
+import { VerificationCodeType } from "../../enum/verification-code";
+import { v4 as uuidv4 } from "uuid";
 
 const Modes = {
   PRINT: "print",
@@ -86,12 +88,15 @@ export class Mailer {
 
   public async generateAndSendEmailVerification(user: UserInterface, type: string) {
     await VerificationCodeModel.deleteMany({ belongsTo: user._id });
-    const code = {
+    const code: any = {
       belongsTo: user._id,
       verificationMethod: "email",
       code: Math.floor(100000 + Math.random() * 900000) + "",
       type,
     };
+    if (type === VerificationCodeType.LOGIN) {
+      code.sessionHash = uuidv4();
+    }
     await new VerificationCodeModel(code).save();
     const appName = Configuration.get("system.app-name") as string;
     const fullName = `${user.firstName} ${user.lastName}`;

@@ -29,10 +29,12 @@ export default function TwoFactorAuthentication() {
         const code = document.getElementById("code").value;
         const urlParams = new URLSearchParams(window.location.search);
         const target = urlParams.get("target");
+        const sessionHash = urlParams.get("session_hash");
         setSubmitting(true);
         $.post("/user/do-2fa", {
             target,
-            code
+            code,
+            sessionHash
         })
             .done(function () {
                 afterLogin(configuration)
