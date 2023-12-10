@@ -55,6 +55,7 @@ export default function Login() {
     if (data["2faEnabled"]) {
       const urlParams = new URLSearchParams(window.location.search);
       urlParams.set('target', data.userInfo._id);
+      urlParams.set('session_hash', data.sessionHash);
       window.location = `/2fa?${urlParams.toString()}`;
     } else {
       afterLogin(configuration);

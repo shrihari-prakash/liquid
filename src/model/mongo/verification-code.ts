@@ -16,6 +16,10 @@ const verificationCodeSchema = {
     type: String,
     required: true,
   },
+  sessionHash: {
+    type: String,
+    required: false,
+  },
   type: {
     type: String,
     required: true,
@@ -38,6 +42,8 @@ export interface VerificationCodeInterface extends Document {
   belongsTo: ObjectId;
   verificationMethod: string;
   code: string;
+  sessionHash?: string;
+  type: string;
 }
 
 export default VerificationCodeModel;

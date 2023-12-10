@@ -15,6 +15,7 @@ import UserModel, { UserInterface } from "../../../model/mongo/user";
 export const POST_Do2FAValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
   body("code").exists().isString().isLength({ min: 3, max: 128 }),
+  body("sessionHash").exists().isString().isLength({ min: 3, max: 128 }),
 ];
 
 const POST_Do2FA = async (req: Request, res: Response) => {
@@ -23,7 +24,7 @@ const POST_Do2FA = async (req: Request, res: Response) => {
     const target = req.body.target;
     const code = req.body.code;
     const dbCode = await VerificationCodeModel.findOne({ $and: [{ belongsTo: target }, { code }] }).exec();
-    if (!dbCode || dbCode.type !== VerificationCodeType.LOGIN) {
+    if (!dbCode || dbCode.type !== VerificationCodeType.LOGIN || dbCode.sessionHash !== req.body.sessionHash) {
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }
     await VerificationCodeModel.deleteOne({ code });
