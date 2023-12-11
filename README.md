@@ -21,6 +21,8 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 - **Invite-Only Access:** Using the optional invite-only sign-up feature can be an effective way to create virality because it encourages existing users to invite their network to join the product. This also doubles as a spam account prevention system by ensuring a controlled userbase growth.
 - **2FA:** Secure user logins with email based Two-Factor Authentication.
 - **Admin Controls:** With [Liquid Nitrogen](https://github.com/shrihari-prakash/nitrogen), spinning up an admin panel takes minutes, but if you want to build your own, Liquid offers administrative APIs that let you edit profile information, ban users, restrict accounts and do a lot more.
+  ![Nitrogen](https://github.com/shrihari-prakash/nitrogen/blob/main/images/banner.png?raw=true)
+
 - **Profile Pictures:** Provide users with the option to personalize their profiles with profile pictures.
 - **Microservice Integration:** Seamlessly integrate Liquid into your project, allowing other microservices to utilize its robust authentication and user management capabilities.
 - **Advanced Scope Management:** Granular access control to APIs through Liquid's sophisticated scope management solution. Liquid also lets you add your own scopes into it so you can also use scopes in your other microservices.
