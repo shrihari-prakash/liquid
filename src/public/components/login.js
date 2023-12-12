@@ -26,7 +26,7 @@ export default function Login() {
         if (response.ok) {
           setIsLoggedIn(true);
           console.log("Bypassing login screen due to an existing session...")
-          onLogin(response.data.data.userInfo);
+          onLogin({});
         }
       }
     })();
