@@ -5,7 +5,6 @@ COPY package*.json ./
 COPY tsconfig.json ./
 COPY gulpfile.js ./
 COPY src /app/src
-RUN ls -a
 RUN npm ci
 RUN npm run build
 RUN npm prune --production
@@ -13,6 +12,7 @@ RUN npm prune --production
 # Second Stage: Run Application
 FROM node:21-alpine AS production
 WORKDIR /app
-COPY --from=base /app .
+COPY --from=base /app/build .
+COPY --from=base /app/node_modules ./node_modules
 EXPOSE 2000
-CMD [ "node", "./build/index.js" ]
+CMD [ "node", "./index.js" ]
