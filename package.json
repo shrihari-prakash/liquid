@@ -11,7 +11,6 @@
     "build:server": "rimraf ./build && tsc && npm run copy-files",
     "build:static": "gulp static_build",
     "start:dev": "concurrently \"nodemon --inspect\" \"npx babel --watch ./src/public/components --out-dir ./src/public/compiled --presets @babel/preset-react\"",
-    "start:docker": "docker compose -f docker-compose.dev.yml up --build --detach",
     "start": "npm run build && node build/index.js",
     "pretty": "prettier --write \"./**/*.{js,ts,json}\""
   },
