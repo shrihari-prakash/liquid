@@ -66,7 +66,7 @@ export default function TwoFactorAuthentication() {
                     className="form-control"
                     aria-label="Verification Code"
                     aria-required="true"
-                    placeholder={getPlaceholder("Verification code", configuration)}
+                    placeholder={getPlaceholder("Verification Code", configuration)}
                     minLength="6"
                     autoComplete="off"
                     id="code"
