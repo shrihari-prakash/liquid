@@ -41,6 +41,7 @@ import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
 import { errorMessages, statusCodes } from "./utils/http-status";
 import { ErrorResponse } from "./utils/response";
+import { sanitizeEditableFields } from "./utils/user";
 
 const app = express();
 app.disable("x-powered-by");
@@ -181,5 +182,7 @@ app.listen(Configuration.get("system.app-port"), () => {
     )}`
   );
 });
+
+sanitizeEditableFields();
 
 export default app;
