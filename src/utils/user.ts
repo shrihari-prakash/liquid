@@ -72,6 +72,10 @@ export const sanitizeEditableFields = () => {
     "verified",
     "verifiedDate",
     "verifiedBy",
+    "profilePictureUrl",
+    "profilePicturePath",
+    "createdAt",
+    "updatedAt",
   ];
   const makeMessage = (option: string) =>
     `Misconfiguration detected in "${option}". Fields related to subscriptions, verifications, banning and restrictions should not be mutated directly. Instead use the APIs intented for them. Invalid fields have been filtered out.`;
