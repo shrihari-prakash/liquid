@@ -1,3 +1,6 @@
+import { Logger } from "../singleton/logger";
+const log = Logger.getLogger().child({ from: "user-utils" });
+
 import { Response } from "express";
 import FollowModel from "../model/mongo/follow";
 import UserModel, { UserInterface, UserProjection } from "../model/mongo/user";
@@ -51,4 +54,43 @@ export const canRequestFollowerInfo = async ({
     );
   }
   return false;
+};
+
+export const sanitizeEditableFields = () => {
+  const fieldsBlockedForDirectPatch = [
+    "isSubscribed",
+    "subscriptionExpiry",
+    "subscriptionTier",
+    "isBanned",
+    "bannedDate",
+    "bannedBy",
+    "bannedReason",
+    "isRestricted",
+    "restrictedDate",
+    "restrictedReason",
+    "restrictedBy",
+    "verified",
+    "verifiedDate",
+    "verifiedBy",
+  ];
+  const makeMessage = (option: string) =>
+    `Misconfiguration detected in "${option}". Fields related to subscriptions, verifications, banning and restrictions should not be mutated directly. Instead use the APIs intented for them. Invalid fields have been filtered out.`;
+  const editableFields = Configuration.get("user.profile.editable-fields");
+  const sanitizedEditableFields = editableFields.filter(
+    (field: string) => !fieldsBlockedForDirectPatch.includes(field)
+  );
+  if (editableFields.length !== sanitizedEditableFields.length) {
+    log.warn(makeMessage("user.profile.editable-fields"));
+    Configuration.set("user.profile.editable-fields", sanitizedEditableFields.join(","));
+    log.warn("Final list of fields %o", Configuration.get("user.profile.editable-fields"));
+  }
+  const adminEditableFields = Configuration.get("admin-api.user.profile.editable-fields");
+  const sanitizedAdminEditableFields = adminEditableFields.filter(
+    (field: string) => !fieldsBlockedForDirectPatch.includes(field)
+  );
+  if (adminEditableFields.length !== sanitizedAdminEditableFields.length) {
+    log.warn(makeMessage("admin-api.user.profile.editable-fields"));
+    Configuration.set("admin-api.user.profile.editable-fields", sanitizedAdminEditableFields.join(","));
+    log.warn("Final list of fields %o", Configuration.get("admin-api.user.profile.editable-fields"));
+  }
 };
