@@ -58,6 +58,8 @@ export const canRequestFollowerInfo = async ({
 
 export const sanitizeEditableFields = () => {
   const fieldsBlockedForDirectPatch = [
+    "2faEnabled",
+    "2faMedium",
     "isSubscribed",
     "subscriptionExpiry",
     "subscriptionTier",
