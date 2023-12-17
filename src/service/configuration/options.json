@@ -960,7 +960,8 @@
       "privilege.can-use-phone-number",
       "user.account-creation.enable-invite-only",
       "user.account-creation.require-email-verification",
-      "privilege.can-reset-password"
+      "privilege.can-reset-password",
+      "system.demo-mode"
     ]
   }
 ]

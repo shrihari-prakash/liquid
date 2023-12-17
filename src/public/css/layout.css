@@ -207,7 +207,7 @@ h3 {
 
 .page .sidebar .title1,
 .page .sidebar .title2 {
-  font-size: 1.50em;
+  font-size: 1.5em;
   color: #fff;
 }
 
@@ -249,12 +249,28 @@ h3 {
 .fineprint {
   margin-top: 12px;
   color: var(--text-lighter-color);
-  font-size: 0.80rem;
+  font-size: 0.8rem;
   text-align: center;
 }
 
 .fineprint a {
   color: var(--text-lighter-color);
+}
+
+.ribbon {
+  background-color: rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  color: white;
+  height: 2rem;
+  width: 100%;
+  font-size: 0.9rem;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 50%;
+  top: 0%;
+  transform: translateX(-50%) translateY(0%);
 }
 
 @keyframes spin {
