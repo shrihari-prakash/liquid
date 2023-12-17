@@ -58,6 +58,8 @@ export const canRequestFollowerInfo = async ({
 
 export const sanitizeEditableFields = () => {
   const fieldsBlockedForDirectPatch = [
+    "2faEnabled",
+    "2faMedium",
     "isSubscribed",
     "subscriptionExpiry",
     "subscriptionTier",
@@ -74,11 +76,13 @@ export const sanitizeEditableFields = () => {
     "verifiedBy",
     "profilePictureUrl",
     "profilePicturePath",
+    "scope",
+    "credits",
     "createdAt",
     "updatedAt",
   ];
   const makeMessage = (option: string) =>
-    `Misconfiguration detected in "${option}". Fields related to subscriptions, verifications, banning and restrictions should not be mutated directly. Instead use the APIs intented for them. Invalid fields have been filtered out.`;
+    `Misconfiguration detected in "${option}". Fields related to permissions, subscriptions, verifications, banning and restrictions should not be mutated directly. Instead use the APIs intented for them. Invalid fields have been filtered out.`;
   const editableFields = Configuration.get("user.profile.editable-fields");
   const sanitizedEditableFields = editableFields.filter(
     (field: string) => !fieldsBlockedForDirectPatch.includes(field)
