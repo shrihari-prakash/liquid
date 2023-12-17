@@ -16,7 +16,7 @@ async function createApplicationClient() {
     const client = {
       id: "application_client",
       grants: ["client_credentials", "authorization_code", "refresh_token"],
-      redirectUris: ["https://localhost:2000", "https://localhost:2001"], // 1. Liqud, 2. Nitrogen
+      redirectUris: ["http://localhost:2000", "http://localhost:2001"], // 1. Liqud, 2. Nitrogen
       secret: "super-secure-client-secret",
       role: "internal_client",
       scope: ["*"],
