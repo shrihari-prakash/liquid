@@ -17,10 +17,20 @@ import UserValidator from "../../../validator/user";
 import { Mailer } from "../../../singleton/mailer";
 import { VerificationCodeType } from "../../../enum/verification-code";
 import { Configuration } from "../../../singleton/configuration";
+import LoginHistoryModel from "../../../model/mongo/login-history";
 
 const userValidator = new UserValidator(body);
 
-export const POST_LoginValidator = [userValidator.username(), userValidator.email(), userValidator.password(true)];
+export const POST_LoginValidator = [
+  userValidator.username(),
+  userValidator.email(),
+  userValidator.password(true),
+  body("userAgent")
+    .if(() => Configuration.get("user.login.require-user-agent"))
+    .exists()
+    .isString()
+    .isLength({ max: 128 }),
+];
 
 const POST_Login = async (req: Request, res: Response) => {
   try {
@@ -40,20 +50,38 @@ const POST_Login = async (req: Request, res: Response) => {
     const isPasswordValid = await bcrypt.compare(password, user.password || "");
     if (!isPasswordValid)
       return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
-    user.password = undefined;
-    req.session.user = user;
-    log.debug("Assigned session id %s for user %s", req.session?.id, user._id);
-    Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
+    const loginMeta = {
+      targetId: user._id,
+      userAgent: req.body.userAgent,
+      ipAddress: req.ip,
+    };
+    log.debug("LoginMeta %o", loginMeta);
     if (Configuration.get("2fa.email.enforce") || (user["2faEnabled"] && user["2faMedium"] === "email")) {
       const code = await Mailer.generateAndSendEmailVerification(user, VerificationCodeType.LOGIN);
+      req.session.loginMeta = loginMeta;
       const userInfo = {
         _id: user._id,
         username: user.username,
         email: user.email,
       };
       const sessionHash = code.sessionHash;
-      return res.status(statusCodes.success).json(new SuccessResponse({ "2faEnabled": true, sessionHash, userInfo }));
+      req.session.save(function (err) {
+        log.debug("Login meta saved for user %s.", user._id);
+        if (err) {
+          log.error(err);
+          return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+        }
+        return res.status(statusCodes.success).json(new SuccessResponse({ "2faEnabled": true, sessionHash, userInfo }));
+      });
     } else {
+      user.password = undefined;
+      req.session.user = user;
+      log.debug("Assigned session id %s for user %s", req.session?.id, user._id);
+      Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
+      if (Configuration.get("user.login.enable-history")) {
+        await new LoginHistoryModel(loginMeta).save();
+        log.debug("Login history saved %o.", loginMeta);
+      }
       req.session.save(function (err) {
         if (err) {
           log.error(err);

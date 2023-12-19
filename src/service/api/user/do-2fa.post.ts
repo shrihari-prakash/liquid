@@ -11,6 +11,8 @@ import { hasErrors } from "../../../utils/api";
 import VerificationCodeModel from "../../../model/mongo/verification-code";
 import { VerificationCodeType } from "../../../enum/verification-code";
 import UserModel, { UserInterface } from "../../../model/mongo/user";
+import { Configuration } from "../../../singleton/configuration";
+import LoginHistoryModel from "../../../model/mongo/login-history";
 
 export const POST_Do2FAValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -29,6 +31,11 @@ const POST_Do2FA = async (req: Request, res: Response) => {
     }
     await VerificationCodeModel.deleteOne({ code });
     const user = (await UserModel.findOne({ _id: target }).exec()) as unknown as UserInterface;
+    if (Configuration.get("user.login.enable-history")) {
+      const loginMeta = req.session.loginMeta;
+      await new LoginHistoryModel(loginMeta).save();
+      log.debug("Login history saved %o.", loginMeta);
+    }
     req.session.save(function (err) {
       if (err) {
         log.error(err);
