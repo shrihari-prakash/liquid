@@ -3,6 +3,8 @@ import chai from "chai";
 import MemoryStore from "../store";
 import TokenModel from "../../../src/model/mongo/token";
 import { MockData } from "../utils/records";
+import { Configuration } from "../../../src/singleton/configuration";
+import LoginHistoryModel from "../../../src/model/mongo/login-history";
 
 describe("Login", () => {
   it("should login user john_doe", () => {
@@ -12,6 +14,22 @@ describe("Login", () => {
       .send(MockData.users.user1)
       .then(async (res) => {
         chai.expect(res.status).to.eql(200);
+        const record = await LoginHistoryModel.findOne({ success: true });
+        chai.expect(record).to.be.null;
+      });
+  });
+
+  it("should record login history user john_doe", () => {
+    Configuration.set("user.login.record-successfull-attempts", true);
+    return chai
+      .request(app)
+      .post("/user/login")
+      .send(MockData.users.user1)
+      .then(async (res) => {
+        chai.expect(res.status).to.eql(200);
+        const record = await LoginHistoryModel.findOne({ success: true });
+        chai.expect(record).to.not.be.null;
+        Configuration.set("user.login.record-successfull-attempts", false);
       });
   });
 
@@ -22,6 +40,22 @@ describe("Login", () => {
       .send({ username: "john_doe", password: "password" })
       .then((res) => {
         chai.expect(res.status).to.eql(401);
+      });
+  });
+
+  it("should record login history user john_doe for failed attempt", () => {
+    Configuration.set("user.login.record-failed-attempts", true);
+    return chai
+      .request(app)
+      .post("/user/login")
+      .send({ username: "john_doe", password: "password" })
+      .then(async (res) => {
+        chai.expect(res.status).to.eql(401);
+        const record = await LoginHistoryModel.findOne({ success: false });
+        console.log(record);
+        chai.expect(record).to.not.be.null;
+        chai.expect(record?.reason).to.eql("password_rejected");
+        Configuration.set("user.login.record-failed-attempts", false);
       });
   });
 
