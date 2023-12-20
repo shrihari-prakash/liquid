@@ -39,7 +39,7 @@ const POST_Do2FA = async (req: Request, res: Response) => {
     }
     await VerificationCodeModel.deleteOne({ code });
     const user = (await UserModel.findOne({ _id: target }).exec()) as unknown as UserInterface;
-    if (Configuration.get("user.login.record-successfull-attempts")) {
+    if (Configuration.get("user.login.record-successful-attempts")) {
       const loginMeta = req.session.loginMeta;
       await new LoginHistoryModel(loginMeta).save();
       log.debug("Login metadata saved %o.", loginMeta);

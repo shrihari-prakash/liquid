@@ -600,10 +600,10 @@
     "type": "string"
   },
   {
-    "name": "user.login.record-successfull-attempts",
+    "name": "user.login.record-successful-attempts",
     "displayName": "User Login Record Successful Attempts",
-    "envName": "USER_LOGIN_RECORD_SUCCESSFULL_ATTEMPTS",
-    "description": "Specifies if successfull login attempts should be logged.",
+    "envName": "USER_LOGIN_RECORD_SUCCESSFUL_ATTEMPTS",
+    "description": "Specifies if successful login attempts should be logged.",
     "type": "boolean",
     "default": false
   },

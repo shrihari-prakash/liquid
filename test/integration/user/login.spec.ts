@@ -1,12 +1,18 @@
 import app from "../../../src/index";
 import chai from "chai";
-import MemoryStore from "../store";
-import TokenModel from "../../../src/model/mongo/token";
 import { MockData } from "../utils/records";
 import { Configuration } from "../../../src/singleton/configuration";
 import LoginHistoryModel from "../../../src/model/mongo/login-history";
 
 describe("Login", () => {
+  before(async () => {
+    await LoginHistoryModel.deleteMany({});
+  });
+
+  after(async () => {
+    await LoginHistoryModel.deleteMany({});
+  });
+
   it("should login user john_doe", () => {
     return chai
       .request(app)
@@ -20,7 +26,7 @@ describe("Login", () => {
   });
 
   it("should record login history user john_doe", () => {
-    Configuration.set("user.login.record-successfull-attempts", true);
+    Configuration.set("user.login.record-successful-attempts", true);
     return chai
       .request(app)
       .post("/user/login")
@@ -29,7 +35,7 @@ describe("Login", () => {
         chai.expect(res.status).to.eql(200);
         const record = await LoginHistoryModel.findOne({ success: true });
         chai.expect(record).to.not.be.null;
-        Configuration.set("user.login.record-successfull-attempts", false);
+        Configuration.set("user.login.record-successful-attempts", false);
       });
   });
 
@@ -52,7 +58,6 @@ describe("Login", () => {
       .then(async (res) => {
         chai.expect(res.status).to.eql(401);
         const record = await LoginHistoryModel.findOne({ success: false });
-        console.log(record);
         chai.expect(record).to.not.be.null;
         chai.expect(record?.reason).to.eql("password_rejected");
         Configuration.set("user.login.record-failed-attempts", false);
