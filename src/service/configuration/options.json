@@ -600,17 +600,25 @@
     "type": "string"
   },
   {
-    "name": "user.login.enable-history",
-    "displayName": "User Login Enable History",
-    "envName": "USER_LOGIN_ENABLE_HISTORY",
-    "description": "Specifies if login history should be logged.",
+    "name": "user.login.record-successfull-attempts",
+    "displayName": "User Login Record Successful Attempts",
+    "envName": "USER_LOGIN_RECORD_SUCCESSFULL_ATTEMPTS",
+    "description": "Specifies if successfull login attempts should be logged.",
+    "type": "boolean",
+    "default": false
+  },
+  {
+    "name": "user.login.record-failed-attempts",
+    "displayName": "User Login Record Failed Attempts",
+    "envName": "USER_LOGIN_RECORD_FAILED_ATTEMPTS",
+    "description": "Specifies if failed login attempts should be logged.",
     "type": "boolean",
     "default": false
   },
   {
     "name": "user.login.require-user-agent",
     "displayName": "User Login Require User Agent",
-    "envName": "USER_ACCOUNT_CREATION_REQUIRE_USER_AGENT",
+    "envName": "USER_LOGIN_REQUIRE_USER_AGENT",
     "description": "Specifies if user agent should be mandated in login requests.",
     "type": "boolean",
     "default": false

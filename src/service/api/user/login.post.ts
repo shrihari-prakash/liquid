@@ -17,7 +17,9 @@ import UserValidator from "../../../validator/user";
 import { Mailer } from "../../../singleton/mailer";
 import { VerificationCodeType } from "../../../enum/verification-code";
 import { Configuration } from "../../../singleton/configuration";
-import LoginHistoryModel from "../../../model/mongo/login-history";
+import LoginHistoryModel, { LoginHistoryInterface } from "../../../model/mongo/login-history";
+import { isEmail2FA } from "../../../utils/2fa";
+import { LoginFailure } from "../../../enum/login-failure";
 
 const userValidator = new UserValidator(body);
 
@@ -47,16 +49,23 @@ const POST_Login = async (req: Request, res: Response) => {
     if (!user) return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
     if (!user.emailVerified)
       return res.status(statusCodes.resourceNotActive).json(new ErrorResponse(errorMessages.resourceNotActive));
-    const isPasswordValid = await bcrypt.compare(password, user.password || "");
-    if (!isPasswordValid)
-      return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
-    const loginMeta = {
+    let loginMeta: LoginHistoryInterface = {
       targetId: user._id,
       userAgent: req.body.userAgent,
       ipAddress: req.ip,
     };
-    log.debug("LoginMeta %o", loginMeta);
-    if (Configuration.get("2fa.email.enforce") || (user["2faEnabled"] && user["2faMedium"] === "email")) {
+    const isPasswordValid = await bcrypt.compare(password, user.password || "");
+    if (!isPasswordValid) {
+      loginMeta = { ...loginMeta, success: false, reason: LoginFailure.PASSWORD_REJECTED };
+      if (Configuration.get("user.login.record-failed-attempts")) {
+        await new LoginHistoryModel(loginMeta).save();
+        log.debug("Login history saved %o.", loginMeta);
+      }
+      return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    }
+    loginMeta = { ...loginMeta, success: true };
+    log.debug("Login metadata %o", loginMeta);
+    if (isEmail2FA(user)) {
       const code = await Mailer.generateAndSendEmailVerification(user, VerificationCodeType.LOGIN);
       req.session.loginMeta = loginMeta;
       const userInfo = {
@@ -78,7 +87,7 @@ const POST_Login = async (req: Request, res: Response) => {
       req.session.user = user;
       log.debug("Assigned session id %s for user %s", req.session?.id, user._id);
       Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
-      if (Configuration.get("user.login.enable-history")) {
+      if (Configuration.get("user.login.record-successfull-attempts")) {
         await new LoginHistoryModel(loginMeta).save();
         log.debug("Login history saved %o.", loginMeta);
       }

@@ -1,10 +1,17 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { ObjectId, Schema } from "mongoose";
 
 const loginHistorySchema = {
   userAgent: {
     type: String,
   },
   ipAddress: {
+    type: String,
+  },
+  success: {
+    type: Boolean,
+    required: true,
+  },
+  reason: {
     type: String,
   },
   targetId: {
@@ -20,3 +27,11 @@ const loginHistoryInstance = new mongoose.Schema(loginHistorySchema, {
   LoginHistoryModel = mongoose.model("login-history", loginHistoryInstance);
 
 export default LoginHistoryModel;
+
+export type LoginHistoryInterface = {
+  userAgent?: string;
+  ipAddress?: string;
+  success?: boolean;
+  reason?: string;
+  targetId: string | ObjectId;
+};
