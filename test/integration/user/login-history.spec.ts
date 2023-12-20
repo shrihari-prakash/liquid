@@ -20,9 +20,9 @@ describe("Login History", () => {
       .set({ Authorization: `Bearer john_doe_access_token` });
     chai.expect(res.status).to.eql(200);
     const records = res.body.data.records;
-    chai.expect(records[0].success).to.eql(false);
-    chai.expect(records[0].reason).to.eql("password_rejected");
-    chai.expect(records[1].success).to.eql(true);
+    chai.expect(records[0].success).to.eql(true);
+    chai.expect(records[1].success).to.eql(false);
+    chai.expect(records[1].reason).to.eql("password_rejected");
     Configuration.set("user.login.record-successful-attempts", false);
     Configuration.set("user.login.record-failed-attempts", false);
     await LoginHistoryModel.deleteMany({});

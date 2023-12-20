@@ -19,9 +19,9 @@ const GET_LoginHistory = async (req: Request, res: Response) => {
     const offset = req.query.offset as string;
     const query: any = { targetId: target };
     if (offset) {
-      query.createdAt = { $lt: new Date(offset) };
+      query.createdAt = { $gt: new Date(offset) };
     }
-    const records = await LoginHistoryModel.find(query).limit(limit);
+    const records = await LoginHistoryModel.find(query).sort({ createdAt: -1 }).limit(limit);
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
     log.error(err);
