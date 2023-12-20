@@ -1,4 +1,5 @@
 import mongoose, { ObjectId, Schema } from "mongoose";
+import { Configuration } from "../../singleton/configuration";
 
 const loginHistorySchema = {
   userAgent: {
@@ -21,10 +22,18 @@ const loginHistorySchema = {
   },
 };
 
-const loginHistoryInstance = new mongoose.Schema(loginHistorySchema, {
-    timestamps: true,
-  }),
-  LoginHistoryModel = mongoose.model("login-history", loginHistoryInstance);
+const schemaInstance = new mongoose.Schema(loginHistorySchema, {
+  timestamps: true,
+});
+
+schemaInstance.index(
+  { createdAt: 1 },
+  {
+    expireAfterSeconds: Configuration.get("user.login.history-record-expires-in"),
+  }
+);
+
+const LoginHistoryModel = mongoose.model("login-history", schemaInstance);
 
 export default LoginHistoryModel;
 
