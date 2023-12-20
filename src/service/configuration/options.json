@@ -600,6 +600,14 @@
     "type": "string"
   },
   {
+    "name": "user.login.history-record-expires-in",
+    "displayName": "User Login History Record Expires In",
+    "envName": "USER_LOGIN_HISTORY_RECORD_EXPIRES_IN",
+    "description": "Specifies in seconds the amount of time after which login history records will expire.",
+    "type": "number",
+    "default": 1296000
+  },
+  {
     "name": "user.login.record-successful-attempts",
     "displayName": "User Login Record Successful Attempts",
     "envName": "USER_LOGIN_RECORD_SUCCESSFUL_ATTEMPTS",
