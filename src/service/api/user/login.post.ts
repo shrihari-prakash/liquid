@@ -31,7 +31,7 @@ export const POST_LoginValidator = [
     .if(() => Configuration.get("user.login.require-user-agent"))
     .exists()
     .isString()
-    .isLength({ max: 128 }),
+    .isLength({ max: 1024 }),
 ];
 
 const POST_Login = async (req: Request, res: Response) => {
