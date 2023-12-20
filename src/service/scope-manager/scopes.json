@@ -34,6 +34,11 @@
     "parent": "delegated:profile:all"
   },
   {
+    "name": "delegated:profile:login-history:read",
+    "description": "View your login history information.",
+    "parent": "delegated:profile:all"
+  },
+  {
     "name": "delegated:profile:write",
     "description": "Edit your profile information.",
     "parent": "delegated:profile:all"

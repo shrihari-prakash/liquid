@@ -600,6 +600,30 @@
     "type": "string"
   },
   {
+    "name": "user.login.record-successful-attempts",
+    "displayName": "User Login Record Successful Attempts",
+    "envName": "USER_LOGIN_RECORD_SUCCESSFUL_ATTEMPTS",
+    "description": "Specifies if successful login attempts should be logged.",
+    "type": "boolean",
+    "default": false
+  },
+  {
+    "name": "user.login.record-failed-attempts",
+    "displayName": "User Login Record Failed Attempts",
+    "envName": "USER_LOGIN_RECORD_FAILED_ATTEMPTS",
+    "description": "Specifies if failed login attempts should be logged.",
+    "type": "boolean",
+    "default": false
+  },
+  {
+    "name": "user.login.require-user-agent",
+    "displayName": "User Login Require User Agent",
+    "envName": "USER_LOGIN_REQUIRE_USER_AGENT",
+    "description": "Specifies if user agent should be mandated in login requests.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "user.account-creation.require-email-verification",
     "displayName": "User Account Creation Require Email Verification",
     "envName": "USER_ACCOUNT_CREATION_REQUIRE_EMAIL_VERIFICATION",
@@ -961,7 +985,9 @@
       "user.account-creation.enable-invite-only",
       "user.account-creation.require-email-verification",
       "privilege.can-reset-password",
-      "system.demo-mode"
+      "system.demo-mode",
+      "user.login.require-browser-info",
+      "user.login.require-os-info"
     ]
   }
 ]

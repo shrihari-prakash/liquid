@@ -67,7 +67,7 @@ export default function Login() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     setSubmitting(true);
-    const data = { password };
+    const data = { password, userAgent: window.navigator.userAgent };
     if (isEmail(username)) {
       data.email = username;
     } else {
