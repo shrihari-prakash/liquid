@@ -35,6 +35,7 @@ import PATCH_Me, { PATCH_MeValidator } from "./me.patch";
 import PATCH_ProfilePicture from "./profile-picture.patch";
 import DELETE_FollowEntry, { DELETE_FollowEntryValidator } from "./follow-entry.delete";
 import DELETE_ProfilePicture from "./profile-picture.delete";
+import GET_LoginHistory from "./login-history.get";
 
 const UserRouter = express.Router();
 
@@ -44,6 +45,7 @@ if (Configuration.get("privilege.can-create-account")) {
 }
 UserRouter.get("/session-state", GET_SessionState);
 UserRouter.post("/login", ...POST_LoginValidator, POST_Login);
+UserRouter.get("/login-history", ...DelegatedAuthFlow, GET_LoginHistory);
 UserRouter.get("/verify-email", ...GET_VerifyEmailValidator, GET_VerifyEmail);
 UserRouter.post("/private", ...DelegatedAuthFlow, ...POST_PrivateValidator, POST_Private);
 UserRouter.get("/code", ...GET_CodeValidator, GET_Code);

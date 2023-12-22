@@ -42,6 +42,7 @@ import { Redis } from "./singleton/redis";
 import { errorMessages, statusCodes } from "./utils/http-status";
 import { ErrorResponse } from "./utils/response";
 import { sanitizeEditableFields } from "./utils/user";
+import { initializeDemo } from "./utils/demo";
 
 const app = express();
 app.disable("x-powered-by");
@@ -114,7 +115,10 @@ if (Configuration.get("system.enable-response-compression")) {
 
 // ********** Singleton Init ********** //
 if (environment !== "test") {
-  MongoDB.connect();
+  MongoDB.connect().then(() => {
+    // Runs only if system.demo-mode = true.
+    initializeDemo();
+  });
 }
 Api.initialize(app);
 Mailer.initialize(app);

@@ -16,6 +16,14 @@
     "default": false
   },
   {
+    "name": "system.demo-mode",
+    "displayName": "Demo Mode",
+    "envName": "SYSTEM_DEMO_MODE",
+    "description": "Specifies if Liquid is running in the demo mode.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "system.reverse-proxy-mode",
     "displayName": "Reverse Proxy Mode",
     "envName": "SYSTEM_REVERSE_PROXY_MODE",
@@ -592,6 +600,38 @@
     "type": "string"
   },
   {
+    "name": "user.login.history-record-expires-in",
+    "displayName": "User Login History Record Expires In",
+    "envName": "USER_LOGIN_HISTORY_RECORD_EXPIRES_IN",
+    "description": "Specifies in seconds the amount of time after which login history records will expire. By default this data is stored for upto 24 hours.",
+    "type": "number",
+    "default": 86400
+  },
+  {
+    "name": "user.login.record-successful-attempts",
+    "displayName": "User Login Record Successful Attempts",
+    "envName": "USER_LOGIN_RECORD_SUCCESSFUL_ATTEMPTS",
+    "description": "Specifies if successful login attempts should be logged.",
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "name": "user.login.record-failed-attempts",
+    "displayName": "User Login Record Failed Attempts",
+    "envName": "USER_LOGIN_RECORD_FAILED_ATTEMPTS",
+    "description": "Specifies if failed login attempts should be logged.",
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "name": "user.login.require-user-agent",
+    "displayName": "User Login Require User Agent",
+    "envName": "USER_LOGIN_REQUIRE_USER_AGENT",
+    "description": "Specifies if user agent should be mandated in login requests.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "user.account-creation.require-email-verification",
     "displayName": "User Account Creation Require Email Verification",
     "envName": "USER_ACCOUNT_CREATION_REQUIRE_EMAIL_VERIFICATION",
@@ -952,7 +992,10 @@
       "privilege.can-use-phone-number",
       "user.account-creation.enable-invite-only",
       "user.account-creation.require-email-verification",
-      "privilege.can-reset-password"
+      "privilege.can-reset-password",
+      "system.demo-mode",
+      "user.login.require-browser-info",
+      "user.login.require-os-info"
     ]
   }
 ]
