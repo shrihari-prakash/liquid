@@ -4,6 +4,8 @@ import { MockData } from "../utils/records";
 import { Configuration } from "../../../src/singleton/configuration";
 import LoginHistoryModel from "../../../src/model/mongo/login-history";
 
+const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0";
+
 describe("Login", () => {
   before(async () => {
     await LoginHistoryModel.deleteMany({});
@@ -17,7 +19,7 @@ describe("Login", () => {
     return chai
       .request(app)
       .post("/user/login")
-      .send(MockData.users.user1)
+      .send({ ...MockData.users.user1, userAgent })
       .then(async (res) => {
         chai.expect(res.status).to.eql(200);
         const record = await LoginHistoryModel.findOne({ success: true });
@@ -30,7 +32,7 @@ describe("Login", () => {
     return chai
       .request(app)
       .post("/user/login")
-      .send(MockData.users.user1)
+      .send({ ...MockData.users.user1, userAgent })
       .then(async (res) => {
         chai.expect(res.status).to.eql(200);
         const record = await LoginHistoryModel.findOne({ success: true });
@@ -43,7 +45,7 @@ describe("Login", () => {
     return chai
       .request(app)
       .post("/user/login")
-      .send({ username: "john_doe", password: "password" })
+      .send({ username: "john_doe", password: "password", userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(401);
       });
@@ -54,7 +56,7 @@ describe("Login", () => {
     return chai
       .request(app)
       .post("/user/login")
-      .send({ username: "john_doe", password: "password" })
+      .send({ username: "john_doe", password: "password", userAgent })
       .then(async (res) => {
         chai.expect(res.status).to.eql(401);
         const record = await LoginHistoryModel.findOne({ success: false });
@@ -68,7 +70,7 @@ describe("Login", () => {
     return chai
       .request(app)
       .post("/user/login")
-      .send({ username: "a", password: "password" })
+      .send({ username: "a", password: "password", userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
         chai.expect(res.body.additionalInfo.errors[0].param).to.eql("username");
@@ -79,7 +81,7 @@ describe("Login", () => {
     return chai
       .request(app)
       .post("/user/login")
-      .send({ username: "john_doe", password: "a" })
+      .send({ username: "john_doe", password: "a", userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
         chai.expect(res.body.additionalInfo.errors[0].param).to.eql("password");
@@ -90,7 +92,7 @@ describe("Login", () => {
     return chai
       .request(app)
       .post("/user/login")
-      .send({ username: "abcdefghijklmnopqrstuvwxyz123456789", password: "password" })
+      .send({ username: "abcdefghijklmnopqrstuvwxyz123456789", password: "password", userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
         chai.expect(res.body.additionalInfo.errors[0].param).to.eql("username");
@@ -116,7 +118,7 @@ describe("Login", () => {
     return chai
       .request(app)
       .post("/user/login")
-      .send({ username: { username: { $gt: "" } }, password: "password" })
+      .send({ username: { username: { $gt: "" } }, password: "password", userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
         chai.expect(res.body.additionalInfo.errors[0].param).to.eql("username");
@@ -127,7 +129,7 @@ describe("Login", () => {
     return chai
       .request(app)
       .post("/user/login")
-      .send({ username: "john_doe", password: { password: { $gt: "" } } })
+      .send({ username: "john_doe", password: { password: { $gt: "" } }, userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
         chai.expect(res.body.additionalInfo.errors[0].param).to.eql("password");

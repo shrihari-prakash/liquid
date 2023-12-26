@@ -147,7 +147,7 @@ class UserValidator {
   bio(required = false, nested = false) {
     const field = this.makeFieldName("bio", nested);
     const requiredFn = required ? "exists" : "optional";
-    return this.fn(field)[requiredFn]().isString().matches(this.alphaRegex).isLength({ min: 3, max: 256 });
+    return this.fn(field)[requiredFn]().isString().isLength({ min: 3, max: 256 });
   }
 
   customLink(required = false, nested = false) {

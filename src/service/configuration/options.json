@@ -603,9 +603,9 @@
     "name": "user.login.history-record-expires-in",
     "displayName": "User Login History Record Expires In",
     "envName": "USER_LOGIN_HISTORY_RECORD_EXPIRES_IN",
-    "description": "Specifies in seconds the amount of time after which login history records will expire.",
+    "description": "Specifies in seconds the amount of time after which login history records will expire. By default this data is stored for upto 24 hours.",
     "type": "number",
-    "default": 1296000
+    "default": 86400
   },
   {
     "name": "user.login.record-successful-attempts",
@@ -613,7 +613,7 @@
     "envName": "USER_LOGIN_RECORD_SUCCESSFUL_ATTEMPTS",
     "description": "Specifies if successful login attempts should be logged.",
     "type": "boolean",
-    "default": false
+    "default": true
   },
   {
     "name": "user.login.record-failed-attempts",
@@ -621,7 +621,7 @@
     "envName": "USER_LOGIN_RECORD_FAILED_ATTEMPTS",
     "description": "Specifies if failed login attempts should be logged.",
     "type": "boolean",
-    "default": false
+    "default": true
   },
   {
     "name": "user.login.require-user-agent",
@@ -629,7 +629,7 @@
     "envName": "USER_LOGIN_REQUIRE_USER_AGENT",
     "description": "Specifies if user agent should be mandated in login requests.",
     "type": "boolean",
-    "default": false
+    "default": true
   },
   {
     "name": "user.account-creation.require-email-verification",
