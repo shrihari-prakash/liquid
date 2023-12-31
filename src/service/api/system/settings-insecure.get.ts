@@ -1,5 +1,5 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "system/settings" });
+const log = Logger.getLogger().child({ from: "system/settings-insecure.get" });
 
 import { Request, Response } from "express";
 import { errorMessages, statusCodes } from "../../../utils/http-status";

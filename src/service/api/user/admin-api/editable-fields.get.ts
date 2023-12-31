@@ -1,5 +1,5 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "admin-api/editable-fields" });
+const log = Logger.getLogger().child({ from: "user/admin-api/editable-fields.get" });
 
 import { Request, Response } from "express";
 

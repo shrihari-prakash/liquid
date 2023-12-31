@@ -1,5 +1,5 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/unfollow" });
+const log = Logger.getLogger().child({ from: "user/profile-picture.delete" });
 
 import { Request, Response } from "express";
 

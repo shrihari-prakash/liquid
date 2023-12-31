@@ -1,5 +1,5 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "system/settings" });
+const log = Logger.getLogger().child({ from: "system/settings.get" });
 
 import { Request, Response } from "express";
 import { ScopeManager } from "../../../singleton/scope-manager";
