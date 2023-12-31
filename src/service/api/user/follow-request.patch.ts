@@ -2,7 +2,7 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/accept-follow-request" });
 
 import { Request, Response } from "express";
-import { body } from "express-validator";
+import { param } from "express-validator";
 import { isValidObjectId } from "mongoose";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
@@ -13,9 +13,9 @@ import { hasErrors } from "../../../utils/api";
 import { MongoDB } from "../../../singleton/mongo-db";
 import { ScopeManager } from "../../../singleton/scope-manager";
 
-export const PATCH_AcceptFollowRequestValidator = [body("request").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
+export const PATCH_FollowRequestValidator = [param("requestId").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
-const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
+const PATCH_FollowRequest = async (req: Request, res: Response) => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:accept", res)) {
@@ -23,7 +23,7 @@ const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
     };
     if (hasErrors(req, res)) return;
     const targetId = res.locals.oauth.token.user._id;
-    const requestId = req.body.request;
+    const requestId = req.params.requestId;
     session = await MongoDB.startSession();
     MongoDB.startTransaction(session);
     const sessionOptions = MongoDB.getSessionOptions(session);
@@ -45,4 +45,4 @@ const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
   }
 };
 
-export default PATCH_AcceptFollowRequest;
+export default PATCH_FollowRequest;

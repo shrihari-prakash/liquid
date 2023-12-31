@@ -116,6 +116,7 @@ export class Mailer {
     msg.text = `Hello ${fullName}, Here's your ${appName} verification code: ${code.code}`;
     const templateFile =
       Configuration.get("email.verification-template") || path.join(__dirname, "/templates/verification-code.html");
+    log.debug("Email template file name: %s", templateFile);
     const template = await fs.promises.readFile(templateFile, "utf8");
     const html = template
       .replaceAll("%app_name%", appName)
