@@ -33,7 +33,7 @@ const POST_Do2FA = async (req: Request, res: Response) => {
         loginMeta.success = false;
         loginMeta.reason = LoginFailure.MFA_REJECTED;
         await new LoginHistoryModel(loginMeta).save();
-        log.debug("Login metadata saved %o.", loginMeta);
+        log.info("Login metadata saved to database %o.", loginMeta);
       }
       return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     }
@@ -43,7 +43,7 @@ const POST_Do2FA = async (req: Request, res: Response) => {
     if (Configuration.get("user.login.record-successful-attempts")) {
       const loginMeta = req.session.loginMeta;
       await new LoginHistoryModel(loginMeta).save();
-      log.debug("Login metadata saved %o.", loginMeta);
+      log.info("Login metadata saved to database %o.", loginMeta);
     }
     req.session.save(function (err) {
       if (err) {
