@@ -81,7 +81,7 @@ if (canUseFollowAPIs) {
   UserRouter.get("/follow-requests", ...DelegatedAuthFlow, GET_FollowRequests);
   UserRouter.get("/follow-status", ...DelegatedAuthFlow, GET_FollowStatusValidator, GET_FollowStatus);
   UserRouter.get("/follow-status/:userId", ...DelegatedAuthFlow, GET_FollowStatusValidator, GET_FollowStatus);
-  UserRouter.patch("/follow-request/:requestId", ...DelegatedAuthFlow, ...PATCH_FollowRequestValidator, PATCH_FollowRequest);
+  UserRouter.patch("/follow-request", ...DelegatedAuthFlow, ...PATCH_FollowRequestValidator, PATCH_FollowRequest);
   UserRouter.delete("/follow-entry", ...DelegatedAuthFlow, ...DELETE_FollowEntryValidator, DELETE_FollowEntry);
 }
 
