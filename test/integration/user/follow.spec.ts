@@ -48,8 +48,9 @@ describe("Follow", () => {
       }).exec();
       chai
         .request(app)
-        .patch(`/user/follow-request/${(followObject as any)._id}`)
+        .patch("/user/follow-request")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
+        .send({ request: (followObject as any)._id })
         .then(async (res) => {
           try {
             chai.expect(res.status).to.eql(200);
