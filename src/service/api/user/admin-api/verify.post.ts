@@ -1,5 +1,5 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/admin-api/verify" });
+const log = Logger.getLogger().child({ from: "user/admin-api/verify.post" });
 
 import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";

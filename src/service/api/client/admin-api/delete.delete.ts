@@ -1,5 +1,5 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "admin-api/editable-fields" });
+const log = Logger.getLogger().child({ from: "client/admin-api/delete.delete" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";

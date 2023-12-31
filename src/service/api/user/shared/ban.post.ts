@@ -1,5 +1,5 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/common-api/ban" });
+const log = Logger.getLogger().child({ from: "user/shared/ban.post" });
 
 import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";

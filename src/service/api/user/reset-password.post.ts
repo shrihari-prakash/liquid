@@ -1,5 +1,5 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/reset-password" });
+const log = Logger.getLogger().child({ from: "user/reset-password.post" });
 
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
