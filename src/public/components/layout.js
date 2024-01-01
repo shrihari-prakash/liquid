@@ -18,7 +18,9 @@ export default function Layout({ children }) {
 
   React.useEffect(() => {
     function onNarrowMediaChange(e) {
-      setShowSidebar(!e.matches);
+      if (showSidebar !== !e.matches) {
+        setShowSidebar(!e.matches);
+      }
     }
     narrowScreenMedia.addEventListener('change', onNarrowMediaChange)
     return function cleanup() {
