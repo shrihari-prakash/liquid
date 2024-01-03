@@ -600,6 +600,14 @@
     "type": "string"
   },
   {
+    "name": "user.profile.custom-data.hide-for-non-followers",
+    "displayName": "User Profile Custom Data Hide For Non Followers",
+    "envName": "USER_PROFILE_CUSTOM_DATA_HIDE_FOR_NON_FOLLOWERS",
+    "description": "Specifies if users can see custom data of users they do not follow.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "user.login.history-record-expires-in",
     "displayName": "User Login History Record Expires In",
     "envName": "USER_LOGIN_HISTORY_RECORD_EXPIRES_IN",

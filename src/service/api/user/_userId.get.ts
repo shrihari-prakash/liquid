@@ -10,6 +10,7 @@ import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/u
 import { getBlockStatus } from "../../../utils/block";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { canRequestFollowerInfo, hydrateUserProfile } from "../../../utils/user";
+import { Configuration } from "../../../singleton/configuration";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
@@ -41,6 +42,10 @@ const GET__UserId = async (req: Request, res: Response) => {
       user.secondaryEmail = undefined;
       // @ts-expect-error
       user.secondaryPhone = undefined;
+      if (Configuration.get("user.profile.custom-data.hide-for-non-followers")) {
+        // @ts-expect-error
+        user.customData = undefined;
+      }
     }
     await hydrateUserProfile(user);
     res.status(statusCodes.success).json(new SuccessResponse({ user }));
@@ -51,4 +56,3 @@ const GET__UserId = async (req: Request, res: Response) => {
 };
 
 export default GET__UserId;
-
