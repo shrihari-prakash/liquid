@@ -173,6 +173,22 @@ class UserValidator {
     const requiredFn = required ? "exists" : "optional";
     return this.fn(field)[requiredFn]().isString().isIn(countryISOCodes);
   }
+
+  customData(required = false, nested = false) {
+    const field = this.makeFieldName("customData", nested);
+    const requiredFn = required ? "exists" : "optional";
+    return this.fn(field)
+      [requiredFn]()
+      .custom(function isJSON(obj: any) {
+        try {
+          const primitives = [null, false, true];
+          return primitives.includes(obj) || (!!obj && typeof obj === "object");
+        } catch (e) {
+          /* ignore */
+        }
+        return false;
+      });
+  }
 }
 
 export default UserValidator;

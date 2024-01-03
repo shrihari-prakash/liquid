@@ -10,10 +10,9 @@ import { body } from "express-validator";
 import { hasErrors } from "../../../utils/api";
 import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
-import { checkSubscription } from "../../../utils/subscription";
-import { attachProfilePicture } from "../../../utils/profile-picture";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { isValidObjectId } from "mongoose";
+import { hydrateUserProfile } from "../../../utils/user";
 
 export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
 
@@ -55,8 +54,7 @@ const POST_Search = async (req: Request, res: Response) => {
     const results = (await UserModel.find({ $or }, UserProjection).limit(
       Configuration.get("user.search-results.limit")
     )) as unknown as UserInterface[];
-    checkSubscription(results);
-    await attachProfilePicture(results);
+    await hydrateUserProfile(results);
     if (Configuration.get("privilege.can-use-cache")) {
       await Redis.client.set(
         `${redisPrefix}${query}`,
@@ -75,3 +73,4 @@ const POST_Search = async (req: Request, res: Response) => {
 };
 
 export default POST_Search;
+

@@ -7,12 +7,10 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
 import { useFollowingQuery } from "../../../model/query/following";
-import { checkSubscription } from "../../../utils/subscription";
-import { attachProfilePicture } from "../../../utils/profile-picture";
 import { getPaginationLimit } from "../../../utils/pagination";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { getBlockStatus } from "../../../utils/block";
-import { canRequestFollowerInfo } from "../../../utils/user";
+import { canRequestFollowerInfo, hydrateUserProfile } from "../../../utils/user";
 
 const GET_Following = async (req: Request, res: Response) => {
   try {
@@ -40,8 +38,7 @@ const GET_Following = async (req: Request, res: Response) => {
     }
     const records = await FollowModel.aggregate(query).exec();
     for (let i = 0; i < records.length; i++) {
-      checkSubscription(records[i].target);
-      await attachProfilePicture(records[i].target);
+      await hydrateUserProfile(records[i].target);
     }
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
@@ -51,3 +48,4 @@ const GET_Following = async (req: Request, res: Response) => {
 };
 
 export default GET_Following;
+

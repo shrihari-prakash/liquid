@@ -219,6 +219,11 @@
     "parent": "client:profile:all"
   },
   {
+    "name": "client:profile:custom-data:write",
+    "description": "Modify custom data of user accounts in the system.",
+    "parent": "client:profile:all"
+  },
+  {
     "name": "client:configuration:read",
     "description": "Read system configurations.",
     "parent": "client:all"
@@ -326,6 +331,11 @@
   {
     "name": "admin:profile:verifications:write",
     "description": "Update verification status for user accounts in the system.",
+    "parent": "admin:profile:all"
+  },
+  {
+    "name": "admin:profile:custom-data:write",
+    "description": "Modify custom data of user accounts in the system.",
     "parent": "admin:profile:all"
   },
   {

@@ -9,18 +9,19 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
 import { useFollowersQuery } from "../../../../model/query/followers";
-import { attachProfilePicture } from "../../../../utils/profile-picture";
-import { checkSubscription } from "../../../../utils/subscription";
 import { getPaginationLimit } from "../../../../utils/pagination";
 import { ScopeManager } from "../../../../singleton/scope-manager";
+import { hydrateUserProfile } from "../../../../utils/user";
 
-export const GET_UserFollowersValidator = [query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
+export const GET_UserFollowersValidator = [
+  query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
+];
 
 const GET_UserFollowers = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("client:social:follow:read", res)) {
       return;
-    };
+    }
     const userId = req.query.target as string;
     const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;
@@ -30,8 +31,7 @@ const GET_UserFollowers = async (req: Request, res: Response) => {
     }
     const records = await FollowModel.aggregate(query).exec();
     for (let i = 0; i < records.length; i++) {
-      checkSubscription(records[i].source);
-      await attachProfilePicture(records[i].source);
+      await hydrateUserProfile(records[i].source);
     }
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
@@ -41,3 +41,4 @@ const GET_UserFollowers = async (req: Request, res: Response) => {
 };
 
 export default GET_UserFollowers;
+

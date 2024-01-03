@@ -9,10 +9,9 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
 import { useFollowingQuery } from "../../../../model/query/following";
-import { attachProfilePicture } from "../../../../utils/profile-picture";
-import { checkSubscription } from "../../../../utils/subscription";
 import { getPaginationLimit } from "../../../../utils/pagination";
 import { ScopeManager } from "../../../../singleton/scope-manager";
+import { hydrateUserProfile } from "../../../../utils/user";
 
 export const GET_UserFollowingValidator = [query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
@@ -30,8 +29,7 @@ const GET_UserFollowing = async (req: Request, res: Response) => {
     }
     const records = await FollowModel.aggregate(query).exec();
     for (let i = 0; i < records.length; i++) {
-      checkSubscription(records[i].target);
-      await attachProfilePicture(records[i].target);
+      await hydrateUserProfile(records[i].target);
     }
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {

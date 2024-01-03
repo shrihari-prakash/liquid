@@ -8,9 +8,8 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel, { UserAdminProjection, UserClientProjection, UserInterface } from "../../../../model/mongo/user";
 import { Configuration } from "../../../../singleton/configuration";
-import { checkSubscription } from "../../../../utils/subscription";
-import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { ScopeManager } from "../../../../singleton/scope-manager";
+import { hydrateUserProfile } from "../../../../utils/user";
 
 export const GET_UserInfoValidator = [query("targets").exists().isString()];
 
@@ -32,8 +31,7 @@ const GET_UserInfo = async (req: Request, res: Response) => {
     )
       .lean()
       .exec()) as unknown as UserInterface[];
-    checkSubscription(users);
-    await attachProfilePicture(users);
+    await hydrateUserProfile(users);
     res.status(statusCodes.success).json(new SuccessResponse({ users }));
   } catch (err) {
     log.error(err);

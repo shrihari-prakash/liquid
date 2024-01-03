@@ -16,6 +16,7 @@ import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.
 import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
 import GET_List from "../shared/list.get";
 import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get";
+import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put";
 
 const ClientApiRouter = express.Router();
 
@@ -28,6 +29,7 @@ ClientApiRouter.get("/block-status", ...ClientAuthFlow, GET_BlockStatusValidator
 ClientApiRouter.post("/create", ...ClientAuthFlow, POST_CreateValidator, POST_Create);
 ClientApiRouter.get("/list", ...ClientAuthFlow, GET_List);
 ClientApiRouter.post("/access", ...ClientAuthFlow, POST_AccessValidator, POST_Access);
+ClientApiRouter.put("/custom-data", ...ClientAuthFlow, PUT_CustomDataValidator, PUT_CustomData);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {
@@ -36,7 +38,8 @@ if (canUseFollowAPIs) {
   ClientApiRouter.get("/user-followers", ...ClientAuthFlow, GET_UserFollowersValidator, GET_UserFollowers);
 }
 
-const canUseInviteOnly = Configuration.get("user.account-creation.enable-invite-only") ||
+const canUseInviteOnly =
+  Configuration.get("user.account-creation.enable-invite-only") ||
   Configuration.get("user.account-creation.force-generate-invite-codes");
 if (canUseInviteOnly) {
   ClientApiRouter.get("/invite-codes", ...ClientAuthFlow, GET_InviteCodesValidator, GET_InviteCodes);
@@ -44,3 +47,4 @@ if (canUseInviteOnly) {
 }
 
 export default ClientApiRouter;
+

@@ -8,10 +8,8 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
 import { getBlockStatus } from "../../../utils/block";
-import { checkSubscription } from "../../../utils/subscription";
-import { attachProfilePicture } from "../../../utils/profile-picture";
 import { ScopeManager } from "../../../singleton/scope-manager";
-import { canRequestFollowerInfo } from "../../../utils/user";
+import { canRequestFollowerInfo, hydrateUserProfile } from "../../../utils/user";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
@@ -44,8 +42,7 @@ const GET__UserId = async (req: Request, res: Response) => {
       // @ts-expect-error
       user.secondaryPhone = undefined;
     }
-    checkSubscription(user);
-    await attachProfilePicture(user);
+    await hydrateUserProfile(user);
     res.status(statusCodes.success).json(new SuccessResponse({ user }));
   } catch (err) {
     log.error(err);
@@ -54,3 +51,4 @@ const GET__UserId = async (req: Request, res: Response) => {
 };
 
 export default GET__UserId;
+

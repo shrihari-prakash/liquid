@@ -17,33 +17,14 @@ const isSubscribed = (user: UserInterface) => {
   return true;
 };
 
-export const checkSubscription = (input: UserInterface | UserInterface[]) => {
-  if (Array.isArray(input)) {
-    const toUpdate = [];
-    const users = input;
-    for (let i = 0; i < users.length; i++) {
-      const wasSubscribed = users[i].isSubscribed;
-      if (!isSubscribed(users[i])) {
-        users[i].isSubscribed = false;
-        users[i].subscriptionTier = baseTier;
-        if (wasSubscribed) {
-          toUpdate.push(users[i]._id);
-        }
-      }
+export const checkSubscription = (user: UserInterface) => {
+  const wasSubscribed = user.isSubscribed;
+  if (!isSubscribed(user)) {
+    user.isSubscribed = false;
+    user.subscriptionTier = baseTier;
+    if (wasSubscribed) {
+      UserModel.updateOne({ _id: user._id }, { $set: { isSubscribed: false, subscriptionTier: baseTier } });
     }
-    toUpdate.length &&
-      UserModel.updateMany({ _id: { $in: toUpdate } }, { $set: { isSubscribed: false, subscriptionTier: baseTier } });
-    return users;
-  } else {
-    const user = input;
-    const wasSubscribed = user.isSubscribed;
-    if (!isSubscribed(user)) {
-      user.isSubscribed = false;
-      user.subscriptionTier = baseTier;
-      if (wasSubscribed) {
-        UserModel.updateOne({ _id: user._id }, { $set: { isSubscribed: false, subscriptionTier: baseTier } });
-      }
-    }
-    return user;
   }
+  return user;
 };
