@@ -106,20 +106,29 @@ export const sanitizeEditableFields = () => {
   }
 };
 
-export const hydrateUserProfile = async (user: UserInterface | UserInterface[]) => {
+export const hydrateUserProfile = async (
+  user: UserInterface | UserInterface[],
+  ctx: { customData: boolean } = { customData: true }
+) => {
   if (Array.isArray(user)) {
     for (let i = 0; i < user.length; i++) {
-      if (user[i].customData) {
-        checkSubscription(user[i]);
-        await attachProfilePicture(user[i]);
+      checkSubscription(user[i]);
+      await attachProfilePicture(user[i]);
+      if (user[i].customData && ctx.customData) {
         user[i].customData = JSON.parse(user[i].customData);
+      } else {
+        // @ts-expect-error
+        user.customData = undefined;
       }
     }
   } else {
-    if (user.customData) {
-      checkSubscription(user);
-      await attachProfilePicture(user);
+    checkSubscription(user);
+    await attachProfilePicture(user);
+    if (user.customData && ctx.customData) {
       user.customData = JSON.parse(user.customData);
+    } else {
+      // @ts-expect-error
+      user.customData = undefined;
     }
   }
 };
