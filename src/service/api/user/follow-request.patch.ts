@@ -1,5 +1,5 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/accept-follow-request" });
+const log = Logger.getLogger().child({ from: "user/follow-request.patch" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
@@ -13,9 +13,9 @@ import { hasErrors } from "../../../utils/api";
 import { MongoDB } from "../../../singleton/mongo-db";
 import { ScopeManager } from "../../../singleton/scope-manager";
 
-export const PATCH_AcceptFollowRequestValidator = [body("request").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
+export const PATCH_FollowRequestValidator = [body("request").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
-const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
+const PATCH_FollowRequest = async (req: Request, res: Response) => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:accept", res)) {
@@ -45,4 +45,4 @@ const PATCH_AcceptFollowRequest = async (req: Request, res: Response) => {
   }
 };
 
-export default PATCH_AcceptFollowRequest;
+export default PATCH_FollowRequest;

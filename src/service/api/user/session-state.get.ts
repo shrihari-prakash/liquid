@@ -1,5 +1,5 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/session-state" });
+const log = Logger.getLogger().child({ from: "user/session-state.get" });
 
 import { Request, Response } from "express";
 

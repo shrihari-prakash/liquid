@@ -1,24 +1,40 @@
 import Layout from "./layout.js";
 
+const routes = {
+  ROOT: "/",
+  LOGIN: "/login",
+  SIGNUP: "/signup",
+  GET_CODE: "/get-code",
+  VERIFY_ACCOUNT: "/verify-account",
+  RESET_PASSWORD: "/reset-password",
+  MFA: "/2fa",
+  CONSENT: "/consent",
+  NOT_FOUND: "/not-found",
+}
+
+async function importRouteComponent(route) {
+  return (await import(`.${route}.js`)).default
+}
+
 async function getRenderElement() {
   switch (window.location.pathname) {
-    case "/":
-    case "/login":
-      return (await import("./login.js")).default;
-    case "/signup":
-      return (await import("./signup.js")).default;
-    case "/get-code":
-      return (await import("./get-code.js")).default;
-    case "/verify-account":
-      return (await import("./verify-account.js")).default;
-    case "/reset-password":
-      return (await import("./reset-password.js")).default;
-    case "/2fa":
-      return (await import("./2fa.js")).default;
-    case "/consent":
-      return (await import("./consent.js")).default;
+    case routes.ROOT:
+    case routes.LOGIN:
+      return await importRouteComponent(routes.LOGIN);
+    case routes.SIGNUP:
+      return await importRouteComponent(routes.SIGNUP);
+    case routes.GET_CODE:
+      return await importRouteComponent(routes.GET_CODE);
+    case routes.VERIFY_ACCOUNT:
+      return await importRouteComponent(routes.VERIFY_ACCOUNT);
+    case routes.RESET_PASSWORD:
+      return await importRouteComponent(routes.RESET_PASSWORD);
+    case routes.MFA:
+      return await importRouteComponent(routes.MFA);
+    case routes.CONSENT:
+      return await importRouteComponent(routes.CONSENT);
     default:
-      return (await import("./not-found.js")).default;
+      return await importRouteComponent(routes.NOT_FOUND);
   }
 }
 

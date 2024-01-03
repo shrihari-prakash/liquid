@@ -30,7 +30,7 @@ import GET_InviteCodes from "./invite-codes.get";
 import GET_Scopes from "./scopes.get";
 import GET_Logout from "./logout.get";
 import GET_SessionState from "./session-state.get";
-import PATCH_AcceptFollowRequest, { PATCH_AcceptFollowRequestValidator } from "./accept-follow-request.patch";
+import PATCH_FollowRequest, { PATCH_FollowRequestValidator } from "./follow-request.patch";
 import PATCH_Me, { PATCH_MeValidator } from "./me.patch";
 import PATCH_ProfilePicture from "./profile-picture.patch";
 import DELETE_FollowEntry, { DELETE_FollowEntryValidator } from "./follow-entry.delete";
@@ -81,12 +81,7 @@ if (canUseFollowAPIs) {
   UserRouter.get("/follow-requests", ...DelegatedAuthFlow, GET_FollowRequests);
   UserRouter.get("/follow-status", ...DelegatedAuthFlow, GET_FollowStatusValidator, GET_FollowStatus);
   UserRouter.get("/follow-status/:userId", ...DelegatedAuthFlow, GET_FollowStatusValidator, GET_FollowStatus);
-  UserRouter.patch(
-    "/accept-follow-request",
-    ...DelegatedAuthFlow,
-    ...PATCH_AcceptFollowRequestValidator,
-    PATCH_AcceptFollowRequest
-  );
+  UserRouter.patch("/follow-request", ...DelegatedAuthFlow, ...PATCH_FollowRequestValidator, PATCH_FollowRequest);
   UserRouter.delete("/follow-entry", ...DelegatedAuthFlow, ...DELETE_FollowEntryValidator, DELETE_FollowEntry);
 }
 

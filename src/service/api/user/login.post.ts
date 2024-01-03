@@ -1,5 +1,5 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/login" });
+const log = Logger.getLogger().child({ from: "user/login.post" });
 
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
@@ -75,7 +75,7 @@ const POST_Login = async (req: Request, res: Response) => {
       };
       const sessionHash = code.sessionHash;
       req.session.save(function (err) {
-        log.debug("Login meta saved for user %s.", user._id);
+        log.info("Login meta written to session for user %s.", user._id);
         if (err) {
           log.error(err);
           return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

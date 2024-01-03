@@ -1,5 +1,5 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "client/admin-api/create" });
+const log = Logger.getLogger().child({ from: "client/admin-api/create.post" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
@@ -24,11 +24,11 @@ export const POST_CreateValidator = [
 
 const POST_Create = async (req: Request, res: Response) => {
   try {
+    if (hasErrors(req, res)) return;
     const requiredScope = req.body.role === Role.INTERNAL_CLIENT ? "admin:system:internal-client:write" : "admin:system:external-client:write"
     if (!ScopeManager.isScopeAllowedForSession(requiredScope, res)) {
       return;
     }
-    if (hasErrors(req, res)) return;
     const client = {
       id: req.body.id,
       grants: req.body.grants,

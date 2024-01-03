@@ -1,5 +1,5 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/admin-api/access.post" });
+const log = Logger.getLogger().child({ from: "user/shared/access.post" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
@@ -69,6 +69,13 @@ const POST_Access = async (req: Request, res: Response) => {
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
     }
+    log.info(
+      "Executing operation '%s' for access list '%o' on targets '%o'. Source user: %s",
+      req.body.operation,
+      req.body.scope,
+      req.body.targets,
+      res.locals.oauth.token.user._id
+    );
     let query: any = null;
     switch (req.body.operation) {
       case Operations.ADD:

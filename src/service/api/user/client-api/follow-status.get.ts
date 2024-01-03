@@ -1,5 +1,5 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "client-api/follow-status" });
+const log = Logger.getLogger().child({ from: "user/client-api/follow-status.get" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
