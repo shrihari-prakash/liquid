@@ -623,6 +623,18 @@ export const userSchema = {
       write: SensitivityLevel.HIGH,
     },
   },
+  customData: {
+    type: String,
+    required: true,
+    default: "{}",
+    willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.HIGH,
+    },
+  },
 };
 
 export type UserInterface = {
@@ -684,6 +696,7 @@ export type UserInterface = {
   deleted: boolean;
   deletedDate: Date;
   creationIp: string;
+  customData: string;
   createdAt: Date;
   updatedAt: Date;
   isFollowing?: boolean;

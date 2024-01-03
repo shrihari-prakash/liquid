@@ -2,16 +2,29 @@ import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
 import { useFont, useFavicon, changeToLightVariable, setStyleProperty, getTheme } from "../utils/utils.js";
 
+const narrowScreenMedia = window.matchMedia("(max-width: 1199.99px)");
+
 export default function Layout({ children }) {
   const [configuration, setConfiguration] = React.useState();
   const [fontLoading, setFontLoading] = React.useState(true);
   const [miniIconLoaded, setMiniIconLoaded] = React.useState(false);
+  const [showSidebar, setShowSidebar] = React.useState(!narrowScreenMedia.matches);
 
   const theme = getTheme();
 
   function getThemeVariable(variable) {
     return configuration[`theme.${theme}.${variable}`];
   }
+
+  React.useEffect(() => {
+    function onNarrowMediaChange(e) {
+      setShowSidebar(!e.matches);
+    }
+    narrowScreenMedia.addEventListener('change', onNarrowMediaChange)
+    return function cleanup() {
+      narrowScreenMedia.removeEventListener('change', onNarrowMediaChange)
+    }
+  }, []);
 
   React.useEffect(() => {
     const metadataPromise = fetch("./configuration/options.json");
@@ -45,7 +58,7 @@ export default function Layout({ children }) {
 
   React.useEffect(() => {
     if (!configuration) {
-      return;
+      return () => { };
     }
 
     const usePrimaryButton = () => {
@@ -123,7 +136,7 @@ export default function Layout({ children }) {
             <div className="content-wrapper">
               <div className="content">{children}</div>
             </div>
-            {configuration["content.sidebar.enabled"] && (
+            {configuration["content.sidebar.enabled"] && showSidebar && (
               <div className="sidebar" style={{ backgroundImage: `url(${sidebarImage})` }}>
                 {configuration["system.demo-mode"] &&
                   <div class="ribbon">

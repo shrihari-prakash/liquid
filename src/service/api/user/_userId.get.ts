@@ -1,5 +1,5 @@
 import { Logger } from "../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/:userId" });
+const log = Logger.getLogger().child({ from: "user/:userId.get" });
 
 import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
@@ -8,10 +8,9 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
 import { getBlockStatus } from "../../../utils/block";
-import { checkSubscription } from "../../../utils/subscription";
-import { attachProfilePicture } from "../../../utils/profile-picture";
 import { ScopeManager } from "../../../singleton/scope-manager";
-import { canRequestFollowerInfo } from "../../../utils/user";
+import { canRequestFollowerInfo, hydrateUserProfile } from "../../../utils/user";
+import { Configuration } from "../../../singleton/configuration";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
@@ -43,9 +42,12 @@ const GET__UserId = async (req: Request, res: Response) => {
       user.secondaryEmail = undefined;
       // @ts-expect-error
       user.secondaryPhone = undefined;
+      if (Configuration.get("user.profile.custom-data.hide-for-non-followers")) {
+        // @ts-expect-error
+        user.customData = undefined;
+      }
     }
-    checkSubscription(user);
-    await attachProfilePicture(user);
+    await hydrateUserProfile(user);
     res.status(statusCodes.success).json(new SuccessResponse({ user }));
   } catch (err) {
     log.error(err);

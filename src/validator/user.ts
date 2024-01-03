@@ -147,7 +147,7 @@ class UserValidator {
   bio(required = false, nested = false) {
     const field = this.makeFieldName("bio", nested);
     const requiredFn = required ? "exists" : "optional";
-    return this.fn(field)[requiredFn]().isString().matches(this.alphaRegex).isLength({ min: 3, max: 256 });
+    return this.fn(field)[requiredFn]().isString().isLength({ min: 3, max: 256 });
   }
 
   customLink(required = false, nested = false) {
@@ -172,6 +172,22 @@ class UserValidator {
     const field = this.makeFieldName("country", nested);
     const requiredFn = required ? "exists" : "optional";
     return this.fn(field)[requiredFn]().isString().isIn(countryISOCodes);
+  }
+
+  customData(required = false, nested = false) {
+    const field = this.makeFieldName("customData", nested);
+    const requiredFn = required ? "exists" : "optional";
+    return this.fn(field)
+      [requiredFn]()
+      .custom(function isJSON(obj: any) {
+        try {
+          const primitives = [null, false, true];
+          return primitives.includes(obj) || (!!obj && typeof obj === "object");
+        } catch (e) {
+          /* ignore */
+        }
+        return false;
+      });
   }
 }
 

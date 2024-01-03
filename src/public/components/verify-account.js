@@ -65,6 +65,8 @@ export default function VerifyAccount() {
                     aria-label="Verification Code"
                     aria-required="true"
                     placeholder={getPlaceholder("Verification Code", configuration)}
+                    pattern="[0-9]*"
+                    inputMode="numeric"
                     minLength="6"
                     autoComplete="off"
                     autoCorrect="off"

@@ -8,6 +8,8 @@ import { Configuration } from "../singleton/configuration";
 import { errorMessages, statusCodes } from "./http-status";
 import { ErrorResponse } from "./response";
 import { FollowStatus } from "../enum/follow-status";
+import { checkSubscription } from "./subscription";
+import { attachProfilePicture } from "./profile-picture";
 
 export const canRequestFollowerInfo = async ({
   sourceId,
@@ -78,6 +80,7 @@ export const sanitizeEditableFields = () => {
     "profilePicturePath",
     "scope",
     "credits",
+    "customData",
     "createdAt",
     "updatedAt",
   ];
@@ -100,5 +103,23 @@ export const sanitizeEditableFields = () => {
     log.warn(makeMessage("admin-api.user.profile.editable-fields"));
     Configuration.set("admin-api.user.profile.editable-fields", sanitizedAdminEditableFields.join(","));
     log.warn("Final list of fields %o", Configuration.get("admin-api.user.profile.editable-fields"));
+  }
+};
+
+export const hydrateUserProfile = async (user: UserInterface | UserInterface[]) => {
+  if (Array.isArray(user)) {
+    for (let i = 0; i < user.length; i++) {
+      if (user[i].customData) {
+        checkSubscription(user[i]);
+        await attachProfilePicture(user[i]);
+        user[i].customData = JSON.parse(user[i].customData);
+      }
+    }
+  } else {
+    if (user.customData) {
+      checkSubscription(user);
+      await attachProfilePicture(user);
+      user.customData = JSON.parse(user.customData);
+    }
   }
 };
