@@ -603,7 +603,7 @@
     "name": "user.profile.custom-data.hide-for-non-followers",
     "displayName": "User Profile Custom Data Hide For Non Followers",
     "envName": "USER_PROFILE_CUSTOM_DATA_HIDE_FOR_NON_FOLLOWERS",
-    "description": "Specifies if users can see custom data of users they do not follow.",
+    "description": "Specifies if users can see custom data of users they do not follow. This option does not hide custom data from admin and client APIs.",
     "type": "boolean",
     "default": false
   },
