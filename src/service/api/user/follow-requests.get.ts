@@ -43,7 +43,7 @@ const GET_FollowRequests = async (req: Request, res: Response) => {
       },
     ]).exec();
     for (let i = 0; i < records.length; i++) {
-      await hydrateUserProfile(records[i].source);
+      await hydrateUserProfile(records[i].source, { customData: false });
     }
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
