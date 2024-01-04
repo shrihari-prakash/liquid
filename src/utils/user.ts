@@ -106,29 +106,42 @@ export const sanitizeEditableFields = () => {
   }
 };
 
-export const hydrateUserProfile = async (
-  user: UserInterface | UserInterface[],
-  ctx: { customData: boolean } = { customData: true }
-) => {
+const canShowCustomDataInDelegatedMode = Configuration.get("user.profile.custom-data.hydrate-in-delegated-mode");
+const canShowCustomDataInSelfRetrieval = Configuration.get("user.profile.custom-data.hydrate-in-self-retrieval");
+
+export interface UserHydrationOptions {
+  delegatedMode?: boolean;
+  selfRetrieve?: boolean;
+}
+
+const _hydrateUserProfile = async (user: UserInterface, options: UserHydrationOptions) => {
+  checkSubscription(user);
+  await attachProfilePicture(user);
+  if (!user.customData) {
+    return user;
+  }
+  if (options.selfRetrieve && !canShowCustomDataInSelfRetrieval) {
+    log.debug("Custom data hydration for %s skipped due to self retrievel block.", user._id);
+    // @ts-expect-error
+    user.customData = undefined;
+    return user;
+  } else if (options.delegatedMode && !canShowCustomDataInDelegatedMode) {
+    log.debug("Custom data hydration for %s skipped due to delegation block.", user._id);
+    // @ts-expect-error
+    user.customData = undefined;
+    return user;
+  }
+  log.debug("Custom data hydrated for %s.", user._id);
+  user.customData = user.customData ? JSON.parse(user.customData) : undefined;
+  return user;
+};
+
+export const hydrateUserProfile = async (user: UserInterface | UserInterface[], options: UserHydrationOptions = {}) => {
   if (Array.isArray(user)) {
     for (let i = 0; i < user.length; i++) {
-      checkSubscription(user[i]);
-      await attachProfilePicture(user[i]);
-      if (user[i].customData && ctx.customData) {
-        user[i].customData = JSON.parse(user[i].customData);
-      } else {
-        // @ts-expect-error
-        user.customData = undefined;
-      }
+      _hydrateUserProfile(user[i], options);
     }
   } else {
-    checkSubscription(user);
-    await attachProfilePicture(user);
-    if (user.customData && ctx.customData) {
-      user.customData = JSON.parse(user.customData);
-    } else {
-      // @ts-expect-error
-      user.customData = undefined;
-    }
+    _hydrateUserProfile(user, options);
   }
 };
