@@ -18,7 +18,7 @@ const GET_Me = async (_: Request, res: Response) => {
     const userId = res.locals.oauth.token.user._id;
     let user = (await UserModel.findOne({ _id: userId }).lean().exec()) as unknown as UserInterface;
     const editableFields = Configuration.get("user.profile.editable-fields");
-    await hydrateUserProfile(user);
+    await hydrateUserProfile(user, { selfRetrieve: true });
     res.status(statusCodes.success).json(new SuccessResponse({ user, editableFields }));
   } catch (err) {
     log.error(err);

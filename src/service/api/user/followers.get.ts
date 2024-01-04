@@ -39,7 +39,7 @@ const GET_Followers = async (req: Request, res: Response) => {
     }
     const records = await FollowModel.aggregate(query).exec();
     for (let i = 0; i < records.length; i++) {
-      await hydrateUserProfile(records[i].source, { customData: false });
+      await hydrateUserProfile(records[i].source, { delegatedMode: true });
     }
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
