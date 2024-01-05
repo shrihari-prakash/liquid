@@ -139,9 +139,9 @@ const _hydrateUserProfile = async (user: UserInterface, options: UserHydrationOp
 export const hydrateUserProfile = async (user: UserInterface | UserInterface[], options: UserHydrationOptions = {}) => {
   if (Array.isArray(user)) {
     for (let i = 0; i < user.length; i++) {
-      _hydrateUserProfile(user[i], options);
+      await _hydrateUserProfile(user[i], options);
     }
   } else {
-    _hydrateUserProfile(user, options);
+    await _hydrateUserProfile(user, options);
   }
 };
