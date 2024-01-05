@@ -922,7 +922,7 @@
     "envName": "SYSTEM_RATE_LIMIT_MEDIUM_API_MAX_LIMIT",
     "description": "Specifies the rate limit for medium APIs for the specified window size.",
     "type": "number",
-    "default": 50
+    "default": 30
   },
   {
     "name": "system.rate-limit.heavy-api-max-limit",
@@ -930,7 +930,7 @@
     "envName": "SYSTEM_RATE_LIMIT_HEAVY_API_MAX_LIMIT",
     "description": "Specifies the rate limit for heavy APIs for the specified window size.",
     "type": "number",
-    "default": 30
+    "default": 10
   },
   {
     "name": "system.rate-limit.extreme-api-max-limit",
@@ -938,7 +938,15 @@
     "envName": "SYSTEM_RATE_LIMIT_EXTREME_API_MAX_LIMIT",
     "description": "Specifies the rate limit for extreme APIs for the specified window size.",
     "type": "number",
-    "default": 20
+    "default": 5
+  },
+  {
+    "name": "system.rate-limit.count-by-route",
+    "displayName": "Rate Limiter Count By Route",
+    "envName": "SYSTEM_RATE_LIMIT_COUNT_BY_ROUTE",
+    "description": "Specifies if the rate limit counter should be incremented per route per IP instead of just the IP. This means rate limit will be counted independendly for every API.",
+    "type": "boolean",
+    "default": true
   },
   {
     "name": "system.role.default",
