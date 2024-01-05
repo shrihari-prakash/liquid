@@ -2,7 +2,6 @@ import { Logger } from "../../singleton/logger";
 const log = Logger.getLogger().child({ from: "rate-limiter" });
 
 import rateLimit from "express-rate-limit";
-import { parse } from "url";
 import RedisStore from "rate-limit-redis";
 
 import { Configuration } from "../../singleton/configuration";
