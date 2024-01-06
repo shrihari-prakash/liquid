@@ -106,7 +106,7 @@ export default function Login() {
   }
 
   return (
-    <form className="form" onSubmit={login}>
+    <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={login}>
       <div className="noselect">
         <h3>
           Login to&nbsp;

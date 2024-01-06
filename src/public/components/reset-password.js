@@ -52,7 +52,7 @@ export default function ResetPassword() {
     }
 
     return (
-        <form className="form" onSubmit={resetPassword}>
+        <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={resetPassword}>
             <div className="noselect">
                 <h3>
                     Reset your password

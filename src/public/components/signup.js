@@ -102,7 +102,7 @@ export default function SignUp() {
   }
 
   return (
-    <form className="form" onSubmit={signup}>
+    <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={signup}>
       <div className="noselect">
         <h3>
           Sign up &#x2022;&nbsp;
