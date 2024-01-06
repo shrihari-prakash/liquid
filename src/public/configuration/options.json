@@ -150,7 +150,7 @@
   {
     "name": "form.animate-entrance",
     "displayName": "Form Animate Entrance",
-    "description": "Specifies if form should animate on entering the screen.",
+    "description": "Specifies if forms should animate on entering the screen.",
     "default": false
   },
   {
