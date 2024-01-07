@@ -1,3 +1,6 @@
+import { Logger } from "../../../singleton/logger";
+const log = Logger.getLogger().child({ from: "oauth/authorize.all" });
+
 import { Request as OAuthRequest, Response as OAuthResponse } from "@node-oauth/oauth2-server";
 import { Request, Response, NextFunction } from "express";
 import { v4 as uuidv4 } from "uuid";
@@ -5,6 +8,8 @@ import { v4 as uuidv4 } from "uuid";
 import { OAuthServer } from "../../../singleton/oauth-server";
 import { statusCodes } from "../../../utils/http-status";
 import { Configuration } from "../../../singleton/configuration";
+import moment from "moment";
+import UserModel from "../../../model/mongo/user";
 
 function validatePKCEParameters(req: Request) {
   const queryParameters = req.query;
@@ -49,7 +54,22 @@ async function ALL__Authorize(req: Request, res: Response, next: NextFunction) {
     }
     const code = await OAuthServer.server.authorize(new OAuthRequest(req), new OAuthResponse(res), {
       authenticateHandler: {
-        handle: (req: Request) => {
+        handle: async (req: Request) => {
+          if (!req.session.user) {
+            return null;
+          }
+          const userId = req.session.user._id;
+          const user = await UserModel.findById(userId).lean();
+          if (!user) {
+            return null;
+          }
+          const globalLogoutAt = user.globalLogoutAt;
+          const currentLoginAt = req.session.loggedInAt;
+          if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(currentLoginAt))) {
+            log.debug("Expired session detected in authorize.");
+            req.session.destroy(() => {});
+            return null;
+          }
           return req.session.user;
         },
       },

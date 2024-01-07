@@ -635,6 +635,17 @@ export const userSchema = {
       write: SensitivityLevel.HIGH,
     },
   },
+  globalLogoutAt: {
+    type: Date,
+    required: false,
+    willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW,
+    },
+  },
 };
 
 export type UserInterface = {
@@ -699,6 +710,7 @@ export type UserInterface = {
   customData: string;
   createdAt: Date;
   updatedAt: Date;
+  globalLogoutAt: Date;
   isFollowing?: boolean;
   requested?: boolean;
 };

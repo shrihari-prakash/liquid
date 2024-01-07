@@ -28,14 +28,15 @@ import GET_FollowRequests from "./follow-requests.get";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
 import GET_InviteCodes from "./invite-codes.get";
 import GET_Scopes from "./scopes.get";
-import GET_Logout from "./logout.get";
 import GET_SessionState from "./session-state.get";
+import GET_Logout from "./logout.get";
+import GET_LogoutAll from "./logout-all.get";
+import GET_LoginHistory from "./login-history.get";
 import PATCH_FollowRequest, { PATCH_FollowRequestValidator } from "./follow-request.patch";
 import PATCH_Me, { PATCH_MeValidator } from "./me.patch";
 import PATCH_ProfilePicture from "./profile-picture.patch";
 import DELETE_FollowEntry, { DELETE_FollowEntryValidator } from "./follow-entry.delete";
 import DELETE_ProfilePicture from "./profile-picture.delete";
-import GET_LoginHistory from "./login-history.get";
 
 const UserRouter = express.Router();
 
@@ -52,6 +53,7 @@ UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
 UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
 UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
 UserRouter.get("/logout", AuthenticateSilent, GET_Logout);
+UserRouter.get("/logout-all", AuthenticateSilent, GET_LogoutAll);
 UserRouter.get("/scopes", GET_Scopes);
 
 // Invite System
