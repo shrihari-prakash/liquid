@@ -50,7 +50,7 @@ export default function VerifyAccount() {
     }
 
     return (
-        <form className="form" onSubmit={verifyAccount}>
+        <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={verifyAccount}>
             <div className="noselect">
                 <h3>
                     Verify your account

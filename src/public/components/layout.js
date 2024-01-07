@@ -106,6 +106,16 @@ export default function Layout({ children }) {
     useFavicon(configuration["assets.favicon-uri"]);
   }, [configuration]);
 
+  React.useEffect(() => {
+    if (configuration && !fontLoading) {
+      if (configuration["form.animate-entrance"]) {
+        setTimeout(() => {
+          document.querySelector('.form').style.willChange = "auto";
+        }, 2000)
+      }
+    }
+  }, [configuration, fontLoading]);
+
   if (!configuration || fontLoading)
     return (
       <div className="spinner-container">

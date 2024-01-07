@@ -52,7 +52,7 @@ export default function TwoFactorAuthentication() {
     }
 
     return (
-        <form className="form" onSubmit={submit2fa}>
+        <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={submit2fa}>
             <div className="noselect">
                 <h3>
                     Two-Step Verification

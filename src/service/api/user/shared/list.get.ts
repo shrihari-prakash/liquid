@@ -6,10 +6,9 @@ import { Request, Response } from "express";
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel, { UserAdminProjection, UserClientProjection, UserInterface } from "../../../../model/mongo/user";
-import { checkSubscription } from "../../../../utils/subscription";
-import { attachProfilePicture } from "../../../../utils/profile-picture";
 import { getPaginationLimit } from "../../../../utils/pagination";
 import { ScopeManager } from "../../../../singleton/scope-manager";
+import { hydrateUserProfile } from "../../../../utils/user";
 
 const GET_List = async (req: Request, res: Response) => {
   try {
@@ -27,8 +26,7 @@ const GET_List = async (req: Request, res: Response) => {
       .limit(limit)
       .lean()
       .exec()) as unknown as UserInterface[];
-    checkSubscription(users);
-    await attachProfilePicture(users);
+    await hydrateUserProfile(users);
     const totalUsers = await UserModel.estimatedDocumentCount();
     res.status(statusCodes.success).json(new SuccessResponse({ users, totalUsers }));
   } catch (err) {

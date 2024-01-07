@@ -42,7 +42,7 @@ export default function ConsentScreen() {
   React.useEffect(() => useTitle(configuration["content.app-name"], "Consent Required"), []);
 
   return clientInfo && permissionsInfo ? (
-    <div className="form">
+    <div className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`}>
       <div className="noselect">
         <h3 className="long-header">
           Consent Required<span className="header-separator">&nbsp;&#x2022;&nbsp;</span>

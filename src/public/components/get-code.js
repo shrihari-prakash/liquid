@@ -52,7 +52,7 @@ export default function GetCode() {
     }
 
     return (
-        <form className="form" onSubmit={getCode}>
+        <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={getCode}>
             <div className="noselect">
                 <h3>
                     Verify your identity

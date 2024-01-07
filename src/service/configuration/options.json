@@ -600,6 +600,24 @@
     "type": "string"
   },
   {
+    "name": "user.profile.custom-data.hydrate-in-delegated-mode",
+    "displayName": "User Profile Custom Data Hydrate In Delegated Mode",
+    "envName": "USER_PROFILE_CUSTOM_DATA_HYDRATE_IN_DELEGATED_MODE",
+    "description": "Specifies if custom data has to be sent in delegated/general use APIs. This option does not hide custom data from admin and client APIs. For controlling custom data visibility in GET /user/me, the option `user.profile.custom-data.hydrate-in-self-retrieval` should be adjusted.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["user.profile.custom-data.hydrate-in-self-retrieval"]
+  },
+  {
+    "name": "user.profile.custom-data.hydrate-in-self-retrieval",
+    "displayName": "User Profile Custom Data Hydrate In Self Retrieval",
+    "envName": "USER_PROFILE_CUSTOM_DATA_HYDRATE_IN_SELF_RETRIEVAL",
+    "description": "Specifies if custom data has to be sent in while hitting GET /user/me. This option works independent of the value in option `user.profile.custom-data.hydrate-in-delegated-mode`.",
+    "type": "boolean",
+    "default": true,
+    "relatedOptions": ["user.profile.custom-data.hydrate-in-delegated-mode"]
+  },
+  {
     "name": "user.login.history-record-expires-in",
     "displayName": "User Login History Record Expires In",
     "envName": "USER_LOGIN_HISTORY_RECORD_EXPIRES_IN",
@@ -904,7 +922,7 @@
     "envName": "SYSTEM_RATE_LIMIT_MEDIUM_API_MAX_LIMIT",
     "description": "Specifies the rate limit for medium APIs for the specified window size.",
     "type": "number",
-    "default": 50
+    "default": 30
   },
   {
     "name": "system.rate-limit.heavy-api-max-limit",
@@ -912,7 +930,7 @@
     "envName": "SYSTEM_RATE_LIMIT_HEAVY_API_MAX_LIMIT",
     "description": "Specifies the rate limit for heavy APIs for the specified window size.",
     "type": "number",
-    "default": 30
+    "default": 10
   },
   {
     "name": "system.rate-limit.extreme-api-max-limit",
@@ -920,7 +938,15 @@
     "envName": "SYSTEM_RATE_LIMIT_EXTREME_API_MAX_LIMIT",
     "description": "Specifies the rate limit for extreme APIs for the specified window size.",
     "type": "number",
-    "default": 20
+    "default": 5
+  },
+  {
+    "name": "system.rate-limit.count-by-route",
+    "displayName": "Rate Limiter Count By Route",
+    "envName": "SYSTEM_RATE_LIMIT_COUNT_BY_ROUTE",
+    "description": "Specifies if the rate limit counter should be incremented per route per IP instead of just the IP. This means rate limit will be counted independendly for every API.",
+    "type": "boolean",
+    "default": true
   },
   {
     "name": "system.role.default",

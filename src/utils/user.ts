@@ -8,6 +8,8 @@ import { Configuration } from "../singleton/configuration";
 import { errorMessages, statusCodes } from "./http-status";
 import { ErrorResponse } from "./response";
 import { FollowStatus } from "../enum/follow-status";
+import { checkSubscription } from "./subscription";
+import { attachProfilePicture } from "./profile-picture";
 
 export const canRequestFollowerInfo = async ({
   sourceId,
@@ -78,6 +80,7 @@ export const sanitizeEditableFields = () => {
     "profilePicturePath",
     "scope",
     "credits",
+    "customData",
     "createdAt",
     "updatedAt",
   ];
@@ -100,5 +103,45 @@ export const sanitizeEditableFields = () => {
     log.warn(makeMessage("admin-api.user.profile.editable-fields"));
     Configuration.set("admin-api.user.profile.editable-fields", sanitizedAdminEditableFields.join(","));
     log.warn("Final list of fields %o", Configuration.get("admin-api.user.profile.editable-fields"));
+  }
+};
+
+const canShowCustomDataInDelegatedMode = Configuration.get("user.profile.custom-data.hydrate-in-delegated-mode");
+const canShowCustomDataInSelfRetrieval = Configuration.get("user.profile.custom-data.hydrate-in-self-retrieval");
+
+export interface UserHydrationOptions {
+  delegatedMode?: boolean;
+  selfRetrieve?: boolean;
+}
+
+const _hydrateUserProfile = async (user: UserInterface, options: UserHydrationOptions) => {
+  checkSubscription(user);
+  await attachProfilePicture(user);
+  if (!user.customData) {
+    return user;
+  }
+  if (options.selfRetrieve && !canShowCustomDataInSelfRetrieval) {
+    log.debug("Custom data hydration for %s skipped due to self retrievel block.", user._id);
+    // @ts-expect-error
+    user.customData = undefined;
+    return user;
+  } else if (options.delegatedMode && !canShowCustomDataInDelegatedMode) {
+    log.debug("Custom data hydration for %s skipped due to delegation block.", user._id);
+    // @ts-expect-error
+    user.customData = undefined;
+    return user;
+  }
+  log.debug("Custom data hydrated for %s.", user._id);
+  user.customData = user.customData ? JSON.parse(user.customData) : undefined;
+  return user;
+};
+
+export const hydrateUserProfile = async (user: UserInterface | UserInterface[], options: UserHydrationOptions = {}) => {
+  if (Array.isArray(user)) {
+    for (let i = 0; i < user.length; i++) {
+      await _hydrateUserProfile(user[i], options);
+    }
+  } else {
+    await _hydrateUserProfile(user, options);
   }
 };
