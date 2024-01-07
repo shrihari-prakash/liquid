@@ -7,5 +7,6 @@ declare module "express-session" {
     oAuthLogin: boolean;
     user: { [key: string]: any };
     loginMeta: { [key: string]: any };
+    loggedInAt: string;
   }
 }

@@ -21,6 +21,7 @@ import {
   Token,
   RefreshToken,
 } from "@node-oauth/oauth2-server";
+import moment from "moment";
 
 interface Client {
   id: string;
@@ -133,6 +134,7 @@ const OAuthModel: OAuthModel = {
         token.user = user;
       }
       if (useTokenCache) {
+        token.registeredAt = new Date().toISOString();
         const serialized = JSON.stringify(token);
         await Redis.client.set(
           getPrefixedToken(token.accessToken),
@@ -168,6 +170,12 @@ const OAuthModel: OAuthModel = {
         if (!isApplicationClient(cacheToken.user)) {
           cacheToken.user = await getUserInfo(cacheToken.user._id);
         }
+        const globalLogoutAt = cacheToken.user.globalLogoutAt;
+        const tokenRegisteredAt = cacheToken.registeredAt;
+        if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(tokenRegisteredAt))) {
+          log.debug("Expired access token detected.");
+          return null;
+        }
         const hasNegativeScopeDiff = cacheToken.scope.some((scope: string) => {
           return !ScopeManager.isScopeAllowed(scope, cacheToken.user.scope);
         });
@@ -187,6 +195,15 @@ const OAuthModel: OAuthModel = {
       if (dbTokenObject && !isApplicationClient(dbTokenObject.user)) {
         dbTokenObject.user = await getUserInfo(dbTokenObject.user._id);
       }
+      if (!dbTokenObject) {
+        return null;
+      }
+      const globalLogoutAt = dbTokenObject.user.globalLogoutAt;
+      const tokenRegisteredAt = dbTokenObject.registeredAt;
+      if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(tokenRegisteredAt))) {
+        log.debug("Expired access token detected.");
+        return null;
+      }
       return dbTokenObject as unknown as Token;
     } catch (err) {
       log.error("Error retrieving access token.");
@@ -203,6 +220,12 @@ const OAuthModel: OAuthModel = {
       if (!isApplicationClient(cacheToken.user)) {
         cacheToken.user = await getUserInfo(cacheToken.user._id);
       }
+      const globalLogoutAt = cacheToken.user.globalLogoutAt;
+      const tokenRegisteredAt = cacheToken.registeredAt;
+      if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(tokenRegisteredAt))) {
+        log.debug("Expired refresh token detected.");
+        return null;
+      }
       cacheToken.refreshTokenExpiresAt = new Date(cacheToken.refreshTokenExpiresAt);
       log.debug("Refresh token retrieved from cache.");
       return cacheToken;
@@ -212,6 +235,15 @@ const OAuthModel: OAuthModel = {
     }).lean();
     if (dbTokenObject && !isApplicationClient(dbTokenObject.user)) {
       dbTokenObject.user = await getUserInfo(dbTokenObject.user._id);
+    }
+    if (!dbTokenObject) {
+      return null;
+    }
+    const globalLogoutAt = dbTokenObject.user.globalLogoutAt;
+    const tokenRegisteredAt = dbTokenObject.registeredAt;
+    if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(tokenRegisteredAt))) {
+      log.debug("Expired refresh token detected.");
+      return null;
     }
     log.debug("Refresh token retrieved from database.");
     return dbTokenObject as unknown as Token;

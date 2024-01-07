@@ -13,7 +13,7 @@ import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
 import { Token } from "@node-oauth/oauth2-server";
 
-const POST_Logout = async (req: Request, res: Response) => {
+const GET_Logout = async (req: Request, res: Response) => {
   try {
     const token = res.locals?.oauth?.token;
     const user = token ? { ...res.locals.oauth.token.user } : null;
@@ -41,4 +41,4 @@ const POST_Logout = async (req: Request, res: Response) => {
   }
 };
 
-export default POST_Logout;
+export default GET_Logout;

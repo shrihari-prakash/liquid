@@ -85,6 +85,7 @@ const POST_Login = async (req: Request, res: Response) => {
     } else {
       user.password = undefined;
       req.session.user = user;
+      req.session.loggedInAt = new Date().toISOString();
       log.debug("Assigned session id %s for user %s", req.session?.id, user._id);
       Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user }));
       if (Configuration.get("user.login.record-successful-attempts")) {
