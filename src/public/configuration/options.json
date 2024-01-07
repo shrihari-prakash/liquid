@@ -148,6 +148,24 @@
     "default": true
   },
   {
+    "name": "sidebar.width",
+    "displayName": "Sidebar Margin",
+    "description": "Specifies width of the sidebar.",
+    "default": "35%"
+  },
+  {
+    "name": "sidebar.margin",
+    "displayName": "Sidebar Margin",
+    "description": "Specifies the margin for sidebar. Single value margin in any unit.",
+    "default": "0px"
+  },
+  {
+    "name": "sidebar.border-radius",
+    "displayName": "Sidebar Border Radius",
+    "description": "Specifies the border radius for sidebar.",
+    "default": "0px"
+  },
+  {
     "name": "form.animate-entrance",
     "displayName": "Form Animate Entrance",
     "description": "Specifies if forms should animate on entering the screen.",
