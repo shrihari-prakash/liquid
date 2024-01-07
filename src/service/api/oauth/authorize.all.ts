@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from "uuid";
 import { OAuthServer } from "../../../singleton/oauth-server";
 import { statusCodes } from "../../../utils/http-status";
 import { Configuration } from "../../../singleton/configuration";
-import moment from "moment";
 import UserModel from "../../../model/mongo/user";
 import { isTokenInvalidated } from "../../../utils/sesion";
 

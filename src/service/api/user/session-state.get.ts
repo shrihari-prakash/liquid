@@ -2,7 +2,6 @@ import { Logger } from "../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/session-state.get" });
 
 import { Request, Response } from "express";
-import moment from "moment";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
