@@ -10,6 +10,7 @@ import { statusCodes } from "../../../utils/http-status";
 import { Configuration } from "../../../singleton/configuration";
 import moment from "moment";
 import UserModel from "../../../model/mongo/user";
+import { isTokenInvalidated } from "../../../utils/sesion";
 
 function validatePKCEParameters(req: Request) {
   const queryParameters = req.query;
@@ -63,9 +64,9 @@ async function ALL__Authorize(req: Request, res: Response, next: NextFunction) {
           if (!user) {
             return null;
           }
-          const globalLogoutAt = user.globalLogoutAt;
-          const currentLoginAt = req.session.loggedInAt;
-          if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(currentLoginAt))) {
+          const globalLogoutAt = user.globalLogoutAt as unknown as string;
+          const currentLoginAt = req.session.loggedInAt as string;
+          if (isTokenInvalidated(globalLogoutAt, currentLoginAt)) {
             log.debug("Expired session detected in authorize.");
             req.session.destroy(() => {});
             return null;

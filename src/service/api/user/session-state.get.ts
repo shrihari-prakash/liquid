@@ -7,6 +7,7 @@ import moment from "moment";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel from "../../../model/mongo/user";
+import { isTokenInvalidated } from "../../../utils/sesion";
 
 const GET_SessionState = async (req: Request, res: Response) => {
   try {
@@ -16,9 +17,9 @@ const GET_SessionState = async (req: Request, res: Response) => {
     }
     const user = await await UserModel.findById(sessionUser._id).lean();
     if (user) {
-      const globalLogoutAt = user.globalLogoutAt;
-      const currentLoginAt = req.session.loggedInAt;
-      if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(currentLoginAt))) {
+      const globalLogoutAt = user.globalLogoutAt as unknown as string;
+      const currentLoginAt = req.session.loggedInAt as string;
+      if (isTokenInvalidated(globalLogoutAt, currentLoginAt)) {
         log.debug("Expired session detected.");
         req.session.destroy(() => {});
         return null;

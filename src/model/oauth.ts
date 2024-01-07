@@ -21,7 +21,7 @@ import {
   Token,
   RefreshToken,
 } from "@node-oauth/oauth2-server";
-import moment from "moment";
+import { isTokenInvalidated } from "../utils/sesion";
 
 interface Client {
   id: string;
@@ -172,7 +172,7 @@ const OAuthModel: OAuthModel = {
         }
         const globalLogoutAt = cacheToken.user.globalLogoutAt;
         const tokenRegisteredAt = cacheToken.registeredAt;
-        if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(tokenRegisteredAt))) {
+        if (isTokenInvalidated(globalLogoutAt, tokenRegisteredAt)) {
           log.debug("Expired access token detected.");
           return null;
         }
@@ -200,7 +200,7 @@ const OAuthModel: OAuthModel = {
       }
       const globalLogoutAt = dbTokenObject.user.globalLogoutAt;
       const tokenRegisteredAt = dbTokenObject.registeredAt;
-      if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(tokenRegisteredAt))) {
+      if (isTokenInvalidated(globalLogoutAt, tokenRegisteredAt as Date)) {
         log.debug("Expired access token detected.");
         return null;
       }
@@ -222,7 +222,7 @@ const OAuthModel: OAuthModel = {
       }
       const globalLogoutAt = cacheToken.user.globalLogoutAt;
       const tokenRegisteredAt = cacheToken.registeredAt;
-      if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(tokenRegisteredAt))) {
+      if (isTokenInvalidated(globalLogoutAt, tokenRegisteredAt)) {
         log.debug("Expired refresh token detected.");
         return null;
       }
@@ -241,7 +241,7 @@ const OAuthModel: OAuthModel = {
     }
     const globalLogoutAt = dbTokenObject.user.globalLogoutAt;
     const tokenRegisteredAt = dbTokenObject.registeredAt;
-    if (globalLogoutAt && moment(globalLogoutAt).isAfter(moment(tokenRegisteredAt))) {
+    if (isTokenInvalidated(globalLogoutAt, tokenRegisteredAt as Date)) {
       log.debug("Expired refresh token detected.");
       return null;
     }
