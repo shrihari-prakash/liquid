@@ -40,6 +40,7 @@ const POST_Do2FA = async (req: Request, res: Response) => {
     await VerificationCodeModel.deleteOne({ code });
     const user = (await UserModel.findOne({ _id: target }).exec()) as unknown as UserInterface;
     req.session.user = user;
+    req.session.loggedInAt = new Date().toISOString();
     if (Configuration.get("user.login.record-successful-attempts")) {
       const loginMeta = req.session.loginMeta;
       await new LoginHistoryModel(loginMeta).save();
