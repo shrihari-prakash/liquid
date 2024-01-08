@@ -5,4 +5,5 @@ export const PushEventList = {
   USER_CREATE: "user.create",
   USER_LOGIN: "user.login",
   USER_LOGOUT: "user.logout",
+  USER_LOGOUT_ALL: "user.logout-all",
 };
