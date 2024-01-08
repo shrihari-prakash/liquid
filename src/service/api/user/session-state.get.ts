@@ -5,11 +5,24 @@ import { Request, Response } from "express";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
+import UserModel from "../../../model/mongo/user";
+import { isTokenInvalidated } from "../../../utils/sesion";
 
 const GET_SessionState = async (req: Request, res: Response) => {
   try {
-    const user = req.session?.user;
+    const sessionUser = req.session?.user;
+    if (!sessionUser) {
+      return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
+    }
+    const user = await await UserModel.findById(sessionUser._id).lean();
     if (user) {
+      const globalLogoutAt = user.globalLogoutAt as unknown as string;
+      const currentLoginAt = req.session.loggedInAt as string;
+      if (isTokenInvalidated(globalLogoutAt, currentLoginAt)) {
+        log.debug("Expired session detected.");
+        req.session.destroy(() => {});
+        return null;
+      }
       return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
     } else {
       return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));

@@ -18,6 +18,10 @@
   --spinner-background-color: #0a0a0a;
   --spinner-primary-color: #ffffff40;
   --spinner-secondary-color: #2b2b2b;
+  /* Common */
+  --sidebar-width: 35%;
+  --sidebar-margin: 3em;
+  --sidebar-border-radius: 1em;
 }
 
 html {
@@ -179,9 +183,22 @@ h3 {
   justify-content: center;
 }
 
+.page .sidebar-wrapper {
+  position: relative;
+  width: var(--sidebar-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+}
+
 .page .sidebar {
   position: relative;
-  width: 35%;
+  height: calc(100% - var(--sidebar-margin));
+  width: calc(100% - var(--sidebar-margin));
+  border-radius: var(--sidebar-border-radius);
+  overflow: hidden;
   box-shadow: inset 5px 0px 6px 1px #00000035;
   display: flex;
   align-items: center;

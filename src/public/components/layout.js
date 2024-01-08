@@ -86,6 +86,9 @@ export default function Layout({ children }) {
       setStyleProperty("--form-input-vertical-padding", getThemeVariable("form.input-vertical-padding"));
       setStyleProperty("--form-input-horizontal-padding", getThemeVariable("form.input-horizontal-padding"));
       setStyleProperty("--app-font-base-size", configuration["theme.app-font-base-size"]);
+      setStyleProperty("--sidebar-width", configuration["sidebar.width"]);
+      setStyleProperty("--sidebar-margin", configuration["sidebar.margin"]);
+      setStyleProperty("--sidebar-border-radius", configuration["sidebar.border-radius"]);
       if (theme === "light") {
         changeToLightVariable("--text-color");
         changeToLightVariable("--text-lighter-color");
@@ -105,6 +108,16 @@ export default function Layout({ children }) {
     useFont(configuration["theme.app-font-face"], configuration["theme.app-font-url"], finishFontLoad);
     useFavicon(configuration["assets.favicon-uri"]);
   }, [configuration]);
+
+  React.useEffect(() => {
+    if (configuration && !fontLoading) {
+      if (configuration["form.animate-entrance"]) {
+        setTimeout(() => {
+          document.querySelector('.form').style.willChange = "auto";
+        }, 2000)
+      }
+    }
+  }, [configuration, fontLoading]);
 
   if (!configuration || fontLoading)
     return (
@@ -137,19 +150,21 @@ export default function Layout({ children }) {
               <div className="content">{children}</div>
             </div>
             {configuration["content.sidebar.enabled"] && showSidebar && (
-              <div className="sidebar" style={{ backgroundImage: `url(${sidebarImage})` }}>
-                {configuration["system.demo-mode"] &&
-                  <div class="ribbon">
-                    Demo Mode
-                  </div>
-                }
-                {configuration["content.sidebar.content-enabled"] && (
-                  <div className="intro">
-                    <div className="title1">{configuration["content.sidebar.intro.title1"]}</div>
-                    <div className="title2">{configuration["content.sidebar.intro.title2"]}</div>
-                    <div className="description">{configuration["content.sidebar.intro.description"]}</div>
-                  </div>
-                )}
+              <div className="sidebar-wrapper">
+                <div className="sidebar" style={{ backgroundImage: `url(${sidebarImage})` }}>
+                  {configuration["system.demo-mode"] &&
+                    <div class="ribbon">
+                      Demo Mode
+                    </div>
+                  }
+                  {configuration["content.sidebar.content-enabled"] && (
+                    <div className="intro">
+                      <div className="title1">{configuration["content.sidebar.intro.title1"]}</div>
+                      <div className="title2">{configuration["content.sidebar.intro.title2"]}</div>
+                      <div className="description">{configuration["content.sidebar.intro.description"]}</div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>

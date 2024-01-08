@@ -13,7 +13,7 @@ import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
 import { Token } from "@node-oauth/oauth2-server";
 
-const POST_Logout = async (req: Request, res: Response) => {
+const GET_Logout = async (req: Request, res: Response) => {
   try {
     const token = res.locals?.oauth?.token;
     const user = token ? { ...res.locals.oauth.token.user } : null;
@@ -27,7 +27,7 @@ const POST_Logout = async (req: Request, res: Response) => {
           await Redis.client.del(`session_id:${sessionId}`);
           log.debug("Deleted session id %s from Redis.", sessionId);
         }
-        if (user) {
+        if (user && (req.baseUrl + req.path).endsWith("/user/logout")) {
           Pusher.publish(new PushEvent(PushEventList.USER_LOGOUT, { user }));
         }
         res.status(statusCodes.success).json(new SuccessResponse());
@@ -41,4 +41,4 @@ const POST_Logout = async (req: Request, res: Response) => {
   }
 };
 
-export default POST_Logout;
+export default GET_Logout;

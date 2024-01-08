@@ -6,6 +6,7 @@ const tokenSchema = {
   accessTokenExpiresAt: Date,
   refreshToken: String,
   refreshTokenExpiresAt: Date,
+  registeredAt: Date,
   scope: {
     type: Array,
     required: true,
