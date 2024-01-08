@@ -115,6 +115,13 @@ export interface UserHydrationOptions {
 }
 
 const _hydrateUserProfile = async (user: UserInterface, options: UserHydrationOptions) => {
+  if (user.isBanned && options.delegatedMode) {
+    user.firstName = "NA";
+    user.middleName = "NA";
+    user.lastName = "NA";
+    user.customData = "{}";
+    return user;
+  }
   checkSubscription(user);
   await attachProfilePicture(user);
   if (!user.customData) {
