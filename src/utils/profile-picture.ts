@@ -11,6 +11,8 @@ export const attachProfilePicture = async (user: UserInterface) => {
   if (user.profilePicturePath) {
     const fileName = `${profilePicturePath}/${user._id}.png`;
     user.profilePictureUrl = (await S3.getSignedUrl("GET", fileName, {}, expiry)) as string;
+    // @ts-expect-error
+    user.profilePicturePath = undefined;
   } else {
     (user as any).profilePictureUrl = null;
   }
