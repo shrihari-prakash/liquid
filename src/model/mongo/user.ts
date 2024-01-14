@@ -665,12 +665,12 @@ export type UserInterface = {
   profilePictureUrl: string;
   profilePicturePath: string;
   followingCount: string;
+  followerCount: string;
   pronouns: string;
   verified: boolean;
   verifiedDate: Date;
   verifiedBy: string;
   customLink: string;
-  followerCount: string;
   isPrivate: boolean;
   email: string;
   emailVerified: boolean;
