@@ -11,7 +11,7 @@ import UserModel from "../../../model/mongo/user";
 import { Configuration } from "../../../singleton/configuration";
 import { bcryptConfig } from "./create.post";
 import { hasErrors } from "../../../utils/api";
-import { flushUserInfoFromRedis } from "../../../model/oauth";
+import { flushUserInfoFromRedis } from "../../../model/oauth/oauth";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import UserValidator from "../../../validator/user";
 

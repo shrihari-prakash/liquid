@@ -21,6 +21,7 @@ const adapters = {
   RabbitMQ: "rabbitmq",
   Redis: "redis",
 };
+
 export default class Pusher {
   queue: typeof RabbitMQ | typeof RedisPublisher | undefined;
 

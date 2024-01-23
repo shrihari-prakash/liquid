@@ -3,7 +3,7 @@ const log = Logger.getLogger().child({ from: "oauth-service" });
 
 import OAuth2Server from '@node-oauth/oauth2-server';
 
-import OAuthModel from "../model/oauth";
+import OAuthModel from "../model/oauth/oauth";
 import { Configuration } from "../singleton/configuration";
 
 class OAuthServer {

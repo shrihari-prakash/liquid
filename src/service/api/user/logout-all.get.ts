@@ -7,7 +7,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import GET_Logout from "./logout.get";
 import UserModel from "../../../model/mongo/user";
-import { flushUserInfoFromRedis } from "../../../model/oauth";
+import { flushUserInfoFromRedis } from "../../../model/oauth/oauth";
 import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";

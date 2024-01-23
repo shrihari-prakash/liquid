@@ -14,7 +14,7 @@ import Role from "../../../../enum/role";
 import { bcryptConfig } from "../create.post";
 import { hasErrors } from "../../../../utils/api";
 import { PATCH_MeValidator } from "../me.patch";
-import { flushUserInfoFromRedis } from "../../../../model/oauth";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth";
 import { isRoleRankHigher } from "../../../../utils/role";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 

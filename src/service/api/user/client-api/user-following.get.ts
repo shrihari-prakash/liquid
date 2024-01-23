@@ -8,7 +8,7 @@ import { isValidObjectId } from "mongoose";
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import FollowModel from "../../../../model/mongo/follow";
-import { useFollowingQuery } from "../../../../model/query/following";
+import { useFollowingQuery } from "../../../../query/following";
 import { getPaginationLimit } from "../../../../utils/pagination";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 import { hydrateUserProfile } from "../../../../utils/user";

@@ -1,5 +1,5 @@
 import { mongo } from "mongoose";
-import { UserProjection } from "../mongo/user";
+import { UserProjection } from "../model/mongo/user";
 
 export const useFollowingQuery: any = (userId: string, limit: number) => [
   { $match: { $and: [{ sourceId: new mongo.ObjectId(userId) }, { approved: true }] } },
