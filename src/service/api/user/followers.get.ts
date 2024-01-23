@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import FollowModel from "../../../model/mongo/follow";
-import { useFollowersQuery } from "../../../model/query/followers";
+import { useFollowersQuery } from "../../../query/followers";
 import { getPaginationLimit } from "../../../utils/pagination";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { getBlockStatus } from "../../../utils/block";

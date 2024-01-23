@@ -11,7 +11,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
 import { hasErrors } from "../../../../utils/api";
 import { Configuration } from "../../../../singleton/configuration";
-import { flushUserInfoFromRedis } from "../../../../model/oauth";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const POST_SubscriptionValidator = [
