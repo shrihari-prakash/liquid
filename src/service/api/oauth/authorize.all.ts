@@ -9,7 +9,7 @@ import { OAuthServer } from "../../../singleton/oauth-server";
 import { statusCodes } from "../../../utils/http-status";
 import { Configuration } from "../../../singleton/configuration";
 import UserModel from "../../../model/mongo/user";
-import { isTokenInvalidated } from "../../../utils/sesion";
+import { isTokenInvalidated } from "../../../utils/session";
 
 function validatePKCEParameters(req: Request) {
   const queryParameters = req.query;

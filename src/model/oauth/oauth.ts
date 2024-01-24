@@ -21,7 +21,7 @@ import {
   Token,
   RefreshToken,
 } from "@node-oauth/oauth2-server";
-import { isTokenInvalidated } from "../../utils/sesion";
+import { isTokenInvalidated } from "../../utils/session";
 
 interface Client {
   id: string;
