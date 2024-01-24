@@ -25,11 +25,10 @@ const POST_Search = async (req: Request, res: Response) => {
     if (hasErrors(req, res)) return;
     const query = req.body.query;
     const startTime = +new Date();
-    if (Configuration.get("privilege.can-use-cache")) {
-      const cacheResults = await Redis.client.get(`${redisPrefix}${query}`);
-      if (cacheResults) {
-        return res.status(statusCodes.success).json(new SuccessResponse({ results: JSON.parse(cacheResults) }));
-      }
+    console.log(Redis);
+    const cacheResults = await Redis.get(`${redisPrefix}${query}`);
+    if (cacheResults) {
+      return res.status(statusCodes.success).json(new SuccessResponse({ results: JSON.parse(cacheResults) }));
     }
     log.info("Cache miss for query: " + query);
     const queryRegex = new RegExp(query, "i");
@@ -55,14 +54,10 @@ const POST_Search = async (req: Request, res: Response) => {
       Configuration.get("user.search-results.limit")
     )) as unknown as UserInterface[];
     await hydrateUserProfile(results);
-    if (Configuration.get("privilege.can-use-cache")) {
-      await Redis.client.set(
-        `${redisPrefix}${query}`,
-        JSON.stringify(results),
-        "EX",
-        Configuration.get("user.search-results.cache-lifetime") as number
-      );
-    }
+    const cacheKey = `${redisPrefix}${query}`;
+    const cacheValue = JSON.stringify(results);
+    const cacheExpiry = Configuration.get("user.search-results.cache-lifetime");
+    await Redis.setEx(cacheKey, cacheValue, cacheExpiry);
     const milliseconds = +new Date() - startTime;
     log.info("Search for query `%s` completed in %s ms", query, milliseconds);
     res.status(statusCodes.success).json(new SuccessResponse({ results }));
@@ -73,4 +68,3 @@ const POST_Search = async (req: Request, res: Response) => {
 };
 
 export default POST_Search;
-

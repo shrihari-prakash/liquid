@@ -8,6 +8,7 @@ const authorizationCodeSchema = {
   user: Object,
   codeChallenge: String,
   codeChallengeMethod: String,
+  scope: Array,
   createdAt: {
     type: Date,
     default: Date.now,

@@ -8,7 +8,7 @@ import { ErrorResponse } from "./response";
 const redisPrefix = "block:";
 export const getBlockStatus = async (sourceId: string, targetId: string, res: any, skipCache = false) => {
   if (Configuration.get("privilege.can-use-cache") && !skipCache) {
-    const cacheResults = await Redis.client.get(`${redisPrefix}${sourceId}_${targetId}`);
+    const cacheResults = await Redis.get(`${redisPrefix}${sourceId}_${targetId}`);
     if (cacheResults) {
       if (cacheResults === "blocked") {
         res &&
@@ -34,13 +34,9 @@ export const getBlockStatus = async (sourceId: string, targetId: string, res: an
         })
       );
   }
-  if (Configuration.get("privilege.can-use-cache")) {
-    await Redis.client.set(
-      `${redisPrefix}${sourceId}_${targetId}`,
-      isBlocked ? "blocked" : "unblocked",
-      "EX",
-      Configuration.get("user.block-status.cache-lifetime") as number
-    );
-  }
+  const cacheKey = `${redisPrefix}${sourceId}_${targetId}`;
+  const cacheValue = isBlocked ? "blocked" : "unblocked";
+  const cacheExpiry = Configuration.get("user.block-status.cache-lifetime");
+  await Redis.setEx(cacheKey, cacheValue, cacheExpiry);
   return isBlocked;
 };
