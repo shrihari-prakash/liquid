@@ -25,6 +25,7 @@ export const errorMessages = {
   invalidField: "InvalidField",
   invalidTarget: "InvalidTarget",
   generationTargetExceededForRequest: "GenerationTargetExceededForRequest",
+  blocked: "Blocked",
   banned: "Banned",
   unauthorized: "Unauthorized",
   insufficientPrivileges: "InsufficientPrivileges",

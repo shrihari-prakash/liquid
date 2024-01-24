@@ -13,7 +13,7 @@ export const getBlockStatus = async (sourceId: string, targetId: string, res: an
       if (cacheResults === "blocked") {
         res &&
           res.status(statusCodes.forbidden).json(
-            new ErrorResponse(errorMessages.forbidden, {
+            new ErrorResponse(errorMessages.blocked, {
               reason: FollowStatus.BLOCKED,
             })
           );
@@ -29,7 +29,7 @@ export const getBlockStatus = async (sourceId: string, targetId: string, res: an
   if (isBlocked) {
     res &&
       res.status(statusCodes.forbidden).json(
-        new ErrorResponse(errorMessages.forbidden, {
+        new ErrorResponse(errorMessages.blocked, {
           reason: FollowStatus.BLOCKED,
         })
       );
