@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel from "../../../model/mongo/user";
-import { isTokenInvalidated } from "../../../utils/sesion";
+import { isTokenInvalidated } from "../../../utils/session";
 
 const GET_SessionState = async (req: Request, res: Response) => {
   try {
