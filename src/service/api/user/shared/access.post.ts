@@ -11,7 +11,7 @@ import { hasErrors } from "../../../../utils/api";
 import UserModel from "../../../../model/mongo/user";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 import ClientModel from "../../../../model/mongo/client";
-import { flushUserInfoFromRedis } from "../../../../model/oauth";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth";
 
 const Operations = {
   ADD: "add",

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import { errorMessages, statusCodes } from "../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import OAuthModel from "../../../model/oauth";
+import OAuthModel from "../../../model/oauth/oauth";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { UserProjection } from "../../../model/mongo/user";
 
@@ -32,8 +32,7 @@ const ALL_Introspect = async (req: Request, res: Response) => {
   tokenInfo.authorizationCode = undefined;
   tokenInfo.refreshToken = undefined;
   tokenInfo.refreshTokenExpiresAt = undefined;
-  // @ts-expect-error: Temporary client object removal for sending response to client.
-  tokenInfo.client = undefined;
+  tokenInfo.client.secret = undefined;
   const allFields = Object.keys(tokenInfo.user);
   for (let i = 0; i < allFields.length; i++) {
     const field = allFields[i] as string;

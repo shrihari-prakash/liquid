@@ -8,7 +8,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import { Pusher } from "../../../singleton/pusher";
 import { PushEvent } from "../../pusher/pusher";
 import { PushEventList } from "../../../enum/push-events";
-import OAuthModel from "../../../model/oauth";
+import OAuthModel from "../../../model/oauth/oauth";
 import { Redis } from "../../../singleton/redis";
 import { Token } from "@node-oauth/oauth2-server";
 

@@ -9,7 +9,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
 import UserModel from "../../../../model/mongo/user";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api";
-import { flushUserInfoFromRedis } from "../../../../model/oauth";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth";
 import { ScopeManager } from "../../../../singleton/scope-manager";
 
 export const POST_BanValidator = [

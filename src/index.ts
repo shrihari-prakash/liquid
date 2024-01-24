@@ -35,7 +35,7 @@ process.env.NODE_ENV = environment;
 log.info("Environment: %s", environment);
 
 import { MongoDB } from "./singleton/mongo-db";
-import { Api } from "./singleton/api/api";
+import { Api } from "./singleton/api";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
 import { Mailer } from "./singleton/mailer";
 import { Redis } from "./singleton/redis";
