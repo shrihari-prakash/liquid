@@ -63,7 +63,7 @@ export const flushUserInfoFromRedis = async (userIds: string | string[]) => {
   }
   for (let i = 0; i < userIds.length; i++) {
     const key = getPrefixedUserId(userIds[i]);
-    await Redis.client.del(key);
+    await Redis.del(key);
     log.debug("User info for %s flushed from cache.", key);
   }
 };
@@ -71,18 +71,16 @@ export const flushUserInfoFromRedis = async (userIds: string | string[]) => {
 const getUserInfo = async (userId: string) => {
   let userInfo;
   if (useTokenCache) {
-    userInfo = await Redis.client.get(getPrefixedUserId(userId));
+    userInfo = await Redis.get(getPrefixedUserId(userId));
   }
   if (!userInfo) {
     userInfo = await UserModel.findById(userId).lean();
     if (useTokenCache) {
-      await Redis.client.set(
+      await Redis.setEx(
         getPrefixedUserId(userId),
         JSON.stringify(userInfo),
-        "EX",
         Configuration.get("oauth.refresh-token-lifetime") as number
       );
-      log.debug("User info for %s written to cache.", userId);
     }
   } else {
     userInfo = JSON.parse(userInfo);
@@ -136,17 +134,15 @@ const OAuthModel: OAuthModel = {
       if (useTokenCache) {
         token.registeredAt = new Date().toISOString();
         const serialized = JSON.stringify(token);
-        await Redis.client.set(
+        await Redis.setEx(
           getPrefixedToken(token.accessToken),
           serialized,
-          "EX",
           Configuration.get("oauth.access-token-lifetime") as number
         );
         if (token.refreshToken)
-          await Redis.client.set(
+          await Redis.setEx(
             getPrefixedToken(token.refreshToken),
             serialized,
-            "EX",
             Configuration.get("oauth.refresh-token-lifetime") as number
           );
         return token;
@@ -164,7 +160,7 @@ const OAuthModel: OAuthModel = {
   getAccessToken: async (accessToken: string) => {
     try {
       if (useTokenCache) {
-        let cacheToken: any = await Redis.client.get(getPrefixedToken(accessToken));
+        let cacheToken: any = await Redis.get(getPrefixedToken(accessToken));
         cacheToken = JSON.parse(cacheToken);
         if (!cacheToken) return null;
         if (!isApplicationClient(cacheToken.user)) {
@@ -214,7 +210,7 @@ const OAuthModel: OAuthModel = {
 
   getRefreshToken: async (refreshToken: string) => {
     if (useTokenCache) {
-      let cacheToken: any = await Redis.client.get(getPrefixedToken(refreshToken));
+      let cacheToken: any = await Redis.get(getPrefixedToken(refreshToken));
       cacheToken = JSON.parse(cacheToken);
       if (!cacheToken) return null;
       if (!isApplicationClient(cacheToken.user)) {
@@ -253,10 +249,10 @@ const OAuthModel: OAuthModel = {
     if (!token) return false;
     if (useTokenCache) {
       if (token.refreshToken) {
-        await Redis.client.del(getPrefixedToken(token.refreshToken));
+        await Redis.del(getPrefixedToken(token.refreshToken));
       }
       if (token.accessToken) {
-        await Redis.client.del(getPrefixedToken(token.accessToken));
+        await Redis.del(getPrefixedToken(token.accessToken));
       }
       return true;
     }
@@ -281,10 +277,9 @@ const OAuthModel: OAuthModel = {
         scope: code.scope,
       };
       if (useTokenCache) {
-        await Redis.client.set(
+        await Redis.setEx(
           getPrefixedCode(authorizationCode.authorizationCode),
           JSON.stringify(authorizationCode),
-          "EX",
           Configuration.get("oauth.authorization-code-lifetime") as number
         );
         return authorizationCode;
@@ -302,7 +297,7 @@ const OAuthModel: OAuthModel = {
   getAuthorizationCode: async (authorizationCode: any) => {
     try {
       if (useTokenCache) {
-        let cacheCode: any = (await Redis.client.get(getPrefixedCode(authorizationCode))) as string;
+        let cacheCode: any = (await Redis.get(getPrefixedCode(authorizationCode))) as string;
         if (!cacheCode) return null;
         cacheCode = JSON.parse(cacheCode) as AuthorizationCode;
         cacheCode.expiresAt = new Date(cacheCode.expiresAt);
@@ -323,7 +318,7 @@ const OAuthModel: OAuthModel = {
     try {
       const code = authorizationCode.authorizationCode;
       if (useTokenCache) {
-        await Redis.client.del(getPrefixedCode(code));
+        await Redis.del(getPrefixedCode(code));
         return true;
       }
       await AuthorizationCodeModel.deleteOne({
