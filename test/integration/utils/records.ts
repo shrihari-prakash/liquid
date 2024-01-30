@@ -20,9 +20,10 @@ export const setupUsers = async () => {
   await ClientModel.deleteMany({});
   await VerificationCodeModel.deleteMany({});
 
+  const mockData = MockData;
   try {
-    await chai.request(app).post("/user/create").send(MemoryStore.users.user1);
-    await chai.request(app).post("/user/create").send(MemoryStore.users.user2);
+    await chai.request(app).post("/user/create").send(mockData.users.user1);
+    await chai.request(app).post("/user/create").send(mockData.users.user2);
   } catch (err) {
     console.error(err);
   }
