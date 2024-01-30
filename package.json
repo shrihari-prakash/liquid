@@ -6,12 +6,11 @@
   "browserslist": "> 0.25%, not dead",
   "scripts": {
     "test": "mocha -r ts-node/register 'test/integration/**/*.spec.ts' --exit --recursive --require test/integration/tester.spec.ts",
+    "start": "concurrently \"nodemon --inspect\" \"npx babel --watch ./src/public/components --out-dir ./src/public/compiled --presets @babel/preset-react\"",
     "build": "npm run build:server && npm run build:static",
     "copy-files": "copyfiles -u 1 \"src/**/*.yaml\" \"src/**/*.html\" \"src/**/*.json\" \"src/VERSION\" build/",
     "build:server": "rimraf ./build && tsc && npm run copy-files",
     "build:static": "gulp static_build",
-    "start:dev": "concurrently \"nodemon --inspect\" \"npx babel --watch ./src/public/components --out-dir ./src/public/compiled --presets @babel/preset-react\"",
-    "start": "npm run build && node build/index.js",
     "pretty": "prettier --write \"./**/*.{js,ts,json}\""
   },
   "keywords": [],

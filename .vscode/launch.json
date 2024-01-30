@@ -9,7 +9,7 @@
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "start:dev"]
+      "runtimeArgs": ["run-script", "start"]
     },
     {
       "name": "Test",
