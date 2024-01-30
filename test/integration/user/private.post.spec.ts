@@ -1,10 +1,13 @@
-import app from "../../../src/index";
 import chai from "chai";
-import MemoryStore from "../store";
+import "chai-http";
+
+import app from "../../../src/index";
 import UserModel, { UserInterface } from "../../../src/model/mongo/user";
+
+import MemoryStore from "../store";
 import { setupUsers } from "../utils/records";
 
-describe("Private", () => {
+describe("private.post", () => {
   before(setupUsers);
 
   it("should test john_doe switching to private account", async () => {
@@ -17,7 +20,9 @@ describe("Private", () => {
         .then(async (res) => {
           try {
             chai.expect(res.status).to.eql(200);
-            const user = (await UserModel.findOne({ _id: MemoryStore.users.user1._id }).exec()) as unknown as UserInterface;
+            const user = (await UserModel.findOne({
+              _id: MemoryStore.users.user1._id,
+            }).exec()) as unknown as UserInterface;
             chai.expect(user.isPrivate).to.be.eq(true);
             return resolve();
           } catch (e) {
@@ -37,7 +42,9 @@ describe("Private", () => {
         .then(async (res) => {
           try {
             chai.expect(res.status).to.eql(200);
-            const user = (await UserModel.findOne({ _id: MemoryStore.users.user1._id }).exec()) as unknown as UserInterface;
+            const user = (await UserModel.findOne({
+              _id: MemoryStore.users.user1._id,
+            }).exec()) as unknown as UserInterface;
             chai.expect(user.isPrivate).to.be.eq(false);
             return resolve();
           } catch (e) {

@@ -1,10 +1,13 @@
+import chai from "chai";
+import "chai-http";
+
 import app from "../../../src/index";
-import chai, { use } from "chai";
 import UserModel from "../../../src/model/mongo/user";
 import VerificationCodeModel from "../../../src/model/mongo/verification-code";
+
 import { MockData } from "../utils/records";
 
-describe("Create", () => {
+describe("create.post", () => {
   before(async () => {
     await UserModel.deleteMany({});
     await VerificationCodeModel.deleteMany({});
@@ -164,7 +167,6 @@ describe("Create", () => {
   });
 
   it("should NOT verify email for john_doe with same code for the second time", async () => {
-    const code = (await VerificationCodeModel.findOne({}).exec()) as any;
     return chai
       .request(app)
       .get("/user/verify-email")

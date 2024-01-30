@@ -1,4 +1,6 @@
 import chai from "chai";
+import "chai-http";
+
 import app from "../../../src";
 import TokenModel from "../../../src/model/mongo/token";
 import UserModel from "../../../src/model/mongo/user";

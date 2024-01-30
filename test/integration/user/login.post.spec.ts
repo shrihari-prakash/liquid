@@ -1,12 +1,16 @@
-import app from "../../../src/index";
 import chai from "chai";
-import { MockData } from "../utils/records";
+import "chai-http";
+
+import app from "../../../src/index";
 import { Configuration } from "../../../src/singleton/configuration";
 import LoginHistoryModel from "../../../src/model/mongo/login-history";
 
-const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0";
+import { MockData } from "../utils/records";
 
-describe("Login", () => {
+const userAgent =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0";
+
+describe("login.post", () => {
   before(async () => {
     await LoginHistoryModel.deleteMany({});
   });
