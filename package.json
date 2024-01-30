@@ -5,7 +5,7 @@
   "main": "index.js",
   "browserslist": "> 0.25%, not dead",
   "scripts": {
-    "test": "mocha -r ts-node/register 'test/integration/**/*.spec.ts' --exit --recursive --require test/integration/index.spec.ts",
+    "test": "mocha -r ts-node/register 'test/integration/**/*.spec.ts' --exit --recursive --require test/integration/tester.spec.ts",
     "build": "npm run build:server && npm run build:static",
     "copy-files": "copyfiles -u 1 \"src/**/*.yaml\" \"src/**/*.html\" \"src/**/*.json\" \"src/VERSION\" build/",
     "build:server": "rimraf ./build && tsc && npm run copy-files",

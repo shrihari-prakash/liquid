@@ -1,15 +1,15 @@
 import chai from "chai";
+import "chai-http";
 
-import app from "../../../../src";
+import app from "../../../../src/index";
 import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
 import MemoryStore from "../../store";
 import { setupUsers } from "../../utils/records";
-import { Configuration } from "../../../../src/singleton/configuration";
 
-describe("Banning", () => {
+describe("ban.post", () => {
   before(setupUsers);
 
-  it("[POST] should ban user", () => {
+  it("should ban user", () => {
     return chai
       .request(app)
       .post(`/user/admin-api/ban`)
@@ -28,7 +28,7 @@ describe("Banning", () => {
       });
   });
 
-  it("[POST] should un-ban user", () => {
+  it("should un-ban user", () => {
     return chai
       .request(app)
       .post(`/user/admin-api/ban`)
