@@ -1,8 +1,8 @@
-import { Logger } from "./singleton/logger";
-const log = Logger.getLogger().child({ from: "main" });
-
 import * as dotenv from "dotenv";
 dotenv.config();
+
+import { Logger } from "./singleton/logger";
+const log = Logger.getLogger().child({ from: "main" });
 
 import * as path from "path";
 import * as fs from "fs";

@@ -6,3 +6,4 @@ build
 compiled
 .env
 !quickstart/.env
+*.log
