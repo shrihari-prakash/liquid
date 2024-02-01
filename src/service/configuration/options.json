@@ -40,6 +40,13 @@
     "default": "debug"
   },
   {
+    "name": "system.log-file-path",
+    "displayName": "Log File Path",
+    "envName": "SYSTEM_LOG_FILE_PATH",
+    "description": "The log file path.",
+    "type": "string"
+  },
+  {
     "name": "system.app-port",
     "displayName": "Application Port",
     "envName": "SYSTEM_APP_PORT",
