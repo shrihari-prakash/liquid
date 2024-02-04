@@ -18,6 +18,7 @@ import PATCH_Update, { PATCH_UpdateValidator } from "./update.patch";
 import GET_SubscriptionTiers from "../shared/subscription-tiers.get";
 import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get";
 import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put";
+import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get";
 
 const AdminApiRouter = express.Router();
 
@@ -35,6 +36,7 @@ AdminApiRouter.get("/subscription-tiers", ...DelegatedAuthFlow, GET_Subscription
 AdminApiRouter.post("/create", ...DelegatedAuthFlow, POST_CreateValidator, POST_Create);
 AdminApiRouter.get("/list", ...DelegatedAuthFlow, GET_List);
 AdminApiRouter.put("/custom-data", ...DelegatedAuthFlow, PUT_CustomDataValidator, PUT_CustomData);
+AdminApiRouter.get("/login-history", ...DelegatedAuthFlow, GET_LoginHistoryValidator, GET_LoginHistory);
 
 const canUseInviteOnly =
   Configuration.get("user.account-creation.enable-invite-only") ||
@@ -45,4 +47,3 @@ if (canUseInviteOnly) {
 }
 
 export default AdminApiRouter;
-

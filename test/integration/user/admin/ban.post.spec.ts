@@ -6,7 +6,7 @@ import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
 import MemoryStore from "../../store";
 import { setupUsers } from "../../utils/records";
 
-describe("ban.post", () => {
+describe("admin-api.ban.post", () => {
   before(setupUsers);
 
   it("should ban user", () => {

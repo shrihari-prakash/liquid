@@ -8,7 +8,7 @@ import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
 import MemoryStore from "../../store";
 import { setupUsers } from "../../utils/records";
 
-describe("subscriptions.post", () => {
+describe("admin-api.subscriptions.post", () => {
   before(setupUsers);
 
   it("should add subscription to user", async () => {

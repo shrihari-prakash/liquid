@@ -6,7 +6,7 @@ import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
 import MemoryStore from "../../store";
 import { setupUsers } from "../../utils/records";
 
-describe("restrict.post", () => {
+describe("admin-api.restrict.post", () => {
   before(setupUsers);
 
   it("should restrict user", () => {

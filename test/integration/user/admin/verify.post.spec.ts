@@ -7,7 +7,7 @@ import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
 import MemoryStore from "../../store";
 import { setupUsers } from "../../utils/records";
 
-describe("verify.post", () => {
+describe("admin-api.verify.post", () => {
   before(setupUsers);
 
   it("should verify user", () => {
