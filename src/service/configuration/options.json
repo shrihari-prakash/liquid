@@ -791,7 +791,7 @@
     "envName": "ADMIN_API_USER_PROFILE_EDITABLE_FIELDS",
     "description": "Comma specified list of fields that are editable by edit profile API.",
     "type": "stringArray",
-    "default": "username,email,password,deleted,role,firstName,lastName,middleName,bio,pronouns,customLink,organization,designation,gender,preferredLanguage,country"
+    "default": "username,email,password,isDeleted,role,firstName,lastName,middleName,bio,pronouns,customLink,organization,designation,gender,preferredLanguage,country"
   },
   {
     "name": "client.id-validation-regex",
