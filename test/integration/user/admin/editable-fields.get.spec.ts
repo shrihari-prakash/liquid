@@ -6,7 +6,7 @@ import { Configuration } from "../../../../src/singleton/configuration";
 
 import { setupUsers } from "../../utils/records";
 
-describe("editable-fields.get", () => {
+describe("admin-api.editable-fields.get", () => {
   before(setupUsers);
 
   it("should get proper editable fields", () => {

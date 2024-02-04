@@ -17,6 +17,7 @@ import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
 import GET_List from "../shared/list.get";
 import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get";
 import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put";
+import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get";
 
 const ClientApiRouter = express.Router();
 
@@ -30,6 +31,7 @@ ClientApiRouter.post("/create", ...ClientAuthFlow, POST_CreateValidator, POST_Cr
 ClientApiRouter.get("/list", ...ClientAuthFlow, GET_List);
 ClientApiRouter.post("/access", ...ClientAuthFlow, POST_AccessValidator, POST_Access);
 ClientApiRouter.put("/custom-data", ...ClientAuthFlow, PUT_CustomDataValidator, PUT_CustomData);
+ClientApiRouter.get("/login-history", ...ClientAuthFlow, GET_LoginHistoryValidator, GET_LoginHistory);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {
@@ -47,4 +49,3 @@ if (canUseInviteOnly) {
 }
 
 export default ClientApiRouter;
-

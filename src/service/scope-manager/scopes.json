@@ -199,6 +199,11 @@
     "parent": "client:profile:write"
   },
   {
+    "name": "client:profile:login-history:read",
+    "description": "Audit login history of user accounts in the system.",
+    "parent": "client:profile:read"
+  },
+  {
     "name": "client:profile:ban:write",
     "description": "Ban and unban user accounts in the system.",
     "parent": "client:profile:all"
@@ -297,6 +302,11 @@
     "name": "admin:profile:write",
     "description": "Edit your profile information of user accounts in the system.",
     "parent": "admin:profile:all"
+  },
+  {
+    "name": "admin:profile:login-history:read",
+    "description": "Audit login history of user accounts in the system.",
+    "parent": "admin:profile:read"
   },
   {
     "name": "admin:profile:access:write",

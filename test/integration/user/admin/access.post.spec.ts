@@ -8,7 +8,7 @@ import { setupUsers } from "../../utils/records";
 import TokenModel from "../../../../src/model/mongo/token";
 import ClientModel from "../../../../src/model/mongo/client";
 
-describe("access.post", () => {
+describe("admin-api.access.post", () => {
   before(setupUsers);
 
   it("should provide passed access to users", async () => {
