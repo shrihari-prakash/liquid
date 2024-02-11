@@ -590,7 +590,7 @@ export const userSchema = {
       write: SensitivityLevel.HIGH,
     },
   },
-  deleted: {
+  isDeleted: {
     type: Boolean,
     required: true,
     default: false,
@@ -704,7 +704,7 @@ export type UserInterface = {
   restrictedDate: Date;
   restrictedBy: string;
   restrictedReason: string;
-  deleted: boolean;
+  isDeleted: boolean;
   deletedDate: Date;
   creationIp: string;
   customData: string;
