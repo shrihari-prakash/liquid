@@ -770,6 +770,14 @@
     "default": "delegated:all"
   },
   {
+    "name": "user.account-creation.custom-data.default-value",
+    "displayName": "User Account Creation Custom Data Default Value",
+    "envName": "USER_ACCOUNT_CREATION_CUSTOM_DATA_DEFAULT_VALUE",
+    "description": "Valid JSON string that should be assigned to users account customData field when they are created.",
+    "type": "string",
+    "default": "{}"
+  },
+  {
     "name": "user.account-creation.verificaton-code-lifetime",
     "displayName": "User Account Creation Verificaton Code Lifetime",
     "envName": "USER_ACCOUNT_CREATION_VERIFICATION_CODE_LIFETIME",

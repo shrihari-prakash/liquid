@@ -2,8 +2,9 @@ import chai from "chai";
 import "chai-http";
 
 import app from "../../../src/index";
-import UserModel from "../../../src/model/mongo/user";
+import UserModel, { UserInterface } from "../../../src/model/mongo/user";
 import VerificationCodeModel from "../../../src/model/mongo/verification-code";
+import { Configuration } from "../../../src/singleton/configuration";
 
 import { MockData } from "../utils/records";
 
@@ -194,5 +195,40 @@ describe("create.post", () => {
       .then((res) => {
         chai.expect(res.status).to.eql(201);
       });
+  });
+
+  describe("test custom data", () => {
+    beforeEach(async () => {
+      await UserModel.deleteMany({});
+      await VerificationCodeModel.deleteMany({});
+    });
+
+    const user = {
+      _id: null,
+      username: "jack_daniels",
+      password: "helloworld",
+      firstName: "Jack",
+      lastName: "Daniels",
+      email: "jackdaniels@example.com",
+      scope: ["*"],
+    };
+
+    it("should create account with proper custom data", async () => {
+      const customData = `{"key" : "value"}`;
+      Configuration.set("user.account-creation.custom-data.default-value", customData);
+      const res = await chai.request(app).post("/user/create").send(user);
+      chai.expect(res.status).to.eql(201);
+      const dbUser = (await UserModel.findOne({ username: user.username })) as unknown as UserInterface;
+      chai.expect(dbUser.customData).to.eql(customData);
+    });
+
+    it("should create account with {} as custom data for invalid configuration", async () => {
+      const customData = `{"key" : invalid`;
+      Configuration.set("user.account-creation.custom-data.default-value", customData);
+      const res = await chai.request(app).post("/user/create").send(user);
+      chai.expect(res.status).to.eql(201);
+      const dbUser = (await UserModel.findOne({ username: user.username })) as unknown as UserInterface;
+      chai.expect(dbUser.customData).to.eql("{}");
+    });
   });
 });
