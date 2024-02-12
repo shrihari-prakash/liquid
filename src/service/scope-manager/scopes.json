@@ -10,10 +10,10 @@
     "parent": "*"
   },
   {
-    "name": "delegated:settings:read",
+    "name": "delegated:system:settings:read",
     "description": "View system settings.",
     "adminDescription": "View system settings on behalf of a user.",
-    "parent": "delegated:system:settings:all"
+    "parent": "delegated:all"
   },
   {
     "name": "delegated:profile:all",
