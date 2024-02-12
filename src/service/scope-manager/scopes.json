@@ -6,121 +6,127 @@
   {
     "name": "delegated:all",
     "description": "View and manage your account.",
+    "adminDescription": "View and manage a user's account on behalf of them using delegated access.",
     "parent": "*"
   },
   {
-    "name": "delegated:system:all",
-    "description": "View and manage the system.",
-    "parent": "delegated:all"
-  },
-  {
-    "name": "delegated:system:settings:all",
-    "description": "View and manage system settings.",
-    "parent": "delegated:system:all"
-  },
-  {
-    "name": "delegated:system:settings:read",
+    "name": "delegated:settings:read",
     "description": "View system settings.",
+    "adminDescription": "View system settings on behalf of a user.",
     "parent": "delegated:system:settings:all"
   },
   {
     "name": "delegated:profile:all",
     "description": "View and manage your profile information.",
+    "adminDescription": "View and manage user profile information on behalf of a user.",
     "parent": "delegated:all"
   },
   {
     "name": "delegated:profile:read",
     "description": "View your profile information.",
+    "adminDescription": "View user profile information on behalf of a user.",
     "parent": "delegated:profile:all"
   },
   {
     "name": "delegated:profile:login-history:read",
     "description": "View your login history information.",
+    "adminDescription": "View login history information on behalf of a user.",
     "parent": "delegated:profile:all"
   },
   {
     "name": "delegated:profile:write",
     "description": "Edit your profile information.",
+    "adminDescription": "Manage user profile information on behalf of a user.",
     "parent": "delegated:profile:all"
   },
   {
     "name": "delegated:profile:2fa:all",
     "description": "View and manage Two-Factor Authentication for your account.",
+    "adminDescription": "View and manage two-factor authentication of user accounts on behalf of them.",
     "parent": "delegated:profile:all"
   },
   {
     "name": "delegated:profile:2fa:write",
     "description": "Manage Two-Factor Authentication for your account.",
+    "adminDescription": "Manage two-factor authentication of user accounts on behalf of a them.",
     "parent": "delegated:profile:2fa:all"
   },
   {
     "name": "delegated:profile:search",
     "description": "Search for people on your behalf.",
+    "adminDescription": "Search for people on behalf of a user.",
     "parent": "delegated:profile:all"
   },
   {
     "name": "delegated:social:all",
     "description": "View and manage information about people you follow and people you've blocked.",
+    "adminDescription": "View and manage social features like following and blocking on behalf of a user.",
     "parent": "delegated:all"
   },
   {
     "name": "delegated:social:follow:all",
     "description": "View and manage your followers and people you follow.",
+    "adminDescription": "View and manage followings and followers of a user on behalf of them.",
     "parent": "delegated:social:all"
   },
   {
     "name": "delegated:social:follow:read",
     "description": "View people you follow and your followers.",
+    "adminDescription": "View followings and followers of a user on behalf of them.",
     "parent": "delegated:social:follow:all"
   },
   {
     "name": "delegated:social:follow:write",
     "description": "Manage people you follow and your followers.",
+    "adminDescription": "Manage followings and followers of a user on behalf of them.",
     "parent": "delegated:social:follow:all"
   },
   {
     "name": "delegated:social:follow:accept",
     "description": "Accept follow requests on your behalf.",
-    "parent": "delegated:social:follow:write"
-  },
-  {
-    "name": "delegated:social:follow:delete",
-    "description": "Delete follow requests on your behalf.",
+    "adminDescription": "Accept follow requests on behalf of a user.",
     "parent": "delegated:social:follow:write"
   },
   {
     "name": "delegated:social:follow:remove",
     "description": "Remove your followers on your behalf.",
+    "adminDescription": "Remove followers on behalf of a user.",
     "parent": "delegated:social:follow:write"
   },
   {
     "name": "delegated:social:follow:request",
     "description": "Follow people on your behalf.",
+    "adminDescription": "Follow people on behalf of a user.",
     "parent": "delegated:social:follow:write"
   },
   {
     "name": "delegated:social:follow:unfollow",
     "description": "Unfollow people on your behalf.",
+    "adminDescription": "Accept follow requests on behalf of a user.",
     "parent": "delegated:social:follow:write"
   },
   {
     "name": "delegated:social:block:all",
     "description": "Block, unblock and view people you've blocked on your behalf.",
+    "adminDescription": "Block, unblock and view people a user has blocked on behalf of them.",
     "parent": "delegated:social:all"
   },
   {
     "name": "delegated:social:block:read",
     "description": "View people you've blocked.",
+    "adminDescription": "View people a user has blocked on behalf of them.",
     "parent": "delegated:social:block:all"
   },
   {
     "name": "delegated:social:block:write",
     "description": "Block people on your behalf.",
+    "adminDescription": "Block people on behalf of a user.",
     "parent": "delegated:social:block:all"
   },
   {
     "name": "delegated:social:invite-code:read",
     "description": "View your invite codes.",
+    "adminDescription": "View invite codes on behalf of a user.",
     "parent": "delegated:social:all"
   },
   {
