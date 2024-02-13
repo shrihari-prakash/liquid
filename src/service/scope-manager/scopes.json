@@ -131,7 +131,7 @@
   },
   {
     "name": "client:all",
-    "description": "View and manage your accounts in the system.",
+    "description": "View and manage accounts in the system using headless application access.",
     "parent": "*"
   },
   {
@@ -246,7 +246,7 @@
   },
   {
     "name": "admin:all",
-    "description": "View and manage user accounts in the system.",
+    "description": "View and manage user accounts in the system using admin APIs.",
     "parent": "*"
   },
   {
