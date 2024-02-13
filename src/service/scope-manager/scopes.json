@@ -207,7 +207,7 @@
   {
     "name": "client:profile:login-history:read",
     "description": "Audit login history of user accounts in the system.",
-    "parent": "client:profile:read"
+    "parent": "client:profile:all"
   },
   {
     "name": "client:profile:ban:write",
