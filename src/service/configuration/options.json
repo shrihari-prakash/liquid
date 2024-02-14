@@ -89,28 +89,18 @@
     "default": "1mb"
   },
   {
-    "name": "system.static.use-relative-path",
-    "displayName": "Static Use Relative Path",
-    "envName": "SYSTEM_STATIC_USE_RELATIVE_PATH",
-    "description": "Specifies if the path in option `system.static-folder` is `relative`.",
+    "name": "system.use-built-in-static-ui",
+    "displayName": "Use Built-In Static UI",
+    "envName": "SYSTEM_USE_BUILT_IN_STATIC UI",
+    "description": "Specifies if Liquid can use it's built-in static UI. Turn this off if you are building your own login and signup pages.",
     "type": "boolean",
-    "default": true,
-    "relatedOptions": ["system.static-folder"]
+    "default": true
   },
   {
-    "name": "system.static-folder",
-    "displayName": "Static Folder",
-    "envName": "SYSTEM_STATIC_FOLDER",
-    "description": "Specifies the name of the folder that contains static HTML files. For example, if you have a file named login.html inside the folder named static in src, navigating to your-domain.com/login will render login.html.",
-    "type": "string",
-    "default": "public",
-    "relatedOptions": ["system.static.use-relative-path"]
-  },
-  {
-    "name": "system.static.app-config-absolute-path",
-    "displayName": "Static App Config Absolute Path",
-    "envName": "SYSTEM_STATIC_APP_CONFIG_ABSOLUTE_PATH",
-    "description": "Specifies the absolute path for frontend configuration file. If not speficied 'app-config.json' in src folder is used.",
+    "name": "system.static.app-config-file-path",
+    "displayName": "Static App Config File Path",
+    "envName": "SYSTEM_STATIC_APP_CONFIG_FILE_PATH",
+    "description": "Specifies the file path for frontend configuration file. Defaults to the contents of https://github.com/shrihari-prakash/liquid/blob/main/src/public/configuration/app-config.sample.json.",
     "type": "string"
   },
   {

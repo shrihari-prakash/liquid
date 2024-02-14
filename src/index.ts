@@ -43,6 +43,7 @@ import { errorMessages, statusCodes } from "./utils/http-status";
 import { ErrorResponse } from "./utils/response";
 import { sanitizeEditableFields } from "./utils/user";
 import { initializeDemo } from "./utils/demo";
+import { StaticRoutes } from "./enum/static-routes";
 
 const app = express();
 app.disable("x-powered-by");
@@ -125,42 +126,36 @@ Mailer.initialize(app);
 // ********** End Singleton Init ********** //
 
 // ********** UI / Static Pages ********** //
-const staticFolder = Configuration.get("system.static.use-relative-path")
-  ? path.join(__dirname, Configuration.get("system.static-folder"))
-  : Configuration.get("system.static-folder");
-log.info("Static path normalized to %s", staticFolder);
-const staticRoutes = ["/", "/login", "/signup", "/get-code", "/verify-account", "/reset-password", "/consent", "/2fa"];
-// Static pages
-app.get(staticRoutes, function (_, res) {
-  // index.html will route to the respective static pages.
-  const index = path.join(staticFolder, "index.html");
-  res.sendFile(index);
-});
-const appConfigAbsolutePath = Configuration.get("system.static.app-config-absolute-path");
-if (appConfigAbsolutePath) {
-  app.get("/app-config.json", function (_, res) {
-    res.sendFile(appConfigAbsolutePath);
+if (Configuration.get("system.use-built-in-static-ui")) {
+  const staticFolder = path.join(__dirname, "public");
+  // Static pages
+  app.get(Object.values(StaticRoutes), function (_, res) {
+    // index.html will route to the respective static pages.
+    const index = path.join(staticFolder, "index.html");
+    res.sendFile(index);
   });
-} else {
-  const localAppConfigPath = path.join(staticFolder, "configuration/app-config.json");
-  if (!fs.existsSync(localAppConfigPath)) {
-    const source = path.join(staticFolder, "configuration/app-config.sample.json");
-    const target = localAppConfigPath;
-    fs.copyFileSync(source, target);
+  let appConfigPath = Configuration.get("system.static.app-config-file-path");
+  if (!appConfigPath) {
+    appConfigPath = path.join(staticFolder, "configuration/app-config.json");
+    if (!fs.existsSync(appConfigPath)) {
+      const source = path.join(staticFolder, "configuration/app-config.sample.json");
+      const target = appConfigPath;
+      fs.copyFileSync(source, target);
+    }
+    log.warn("Frontend config was not found. Please configure option `system.static.app-config-file-path`");
   }
   app.get("/app-config.json", function (_, res) {
-    res.sendFile(localAppConfigPath);
+    res.sendFile(appConfigPath);
   });
-  log.warn("Frontend config was not found. Please configure option `system.static.app-config-absolute-path`");
+  // Static files. Stylesheets, images, etc.
+  app.get(
+    /^.*\.\w+$/,
+    express.static(staticFolder, {
+      index: false,
+      extensions: ["html"],
+    })
+  );
 }
-// Static files. Stylesheets, images, etc.
-app.get(
-  /^.*\.\w+$/,
-  express.static(staticFolder, {
-    index: false,
-    extensions: ["html"],
-  })
-);
 // ********** End UI / Static Pages ********** //
 
 app.all("*", function (_, res) {
