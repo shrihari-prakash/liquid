@@ -1,10 +1,12 @@
 import chai from "chai";
+import "chai-http";
 
 import app from "../../../../src";
-import { setupUsers } from "../../utils/records";
 import { Configuration } from "../../../../src/singleton/configuration";
 
-describe("Editable Fields", () => {
+import { setupUsers } from "../../utils/records";
+
+describe("admin-api.editable-fields.get", () => {
   before(setupUsers);
 
   it("should get proper editable fields", () => {

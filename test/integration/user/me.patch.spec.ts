@@ -1,41 +1,16 @@
-import app from "../../../src/index";
 import chai from "chai";
-import MemoryStore from "../store";
-import { setupUsers } from "../utils/records";
+import "chai-http";
+
+import app from "../../../src/index";
 import UserModel, { UserInterface } from "../../../src/model/mongo/user";
 
-describe("Me", () => {
+import MemoryStore from "../store";
+import { setupUsers } from "../utils/records";
+
+describe("me.patch", () => {
   before(setupUsers);
 
-  it("[GET] should get user john_doe", () => {
-    return chai
-      .request(app)
-      .get("/user/me")
-      .set({ Authorization: `Bearer john_doe_access_token` })
-      .then((res) => {
-        const user = MemoryStore.users.user1;
-        chai.expect(res.status).to.eql(200);
-        chai.expect(res.body.data.user.email).to.eql(user.email);
-        chai.expect(res.body.data.user.firstName).to.eql(user.firstName);
-        chai.expect(res.body.data.user.lastName).to.eql(user.lastName);
-      });
-  });
-
-  it("[GET] should get user rick_asthley", () => {
-    return chai
-      .request(app)
-      .get("/user/me")
-      .set({ Authorization: `Bearer rick_asthley_access_token` })
-      .then((res) => {
-        const user = MemoryStore.users.user2;
-        chai.expect(res.status).to.eql(200);
-        chai.expect(res.body.data.user.email).to.eql(user.email);
-        chai.expect(res.body.data.user.firstName).to.eql(user.firstName);
-        chai.expect(res.body.data.user.lastName).to.eql(user.lastName);
-      });
-  });
-
-  it("[PATCH] should NOT edit first name and last name for rick_asthley for invalid inputs", () => {
+  it("should NOT edit first name and last name for rick_asthley for invalid inputs", () => {
     return new Promise<void>(async (resolve, reject) => {
       const u = {
         firstName: "",
@@ -60,7 +35,7 @@ describe("Me", () => {
     });
   });
 
-  it("[PATCH] should edit first name and last name for rick_asthley", () => {
+  it("should edit first name and last name for rick_asthley", () => {
     return new Promise<void>(async (resolve, reject) => {
       const u = {
         firstName: "Ric",
@@ -85,7 +60,7 @@ describe("Me", () => {
     });
   });
 
-  it("[PATCH] should edit first name and last name for rick_asthley", () => {
+  it("should edit first name and last name for rick_asthley", () => {
     return new Promise<void>(async (resolve, reject) => {
       const u = {
         firstName: "Ric",
@@ -110,7 +85,7 @@ describe("Me", () => {
     });
   });
 
-  it("[PATCH] should NOT edit username rick_asthley without it being in the configuration", () => {
+  it("should NOT edit username rick_asthley without it being in the configuration", () => {
     return new Promise<void>(async (resolve, reject) => {
       const u = {
         username: "rick_asth",
@@ -133,7 +108,7 @@ describe("Me", () => {
     });
   });
 
-  it("[PATCH] should NOT edit username rick_asthley for invalid username", () => {
+  it("should NOT edit username rick_asthley for invalid username", () => {
     return new Promise<void>(async (resolve, reject) => {
       process.env.USER_PROFILE_EDITABLE_FIELDS =
         "firstName,lastName,middleName,password,bio,pronouns,customLink,organization,gender,preferredLanguage,username";
@@ -158,7 +133,7 @@ describe("Me", () => {
     });
   });
 
-  it("[PATCH] should edit username rick_asthley for valid username", () => {
+  it("should edit username rick_asthley for valid username", () => {
     return new Promise<void>(async (resolve, reject) => {
       const u = {
         username: "rick_asth",
@@ -181,7 +156,7 @@ describe("Me", () => {
     });
   });
 
-  it("[PATCH] should NOT edit email rick_asthley without it being in the configuration", () => {
+  it("should NOT edit email rick_asthley without it being in the configuration", () => {
     return new Promise<void>(async (resolve, reject) => {
       const u = {
         email: "rick@example.com",
@@ -204,7 +179,7 @@ describe("Me", () => {
     });
   });
 
-  it("[PATCH] should NOT edit email rick_asthley for invalid email", () => {
+  it("should NOT edit email rick_asthley for invalid email", () => {
     process.env.USER_PROFILE_EDITABLE_FIELDS =
       "firstName,lastName,middleName,password,bio,pronouns,customLink,organization,gender,preferredLanguage,email";
     return new Promise<void>(async (resolve, reject) => {
@@ -229,7 +204,7 @@ describe("Me", () => {
     });
   });
 
-  it("[PATCH] should edit email rick_asthley for valid email", () => {
+  it("should edit email rick_asthley for valid email", () => {
     return new Promise<void>(async (resolve, reject) => {
       const u = {
         email: "rick@example.com",

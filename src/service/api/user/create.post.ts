@@ -160,6 +160,13 @@ const POST_Create = async (req: Request, res: Response) => {
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
     const role = Configuration.get("system.role.default");
     const credits = Configuration.get("user.account-creation.initial-credit-count");
+    let customData = Configuration.get("user.account-creation.custom-data.default-value");
+    try {
+      JSON.parse(customData);
+    } catch {
+      customData = "{}";
+      log.warn("Invalid JSON found in `user.account-creation.custom-data.default-value`.");
+    }
     const toInsert: any = {
       username,
       firstName,
@@ -170,6 +177,7 @@ const POST_Create = async (req: Request, res: Response) => {
       credits,
       scope: Configuration.get("user.account-creation.default-scope"),
       creationIp: req.ip,
+      customData,
     };
     const shouldVerifyEmail = Configuration.get("user.account-creation.require-email-verification");
     if (!shouldVerifyEmail) {

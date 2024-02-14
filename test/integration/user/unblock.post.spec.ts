@@ -1,9 +1,12 @@
-import app from "../../../src/index";
 import chai from "chai";
-import MemoryStore from "../store";
+import "chai-http";
+
+import app from "../../../src/index";
 import BlockModel from "../../../src/model/mongo/block";
 
-describe("Unblock", () => {
+import MemoryStore from "../store";
+
+describe("unblock.post", () => {
   it("should test john_doe unblocking rick_asthley", async () => {
     return new Promise<void>((resolve, reject) => {
       chai

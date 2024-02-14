@@ -1,38 +1,33 @@
 import { Logger } from "../../../../singleton/logger";
-const log = Logger.getLogger().child({ from: "user/client-api/user-followers.get" });
+const log = Logger.getLogger().child({ from: "user/login-history.get" });
 
 import { Request, Response } from "express";
-import { query } from "express-validator";
 import { isValidObjectId } from "mongoose";
+import { query } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import FollowModel from "../../../../model/mongo/follow";
-import { useFollowersQuery } from "../../../../query/followers";
 import { getPaginationLimit } from "../../../../utils/pagination";
 import { ScopeManager } from "../../../../singleton/scope-manager";
-import { hydrateUserProfile } from "../../../../utils/user";
+import LoginHistoryModel from "../../../../model/mongo/login-history";
 
-export const GET_UserFollowersValidator = [
+export const GET_LoginHistoryValidator = [
   query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
 ];
 
-const GET_UserFollowers = async (req: Request, res: Response) => {
+const GET_LoginHistory = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("client:social:follow:read", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:login-history:read", res)) {
       return;
     }
-    const userId = req.query.target as string;
+    const target = req.query.target;
     const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;
-    const query = useFollowersQuery(userId, limit);
+    const query: any = { targetId: target };
     if (offset) {
-      query[0].$match.$and.push({ createdAt: { $lt: new Date(offset) } });
+      query.createdAt = { $gt: new Date(offset) };
     }
-    const records = await FollowModel.aggregate(query).exec();
-    for (let i = 0; i < records.length; i++) {
-      await hydrateUserProfile(records[i].source);
-    }
+    const records = await LoginHistoryModel.find(query).sort({ createdAt: -1 }).limit(limit);
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
     log.error(err);
@@ -40,5 +35,4 @@ const GET_UserFollowers = async (req: Request, res: Response) => {
   }
 };
 
-export default GET_UserFollowers;
-
+export default GET_LoginHistory;
