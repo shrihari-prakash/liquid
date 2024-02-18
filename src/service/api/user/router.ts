@@ -51,10 +51,14 @@ UserRouter.get("/verify-email", ...GET_VerifyEmailValidator, GET_VerifyEmail);
 UserRouter.post("/private", ...DelegatedAuthFlow, ...POST_PrivateValidator, POST_Private);
 UserRouter.get("/code", ...GET_CodeValidator, GET_Code);
 UserRouter.post("/reset-password", ...POST_ResetPasswordValidator, POST_ResetPassword);
-UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
 UserRouter.get("/logout", AuthenticateSilent, GET_Logout);
 UserRouter.get("/logout-all", AuthenticateSilent, GET_LogoutAll);
 UserRouter.get("/scopes", GET_Scopes);
+
+// Search
+if (Configuration.get("privilege.can-use-delegated-user-search-api")) {
+  UserRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
+}
 
 // Invite System
 if (Configuration.get("user.account-creation.enable-invite-only")) {

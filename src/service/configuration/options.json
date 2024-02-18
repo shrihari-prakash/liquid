@@ -533,6 +533,22 @@
     "relatedOptions": ["privilege.can-use-cloud-storage"]
   },
   {
+    "name": "privilege.can-use-delegated-user-search-api",
+    "displayName": "Can Use User Search API (Delegated)",
+    "envName": "CAN_USE_DELEGATED_USER_SEARCH_API",
+    "description": "Specifies if users can search for other users in the system.",
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "name": "privilege.can-use-admin-user-search-api",
+    "displayName": "Can Use User Search API (Admin)",
+    "envName": "CAN_USE_ADMIN_USER_SEARCH_API",
+    "description": "Specifies if admins can search for other users in the system.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "privilege.can-use-cloud-storage",
     "displayName": "Can Use Cloud Storage",
     "envName": "CAN_USE_CLOUD_STORAGE",

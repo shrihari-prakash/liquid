@@ -19,6 +19,7 @@ import GET_SubscriptionTiers from "../shared/subscription-tiers.get";
 import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get";
 import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put";
 import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get";
+import POST_Search, { POST_SearchValidator } from "../search.post";
 
 const AdminApiRouter = express.Router();
 
@@ -44,6 +45,10 @@ const canUseInviteOnly =
 if (canUseInviteOnly) {
   AdminApiRouter.get("/invite-codes", ...DelegatedAuthFlow, GET_InviteCodesValidator, GET_InviteCodes);
   AdminApiRouter.post("/invite-codes", ...DelegatedAuthFlow, POST_InviteCodesValidator, POST_InviteCodes);
+}
+
+if (Configuration.get("privilege.can-use-admin-user-search-api")) {
+  AdminApiRouter.post("/search", ...DelegatedAuthFlow, ...POST_SearchValidator, POST_Search);
 }
 
 export default AdminApiRouter;
