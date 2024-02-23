@@ -30,6 +30,15 @@ const MemoryStore = {
       email: "rickasthley@example.com",
       scope: ["*"],
     },
+    user3: {
+      _id: null,
+      username: "allisson_brooklyn",
+      password: "helloworld",
+      firstName: "Allisson",
+      lastName: "Brooklyn",
+      email: "allissonbrooklyn@example.com",
+      scope: ["*"],
+    },
   },
 };
 
