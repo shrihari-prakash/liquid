@@ -7,7 +7,7 @@ import MemoryStore from "../store";
 import { setupUsers } from "../utils/records";
 
 describe("followers.get", () => {
-  before(setupUsers);
+  beforeEach(setupUsers);
 
   it("test get followers list", async () => {
     const followResponse = await chai
