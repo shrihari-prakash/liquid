@@ -21,6 +21,61 @@ describe("followers.get", () => {
       .get("/user/followers")
       .set({ Authorization: `Bearer rick_asthley_access_token` });
     chai.expect(followingResponse.body.data.records.length).to.be.eq(1);
-    chai.expect(followingResponse.body.data.records[0].email === (MemoryStore.users.user2 as any).email);
+    chai.expect(followingResponse.body.data.records[0].source.email === (MemoryStore.users.user2 as any).email);
+  });
+
+  it("test rick_asthley getting john_doe's followers list", async () => {
+    // allisson follows john
+    const follow1Response = await chai
+      .request(app)
+      .post("/user/follow")
+      .set({ Authorization: `Bearer allisson_brooklyn_access_token` })
+      .send({ target: (MemoryStore.users.user1 as any)._id });
+    chai.expect(follow1Response.status).to.eql(200);
+    // rick follows john
+    const follow2Response = await chai
+      .request(app)
+      .post("/user/follow")
+      .set({ Authorization: `Bearer rick_asthley_access_token` })
+      .send({ target: (MemoryStore.users.user1 as any)._id });
+    chai.expect(follow2Response.status).to.eql(200);
+    // rick gets john's followers
+    const followingResponse = await chai
+      .request(app)
+      .get("/user/" + MemoryStore.users.user1._id + "/followers")
+      .set({ Authorization: `Bearer rick_asthley_access_token` });
+    chai.expect(followingResponse.body.data.records.length).to.be.eq(2);
+    chai.expect(followingResponse.body.data.records[0].source.email).to.eq((MemoryStore.users.user2 as any).email);
+    chai.expect(followingResponse.body.data.records[1].source.email).to.eq((MemoryStore.users.user3 as any).email);
+  });
+
+  it("test allisson_brooklyn blocking rick_asthley in john_doe's followers list", async () => {
+    // allisson blocks rick
+    await chai
+      .request(app)
+      .post("/user/block")
+      .set({ Authorization: `Bearer allisson_brooklyn_access_token` })
+      .send({ target: (MemoryStore.users.user2 as any)._id });
+    // allisson follows john
+    const follow1Response = await chai
+      .request(app)
+      .post("/user/follow")
+      .set({ Authorization: `Bearer allisson_brooklyn_access_token` })
+      .send({ target: (MemoryStore.users.user1 as any)._id });
+    chai.expect(follow1Response.status).to.eql(200);
+    // rick follows john
+    const follow2Response = await chai
+      .request(app)
+      .post("/user/follow")
+      .set({ Authorization: `Bearer rick_asthley_access_token` })
+      .send({ target: (MemoryStore.users.user1 as any)._id });
+    chai.expect(follow2Response.status).to.eql(200);
+    // rick gets john's followers
+    const followingResponse = await chai
+      .request(app)
+      .get("/user/" + MemoryStore.users.user1._id + "/followers")
+      .set({ Authorization: `Bearer rick_asthley_access_token` });
+    chai.expect(followingResponse.body.data.records.length).to.be.eq(1);
+    chai.expect(followingResponse.body.data.records[0].source.email).to.eq((MemoryStore.users.user2 as any).email);
   });
 });
