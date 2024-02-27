@@ -862,7 +862,7 @@
     "envName": "USER_FIELD_PRIVACY_NON_FOLLOWER_HIDDEN_FIELDS",
     "description": "Specifies fields that should be hidden when accounts are retrieved by people who are not following a user.",
     "type": "stringArray",
-    "default": "email,phone,secondaryEmail,secondaryPhone,isBanned,credits,scope,restricted,customData,profilePictureUrl,profilePicturePath"
+    "default": "email,phone,secondaryEmail,secondaryPhone,isBanned,credits,scope,restricted,customData"
   },
   {
     "name": "user.search-results.limit",
