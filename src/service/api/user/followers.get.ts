@@ -10,7 +10,9 @@ import { useFollowersQuery } from "../../../query/followers";
 import { getPaginationLimit } from "../../../utils/pagination";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { getBlockStatus } from "../../../utils/block";
-import { canRequestFollowerInfo, hydrateUserProfile } from "../../../utils/user";
+import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForPublicGet } from "../../../utils/user";
+import { FollowStatus } from "../../../enum/follow-status";
+import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
 
 const GET_Followers = async (req: Request, res: Response) => {
   try {
@@ -23,11 +25,20 @@ const GET_Followers = async (req: Request, res: Response) => {
     // and if the requesting user is following the target user if it is a private account.
     let targetId = req.params.userId;
     if (targetId) {
+      const user = (await UserModel.findOne({ _id: targetId }, UserProjection)
+        .lean()
+        .exec()) as unknown as UserInterface;
       // The first two parameters reversed because we need to find if the target has blocked the source.
       const isBlocked = await getBlockStatus(targetId, loggedInUserId, res);
       if (isBlocked) return;
-      const isFollowerInfoAllowed = await canRequestFollowerInfo({ sourceId: loggedInUserId, targetId, res });
-      if (!isFollowerInfoAllowed) return;
+      const followResults = await isFollowing({ sourceId: loggedInUserId, targets: [user] });
+      if (user.isPrivate && !followResults.results[0]) {
+        return res.status(statusCodes.forbidden).json(
+          new ErrorResponse(errorMessages.forbidden, {
+            reason: FollowStatus.NOT_FOLLOWING,
+          })
+        );
+      }
     } else {
       targetId = loggedInUserId;
     }
@@ -39,8 +50,17 @@ const GET_Followers = async (req: Request, res: Response) => {
       query[0].$match.$and.push({ createdAt: { $lt: new Date(offset) } });
     }
     const records = await FollowModel.aggregate(query).exec();
+    const followers = [];
     for (let i = 0; i < records.length; i++) {
-      await hydrateUserProfile(records[i].source, { delegatedMode: true });
+      const source = records[i].source;
+      followers.push(source);
+      await hydrateUserProfile(source, { delegatedMode: true });
+    }
+    // Strip out some information of users that the current user is not following.
+    const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: followers });
+    for (let i = 0; i < negativeIndices.length; i++) {
+      const index = negativeIndices[i];
+      stripSensitiveFieldsForPublicGet(records[index].source);
     }
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {

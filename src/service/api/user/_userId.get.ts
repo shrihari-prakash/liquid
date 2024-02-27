@@ -9,7 +9,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
 import { getBlockStatus } from "../../../utils/block";
 import { ScopeManager } from "../../../singleton/scope-manager";
-import { canRequestFollowerInfo, hydrateUserProfile } from "../../../utils/user";
+import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForPublicGet } from "../../../utils/user";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
@@ -31,16 +31,9 @@ const GET__UserId = async (req: Request, res: Response) => {
     const isBlocked = await getBlockStatus(targetId, sourceId, res);
     if (isBlocked) return;
     let user = (await UserModel.findOne({ _id: targetId }, UserProjection).exec()) as unknown as UserInterface;
-    const isFollowerInfoAllowed = await canRequestFollowerInfo({ sourceId, target: user });
-    if (!isFollowerInfoAllowed) {
-      // @ts-expect-error
-      user.email = undefined;
-      // @ts-expect-error
-      user.phone = undefined;
-      // @ts-expect-error
-      user.secondaryEmail = undefined;
-      // @ts-expect-error
-      user.secondaryPhone = undefined;
+    const followResults = await isFollowing({ sourceId, targets: [user] });
+    if (user.isPrivate && !followResults.results[0]) {
+      user = stripSensitiveFieldsForPublicGet(user);
     }
     await hydrateUserProfile(user, { delegatedMode: true });
     res.status(statusCodes.success).json(new SuccessResponse({ user }));

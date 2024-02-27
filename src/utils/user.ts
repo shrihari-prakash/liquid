@@ -1,61 +1,70 @@
 import { Logger } from "../singleton/logger";
 const log = Logger.getLogger().child({ from: "user-utils" });
 
-import { Response } from "express";
 import FollowModel from "../model/mongo/follow";
 import UserModel, { UserInterface, UserProjection } from "../model/mongo/user";
 import { Configuration } from "../singleton/configuration";
-import { errorMessages, statusCodes } from "./http-status";
-import { ErrorResponse } from "./response";
-import { FollowStatus } from "../enum/follow-status";
 import { checkSubscription } from "./subscription";
 import { attachProfilePicture } from "./profile-picture";
 
-export const canRequestFollowerInfo = async ({
+interface FollowingResult {
+  results: boolean[];
+  positiveIndices: number[];
+  negativeIndices: number[];
+}
+
+export const isFollowing = async ({
   sourceId,
-  targetId,
-  target,
-  res,
+  targetIds,
+  targets,
 }: {
   sourceId: string;
-  targetId?: string;
-  target?: UserInterface;
-  res?: Response;
-}): Promise<boolean> => {
-  let user = target;
-  if (!user) {
-    user = (await UserModel.findOne({ _id: targetId }, UserProjection).exec()) as unknown as UserInterface;
+  targetIds?: string[];
+  targets?: UserInterface[];
+}): Promise<FollowingResult> => {
+  const results = [];
+  const positiveIndices = [];
+  const negativeIndices = [];
+  if (!Configuration.get("privilege.can-use-follow-apis")) {
+    return { results: [], positiveIndices: [], negativeIndices: [] };
   }
-  if (!user.isPrivate) {
-    return true;
+  if (!targets && targetIds) {
+    targets = [];
+    for (let i = 0; i < targetIds.length; i++) {
+      const user = (await UserModel.findOne({ _id: targetIds[i] }, UserProjection)
+        .lean()
+        .exec()) as unknown as UserInterface;
+      targets.push(user);
+    }
   }
-  if (Configuration.get("privilege.can-use-follow-apis")) {
+  targets = targets as UserInterface[];
+  for (let i = 0; i < targets.length; i++) {
+    let target = targets[i];
     const followEntry = (await FollowModel.findOne({
-      $and: [{ targetId }, { sourceId }],
-    }).exec()) as any;
-    user = JSON.parse(JSON.stringify(user)) as UserInterface;
+      $and: [{ targetId: target._id }, { sourceId }],
+    })
+      .lean()
+      .exec()) as any;
+    target = JSON.parse(JSON.stringify(target)) as UserInterface;
     if (!followEntry) {
-      user.isFollowing = false;
+      target.isFollowing = false;
     } else {
       if (followEntry.approved) {
-        user.isFollowing = true;
+        target.isFollowing = true;
       } else {
-        user.isFollowing = false;
-        user.requested = true;
+        target.isFollowing = false;
+        target.requested = true;
       }
     }
-    if (user.isFollowing) {
-      return true;
+    results.push(target.isFollowing);
+    if (target.isFollowing) {
+      positiveIndices.push(results.length - 1);
+    }
+    if (!target.isFollowing) {
+      negativeIndices.push(results.length - 1);
     }
   }
-  if (res) {
-    res.status(statusCodes.forbidden).json(
-      new ErrorResponse(errorMessages.forbidden, {
-        reason: FollowStatus.NOT_FOLLOWING,
-      })
-    );
-  }
-  return false;
+  return { results, positiveIndices, negativeIndices };
 };
 
 export const sanitizeEditableFields = () => {
@@ -153,4 +162,16 @@ export const hydrateUserProfile = async (user: UserInterface | UserInterface[], 
   } else {
     await _hydrateUserProfile(user, options);
   }
+};
+
+export const stripSensitiveFieldsForPublicGet = (user: UserInterface) => {
+  // @ts-expect-error
+  user.email = undefined;
+  // @ts-expect-error
+  user.phone = undefined;
+  // @ts-expect-error
+  user.secondaryEmail = undefined;
+  // @ts-expect-error
+  user.secondaryPhone = undefined;
+  return user;
 };
