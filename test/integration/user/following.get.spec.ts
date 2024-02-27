@@ -21,6 +21,7 @@ describe("following.get", () => {
       .get("/user/following")
       .set({ Authorization: `Bearer john_doe_access_token` });
     chai.expect(followingResponse.body.data.records.length).to.be.eq(1);
+    chai.expect(followingResponse.body.data.records[0].target.username).to.eq((MemoryStore.users.user2 as any).username);
     chai.expect(followingResponse.body.data.records[0].target.email).to.eq((MemoryStore.users.user2 as any).email);
   });
 
@@ -45,8 +46,8 @@ describe("following.get", () => {
       .get("/user/" + MemoryStore.users.user1._id + "/following")
       .set({ Authorization: `Bearer rick_asthley_access_token` });
     chai.expect(followingResponse.body.data.records.length).to.be.eq(2);
-    chai.expect(followingResponse.body.data.records[0].target.email).to.eq((MemoryStore.users.user2 as any).email);
-    chai.expect(followingResponse.body.data.records[1].target.email).to.eq((MemoryStore.users.user3 as any).email);
+    chai.expect(followingResponse.body.data.records[0].target.username).to.eq((MemoryStore.users.user2 as any).username);
+    chai.expect(followingResponse.body.data.records[1].target.username).to.eq((MemoryStore.users.user3 as any).username);
   });
 
   it("test allisson_brooklyn blocking rick_asthley in john_doe's following list", async () => {
@@ -76,6 +77,6 @@ describe("following.get", () => {
       .get("/user/" + MemoryStore.users.user1._id + "/following")
       .set({ Authorization: `Bearer rick_asthley_access_token` });
     chai.expect(followingResponse.body.data.records.length).to.be.eq(1);
-    chai.expect(followingResponse.body.data.records[0].target.email).to.eq((MemoryStore.users.user2 as any).email);
+    chai.expect(followingResponse.body.data.records[0].target.username).to.eq((MemoryStore.users.user2 as any).username);
   });
 });
