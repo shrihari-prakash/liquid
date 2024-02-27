@@ -164,14 +164,12 @@ export const hydrateUserProfile = async (user: UserInterface | UserInterface[], 
   }
 };
 
-export const stripSensitiveFieldsForPublicGet = (user: UserInterface) => {
-  // @ts-expect-error
-  user.email = undefined;
-  // @ts-expect-error
-  user.phone = undefined;
-  // @ts-expect-error
-  user.secondaryEmail = undefined;
-  // @ts-expect-error
-  user.secondaryPhone = undefined;
+export const stripSensitiveFieldsForNonFollowerGet = (user: UserInterface) => {
+  const fieldsToRemove = Configuration.get("user.field-privacy.non-follower.hidden-fields");
+  for (let i = 0; i < fieldsToRemove.length; i++) {
+    const field = fieldsToRemove[i];
+    // @ts-expect-error
+    user[field] = undefined;
+  }
   return user;
 };

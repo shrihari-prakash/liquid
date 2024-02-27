@@ -9,7 +9,7 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response";
 import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
 import { getBlockStatus } from "../../../utils/block";
 import { ScopeManager } from "../../../singleton/scope-manager";
-import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForPublicGet } from "../../../utils/user";
+import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {
@@ -33,7 +33,7 @@ const GET__UserId = async (req: Request, res: Response) => {
     let user = (await UserModel.findOne({ _id: targetId }, UserProjection).exec()) as unknown as UserInterface;
     const followResults = await isFollowing({ sourceId, targets: [user] });
     if (user.isPrivate && !followResults.results[0]) {
-      user = stripSensitiveFieldsForPublicGet(user);
+      user = stripSensitiveFieldsForNonFollowerGet(user);
     }
     await hydrateUserProfile(user, { delegatedMode: true });
     res.status(statusCodes.success).json(new SuccessResponse({ user }));

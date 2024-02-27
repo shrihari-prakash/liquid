@@ -857,6 +857,14 @@
     "relatedOptions": ["privilege.can-use-cache"]
   },
   {
+    "name": "user.field-privacy.non-follower.hidden-fields",
+    "displayName": "User Field Non-Follower Hidden Fields",
+    "envName": "USER_FIELD_PRIVACY_NON_FOLLOWER_HIDDEN_FIELDS",
+    "description": "Specifies fields that should be hidden when accounts are retrieved by people who are not following a user.",
+    "type": "stringArray",
+    "default": "email,phone,secondaryEmail,secondaryPhone,isBanned,credits,scope,restricted,customData,profilePictureUrl,profilePicturePath"
+  },
+  {
     "name": "user.search-results.limit",
     "displayName": "User Search Results Limit",
     "envName": "USER_SEARCH_RESULTS_LIMIT",

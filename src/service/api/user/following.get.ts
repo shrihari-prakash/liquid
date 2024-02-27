@@ -10,7 +10,7 @@ import { useFollowingQuery } from "../../../query/following";
 import { getPaginationLimit } from "../../../utils/pagination";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { getBlockStatus } from "../../../utils/block";
-import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForPublicGet } from "../../../utils/user";
+import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user";
 import { FollowStatus } from "../../../enum/follow-status";
 import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
 
@@ -59,7 +59,7 @@ const GET_Following = async (req: Request, res: Response) => {
     const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: following });
     for (let i = 0; i < negativeIndices.length; i++) {
       const index = negativeIndices[i];
-      stripSensitiveFieldsForPublicGet(records[index].target);
+      stripSensitiveFieldsForNonFollowerGet(records[index].target);
     }
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
