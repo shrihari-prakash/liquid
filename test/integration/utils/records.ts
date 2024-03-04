@@ -24,6 +24,7 @@ export const setupUsers = async () => {
   try {
     await chai.request(app).post("/user/create").send(mockData.users.user1);
     await chai.request(app).post("/user/create").send(mockData.users.user2);
+    await chai.request(app).post("/user/create").send(mockData.users.user3);
   } catch (err) {
     console.error(err);
   }
@@ -40,10 +41,17 @@ export const setupUsers = async () => {
   (MemoryStore.users.user2 as any) = users[1];
   MemoryStore.users.user2.password = user2password;
   MemoryStore.users.user2._id = (MemoryStore.users.user2._id as any).toString();
-  MemoryStore.users.user1.scope = ["*"];
+  MemoryStore.users.user2.scope = ["*"];
+
+  const user3password = MemoryStore.users.user3.password;
+  (MemoryStore.users.user3 as any) = users[2];
+  MemoryStore.users.user3.password = user3password;
+  MemoryStore.users.user3._id = (MemoryStore.users.user3._id as any).toString();
+  MemoryStore.users.user3.scope = ["*"];
 
   await UserModel.updateOne({ email: MemoryStore.users.user1.email }, { $set: { emailVerified: true, scope: ["*"] } });
   await UserModel.updateOne({ email: MemoryStore.users.user2.email }, { $set: { emailVerified: true, scope: ["*"] } });
+  await UserModel.updateOne({ email: MemoryStore.users.user3.email }, { $set: { emailVerified: true, scope: ["*"] } });
 
   const token1 = {
     accessToken: "john_doe_access_token",
@@ -67,6 +75,17 @@ export const setupUsers = async () => {
     user: MemoryStore.users.user2,
   };
   await new TokenModel(token2).save();
+  const token3 = {
+    accessToken: "allisson_brooklyn_access_token",
+    authorizationCode: "allisson_brooklyn_access_token",
+    accessTokenExpiresAt: "9999-01-01T00:00:00.000Z",
+    refreshToken: "allisson_brooklyn_refresh_token",
+    refreshTokenExpiresAt: "9999-01-01T00:00:00.000Z",
+    scope: ["*"],
+    client: { ...MemoryStore.client },
+    user: MemoryStore.users.user3,
+  };
+  await new TokenModel(token3).save();
   await new ClientModel(MemoryStore.client).save();
   const client = await ClientModel.findOne({ id: MemoryStore.client.id });
   MemoryStore.client._id = (client as unknown as any)._id;

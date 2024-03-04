@@ -10,35 +10,56 @@ import { useFollowingQuery } from "../../../query/following";
 import { getPaginationLimit } from "../../../utils/pagination";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { getBlockStatus } from "../../../utils/block";
-import { canRequestFollowerInfo, hydrateUserProfile } from "../../../utils/user";
+import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user";
+import { FollowStatus } from "../../../enum/follow-status";
+import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
 
 const GET_Following = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:read", res)) {
       return;
     }
-    let loggedInUserId = res.locals.oauth.token.user._id;
+    const loggedInUserId = res.locals.oauth.token.user._id;
     // both `/users/following` and `/users/:userId/following` share the same code. If there is a userId in params,
     // then we do some additional checks like if the target user has blocked the one requesting the API
     // and if the requesting user is following the target user if it is a private account.
-    const targetId = req.params.userId;
+    let targetId = req.params.userId;
     if (targetId) {
+      const user = (await UserModel.findOne({ _id: targetId }, UserProjection)
+        .lean()
+        .exec()) as unknown as UserInterface;
       // The first two parameters reversed because we need to find if the target has blocked the source.
       const isBlocked = await getBlockStatus(targetId, loggedInUserId, res, true);
       if (isBlocked) return;
-      const isFollowerInfoAllowed = await canRequestFollowerInfo({ sourceId: loggedInUserId, targetId, res });
-      if (!isFollowerInfoAllowed) return;
-      loggedInUserId = targetId;
+      const followResults = await isFollowing({ sourceId: loggedInUserId, targets: [user] });
+      if (user.isPrivate && !followResults.results[0]) {
+        return res.status(statusCodes.forbidden).json(
+          new ErrorResponse(errorMessages.forbidden, {
+            reason: FollowStatus.NOT_FOLLOWING,
+          })
+        );
+      }
+    } else {
+      targetId = loggedInUserId;
     }
     const limit = getPaginationLimit(req.query.limit as string);
     const offset = req.query.offset as string;
-    const query = useFollowingQuery(loggedInUserId, limit);
+    const query = useFollowingQuery(targetId, limit, loggedInUserId);
     if (offset) {
       query[0].$match.$and.push({ createdAt: { $lt: new Date(offset) } });
     }
     const records = await FollowModel.aggregate(query).exec();
+    const following = [];
     for (let i = 0; i < records.length; i++) {
-      await hydrateUserProfile(records[i].target, { delegatedMode: true });
+      const target = records[i].target;
+      following.push(target);
+      await hydrateUserProfile(target, { delegatedMode: true });
+    }
+    // Strip out some information of users that the current user is not following.
+    const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: following });
+    for (let i = 0; i < negativeIndices.length; i++) {
+      const index = negativeIndices[i];
+      stripSensitiveFieldsForNonFollowerGet(records[index].target);
     }
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
@@ -48,4 +69,3 @@ const GET_Following = async (req: Request, res: Response) => {
 };
 
 export default GET_Following;
-
