@@ -69,11 +69,6 @@ const POST_Search = async (req: Request, res: Response) => {
       Configuration.get("user.search-results.limit")
     )) as unknown as UserInterface[];
     await hydrateUserProfile(results);
-    const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: results });
-    for (let i = 0; i < negativeIndices.length; i++) {
-      const index = negativeIndices[i];
-      stripSensitiveFieldsForNonFollowerGet(results[index]);
-    }
     const cacheKey = `${redisPrefix}${query}`;
     const cacheValue = JSON.stringify(results);
     const cacheExpiry = Configuration.get("user.search-results.cache-lifetime");
@@ -81,6 +76,11 @@ const POST_Search = async (req: Request, res: Response) => {
     const milliseconds = +new Date() - startTime;
     log.info("Search for query `%s` completed in %s ms", query, milliseconds);
     const filteredResults = await filterBlockedUsers(loggedInUserId, results);
+    const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: results });
+    for (let i = 0; i < negativeIndices.length; i++) {
+      const index = negativeIndices[i];
+      stripSensitiveFieldsForNonFollowerGet(results[index]);
+    }
     res.status(statusCodes.success).json(new SuccessResponse({ results: filteredResults }));
   } catch (err) {
     log.error(err);
