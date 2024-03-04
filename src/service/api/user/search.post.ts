@@ -76,10 +76,10 @@ const POST_Search = async (req: Request, res: Response) => {
     const milliseconds = +new Date() - startTime;
     log.info("Search for query `%s` completed in %s ms", query, milliseconds);
     const filteredResults = await filterBlockedUsers(loggedInUserId, results);
-    const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: results });
+    const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: filteredResults });
     for (let i = 0; i < negativeIndices.length; i++) {
       const index = negativeIndices[i];
-      stripSensitiveFieldsForNonFollowerGet(results[index]);
+      stripSensitiveFieldsForNonFollowerGet(filteredResults[index]);
     }
     res.status(statusCodes.success).json(new SuccessResponse({ results: filteredResults }));
   } catch (err) {
