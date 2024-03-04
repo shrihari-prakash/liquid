@@ -19,7 +19,7 @@ import GET_SubscriptionTiers from "../shared/subscription-tiers.get";
 import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get";
 import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put";
 import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get";
-import POST_Search, { POST_SearchValidator } from "../search.post";
+import POST_Search, { POST_SearchValidator } from "./search.post";
 
 const AdminApiRouter = express.Router();
 

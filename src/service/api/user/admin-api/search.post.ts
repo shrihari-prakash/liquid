@@ -1,19 +1,19 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger";
 const log = Logger.getLogger().child({ from: "user/search.post" });
 
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
+import { errorMessages, statusCodes } from "../../../../utils/http-status";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
+import UserModel, { UserInterface, UserProjection } from "../../../../model/mongo/user";
 import { body } from "express-validator";
-import { hasErrors } from "../../../utils/api";
-import { Redis } from "../../../singleton/redis";
-import { Configuration } from "../../../singleton/configuration";
-import { ScopeManager } from "../../../singleton/scope-manager";
+import { hasErrors } from "../../../../utils/api";
+import { Redis } from "../../../../singleton/redis";
+import { Configuration } from "../../../../singleton/configuration";
+import { ScopeManager } from "../../../../singleton/scope-manager";
 import { isValidObjectId } from "mongoose";
-import { hydrateUserProfile, isFollowing, stripSensitiveFieldsForPublicGet } from "../../../utils/user";
-import BlockModel from "../../../model/mongo/block";
+import { hydrateUserProfile } from "../../../../utils/user";
+import BlockModel from "../../../../model/mongo/block";
 
 export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
 
@@ -69,11 +69,6 @@ const POST_Search = async (req: Request, res: Response) => {
       Configuration.get("user.search-results.limit")
     )) as unknown as UserInterface[];
     await hydrateUserProfile(results);
-    const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: results });
-    for (let i = 0; i < negativeIndices.length; i++) {
-      const index = negativeIndices[i];
-      stripSensitiveFieldsForPublicGet(results[index]);
-    }
     const cacheKey = `${redisPrefix}${query}`;
     const cacheValue = JSON.stringify(results);
     const cacheExpiry = Configuration.get("user.search-results.cache-lifetime");
