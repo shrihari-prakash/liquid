@@ -19,7 +19,7 @@ export const POST_SearchValidator = [body("query").exists().isString().isLength(
 const redisPrefix = "search:";
 const POST_Search = async (req: Request, res: Response) => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("delegated:profile:search", res)) {
+    if (!ScopeManager.isScopeAllowedForSession("admin:profile:search", res)) {
       return;
     }
     if (hasErrors(req, res)) return;
@@ -33,12 +33,12 @@ const POST_Search = async (req: Request, res: Response) => {
     }
     log.info("Cache miss for query: " + query);
     const queryRegex = new RegExp(query, "i");
-    const $or = Configuration.get("user.search.search-fields").map((field: string) => ({ [field]: queryRegex }));
-    if (Configuration.get("privilege.user.search.can-use-id") && isValidObjectId(query)) {
+    const $or = Configuration.get("admin-api.user.search.search-fields").map((field: string) => ({ [field]: queryRegex }));
+    if (Configuration.get("admin-api.privilege.user.search.can-use-id") && isValidObjectId(query)) {
       log.debug("Search by ID is enabled.");
       $or.push({ _id: query });
     }
-    if (Configuration.get("privilege.user.search.can-use-fullname")) {
+    if (Configuration.get("admin-api.privilege.user.search.can-use-fullname")) {
       log.debug("Search by Full Name is enabled.");
       $or.push({
         $expr: {
@@ -52,12 +52,12 @@ const POST_Search = async (req: Request, res: Response) => {
     }
     log.debug("Search query is: %o", $or);
     const results = (await UserModel.find({ $or }, UserProjection).limit(
-      Configuration.get("user.search-results.limit")
+      Configuration.get("admin-api.user.search-results.limit")
     )) as unknown as UserInterface[];
     await hydrateUserProfile(results);
     const cacheKey = `${redisPrefix}${query}`;
     const cacheValue = JSON.stringify(results);
-    const cacheExpiry = Configuration.get("user.search-results.cache-lifetime");
+    const cacheExpiry = Configuration.get("admin-api.user.search-results.cache-lifetime");
     await Redis.setEx(cacheKey, cacheValue, cacheExpiry);
     const milliseconds = +new Date() - startTime;
     log.info("Search for query `%s` completed in %s ms", query, milliseconds);
