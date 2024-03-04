@@ -36,6 +36,7 @@ export const useFollowingQuery: any = (userId: string, limit: number, requesterI
         },
       },
       { $match: { blocks: { $size: 0 } } },
+      { $unset: "blocks" },
     ];
   }
   query.push({ $project: { __v: 0, sourceId: 0, targetId: 0, approved: 0, updatedAt: 0 } });
