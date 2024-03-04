@@ -12,7 +12,7 @@ import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { isValidObjectId } from "mongoose";
-import { hydrateUserProfile, isFollowing, stripSensitiveFieldsForPublicGet } from "../../../utils/user";
+import { hydrateUserProfile, isFollowing, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user";
 import BlockModel from "../../../model/mongo/block";
 
 export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
@@ -72,7 +72,7 @@ const POST_Search = async (req: Request, res: Response) => {
     const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: results });
     for (let i = 0; i < negativeIndices.length; i++) {
       const index = negativeIndices[i];
-      stripSensitiveFieldsForPublicGet(results[index]);
+      stripSensitiveFieldsForNonFollowerGet(results[index]);
     }
     const cacheKey = `${redisPrefix}${query}`;
     const cacheValue = JSON.stringify(results);
