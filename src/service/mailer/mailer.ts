@@ -1,4 +1,4 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "mailer" });
 
 import sgMail from "@sendgrid/mail";
@@ -6,10 +6,10 @@ import nodemailer from "nodemailer";
 import * as path from "path";
 import * as fs from "fs";
 
-import { Configuration } from "../../singleton/configuration";
-import { UserInterface } from "../../model/mongo/user";
-import VerificationCodeModel from "../../model/mongo/verification-code";
-import { VerificationCodeType } from "../../enum/verification-code";
+import { Configuration } from "../../singleton/configuration.js";
+import { UserInterface } from "../../model/mongo/user.js";
+import VerificationCodeModel from "../../model/mongo/verification-code.js";
+import { VerificationCodeType } from "../../enum/verification-code.js";
 import { v4 as uuidv4 } from "uuid";
 
 const Modes = {

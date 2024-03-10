@@ -1,11 +1,11 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "events" });
 
 import { v4 as uuidv4 } from "uuid";
 
-import { Configuration } from "../../singleton/configuration";
-import { RabbitMQ } from "../../singleton/rabbitmq";
-import { RedisPublisher } from "../../singleton/redis-publisher";
+import { Configuration } from "../../singleton/configuration.js";
+import { RabbitMQ } from "../../singleton/rabbitmq.js";
+import { RedisPublisher } from "../../singleton/redis-publisher.js";
 
 export class PushEvent {
   id = uuidv4();

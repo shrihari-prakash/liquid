@@ -1,13 +1,13 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "client/admin-api/list.get" });
 
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { getPaginationLimit } from "../../../../utils/pagination";
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import ClientModel from "../../../../model/mongo/client";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import { getPaginationLimit } from "../../../../utils/pagination.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import ClientModel from "../../../../model/mongo/client.js";
 
 const GET_List = async (req: Request, res: Response) => {
   try {

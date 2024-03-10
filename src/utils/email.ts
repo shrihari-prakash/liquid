@@ -1,4 +1,4 @@
-import { Configuration } from "../singleton/configuration";
+import { Configuration } from "../singleton/configuration.js";
 
 export const sanitizeEmailAddress = (email: string) => {
   email = email.toLowerCase();

@@ -1,7 +1,7 @@
-import { Logger } from "../singleton/logger";
+import { Logger } from "../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "follow-util" });
 
-import UserModel from "../model/mongo/user";
+import UserModel from "../model/mongo/user.js";
 
 export function updateFollowCount(sourceId: string, targetId: string, count: number, opts?: { session: any } | null) {
   return new Promise<void>((resolve, reject) => {

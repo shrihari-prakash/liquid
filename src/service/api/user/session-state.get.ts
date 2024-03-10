@@ -1,12 +1,12 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/session-state.get" });
 
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel from "../../../model/mongo/user";
-import { isTokenInvalidated } from "../../../utils/session";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import UserModel from "../../../model/mongo/user.js";
+import { isTokenInvalidated } from "../../../utils/session.js";
 
 const GET_SessionState = async (req: Request, res: Response) => {
   try {

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { errorMessages, statusCodes } from "./http-status";
-import { ErrorResponse } from "./response";
+import { errorMessages, statusCodes } from "./http-status.js";
+import { ErrorResponse } from "./response.js";
 
 import { validationResult } from "express-validator";
 

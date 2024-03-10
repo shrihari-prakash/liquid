@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import fs from "fs";
 
-import { statusCodes } from "../../../utils/http-status";
-import { SuccessResponse } from "../../../utils/response";
+import { statusCodes } from "../../../utils/http-status.js";
+import { SuccessResponse } from "../../../utils/response.js";
 import path from "path";
 import {fileURLToPath} from 'url';
 

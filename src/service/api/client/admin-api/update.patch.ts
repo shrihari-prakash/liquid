@@ -1,17 +1,17 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "client/admin-api/update.patch" });
 
 import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
 import { body } from "express-validator";
 
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import { hasErrors } from "../../../../utils/api";
-import ClientModel, { clientSchema } from "../../../../model/mongo/client";
-import Role from "../../../../enum/role";
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { Configuration } from "../../../../singleton/configuration";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { hasErrors } from "../../../../utils/api.js";
+import ClientModel, { clientSchema } from "../../../../model/mongo/client.js";
+import Role from "../../../../enum/role.js";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import { Configuration } from "../../../../singleton/configuration.js";
 
 export const PATCH_UpdateValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

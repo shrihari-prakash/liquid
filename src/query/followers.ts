@@ -1,5 +1,5 @@
 import { mongo } from "mongoose";
-import { UserProjection } from "../model/mongo/user";
+import { UserProjection } from "../model/mongo/user.js";
 
 export const useFollowersQuery: any = (userId: string, limit: number, requesterId: string) => {
   let query: any = [

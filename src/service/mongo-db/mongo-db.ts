@@ -1,10 +1,10 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "mongo-db" });
 
 import mongoose, { ClientSession, Connection } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
-import { Configuration } from "../../singleton/configuration";
+import { Configuration } from "../../singleton/configuration.js";
 
 export class MongoDB {
   connection!: Connection;

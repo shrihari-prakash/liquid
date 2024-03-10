@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { Request as OAuthRequest, Response as OAuthResponse } from "@node-oauth/oauth2-server";
 
-import Role from "../../../enum/role";
-import { OAuthServer } from "../../../singleton/oauth-server";
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse } from "../../../utils/response";
+import Role from "../../../enum/role.js";
+import { OAuthServer } from "../../../singleton/oauth-server.js";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse } from "../../../utils/response.js";
 
 const AuthenticateUser = async (_: Request, res: Response, next: NextFunction) => {
   try {

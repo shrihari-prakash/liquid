@@ -1,13 +1,13 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/client-api/block-status.get" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { getBlockStatus } from "../../../../utils/block";
-import { ScopeManager } from "../../../../singleton/scope-manager";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import { getBlockStatus } from "../../../../utils/block.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
 
 export const GET_BlockStatusValidator = [
   query("source").exists().isString().isLength({ min: 8, max: 128 }),

@@ -1,8 +1,8 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "redis" });
 
 import IORedis from "ioredis";
-import { Configuration } from "../../singleton/configuration";
+import { Configuration } from "../../singleton/configuration.js";
 
 class Redis {
   client;
@@ -13,7 +13,7 @@ class Redis {
     }
     const host = Configuration.get("redis.host") as string;
     const port = Configuration.get("redis.port") as number;
-    this.client = new IORedis({
+    this.client = new IORedis.default({
       port: port,
       host: host,
       username: Configuration.get("redis.username") as string,

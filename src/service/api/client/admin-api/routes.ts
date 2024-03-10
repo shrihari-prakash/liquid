@@ -1,9 +1,9 @@
 import express from "express";
-import { DelegatedAuthFlow } from "../../middleware/authenticate";
-import POST_Create, { POST_CreateValidator } from "./create.post";
-import GET_List from "./list.get";
-import DELETE_Delete, { DELETE_DeleteValidator } from "./delete.delete";
-import PATCH_Update, { PATCH_UpdateValidator } from "./update.patch";
+import { DelegatedAuthFlow } from "../../middleware/authenticate.js";
+import POST_Create, { POST_CreateValidator } from "./create.post.js";
+import GET_List from "./list.get.js";
+import DELETE_Delete, { DELETE_DeleteValidator } from "./delete.delete.js";
+import PATCH_Update, { PATCH_UpdateValidator } from "./update.patch.js";
 
 const ClientAdminRouter = express.Router();
 

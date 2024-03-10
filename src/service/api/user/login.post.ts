@@ -1,25 +1,25 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/login.post" });
 
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { body } from "express-validator";
 
-import UserModel, { UserInterface } from "../../../model/mongo/user";
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { hasErrors } from "../../../utils/api";
-import { Pusher } from "../../../singleton/pusher";
-import { PushEvent } from "../../pusher/pusher";
-import { PushEventList } from "../../../enum/push-events";
-import { sanitizeEmailAddress } from "../../../utils/email";
-import UserValidator from "../../../validator/user";
-import { Mailer } from "../../../singleton/mailer";
-import { VerificationCodeType } from "../../../enum/verification-code";
-import { Configuration } from "../../../singleton/configuration";
-import LoginHistoryModel, { LoginHistoryInterface } from "../../../model/mongo/login-history";
-import { isEmail2FA } from "../../../utils/2fa";
-import { LoginFailure } from "../../../enum/login-failure";
+import UserModel, { UserInterface } from "../../../model/mongo/user.js";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { hasErrors } from "../../../utils/api.js";
+import { Pusher } from "../../../singleton/pusher.js";
+import { PushEvent } from "../../pusher/pusher.js";
+import { PushEventList } from "../../../enum/push-events.js";
+import { sanitizeEmailAddress } from "../../../utils/email.js";
+import UserValidator from "../../../validator/user.js";
+import { Mailer } from "../../../singleton/mailer.js";
+import { VerificationCodeType } from "../../../enum/verification-code.js";
+import { Configuration } from "../../../singleton/configuration.js";
+import LoginHistoryModel, { LoginHistoryInterface } from "../../../model/mongo/login-history.js";
+import { isEmail2FA } from "../../../utils/2fa.js";
+import { LoginFailure } from "../../../enum/login-failure.js";
 
 const userValidator = new UserValidator(body);
 

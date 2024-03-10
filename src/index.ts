@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import { Logger } from "./singleton/logger";
+import { Logger } from "./singleton/logger.js";
 const log = Logger.getLogger().child({ from: "main" });
 
 import * as path from "path";
@@ -32,21 +32,21 @@ const banner = `
 `;
 log.info(banner);
 
-import { Configuration } from "./singleton/configuration";
+import { Configuration } from "./singleton/configuration.js";
 const environment = Configuration.get("environment");
 process.env.NODE_ENV = environment;
 log.info("Environment: %s", environment);
 
-import { MongoDB } from "./singleton/mongo-db";
-import { Api } from "./singleton/api";
-import { activateRateLimiters } from "./service/rate-limiter/rate-limiter";
-import { Mailer } from "./singleton/mailer";
-import { Redis } from "./singleton/redis";
-import { errorMessages, statusCodes } from "./utils/http-status";
-import { ErrorResponse } from "./utils/response";
-import { sanitizeEditableFields } from "./utils/user";
-import { initializeDemo } from "./utils/demo";
-import { StaticRoutes } from "./enum/static-routes";
+import { MongoDB } from "./singleton/mongo-db.js";
+import { Api } from "./singleton/api.js";
+import { activateRateLimiters } from "./service/rate-limiter/rate-limiter.js";
+import { Mailer } from "./singleton/mailer.js";
+import { Redis } from "./singleton/redis.js";
+import { errorMessages, statusCodes } from "./utils/http-status.js";
+import { ErrorResponse } from "./utils/response.js";
+import { sanitizeEditableFields } from "./utils/user.js";
+import { initializeDemo } from "./utils/demo.js";
+import { StaticRoutes } from "./enum/static-routes.js";
 
 const app = express();
 app.disable("x-powered-by");

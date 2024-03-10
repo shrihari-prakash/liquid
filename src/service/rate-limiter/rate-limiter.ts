@@ -1,13 +1,13 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "rate-limiter" });
 
 import rateLimit from "express-rate-limit";
 import RedisStore from "rate-limit-redis";
 
-import { Configuration } from "../../singleton/configuration";
-import { errorMessages } from "../../utils/http-status";
-import { ErrorResponse } from "../../utils/response";
-import { Redis } from "../../singleton/redis";
+import { Configuration } from "../../singleton/configuration.js";
+import { errorMessages } from "../../utils/http-status.js";
+import { ErrorResponse } from "../../utils/response.js";
+import { Redis } from "../../singleton/redis.js";
 import { Request } from "express";
 
 const message = async () => {

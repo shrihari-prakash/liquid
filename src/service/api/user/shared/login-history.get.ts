@@ -1,15 +1,15 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/login-history.get" });
 
 import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
 import { query } from "express-validator";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { getPaginationLimit } from "../../../../utils/pagination";
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import LoginHistoryModel from "../../../../model/mongo/login-history";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import { getPaginationLimit } from "../../../../utils/pagination.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import LoginHistoryModel from "../../../../model/mongo/login-history.js";
 
 export const GET_LoginHistoryValidator = [
   query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

@@ -1,17 +1,17 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/follow-request.patch" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
 import { isValidObjectId } from "mongoose";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import FollowModel from "../../../model/mongo/follow";
-import { updateFollowCount } from "../../../utils/follow";
-import { hasErrors } from "../../../utils/api";
-import { MongoDB } from "../../../singleton/mongo-db";
-import { ScopeManager } from "../../../singleton/scope-manager";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import FollowModel from "../../../model/mongo/follow.js";
+import { updateFollowCount } from "../../../utils/follow.js";
+import { hasErrors } from "../../../utils/api.js";
+import { MongoDB } from "../../../singleton/mongo-db.js";
+import { ScopeManager } from "../../../singleton/scope-manager.js";
 
 export const PATCH_FollowRequestValidator = [body("request").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 

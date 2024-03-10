@@ -1,7 +1,7 @@
 import express from "express";
 
-import SystemAdminRouter from "./admin-api/routes";
-import GET_Client, { GET_ClientValidator } from "./client.get";
+import SystemAdminRouter from "./admin-api/routes.js";
+import GET_Client, { GET_ClientValidator } from "./client.get.js";
 
 const ClientRouter = express.Router();
 
