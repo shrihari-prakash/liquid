@@ -45,7 +45,7 @@ export default function Login() {
   };
 
   function onFieldError({ response, buttonText }) {
-    let errorField = response.responseJSON.additionalInfo.errors[0].param;
+    let errorField = response.responseJSON.additionalInfo.errors[0].path;
     errorField = errorField.charAt(0).toUpperCase() + errorField.slice(1);
     onSubmitError({ errorText: "Invalid " + errorField, buttonText });
     return;

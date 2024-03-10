@@ -39,7 +39,7 @@ describe("create.post", () => {
         .send(u)
         .then((res) => {
           chai.expect(res.status).to.eql(400);
-          chai.expect(res.body.additionalInfo.errors[0].param).to.eql("username");
+          chai.expect(res.body.additionalInfo.errors[0].path).to.eql("username");
           chai.expect(res.body.additionalInfo.errors[0].value).to.eql(u.username);
         });
     });
@@ -81,7 +81,7 @@ describe("create.post", () => {
         .send(u)
         .then((res) => {
           chai.expect(res.status).to.eql(400);
-          chai.expect(res.body.additionalInfo.errors[0].param).to.eql("firstName");
+          chai.expect(res.body.additionalInfo.errors[0].path).to.eql("firstName");
           chai.expect(res.body.additionalInfo.errors[0].value).to.eql(u.firstName);
         });
     });
@@ -105,7 +105,7 @@ describe("create.post", () => {
         .send(u)
         .then((res) => {
           chai.expect(res.status).to.eql(400);
-          chai.expect(res.body.additionalInfo.errors[0].param).to.eql("lastName");
+          chai.expect(res.body.additionalInfo.errors[0].path).to.eql("lastName");
           chai.expect(res.body.additionalInfo.errors[0].value).to.eql(u.lastName);
         });
     });
@@ -136,7 +136,7 @@ describe("create.post", () => {
         .send(u)
         .then((res) => {
           chai.expect(res.status).to.eql(400);
-          chai.expect(res.body.additionalInfo.errors[0].param).to.eql("email");
+          chai.expect(res.body.additionalInfo.errors[0].path).to.eql("email");
           chai.expect(res.body.additionalInfo.errors[0].value).to.eql(u.email);
         });
     });
