@@ -2,14 +2,14 @@ import gulp from "gulp";
 import babel from "gulp-babel";
 import debug from "gulp-debug";
 import replace from "gulp-replace";
-import del from "del";
+import { deleteAsync } from "del";
 
 export function staticCopy() {
   return gulp.src("./src/public/**/*").pipe(gulp.dest("build/public"));
 }
 
 export function staticClean() {
-  return del(["./build/public/components"]);
+  return deleteAsync(["./build/public/components"]);
 }
 
 export function staticCompile() {
