@@ -35,10 +35,10 @@ export class Configuration {
   public get(name: string, defaultValue?: any, delim = ",") {
     const option: Option = this.options[name];
     if (!option) return defaultValue || undefined;
-    if (this.configurations[option.name]) {
+    if (option.name in this.configurations) {
       return this.configurations[option.name];
     }
-    const value = process.env[option.envName] || defaultValue || option.default;
+    const value = (option.envName in process.env && process.env[option.envName]) || defaultValue || option.default;
     switch (option.type) {
       case "boolean":
         return value === "true" || value === true;
