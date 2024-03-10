@@ -1,5 +1,4 @@
-import * as dotenv from "dotenv";
-dotenv.config();
+import 'dotenv/config';
 
 import { Logger } from "./singleton/logger.js";
 const log = Logger.getLogger().child({ from: "main" });

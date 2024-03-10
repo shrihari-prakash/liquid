@@ -39,6 +39,7 @@ export class Configuration {
       return this.configurations[option.name];
     }
     const value = (option.envName in process.env && process.env[option.envName]) || defaultValue || option.default;
+    console.log(name, value, process.env[option.envName])
     switch (option.type) {
       case "boolean":
         return value === "true" || value === true;
