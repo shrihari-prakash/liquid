@@ -1,6 +1,6 @@
 {
   "environment": "development",
-  "cookie.secure": true,
+  "cookie.secure": false,
   "cors.allowed-origins": ["http://localhost:2001", "https://your.frontend.origin"],
   "mongo-db.connection-string": "mongodb://liquid_mongodb:27017/liquid",
   "redis.port": 6379,
