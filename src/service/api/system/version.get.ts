@@ -4,7 +4,10 @@ import fs from "fs";
 import { statusCodes } from "../../../utils/http-status";
 import { SuccessResponse } from "../../../utils/response";
 import path from "path";
+import {fileURLToPath} from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const version = fs.readFileSync(path.join(__dirname, "../../../", "VERSION"), { encoding: "utf8" });
 
 const GET__Version = async (_: Request, res: Response) => {

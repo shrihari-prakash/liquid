@@ -5,6 +5,7 @@ import { Logger } from "./singleton/logger";
 const log = Logger.getLogger().child({ from: "main" });
 
 import * as path from "path";
+import {fileURLToPath} from 'url';
 import * as fs from "fs";
 import cors from "cors";
 import express from "express";
@@ -13,6 +14,8 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import compression from "compression";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const version = fs.readFileSync(path.join(__dirname, "VERSION"), { encoding: "utf8" });
 const banner = `
    __         __     ______     __  __     __     _____
