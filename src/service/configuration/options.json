@@ -104,6 +104,13 @@
     "type": "string"
   },
   {
+    "name": "system.service.app-config-file-path",
+    "displayName": "Service App Config File Path",
+    "envName": "SYSTEM_SERVICE_APP_CONFIG_FILE_PATH",
+    "description": "Specifies the file path for backend configuration file.",
+    "type": "string"
+  },
+  {
     "name": "system.scope-extension-file-path",
     "displayName": "Scope Extension File Path",
     "envName": "SYSTEM_SCOPE_EXTENSION_FILE_PATH",

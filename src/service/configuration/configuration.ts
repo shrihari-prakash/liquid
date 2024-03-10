@@ -1,3 +1,5 @@
+import fs from "fs";
+
 import Options from "./options.json";
 
 interface Option {
@@ -10,14 +12,31 @@ interface Option {
 
 export class Configuration {
   options: any;
+  configurations: any = {};
 
   constructor() {
     this.options = Options.reduce((options, option) => Object.assign(options, { [option.name]: option }), {});
+    this.loadConfigFromJSON();
+  }
+
+  private loadConfigFromJSON() {
+    const path = this.get("system.service.app-config-file-path");
+    if (path) {
+      try {
+        const configurations = fs.readFileSync(path, "utf8");
+        this.configurations = JSON.parse(configurations);
+      } catch (err) {
+        console.error("Error parsing configuration overrides:", err);
+      }
+    }
   }
 
   public get(name: string, defaultValue?: any, delim = ",") {
     const option: Option = this.options[name];
     if (!option) return defaultValue || undefined;
+    if (this.configurations[option.name]) {
+      return this.configurations[option.name];
+    }
     const value = process.env[option.envName] || defaultValue || option.default;
     switch (option.type) {
       case "boolean":
