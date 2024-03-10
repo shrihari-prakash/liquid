@@ -1,0 +1,19 @@
+{
+  "environment": "development",
+  "cookie.secure": true,
+  "cors.allowed-origins": ["http://localhost:2001", "https://your.frontend.origin"],
+  "mongo-db.connection-string": "mongodb://liquid_mongodb:27017/liquid",
+  "redis.port": 6379,
+  "redis.host": "liquid_redis",
+  "redis.db": 0,
+  "system.app-name": "Liquid",
+  "system.static.app-config-file-path": "/environment/app-config.static.json",
+  "privilege.can-reset-password": false,
+  "user.account-creation.require-email-verification": false,
+  "system.email-adapter": "print",
+  "system.rate-limit.light-api-max-limit": 100000000,
+  "system.rate-limit.medium-api-max-limit": 100000000,
+  "system.rate-limit.heavy-api-max-limit": 100000000,
+  "system.rate-limit.extreme-api-max-limit": 100000000,
+  "system.demo-mode": true
+}

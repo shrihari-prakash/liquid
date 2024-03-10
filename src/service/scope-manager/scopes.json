@@ -305,6 +305,11 @@
     "parent": "admin:profile:all"
   },
   {
+    "name": "admin:profile:search",
+    "description": "Search for people in the system.",
+    "parent": "admin:profile:all"
+  },
+  {
     "name": "admin:profile:write",
     "description": "Edit your profile information of user accounts in the system.",
     "parent": "admin:profile:all"

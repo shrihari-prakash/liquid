@@ -12,7 +12,7 @@ import { Redis } from "../../../singleton/redis";
 import { Configuration } from "../../../singleton/configuration";
 import { ScopeManager } from "../../../singleton/scope-manager";
 import { isValidObjectId } from "mongoose";
-import { hydrateUserProfile } from "../../../utils/user";
+import { hydrateUserProfile, isFollowing, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user";
 import BlockModel from "../../../model/mongo/block";
 
 export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
@@ -76,6 +76,11 @@ const POST_Search = async (req: Request, res: Response) => {
     const milliseconds = +new Date() - startTime;
     log.info("Search for query `%s` completed in %s ms", query, milliseconds);
     const filteredResults = await filterBlockedUsers(loggedInUserId, results);
+    const { negativeIndices } = await isFollowing({ sourceId: loggedInUserId, targets: filteredResults });
+    for (let i = 0; i < negativeIndices.length; i++) {
+      const index = negativeIndices[i];
+      stripSensitiveFieldsForNonFollowerGet(filteredResults[index]);
+    }
     res.status(statusCodes.success).json(new SuccessResponse({ results: filteredResults }));
   } catch (err) {
     log.error(err);
