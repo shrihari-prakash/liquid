@@ -1,23 +1,23 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/shared/create.post" });
 
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { body } from "express-validator";
 
-import UserModel from "../../../../model/mongo/user";
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { hasErrors } from "../../../../utils/api";
-import { Configuration } from "../../../../singleton/configuration";
-import { bcryptConfig } from "../create.post";
-import { MongoDB } from "../../../../singleton/mongo-db";
-import { sanitizeEmailAddress } from "../../../../utils/email";
-import InviteCodeModel from "../../../../model/mongo/invite-code";
-import { generateInviteCode } from "../../../../utils/invite-code";
-import { isRoleRankHigher } from "../../../../utils/role";
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import UserValidator from "../../../../validator/user";
+import UserModel from "../../../../model/mongo/user.js";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import { hasErrors } from "../../../../utils/api.js";
+import { Configuration } from "../../../../singleton/configuration.js";
+import { bcryptConfig } from "../create.post.js";
+import { MongoDB } from "../../../../singleton/mongo-db.js";
+import { sanitizeEmailAddress } from "../../../../utils/email.js";
+import InviteCodeModel from "../../../../model/mongo/invite-code.js";
+import { generateInviteCode } from "../../../../utils/invite-code.js";
+import { isRoleRankHigher } from "../../../../utils/role.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import UserValidator from "../../../../validator/user.js";
 
 const userValidator = new UserValidator(body);
 

@@ -1,10 +1,10 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "s3" });
 
 import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import { Configuration } from "../../singleton/configuration";
+import { Configuration } from "../../singleton/configuration.js";
 
 class S3 {
   client: S3Client | undefined;

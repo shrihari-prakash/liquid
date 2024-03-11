@@ -1,15 +1,15 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "oauth-model" });
 
-import { Redis } from "../../singleton/redis";
-import { Configuration } from "../../singleton/configuration";
+import { Redis } from "../../singleton/redis.js";
+import { Configuration } from "../../singleton/configuration.js";
 
-import AuthorizationCodeModel from "../mongo/authorization-code";
-import ClientModel from "../mongo/client";
-import TokenModel from "../mongo/token";
-import UserModel, { UserInterface } from "../mongo/user";
-import Role from "../../enum/role";
-import { ScopeManager } from "../../singleton/scope-manager";
+import AuthorizationCodeModel from "../mongo/authorization-code.js";
+import ClientModel from "../mongo/client.js";
+import TokenModel from "../mongo/token.js";
+import UserModel, { UserInterface } from "../mongo/user.js";
+import Role from "../../enum/role.js";
+import { ScopeManager } from "../../singleton/scope-manager.js";
 import {
   AuthorizationCode,
   AuthorizationCodeModel as OAuthAuthorizationCodeModel,
@@ -21,7 +21,7 @@ import {
   Token,
   RefreshToken,
 } from "@node-oauth/oauth2-server";
-import { isTokenInvalidated } from "../../utils/session";
+import { isTokenInvalidated } from "../../utils/session.js";
 
 interface Client {
   id: string;

@@ -7,9 +7,9 @@ services:
     ports:
       - "2000:2000"
     volumes:
-      - .:/environment # Replace . with the folder that contains app-config.json and .env
-    env_file:
-      - .env
+      - .:/environment # Replace . with the folder that contains app-config.static.json and app-config.service.json
+    environment:
+      - SYSTEM_SERVICE_APP_CONFIG_FILE_PATH=/environment/app-config.service.json
     networks:
       - liquid-network
   nitrogen:

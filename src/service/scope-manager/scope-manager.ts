@@ -1,14 +1,14 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "scope-manager" });
 
 import { Response } from "express";
 import fs from "fs";
 
-import Scopes from "./scopes.json";
-import { errorMessages, statusCodes } from "../../utils/http-status";
-import { ErrorResponse } from "../../utils/response";
-import Role from "../../enum/role";
-import { Configuration } from "../../singleton/configuration";
+import Scopes from "./scopes.json"  assert { type: "json" };
+import { errorMessages, statusCodes } from "../../utils/http-status.js";
+import { ErrorResponse } from "../../utils/response.js";
+import Role from "../../enum/role.js";
+import { Configuration } from "../../singleton/configuration.js";
 
 interface Scope {
   name: string;

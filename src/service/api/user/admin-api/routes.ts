@@ -1,25 +1,25 @@
 import express from "express";
 
-import { Configuration } from "../../../../singleton/configuration";
-import { DelegatedAuthFlow } from "../../middleware/authenticate";
-import POST_Ban, { POST_BanValidator } from "../shared/ban.post";
-import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
-import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
-import POST_Access, { POST_AccessValidator } from "../shared/access.post";
-import POST_Verify, { POST_VerifyValidator } from "./verify.post";
-import POST_Create, { POST_CreateValidator } from "../shared/create.post";
-import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post";
-import POST_InviteCodes, { POST_InviteCodesValidator } from "../shared/invite-codes.post";
-import GET_List from "../shared/list.get";
-import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
-import GET_EditableFields from "./editable-fields.get";
-import GET_Roles from "../shared/roles.get";
-import PATCH_Update, { PATCH_UpdateValidator } from "./update.patch";
-import GET_SubscriptionTiers from "../shared/subscription-tiers.get";
-import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get";
-import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put";
-import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get";
-import POST_Search, { POST_SearchValidator } from "./search.post";
+import { Configuration } from "../../../../singleton/configuration.js";
+import { DelegatedAuthFlow } from "../../middleware/authenticate.js";
+import POST_Ban, { POST_BanValidator } from "../shared/ban.post.js";
+import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post.js";
+import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post.js";
+import POST_Access, { POST_AccessValidator } from "../shared/access.post.js";
+import POST_Verify, { POST_VerifyValidator } from "./verify.post.js";
+import POST_Create, { POST_CreateValidator } from "../shared/create.post.js";
+import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post.js";
+import POST_InviteCodes, { POST_InviteCodesValidator } from "../shared/invite-codes.post.js";
+import GET_List from "../shared/list.get.js";
+import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get.js";
+import GET_EditableFields from "./editable-fields.get.js";
+import GET_Roles from "../shared/roles.get.js";
+import PATCH_Update, { PATCH_UpdateValidator } from "./update.patch.js";
+import GET_SubscriptionTiers from "../shared/subscription-tiers.get.js";
+import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get.js";
+import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put.js";
+import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get.js";
+import POST_Search, { POST_SearchValidator } from "./search.post.js";
 
 const AdminApiRouter = express.Router();
 

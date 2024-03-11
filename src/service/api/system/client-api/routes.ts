@@ -1,6 +1,6 @@
 import express from "express";
-import { ClientAuthFlow } from "../../middleware/authenticate";
-import GET__Stats from "../shared/stats.get";
+import { ClientAuthFlow } from "../../middleware/authenticate.js";
+import GET__Stats from "../shared/stats.get.js";
 
 const SystemClientRouter = express.Router();
 

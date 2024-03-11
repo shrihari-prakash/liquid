@@ -1,19 +1,19 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/do-2fa.post" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
 import { isValidObjectId } from "mongoose";
-import { hasErrors } from "../../../utils/api";
-import VerificationCodeModel from "../../../model/mongo/verification-code";
-import { VerificationCodeType } from "../../../enum/verification-code";
-import UserModel, { UserInterface } from "../../../model/mongo/user";
-import { Configuration } from "../../../singleton/configuration";
-import LoginHistoryModel, { LoginHistoryInterface } from "../../../model/mongo/login-history";
-import { LoginFailure } from "../../../enum/login-failure";
+import { hasErrors } from "../../../utils/api.js";
+import VerificationCodeModel from "../../../model/mongo/verification-code.js";
+import { VerificationCodeType } from "../../../enum/verification-code.js";
+import UserModel, { UserInterface } from "../../../model/mongo/user.js";
+import { Configuration } from "../../../singleton/configuration.js";
+import LoginHistoryModel, { LoginHistoryInterface } from "../../../model/mongo/login-history.js";
+import { LoginFailure } from "../../../enum/login-failure.js";
 
 export const POST_Do2FAValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

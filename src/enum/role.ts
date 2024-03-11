@@ -1,7 +1,7 @@
-import { Logger } from "../singleton/logger";
+import { Logger } from "../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "role" });
 
-import { Configuration } from "../singleton/configuration";
+import { Configuration } from "../singleton/configuration.js";
 
 const Role: any = {
   SUPER_ADMIN: "super_admin",

@@ -1,18 +1,18 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/unfollow.post" });
 
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import FollowModel from "../../../model/mongo/follow";
-import { updateFollowCount } from "../../../utils/follow";
-import { hasErrors } from "../../../utils/api";
-import { Pusher } from "../../../singleton/pusher";
-import { PushEvent } from "../../pusher/pusher";
-import { PushEventList } from "../../../enum/push-events";
-import { MongoDB } from "../../../singleton/mongo-db";
-import { ScopeManager } from "../../../singleton/scope-manager";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import FollowModel from "../../../model/mongo/follow.js";
+import { updateFollowCount } from "../../../utils/follow.js";
+import { hasErrors } from "../../../utils/api.js";
+import { Pusher } from "../../../singleton/pusher.js";
+import { PushEvent } from "../../pusher/pusher.js";
+import { PushEventList } from "../../../enum/push-events.js";
+import { MongoDB } from "../../../singleton/mongo-db.js";
+import { ScopeManager } from "../../../singleton/scope-manager.js";
 
 const POST_Unfollow = async (req: Request, res: Response) => {
   let session = "";

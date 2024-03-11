@@ -1,10 +1,10 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "system/settings-insecure.get" });
 
 import { Request, Response } from "express";
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { Configuration } from "../../../singleton/configuration";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { Configuration } from "../../../singleton/configuration.js";
 
 const GET__SettingsInsecure = async (_: Request, res: Response) => {
   try {

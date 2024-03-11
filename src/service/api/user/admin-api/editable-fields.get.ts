@@ -1,13 +1,13 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/admin-api/editable-fields.get" });
 
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { Configuration } from "../../../../singleton/configuration";
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import { userSchema } from "../../../../model/mongo/user";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import { Configuration } from "../../../../singleton/configuration.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { userSchema } from "../../../../model/mongo/user.js";
 
 const GET_EditableFields = async (_: Request, res: Response) => {
   try {

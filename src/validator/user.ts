@@ -1,11 +1,11 @@
-import { Logger } from "../singleton/logger";
+import { Logger } from "../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user-validator" });
 
 import { query, body } from "express-validator";
 
-import { Configuration } from "../singleton/configuration";
-import { Language } from "../enum/language";
-import { countryISOCodes } from "../utils/country-codes";
+import { Configuration } from "../singleton/configuration.js";
+import { Language } from "../enum/language.js";
+import { countryISOCodes } from "../utils/country-codes.js";
 
 class UserValidator {
   nameValidationRegex = new RegExp(Configuration.get("user.profile.name-validation-regex"), "u");

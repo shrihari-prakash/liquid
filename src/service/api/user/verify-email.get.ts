@@ -1,16 +1,16 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/verify-email.get" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
 import { isValidObjectId } from "mongoose";
 
-import UserModel from "../../../model/mongo/user";
-import VerificationCodeModel from "../../../model/mongo/verification-code";
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { hasErrors } from "../../../utils/api";
-import { VerificationCodeType } from "../../../enum/verification-code";
+import UserModel from "../../../model/mongo/user.js";
+import VerificationCodeModel from "../../../model/mongo/verification-code.js";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { hasErrors } from "../../../utils/api.js";
+import { VerificationCodeType } from "../../../enum/verification-code.js";
 
 export const GET_VerifyEmailValidator = [
   query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

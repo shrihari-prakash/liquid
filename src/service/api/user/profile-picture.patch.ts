@@ -1,4 +1,4 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/profile-picture.patch" });
 
 import { Request, Response } from "express";
@@ -6,12 +6,12 @@ import { S3Client } from "@aws-sdk/client-s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { Configuration } from "../../../singleton/configuration";
-import { S3 } from "../../../singleton/s3";
-import UserModel from "../../../model/mongo/user";
-import { ScopeManager } from "../../../singleton/scope-manager";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { Configuration } from "../../../singleton/configuration.js";
+import { S3 } from "../../../singleton/s3.js";
+import UserModel from "../../../model/mongo/user.js";
+import { ScopeManager } from "../../../singleton/scope-manager.js";
 
 let profilePictureMulter;
 

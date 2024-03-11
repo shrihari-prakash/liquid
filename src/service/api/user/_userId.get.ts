@@ -1,15 +1,15 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/:userId.get" });
 
 import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
-import { getBlockStatus } from "../../../utils/block";
-import { ScopeManager } from "../../../singleton/scope-manager";
-import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user.js";
+import { getBlockStatus } from "../../../utils/block.js";
+import { ScopeManager } from "../../../singleton/scope-manager.js";
+import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user.js";
 
 const GET__UserId = async (req: Request, res: Response) => {
   try {

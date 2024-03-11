@@ -77,7 +77,7 @@ describe("login.post", () => {
       .send({ username: "a", password: "password", userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
-        chai.expect(res.body.additionalInfo.errors[0].param).to.eql("username");
+        chai.expect(res.body.additionalInfo.errors[0].path).to.eql("username");
       });
   });
 
@@ -88,7 +88,7 @@ describe("login.post", () => {
       .send({ username: "john_doe", password: "a", userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
-        chai.expect(res.body.additionalInfo.errors[0].param).to.eql("password");
+        chai.expect(res.body.additionalInfo.errors[0].path).to.eql("password");
       });
   });
 
@@ -99,7 +99,7 @@ describe("login.post", () => {
       .send({ username: "abcdefghijklmnopqrstuvwxyz123456789", password: "password", userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
-        chai.expect(res.body.additionalInfo.errors[0].param).to.eql("username");
+        chai.expect(res.body.additionalInfo.errors[0].path).to.eql("username");
       });
   });
 
@@ -114,7 +114,7 @@ describe("login.post", () => {
       })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
-        chai.expect(res.body.additionalInfo.errors[0].param).to.eql("password");
+        chai.expect(res.body.additionalInfo.errors[0].path).to.eql("password");
       });
   });
 
@@ -125,7 +125,7 @@ describe("login.post", () => {
       .send({ username: { username: { $gt: "" } }, password: "password", userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
-        chai.expect(res.body.additionalInfo.errors[0].param).to.eql("username");
+        chai.expect(res.body.additionalInfo.errors[0].path).to.eql("username");
       });
   });
 
@@ -136,7 +136,7 @@ describe("login.post", () => {
       .send({ username: "john_doe", password: { password: { $gt: "" } }, userAgent })
       .then((res) => {
         chai.expect(res.status).to.eql(400);
-        chai.expect(res.body.additionalInfo.errors[0].param).to.eql("password");
+        chai.expect(res.body.additionalInfo.errors[0].path).to.eql("password");
       });
   });
 });

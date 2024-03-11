@@ -1,12 +1,12 @@
 import express from "express";
 
-import SystemClientRouter from "./client-api/routes";
-import SystemAdminRouter from "./admin-api/routes";
-import { DelegatedAuthFlow } from "../middleware/authenticate";
-import GET__Settings from "./settings.get";
-import GET__SettingsInsecure from "./settings-insecure.get";
-import GET__Version from "./version.get";
-import GET__CountriesInsecure from "./countries-insecure.get";
+import SystemClientRouter from "./client-api/routes.js";
+import SystemAdminRouter from "./admin-api/routes.js";
+import { DelegatedAuthFlow } from "../middleware/authenticate.js";
+import GET__Settings from "./settings.get.js";
+import GET__SettingsInsecure from "./settings-insecure.get.js";
+import GET__Version from "./version.get.js";
+import GET__CountriesInsecure from "./countries-insecure.get.js";
 
 const SystemRouter = express.Router();
 

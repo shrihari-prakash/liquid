@@ -1,4 +1,6 @@
-import Options from "./options.json";
+import fs from "fs";
+
+import Options from "./options.json" assert { type: "json" };
 
 interface Option {
   name: string;
@@ -10,15 +12,33 @@ interface Option {
 
 export class Configuration {
   options: any;
+  configurations: any = {};
 
   constructor() {
     this.options = Options.reduce((options, option) => Object.assign(options, { [option.name]: option }), {});
+    this.loadConfigFromJSON();
+  }
+
+  private loadConfigFromJSON() {
+    const path = this.get("system.service.app-config-file-path");
+    console.log("Backend configuration path: " + path);
+    if (path) {
+      try {
+        const configurations = fs.readFileSync(path, "utf8");
+        this.configurations = JSON.parse(configurations);
+      } catch (err) {
+        console.error("Error parsing configuration overrides:", err);
+      }
+    }
   }
 
   public get(name: string, defaultValue?: any, delim = ",") {
     const option: Option = this.options[name];
     if (!option) return defaultValue || undefined;
-    const value = process.env[option.envName] || defaultValue || option.default;
+    if (option.name in this.configurations) {
+      return this.configurations[option.name];
+    }
+    const value = (option.envName in process.env && process.env[option.envName]) || defaultValue || option.default;
     switch (option.type) {
       case "boolean":
         return value === "true" || value === true;

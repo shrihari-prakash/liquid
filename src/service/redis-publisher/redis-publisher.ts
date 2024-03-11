@@ -1,5 +1,5 @@
-import { Configuration } from "../../singleton/configuration";
-import Redis from "../redis/redis";
+import { Configuration } from "../../singleton/configuration.js";
+import Redis from "../redis/redis.js";
 
 export default class RedisPublisher {
   redis: Redis | undefined;

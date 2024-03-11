@@ -1,6 +1,6 @@
 import moment from "moment";
-import UserModel, { UserInterface } from "../model/mongo/user";
-import { Configuration } from "../singleton/configuration";
+import UserModel, { UserInterface } from "../model/mongo/user.js";
+import { Configuration } from "../singleton/configuration.js";
 
 const baseTier = Configuration.get("user.subscription.base-tier");
 

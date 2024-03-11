@@ -1,16 +1,16 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/shared/restrict.post" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
 import { isValidObjectId } from "mongoose";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import UserModel from "../../../../model/mongo/user";
-import { hasErrors } from "../../../../utils/api";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth";
-import { ScopeManager } from "../../../../singleton/scope-manager";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import UserModel from "../../../../model/mongo/user.js";
+import { hasErrors } from "../../../../utils/api.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
 
 export const POST_RestrictValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

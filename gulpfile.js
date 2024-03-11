@@ -1,18 +1,18 @@
-const gulp = require("gulp");
-const babel = require("gulp-babel");
-const debug = require("gulp-debug");
-const replace = require("gulp-replace");
-const del = require("del");
+import gulp from "gulp";
+import babel from "gulp-babel";
+import debug from "gulp-debug";
+import replace from "gulp-replace";
+import { deleteAsync } from "del";
 
-function static_copy() {
+export function staticCopy() {
   return gulp.src("./src/public/**/*").pipe(gulp.dest("build/public"));
 }
 
-function static_clean() {
-  return del(["./build/public/components"]);
+export function staticClean() {
+  return deleteAsync(["./build/public/components"]);
 }
 
-function static_compile() {
+export function staticCompile() {
   return gulp
     .src("./src/public/components/*.js")
     .pipe(debug({ title: "Ready for compile" }))
@@ -24,7 +24,7 @@ function static_compile() {
     .pipe(gulp.dest("./build/public/compiled"));
 }
 
-function static_swap_react_pdoduction() {
+export function staticSwapReactProduction() {
   return gulp
     .src(["./build/public/index.html"])
     .pipe(debug())
@@ -33,4 +33,5 @@ function static_swap_react_pdoduction() {
     .pipe(gulp.dest("./build/public"));
 }
 
-exports.static_build = gulp.series(static_copy, static_compile, static_swap_react_pdoduction, static_clean);
+export const static_build = gulp.series(staticCopy, staticCompile, staticSwapReactProduction, staticClean);
+

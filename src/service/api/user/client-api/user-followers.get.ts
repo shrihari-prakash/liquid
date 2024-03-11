@@ -1,17 +1,17 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/client-api/user-followers.get" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
 import { isValidObjectId } from "mongoose";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import FollowModel from "../../../../model/mongo/follow";
-import { useFollowersQuery } from "../../../../query/followers";
-import { getPaginationLimit } from "../../../../utils/pagination";
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import { hydrateUserProfile } from "../../../../utils/user";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import FollowModel from "../../../../model/mongo/follow.js";
+import { useFollowersQuery } from "../../../../query/followers.js";
+import { getPaginationLimit } from "../../../../utils/pagination.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { hydrateUserProfile } from "../../../../utils/user.js";
 
 export const GET_UserFollowersValidator = [
   query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
