@@ -1,7 +1,7 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import "mocha";
-const { MongoMemoryServer } = require("mongodb-memory-server");
+import { MongoMemoryServer } from "mongodb-memory-server";
 const mongod = new MongoMemoryServer({
   instance: {
     port: 1111,
