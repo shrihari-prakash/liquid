@@ -1,9 +1,17 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
-import { prepareAuthorizationParams, getPlaceholder, isEmail, useTitle, uuidv4, errorTextTimeout, afterLogin } from "../utils/utils.js";
+import {
+  prepareAuthorizationParams,
+  getPlaceholder,
+  isEmail,
+  useTitle,
+  uuidv4,
+  errorTextTimeout,
+  afterLogin,
+} from "../utils/utils.js";
 
 export default function Login() {
-  const submitButtonText = "Login";
+  const submitButtonText = i18next.t("button.login");
 
   const configuration = React.useContext(ConfigurationContext);
   const theme = React.useContext(ThemeContext);
@@ -17,7 +25,7 @@ export default function Login() {
 
   const appName = configuration["content.app-name"];
 
-  React.useEffect(() => useTitle(configuration["content.app-name"], "Login"), []);
+  React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.login")), []);
 
   React.useEffect(() => {
     (async () => {
@@ -25,12 +33,12 @@ export default function Login() {
         const response = await fetch("/user/session-state");
         if (response.ok) {
           setIsLoggedIn(true);
-          console.log("Bypassing login screen due to an existing session...")
+          console.log("Bypassing login screen due to an existing session...");
           onLogin({});
         }
       }
     })();
-  }, [])
+  }, []);
 
   const onSubmitError = (props) => {
     if (hasError) {
@@ -54,8 +62,8 @@ export default function Login() {
   async function onLogin(data) {
     if (data["2faEnabled"]) {
       const urlParams = new URLSearchParams(window.location.search);
-      urlParams.set('target', data.userInfo._id);
-      urlParams.set('session_hash', data.sessionHash);
+      urlParams.set("target", data.userInfo._id);
+      urlParams.set("session_hash", data.sessionHash);
       window.location = `/2fa?${urlParams.toString()}`;
     } else {
       afterLogin(configuration);
@@ -79,17 +87,17 @@ export default function Login() {
       })
       .fail(function (response) {
         if (response.responseJSON.error === "RateLimitError") {
-          onSubmitError({ errorText: "Too Many Retries" });
+          onSubmitError({ errorText: i18next.t("error.too-many-retries") });
           return;
         }
         if (response.responseJSON.error === "ResourceNotActive") {
-          onSubmitError({ errorText: "Account not verified" });
+          onSubmitError({ errorText: i18next.t("error.account-not-verified") });
           return;
         }
         if (response.status === 400 && response.responseJSON.additionalInfo) {
           return onFieldError({ response });
         }
-        onSubmitError({ errorText: "Invalid Login" });
+        onSubmitError({ errorText: i18next.t("error.inavlid-login") });
       })
       .always(function () {
         setSubmitting(false);
@@ -102,14 +110,14 @@ export default function Login() {
         <div className="spinner"></div>
         Redirecting... Please Wait...
       </div>
-    )
+    );
   }
 
   return (
     <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={login}>
       <div className="noselect">
         <h3>
-          Login to&nbsp;
+          {i18next.t("heading.login")}&nbsp;
           {configuration[`assets.header-icon-${theme}`] ? (
             <div className="app-icon-header">
               <div style={{ display: miniIconLoaded ? "none" : "block" }} className="spinner" />
@@ -128,14 +136,14 @@ export default function Login() {
       </div>
       <div className="form-group first">
         <label className="noselect" htmlFor="username">
-          Username or Email
+          {i18next.t("field.label.username-or-email")}
         </label>
         <input
           type="text"
           className="form-control"
           aria-label="Username or Email"
           aria-required="true"
-          placeholder={getPlaceholder("your_username", configuration)}
+          placeholder={getPlaceholder(i18next.t("field.placeholder.username-or-email"), configuration)}
           minLength="8"
           autoComplete="username"
           autoCorrect="off"
@@ -146,7 +154,7 @@ export default function Login() {
         />
       </div>
       <div className="form-group last">
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">{i18next.t("field.label.password")}</label>
         <input
           type="password"
           className="form-control"
@@ -163,14 +171,18 @@ export default function Login() {
         {configuration["privilege.can-create-account"] && (
           <span className="page-link">
             <a href={"/signup" + window.location.search} className="page-link signup-link" aria-label="Sign Up">
-              Create Account
+              {i18next.t("link.create-account")}
             </a>
           </span>
         )}
         {configuration["privilege.can-reset-password"] && (
           <span className="page-link">
-            <a href={"/get-code" + window.location.search} className="page-link forgot-password-link" aria-label="Forgot Password?">
-              Forgot Password?
+            <a
+              href={"/get-code" + window.location.search}
+              className="page-link forgot-password-link"
+              aria-label="Forgot Password?"
+            >
+              {i18next.t("link.forgot-password")}
             </a>
           </span>
         )}

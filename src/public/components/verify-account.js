@@ -2,7 +2,7 @@ import { ConfigurationContext } from "../context/configuration.js";
 import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function VerifyAccount() {
-    const submitButtonText = "Verify";
+    const submitButtonText = i18next.t("button.verify");
 
     const configuration = React.useContext(ConfigurationContext);
 
@@ -10,7 +10,7 @@ export default function VerifyAccount() {
     const [hasError, setHasError] = React.useState(false);
     const [submitting, setSubmitting] = React.useState(false);
 
-    React.useEffect(() => useTitle(configuration["content.app-name"], "Verify Your Account"), []);
+    React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.verify-account")), []);
 
     const onSubmitError = (props) => {
         if (hasError) {
@@ -53,18 +53,18 @@ export default function VerifyAccount() {
         <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={verifyAccount}>
             <div className="noselect">
                 <h3>
-                    Verify your account
+                    {i18next.t("heading.verify-account")}
                 </h3>
-                <p className="app-tagline">A verification code was sent to your email address.</p>
+                <p className="app-tagline">{i18next.t("message.verification-instructions")}</p>
             </div>
             <div className="form-group first last">
-                <label className="noselect" htmlFor="username">Verification Code</label>
+                <label className="noselect" htmlFor="username">{i18next.t("field.label.verification-code")}</label>
                 <input
                     type="text"
                     className="form-control"
                     aria-label="Verification Code"
                     aria-required="true"
-                    placeholder={getPlaceholder("Verification Code", configuration)}
+                    placeholder={getPlaceholder(i18next.t("field.placeholder.verification-code"), configuration)}
                     pattern="[0-9]*"
                     inputMode="numeric"
                     minLength="6"
