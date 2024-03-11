@@ -1,11 +1,11 @@
-import { Logger } from "../singleton/logger";
+import { Logger } from "../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user-utils" });
 
-import FollowModel from "../model/mongo/follow";
-import UserModel, { UserInterface, UserProjection } from "../model/mongo/user";
-import { Configuration } from "../singleton/configuration";
-import { checkSubscription } from "./subscription";
-import { attachProfilePicture } from "./profile-picture";
+import FollowModel from "../model/mongo/follow.js";
+import UserModel, { UserInterface, UserProjection } from "../model/mongo/user.js";
+import { Configuration } from "../singleton/configuration.js";
+import { checkSubscription } from "./subscription.js";
+import { attachProfilePicture } from "./profile-picture.js";
 
 interface FollowingResult {
   results: boolean[];

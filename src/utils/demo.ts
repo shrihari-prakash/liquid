@@ -1,12 +1,12 @@
-import { Logger } from "../singleton/logger";
+import { Logger } from "../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "main" });
 
 import bcrypt from "bcrypt";
 
-import ClientModel from "../model/mongo/client";
-import { Configuration } from "../singleton/configuration";
-import UserModel from "../model/mongo/user";
-import { bcryptConfig } from "../service/api/user/create.post";
+import ClientModel from "../model/mongo/client.js";
+import { Configuration } from "../singleton/configuration.js";
+import UserModel from "../model/mongo/user.js";
+import { bcryptConfig } from "../service/api/user/create.post.js";
 
 async function createApplicationClient() {
   try {

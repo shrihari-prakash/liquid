@@ -5,5 +5,5 @@
   },
   "ext": ".ts, .js, .json, .yaml",
   "ignore": ["src/public", "app-config.json", "app-config.sample.json"],
-  "exec": "ts-node ./src/index.ts"
+  "exec": "tsx ./src/index.ts"
 }

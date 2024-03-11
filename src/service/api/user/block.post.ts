@@ -1,20 +1,20 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/block.post" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
 import { isValidObjectId } from "mongoose";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel, { UserInterface } from "../../../model/mongo/user";
-import { hasErrors } from "../../../utils/api";
-import { FollowStatus } from "../../../enum/follow-status";
-import BlockModel from "../../../model/mongo/block";
-import FollowModel from "../../../model/mongo/follow";
-import { updateFollowCount } from "../../../utils/follow";
-import { MongoDB } from "../../../singleton/mongo-db";
-import { ScopeManager } from "../../../singleton/scope-manager";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import UserModel, { UserInterface } from "../../../model/mongo/user.js";
+import { hasErrors } from "../../../utils/api.js";
+import { FollowStatus } from "../../../enum/follow-status.js";
+import BlockModel from "../../../model/mongo/block.js";
+import FollowModel from "../../../model/mongo/follow.js";
+import { updateFollowCount } from "../../../utils/follow.js";
+import { MongoDB } from "../../../singleton/mongo-db.js";
+import { ScopeManager } from "../../../singleton/scope-manager.js";
 
 export const POST_BlockValidator = [body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 

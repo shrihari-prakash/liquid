@@ -1,10 +1,10 @@
 import { Response } from "express";
-import { FollowStatus } from "../enum/follow-status";
-import BlockModel from "../model/mongo/block";
-import { Configuration } from "../singleton/configuration";
-import { Redis } from "../singleton/redis";
-import { errorMessages, statusCodes } from "./http-status";
-import { ErrorResponse } from "./response";
+import { FollowStatus } from "../enum/follow-status.js";
+import BlockModel from "../model/mongo/block.js";
+import { Configuration } from "../singleton/configuration.js";
+import { Redis } from "../singleton/redis.js";
+import { errorMessages, statusCodes } from "./http-status.js";
+import { ErrorResponse } from "./response.js";
 
 const redisPrefix = "block:";
 

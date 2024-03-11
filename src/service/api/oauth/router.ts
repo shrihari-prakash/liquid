@@ -1,9 +1,9 @@
 import express from "express";
 
-import { ClientAuthFlow } from "../middleware/authenticate";
-import ALL__Token from "./token.all";
-import ALL__Authorize from "./authorize.all";
-import ALL_Introspect from "./introspect";
+import { ClientAuthFlow } from "../middleware/authenticate.js";
+import ALL__Token from "./token.all.js";
+import ALL__Authorize from "./authorize.all.js";
+import ALL_Introspect from "./introspect.js";
 
 const OAuthRouter = express.Router();
 

@@ -1,15 +1,15 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/shared/invite-codes.get" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
 import { isValidObjectId } from "mongoose";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import InviteCodeModel from "../../../../model/mongo/invite-code";
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import { hasErrors } from "../../../../utils/api";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import InviteCodeModel from "../../../../model/mongo/invite-code.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { hasErrors } from "../../../../utils/api.js";
 
 export const GET_InviteCodesValidator = [
   query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)

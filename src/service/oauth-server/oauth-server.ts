@@ -1,10 +1,10 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "oauth-service" });
 
 import OAuth2Server from '@node-oauth/oauth2-server';
 
-import OAuthModel from "../../model/oauth/oauth";
-import { Configuration } from "../../singleton/configuration";
+import OAuthModel from "../../model/oauth/oauth.js";
+import { Configuration } from "../../singleton/configuration.js";
 
 class OAuthServer {
   server: OAuth2Server;

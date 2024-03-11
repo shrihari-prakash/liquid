@@ -1,4 +1,4 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/create.post" });
 
 import { Request, Response } from "express";
@@ -6,22 +6,22 @@ import bcrypt from "bcrypt";
 import { body } from "express-validator";
 import moment from "moment";
 
-import UserModel, { UserInterface } from "../../../model/mongo/user";
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { hasErrors } from "../../../utils/api";
-import { Pusher } from "../../../singleton/pusher";
-import { PushEvent } from "../../pusher/pusher";
-import { PushEventList } from "../../../enum/push-events";
-import { Configuration } from "../../../singleton/configuration";
-import { sanitizeEmailAddress } from "../../../utils/email";
-import InviteCodeModel from "../../../model/mongo/invite-code";
-import { MongoDB } from "../../../singleton/mongo-db";
+import UserModel, { UserInterface } from "../../../model/mongo/user.js";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { hasErrors } from "../../../utils/api.js";
+import { Pusher } from "../../../singleton/pusher.js";
+import { PushEvent } from "../../pusher/pusher.js";
+import { PushEventList } from "../../../enum/push-events.js";
+import { Configuration } from "../../../singleton/configuration.js";
+import { sanitizeEmailAddress } from "../../../utils/email.js";
+import InviteCodeModel from "../../../model/mongo/invite-code.js";
+import { MongoDB } from "../../../singleton/mongo-db.js";
 import { ClientSession } from "mongoose";
-import { generateInviteCode } from "../../../utils/invite-code";
-import UserValidator from "../../../validator/user";
-import { Mailer } from "../../../singleton/mailer";
-import { VerificationCodeType } from "../../../enum/verification-code";
+import { generateInviteCode } from "../../../utils/invite-code.js";
+import UserValidator from "../../../validator/user.js";
+import { Mailer } from "../../../singleton/mailer.js";
+import { VerificationCodeType } from "../../../enum/verification-code.js";
 
 export const bcryptConfig = {
   salt: 10,

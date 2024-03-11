@@ -1,16 +1,16 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "client/admin-api/create.post" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import Role from "../../../../enum/role";
-import ClientModel from "../../../../model/mongo/client";
-import { hasErrors } from "../../../../utils/api";
-import { Configuration } from "../../../../singleton/configuration";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import Role from "../../../../enum/role.js";
+import ClientModel from "../../../../model/mongo/client.js";
+import { hasErrors } from "../../../../utils/api.js";
+import { Configuration } from "../../../../singleton/configuration.js";
 
 export const POST_CreateValidator = [
   body("id").exists().isString().isLength({ min: 8, max: 30 }).matches(new RegExp(Configuration.get("client.id-validation-regex"), "i")),

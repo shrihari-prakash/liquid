@@ -1,19 +1,19 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/search.post" });
 
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user.js";
 import { body } from "express-validator";
-import { hasErrors } from "../../../utils/api";
-import { Redis } from "../../../singleton/redis";
-import { Configuration } from "../../../singleton/configuration";
-import { ScopeManager } from "../../../singleton/scope-manager";
+import { hasErrors } from "../../../utils/api.js";
+import { Redis } from "../../../singleton/redis.js";
+import { Configuration } from "../../../singleton/configuration.js";
+import { ScopeManager } from "../../../singleton/scope-manager.js";
 import { isValidObjectId } from "mongoose";
-import { hydrateUserProfile, isFollowing, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user";
-import BlockModel from "../../../model/mongo/block";
+import { hydrateUserProfile, isFollowing, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user.js";
+import BlockModel from "../../../model/mongo/block.js";
 
 export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
 

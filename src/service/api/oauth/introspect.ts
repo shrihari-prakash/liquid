@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import OAuthModel from "../../../model/oauth/oauth";
-import { ScopeManager } from "../../../singleton/scope-manager";
-import { UserProjection } from "../../../model/mongo/user";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import OAuthModel from "../../../model/oauth/oauth.js";
+import { ScopeManager } from "../../../singleton/scope-manager.js";
+import { UserProjection } from "../../../model/mongo/user.js";
 
 const ALL_Introspect = async (req: Request, res: Response) => {
   if (!ScopeManager.isScopeAllowedForSession("client:oauth:introspect", res)) {

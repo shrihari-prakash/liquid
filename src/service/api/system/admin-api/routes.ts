@@ -1,6 +1,6 @@
 import express from "express";
-import { DelegatedAuthFlow } from "../../middleware/authenticate";
-import GET__Stats from "../shared/stats.get";
+import { DelegatedAuthFlow } from "../../middleware/authenticate.js";
+import GET__Stats from "../shared/stats.get.js";
 
 const SystemAdminRouter = express.Router();
 
