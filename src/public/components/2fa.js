@@ -2,7 +2,7 @@ import { ConfigurationContext } from "../context/configuration.js";
 import { afterLogin, errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function TwoFactorAuthentication() {
-    const submitButtonText = "Submit";
+    const submitButtonText = i18next.t("button.submit");
 
     const configuration = React.useContext(ConfigurationContext);
 
@@ -10,7 +10,7 @@ export default function TwoFactorAuthentication() {
     const [hasError, setHasError] = React.useState(false);
     const [submitting, setSubmitting] = React.useState(false);
 
-    React.useEffect(() => useTitle(configuration["content.app-name"], "Two-Step Verification"), []);
+    React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.2fa")), []);
 
     const onSubmitError = (props) => {
         if (hasError) {
@@ -40,7 +40,7 @@ export default function TwoFactorAuthentication() {
                 afterLogin(configuration)
             })
             .fail(function () {
-                onSubmitError({ errorText: "Invalid Code" });
+                onSubmitError({ errorText: i18next.t("error.invalid-code") });
             })
             .always(function () {
                 setSubmitting(false);
@@ -55,18 +55,18 @@ export default function TwoFactorAuthentication() {
         <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={submit2fa}>
             <div className="noselect">
                 <h3>
-                    Two-Step Verification
+                    {i18next.t("heading.2fa")}
                 </h3>
-                <p className="app-tagline">To login, enter the verification code sent to your email address.</p>
+                <p className="app-tagline">{i18next.t("message.enter-login-code")}</p>
             </div>
             <div className="form-group first">
-                <label htmlFor="code">Verification Code</label>
+                <label htmlFor="code">{i18next.t("field.label.verification-code")}</label>
                 <input
                     type="text"
                     className="form-control"
                     aria-label="Verification Code"
                     aria-required="true"
-                    placeholder={getPlaceholder("Verification Code", configuration)}
+                    placeholder={getPlaceholder(i18next.t("field.placeholder.verification-code"), configuration)}
                     pattern="[0-9]*"
                     inputMode="numeric"
                     minLength="6"

@@ -1,0 +1,78 @@
+{
+    "title.login": "உள்நுழைய",
+    "title.signup": "கணக்கை துவங்குங்கள்",
+    "title.2fa": "இரண்டு-படி சரிபார்ப்பு",
+    "title.consent": "ஒப்புதலை வழங்கவும்",
+    "title.get-code": "அடையாளத்தை நிரூபிக்கவும்",
+    "title.reset-password": "கடவுச்சொல்லை மீட்டமைக்க",
+    "title.verify-account": "கணக்கை நிரூபிக்கவும்",
+    "title.verify-your-identity": "அடையாளத்தை நிரூபிக்கவும்",
+  
+    "heading.login": "உள்நுழைய",
+    "heading.signup": "கணக்கை துவங்குங்கள்",
+    "heading.2fa": "இரண்டு-படி சரிபார்ப்பு",
+    "heading.consent": "ஒப்புதலை வழங்கவும்",
+    "heading.get-code": "அடையாளத்தை நிரூபிக்கவும்",
+    "heading.reset-password": "கடவுச்சொல்லை மீட்டமைக்க",
+    "heading.verify-account": "கணக்கை நிரூபிக்கவும்",
+    "heading.verify-your-identity": "அடையாளத்தை நிரூபிக்கவும்",
+  
+    "error.too-many-retries": "மிக அதிகமான முயற்சிகள்",
+    "error.too-many-requests": "மிக அதிகமான கோரிக்கைகள்",
+    "error.account-not-verified": "கணக்கு சரிபார்க்கப்படவில்லை",
+    "error.inavlid-login": "தவறான புகுபதிவு",
+    "error.bad-email-domain": "தவறான மின்னஞ்சல் டொமைன்",
+    "error.duplicate-account": "கணக்கு ஏற்கனவே உள்ளது",
+    "error.signup-error": "பதிவு பிழை",
+    "error.invalid-field": "தவறான {{field_name}}",
+    "error.invalid-code": "தவறான குறியீடு",
+  
+    "message.enter-login-code": "உள்நுழைய, உங்கள் மின்னஞ்சல் முகவரிக்கு அனுப்பப்பட்ட சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்.",
+    "message.consent": "{{app_name}} உங்கள் கணக்கைப் பயன்படுத்த விரும்புகிறது. இதற்கு நீங்கள் ஒப்புக்கொண்டால், {{app_name}} பின்வருவனவற்றைச் செய்ய முடியும்:",
+    "message.consent-warning": "நீங்கள் ஒப்புக்கொள்வதற்கு முன், முக்கியமான தகவலைப் பகிர்வதால், இந்தப் பயன்பாட்டை நம்புகிறீர்கள் என்பதை உறுதிப்படுத்திக் கொள்ளுங்கள்.",
+    "message.verification-instructions": "உங்கள் மின்னஞ்சல் முகவரிக்கு சரிபார்ப்புக் குறியீடு அனுப்பப்பட்டது.",
+    "message.recover-instructions": "உங்கள் கணக்கை மீட்டெடுக்க உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும்.",
+    "message.reset-password-instructions": "உங்கள் மின்னஞ்சல் முகவரிக்கு சரிபார்ப்புக் குறியீடு அனுப்பப்பட்டது.",
+  
+    "button.login": "உள்நுழைய",
+    "button.signup": "கணக்கை துவங்குங்கள்",
+    "button.submit": "சமர்ப்பிக்க",
+    "button.consent": "சம்மதம்",
+    "button.refuse": "மறுக்கவும்",
+    "button.get-code": "குறியீடு பெற",
+    "button.change-password": "கடவுச்சொல்லை மாற்று",
+    "button.verify": "சரிபார்க்கவும்",
+  
+    "field.label.username": "கணக்கு கைப்பிடி",
+    "field.placeholder.username": "கணக்கு_கைப்பிடி",
+  
+    "field.label.invite-code": "அழைப்பு குறியீடு",
+    "field.placeholder.invite-code": "உங்கள்-அழைப்புக்-குறியீடு",
+  
+    "field.label.verification-code": "சரிபார்ப்பு குறியீடு",
+    "field.placeholder.verification-code": "000000",
+  
+    "field.label.first-name": "முதல் பெயர்",
+    "field.placeholder.first-name": "உங்களுடைய முதல் பெயர்",
+  
+    "field.label.last-name": "கடைசி பெயர்",
+    "field.placeholder.last-name": "உங்களுடைய கடைசி பெயர்",
+  
+    "field.label.email": "மின்னஞ்சல்",
+    "field.placeholder.email": "உங்களுடைய@மின்னஞ்சல்.com",
+  
+    "field.label.username-or-email": "கணக்கு கைப்பிடி அல்லது மின்னஞ்சல்",
+    "field.placeholder.username-or-email": "உங்களுடைய_கணக்கு_கைப்பிடி",
+  
+    "field.label.password": "கடவுச்சொல்",
+    "field.placeholder.password": "********",
+  
+    "field.label.new-password": "புதிய கடவுச்சொல்",
+    "field.placeholder.new-password": "********",
+  
+    "link.create-account": "கணக்கை துவங்குங்கள்",
+    "link.forgot-password": "கடவுச்சொல்லை மறந்துவிட்டீர்களா?",
+    "link.login": "கணக்கு உள்ளதா? உள்நுழைய",
+    "link.login-minimal": "உள்நுழைய"
+  }
+  

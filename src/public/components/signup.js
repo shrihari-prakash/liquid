@@ -4,7 +4,7 @@ import { countryCodes } from "../utils/country-codes.js";
 import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function SignUp() {
-  const submitButtonText = "Create Account";
+  const submitButtonText = i18next.t("button.signup");
 
   const configuration = React.useContext(ConfigurationContext);
   const theme = React.useContext(ThemeContext);
@@ -18,7 +18,7 @@ export default function SignUp() {
   const termsAndConditions = configuration["content.terms-and-conditions-url"];
   const privacyPolicy = configuration["content.privacy-policy-url"]
 
-  React.useEffect(() => useTitle(configuration["content.app-name"], "Sign Up"), []);
+  React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.signup")), []);
 
   const onSubmitError = (props) => {
     if (hasError) {
@@ -35,7 +35,7 @@ export default function SignUp() {
   function onFieldError({ response }) {
     let errorField = response.responseJSON.additionalInfo.errors[0].path;
     errorField = errorField.charAt(0).toUpperCase() + errorField.slice(1);
-    onSubmitError({ errorText: "Invalid " + errorField });
+    onSubmitError({ errorText: i18next.t("error.invalid-field", { field_name: errorField }) });
     return;
   }
 
@@ -75,22 +75,22 @@ export default function SignUp() {
       })
       .fail(function (response) {
         if (response.responseJSON.error === "RateLimitError") {
-          onSubmitError({ errorText: "Too Many Requests" });
+          onSubmitError({ errorText: i18next.t("error.too-many-requests") });
           return;
         }
         if (response.status === 400 && response.responseJSON.additionalInfo) {
           return onFieldError({ response });
         }
         if (response.status === 400 && response.responseJSON.error === "BadEmailDomain") {
-          return onSubmitError({ errorText: "Bad email domain" });
+          return onSubmitError({ errorText: i18next.t("error.bad-email-domain") });
         }
         if (response.status === 409) {
-          return onSubmitError({ errorText: "Account already exists" });
+          return onSubmitError({ errorText: i18next.t("error.duplicate-account") });
         }
         if (response.status === 429) {
-          return onSubmitError({ errorText: "Account creation limited" });
+          return onSubmitError({ errorText: i18next.t("error.too-many-requests") });
         }
-        onSubmitError({ errorText: "Signup error" });
+        onSubmitError({ errorText: i18next.t("error.signup-error") });
       })
       .always(function () {
         setSubmitting(false);
@@ -105,7 +105,7 @@ export default function SignUp() {
     <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={signup}>
       <div className="noselect">
         <h3>
-          Sign up &#x2022;&nbsp;
+          {i18next.t("heading.signup")} &#x2022;&nbsp;
           {configuration[`assets.header-icon-${theme}`] ? (
             <div className="app-icon-header">
               <div
@@ -126,12 +126,12 @@ export default function SignUp() {
       </div>
       <div className="form-group first">
         <label className="noselect" htmlFor="username">
-          Username
+          {i18next.t("field.label.username")}
         </label>
         <input
           type="text"
           className="form-control"
-          placeholder={getPlaceholder("your_username", configuration)}
+          placeholder={getPlaceholder(i18next.t("field.placeholder.username"), configuration)}
           minLength="8"
           aria-label="Username"
           aria-required="true"
@@ -145,14 +145,14 @@ export default function SignUp() {
       {configuration["user.account-creation.enable-invite-only"] &&
         <div className="form-group">
           <label className="noselect" htmlFor="email">
-            Invite Code
+            {i18next.t("field.label.invite-code")}
           </label>
           <input
             type="text"
             className="form-control"
             aria-label="Invite Code"
             aria-required="true"
-            placeholder={getPlaceholder("YOUR-INVITE-CODE", configuration)}
+            placeholder={getPlaceholder(i18next.t("field.placeholder.invite-code"), configuration)}
             spellCheck="false"
             autoComplete="off"
             id="inviteCode"
@@ -162,14 +162,14 @@ export default function SignUp() {
       }
       <div className="form-group">
         <label className="noselect" htmlFor="firstName">
-          First Name
+          {i18next.t("field.label.first-name")}
         </label>
         <input
           type="text"
           className="form-control"
           aria-label="First Name"
           aria-required="true"
-          placeholder={getPlaceholder("Your First Name", configuration)}
+          placeholder={getPlaceholder(i18next.t("field.placeholder.first-name"), configuration)}
           minLength="3"
           autoCorrect="off"
           autoCapitalize="on"
@@ -180,14 +180,14 @@ export default function SignUp() {
       </div>
       <div className="form-group">
         <label className="noselect" htmlFor="lastName">
-          Last Name
+          {i18next.t("field.label.last-name")}
         </label>
         <input
           type="text"
           className="form-control"
           aria-label="Last Name"
           aria-required="true"
-          placeholder={getPlaceholder("Your Last Name", configuration)}
+          placeholder={getPlaceholder(i18next.t("field.placeholder.last-name"), configuration)}
           minLength="3"
           autoCorrect="off"
           autoCapitalize="on"
@@ -198,14 +198,14 @@ export default function SignUp() {
       </div>
       <div className="form-group">
         <label className="noselect" htmlFor="email">
-          Email
+          {i18next.t("field.label.email")}
         </label>
         <input
           type="email"
           className="form-control"
           aria-label="Email"
           aria-required="true"
-          placeholder={getPlaceholder("your@email.com", configuration)}
+          placeholder={getPlaceholder(i18next.t("field.placeholder.email"), configuration)}
           spellCheck="false"
           id="email"
           required
@@ -242,13 +242,13 @@ export default function SignUp() {
           </span>
         </div>}
       <div className="form-group last mb-3">
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">{i18next.t("field.label.password")}</label>
         <input
           type="password"
           className="form-control"
           aria-label="Password"
           aria-required="true"
-          placeholder={getPlaceholder("********", configuration)}
+          placeholder={getPlaceholder(i18next.t("field.placeholder.password"), configuration)}
           minLength="8"
           autoComplete="new-password"
           id="password"
@@ -258,7 +258,7 @@ export default function SignUp() {
       <div className="page-links">
         <span className="page-link" aria-label="Login">
           <a href={"/login" + window.location.search} className="page-link">
-            Have an account? Login
+            {i18next.t("link.login")}
           </a>
         </span>
       </div>

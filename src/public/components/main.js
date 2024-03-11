@@ -10,10 +10,10 @@ const routes = {
   MFA: "/2fa",
   CONSENT: "/consent",
   NOT_FOUND: "/not-found",
-}
+};
 
 async function importRouteComponent(route) {
-  return (await import(`.${route}.js`)).default
+  return (await import(`.${route}.js`)).default;
 }
 
 async function getRenderElement() {
@@ -39,6 +39,20 @@ async function getRenderElement() {
 }
 
 async function main() {
+  const urlParams = new URLSearchParams(window.location.search);
+  let language = urlParams.get("language") || "en";
+  const languageResponse = await fetch(`./languages/${language}.json`);
+  const languageTranslation = await languageResponse.json();
+  console.log(languageTranslation);
+  i18next.init({
+    lng: urlParams.get("language") || "en",
+    debug: true,
+    resources: {
+      [language]: {
+        translation: languageTranslation,
+      },
+    },
+  });
   const domContainer = document.querySelector("#root");
   const root = ReactDOM.createRoot(domContainer);
   root.render(React.createElement(Layout, {}, React.createElement(await getRenderElement())));
