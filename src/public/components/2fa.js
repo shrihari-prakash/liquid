@@ -47,10 +47,6 @@ export default function TwoFactorAuthentication() {
             });
     }
 
-    if (!configuration["privilege.can-reset-password"]) {
-        return null;
-    }
-
     return (
         <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={submit2fa}>
             <div className="noselect">
