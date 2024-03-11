@@ -4,6 +4,7 @@ const log = Logger.getLogger().child({ from: "mailer" });
 import sgMail from "@sendgrid/mail";
 import nodemailer from "nodemailer";
 import * as path from "path";
+import {fileURLToPath} from 'url';
 import * as fs from "fs";
 
 import { Configuration } from "../../singleton/configuration.js";
@@ -11,6 +12,9 @@ import { UserInterface } from "../../model/mongo/user.js";
 import VerificationCodeModel from "../../model/mongo/verification-code.js";
 import { VerificationCodeType } from "../../enum/verification-code.js";
 import { v4 as uuidv4 } from "uuid";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const Modes = {
   PRINT: "print",
