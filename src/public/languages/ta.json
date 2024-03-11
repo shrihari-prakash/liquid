@@ -1,6 +1,6 @@
 {
-    "title.login": "உள்நுழைய",
-    "title.signup": "கணக்கை துவங்குங்கள்",
+    "title.login": "உள்நுழைக",
+    "title.signup": "பதிவு செய்க",
     "title.2fa": "இரண்டு-படி சரிபார்ப்பு",
     "title.consent": "ஒப்புதலை வழங்கவும்",
     "title.get-code": "அடையாளத்தை நிரூபிக்கவும்",
@@ -8,8 +8,8 @@
     "title.verify-account": "கணக்கை நிரூபிக்கவும்",
     "title.verify-your-identity": "அடையாளத்தை நிரூபிக்கவும்",
   
-    "heading.login": "உள்நுழைய",
-    "heading.signup": "கணக்கை துவங்குங்கள்",
+    "heading.login": "உள்நுழைக",
+    "heading.signup": "பதிவு செய்க",
     "heading.2fa": "இரண்டு-படி சரிபார்ப்பு",
     "heading.consent": "ஒப்புதலை வழங்கவும்",
     "heading.get-code": "அடையாளத்தை நிரூபிக்கவும்",
@@ -34,7 +34,7 @@
     "message.recover-instructions": "உங்கள் கணக்கை மீட்டெடுக்க உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும்.",
     "message.reset-password-instructions": "உங்கள் மின்னஞ்சல் முகவரிக்கு சரிபார்ப்புக் குறியீடு அனுப்பப்பட்டது.",
   
-    "button.login": "உள்நுழைய",
+    "button.login": "உள்நுழைக",
     "button.signup": "கணக்கை துவங்குங்கள்",
     "button.submit": "சமர்ப்பிக்க",
     "button.consent": "சம்மதம்",
@@ -62,7 +62,7 @@
     "field.placeholder.email": "உங்களுடைய@மின்னஞ்சல்.com",
   
     "field.label.username-or-email": "கணக்கு கைப்பிடி அல்லது மின்னஞ்சல்",
-    "field.placeholder.username-or-email": "உங்களுடைய_கணக்கு_கைப்பிடி",
+    "field.placeholder.username-or-email": "கணக்கு_கைப்பிடி",
   
     "field.label.password": "கடவுச்சொல்",
     "field.placeholder.password": "********",
