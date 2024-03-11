@@ -1,15 +1,15 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/shared/user-info.get" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import UserModel, { UserAdminProjection, UserClientProjection, UserInterface } from "../../../../model/mongo/user";
-import { Configuration } from "../../../../singleton/configuration";
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import { hydrateUserProfile } from "../../../../utils/user";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import UserModel, { UserAdminProjection, UserClientProjection, UserInterface } from "../../../../model/mongo/user.js";
+import { Configuration } from "../../../../singleton/configuration.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { hydrateUserProfile } from "../../../../utils/user.js";
 
 export const GET_UserInfoValidator = [query("targets").exists().isString()];
 

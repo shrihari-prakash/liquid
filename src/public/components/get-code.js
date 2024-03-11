@@ -2,7 +2,7 @@ import { ConfigurationContext } from "../context/configuration.js";
 import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
 
 export default function GetCode() {
-    const submitButtonText = "Get Code";
+    const submitButtonText = i18next.t("button.get-code");
 
     const configuration = React.useContext(ConfigurationContext);
 
@@ -10,7 +10,7 @@ export default function GetCode() {
     const [hasError, setHasError] = React.useState(false);
     const [submitting, setSubmitting] = React.useState(false);
 
-    React.useEffect(() => useTitle(configuration["content.app-name"], "Verify Your Identity"), []);
+    React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.verify-your-identity")), []);
 
     const onSubmitError = (props) => {
         if (hasError) {
@@ -40,7 +40,7 @@ export default function GetCode() {
                 if (response.responseJSON.additionalInfo && response.status === 400) {
                     return onFieldError({ response });
                 }
-                onSubmitError({ errorText: "Invalid Login" });
+                onSubmitError({ errorText: i18next.t("error.inavlid-login") });
             })
             .always(function () {
                 setSubmitting(false);
@@ -55,18 +55,18 @@ export default function GetCode() {
         <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={getCode}>
             <div className="noselect">
                 <h3>
-                    Verify your identity
+                    {i18next.t("heading.verify-your-identity")}
                 </h3>
-                <p className="app-tagline">Enter your email address to recover your account.</p>
+                <p className="app-tagline">{i18next.t("message.recover-instructions")}</p>
             </div>
             <div className="form-group first last">
-                <label className="noselect" htmlFor="email">Email</label>
+                <label className="noselect" htmlFor="email">{i18next.t("field.label.email")}</label>
                 <input
                     type="email"
                     className="form-control"
                     aria-label="Email"
                     aria-required="true"
-                    placeholder={getPlaceholder("your@email.com", configuration)}
+                    placeholder={getPlaceholder(i18next.t("field.placeholder.email"), configuration)}
                     minLength="8"
                     autoComplete="off"
                     autoCorrect="off"
@@ -79,7 +79,7 @@ export default function GetCode() {
             <div className="page-links">
                 <span className="page-link">
                     <a href={"/login" + window.location.search} className="page-link" aria-label="Login">
-                        Login
+                        {i18next.t("link.login-minimal")}
                     </a>
                 </span>
             </div>

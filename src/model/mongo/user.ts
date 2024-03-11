@@ -1,8 +1,8 @@
-import { Logger } from "../../singleton/logger";
+import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user-model" });
 
 import mongoose, { ObjectId, Schema } from "mongoose";
-import { SensitivityLevel } from "../../enum/sensitivity-level";
+import { SensitivityLevel } from "../../enum/sensitivity-level.js";
 
 export const userSchema = {
   username: {

@@ -1,14 +1,12 @@
 {
-  "ts-node": {
-    "transpileOnly": true
-  },
   "compilerOptions": {
-    "target": "ES2021",
-    "lib": ["es2021"],
-    "module": "CommonJS",
+    "target": "ES2022",
+    "lib": ["es2022"],
+    "module": "NodeNext",
     "rootDir": "src",
     "typeRoots": ["./node_modules/@types", "src/types"],
     "types": [],
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "allowJs": true,
     "outDir": "build",

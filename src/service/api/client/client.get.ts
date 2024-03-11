@@ -1,13 +1,13 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "client/client.get" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import ClientModel from "../../../model/mongo/client";
-import { hasErrors } from "../../../utils/api";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import ClientModel from "../../../model/mongo/client.js";
+import { hasErrors } from "../../../utils/api.js";
 
 export const GET_ClientValidator = [query("id").optional().isString().isLength({ min: 3, max: 256 })];
 

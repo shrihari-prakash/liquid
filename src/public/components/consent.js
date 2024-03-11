@@ -11,7 +11,7 @@ export default function ConsentScreen() {
   const [permissionsInfo, setPermissionsInfo] = React.useState(false);
   const [requiredScopes, setRequiredScopes] = React.useState([]);
 
-  const submitButtonText = "Consent";
+  const submitButtonText = i18next.t("button.consent");
   const appName = configuration["content.app-name"];
   const authParams = prepareAuthorizationParams(configuration);
 
@@ -39,13 +39,13 @@ export default function ConsentScreen() {
     window.location = redirectUri;
   };
 
-  React.useEffect(() => useTitle(configuration["content.app-name"], "Consent Required"), []);
+  React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.consent")), []);
 
   return clientInfo && permissionsInfo ? (
     <div className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`}>
       <div className="noselect">
         <h3 className="long-header">
-          Consent Required<span className="header-separator">&nbsp;&#x2022;&nbsp;</span>
+          {i18next.t("heading.consent")}<span className="header-separator">&nbsp;&#x2022;&nbsp;</span>
           {configuration[`assets.header-icon-${theme}`] ? (
             <div className="app-icon-header">
               <div style={{ display: miniIconLoaded ? "none" : "block" }} className="spinner" />
@@ -62,8 +62,7 @@ export default function ConsentScreen() {
         </h3>
         <div className="consent-form">
           <p>
-            {clientInfo.displayName} wants access to your account. If you consent to this, {clientInfo.displayName} will
-            be able to:
+            {i18next.t("message.consent", { app_name: clientInfo.displayName })}
           </p>
           <ul className="scope-container">
             {requiredScopes.map((scope) => (
@@ -76,7 +75,7 @@ export default function ConsentScreen() {
             ))}
           </ul>
           <p className="fineprint">
-            Before you consent, make sure you trust this application as you might be sharing sensitive information.
+            {i18next.t("message.consent-warning")}
           </p>
         </div>
       </div>
@@ -89,7 +88,7 @@ export default function ConsentScreen() {
           className="button"
           value={submitButtonText}
         />
-        <input type="button" onClick={onDeny} className="button outline" value="Deny" />
+        <input type="button" onClick={onDeny} className="button outline" value={i18next.t("button.refuse")} />
       </div>
     </div>
   ) : (

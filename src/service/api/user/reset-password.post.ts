@@ -1,4 +1,4 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/reset-password.post" });
 
 import { Request, Response } from "express";
@@ -6,13 +6,13 @@ import bcrypt from "bcrypt";
 import { body } from "express-validator";
 import { isValidObjectId } from "mongoose";
 
-import UserModel from "../../../model/mongo/user";
-import VerificationCodeModel from "../../../model/mongo/verification-code";
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { bcryptConfig } from "./create.post";
-import { hasErrors } from "../../../utils/api";
-import { VerificationCodeType } from "../../../enum/verification-code";
+import UserModel from "../../../model/mongo/user.js";
+import VerificationCodeModel from "../../../model/mongo/verification-code.js";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { bcryptConfig } from "./create.post.js";
+import { hasErrors } from "../../../utils/api.js";
+import { VerificationCodeType } from "../../../enum/verification-code.js";
 
 export const POST_ResetPasswordValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

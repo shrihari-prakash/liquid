@@ -1,4 +1,4 @@
-import { Configuration } from "../singleton/configuration";
+import { Configuration } from "../singleton/configuration.js";
 
 export const getPaginationLimit = (requestLimit: string | number) => {
   let limit: any = parseInt(requestLimit as string);

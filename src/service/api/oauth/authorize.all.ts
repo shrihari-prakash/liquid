@@ -1,15 +1,15 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "oauth/authorize.all" });
 
 import { Request as OAuthRequest, Response as OAuthResponse } from "@node-oauth/oauth2-server";
 import { Request, Response, NextFunction } from "express";
 import { v4 as uuidv4 } from "uuid";
 
-import { OAuthServer } from "../../../singleton/oauth-server";
-import { statusCodes } from "../../../utils/http-status";
-import { Configuration } from "../../../singleton/configuration";
-import UserModel from "../../../model/mongo/user";
-import { isTokenInvalidated } from "../../../utils/session";
+import { OAuthServer } from "../../../singleton/oauth-server.js";
+import { statusCodes } from "../../../utils/http-status.js";
+import { Configuration } from "../../../singleton/configuration.js";
+import UserModel from "../../../model/mongo/user.js";
+import { isTokenInvalidated } from "../../../utils/session.js";
 
 function validatePKCEParameters(req: Request) {
   const queryParameters = req.query;

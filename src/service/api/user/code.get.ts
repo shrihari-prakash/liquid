@@ -1,15 +1,15 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/code.get" });
 
 import { Request, Response } from "express";
 import { query } from "express-validator";
 
-import UserModel, { UserInterface } from "../../../model/mongo/user";
-import { hasErrors } from "../../../utils/api";
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { Mailer } from "../../../singleton/mailer";
-import { VerificationCodeType } from "../../../enum/verification-code";
+import UserModel, { UserInterface } from "../../../model/mongo/user.js";
+import { hasErrors } from "../../../utils/api.js";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { Mailer } from "../../../singleton/mailer.js";
+import { VerificationCodeType } from "../../../enum/verification-code.js";
 
 export const GET_CodeValidator = [query("email").exists().isEmail()];
 

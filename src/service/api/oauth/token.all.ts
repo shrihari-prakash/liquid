@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { OAuthServer } from "../../../singleton/oauth-server";
+import { OAuthServer } from "../../../singleton/oauth-server.js";
 import { Request as OAuthRequest, Response as OAuthResponse } from "@node-oauth/oauth2-server";
-import { Configuration } from "../../../singleton/configuration";
-import { statusCodes } from "../../../utils/http-status";
+import { Configuration } from "../../../singleton/configuration.js";
+import { statusCodes } from "../../../utils/http-status.js";
 
 const oauthOptions = {
   requireClientAuthentication: {

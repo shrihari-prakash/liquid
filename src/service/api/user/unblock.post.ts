@@ -1,15 +1,15 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/unblock.post" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
 import { isValidObjectId } from "mongoose";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { hasErrors } from "../../../utils/api";
-import BlockModel from "../../../model/mongo/block";
-import { ScopeManager } from "../../../singleton/scope-manager";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { hasErrors } from "../../../utils/api.js";
+import BlockModel from "../../../model/mongo/block.js";
+import { ScopeManager } from "../../../singleton/scope-manager.js";
 
 export const POST_UnblockValidator = [body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 

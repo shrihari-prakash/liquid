@@ -1,23 +1,23 @@
 import express from "express";
 
-import { Configuration } from "../../../../singleton/configuration";
-import { ClientAuthFlow } from "../../middleware/authenticate";
-import POST_Ban, { POST_BanValidator } from "../shared/ban.post";
-import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post";
-import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post";
-import POST_Create, { POST_CreateValidator } from "../shared/create.post";
-import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post";
-import POST_Access, { POST_AccessValidator } from "../shared/access.post";
-import POST_InviteCodes, { POST_InviteCodesValidator } from "../shared/invite-codes.post";
-import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get";
-import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get";
-import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get";
-import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get";
-import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get";
-import GET_List from "../shared/list.get";
-import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get";
-import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put";
-import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get";
+import { Configuration } from "../../../../singleton/configuration.js";
+import { ClientAuthFlow } from "../../middleware/authenticate.js";
+import POST_Ban, { POST_BanValidator } from "../shared/ban.post.js";
+import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post.js";
+import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post.js";
+import POST_Create, { POST_CreateValidator } from "../shared/create.post.js";
+import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post.js";
+import POST_Access, { POST_AccessValidator } from "../shared/access.post.js";
+import POST_InviteCodes, { POST_InviteCodesValidator } from "../shared/invite-codes.post.js";
+import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get.js";
+import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get.js";
+import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get.js";
+import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get.js";
+import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get.js";
+import GET_List from "../shared/list.get.js";
+import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get.js";
+import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put.js";
+import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get.js";
 
 const ClientApiRouter = express.Router();
 

@@ -1,7 +1,7 @@
-import { UserInterface } from "../model/mongo/user";
-import { profilePicturePath } from "../service/api/user/profile-picture.patch";
-import { Configuration } from "../singleton/configuration";
-import { S3 } from "../singleton/s3";
+import { UserInterface } from "../model/mongo/user.js";
+import { profilePicturePath } from "../service/api/user/profile-picture.patch.js";
+import { Configuration } from "../singleton/configuration.js";
+import { S3 } from "../singleton/s3.js";
 
 export const attachProfilePicture = async (user: UserInterface) => {
   if (!Configuration.get("privilege.can-use-profile-picture-apis")) {

@@ -1,19 +1,19 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/me.patch" });
 
 import { Request, Response } from "express";
 import { body } from "express-validator";
 import bcrypt from "bcrypt";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import UserModel from "../../../model/mongo/user";
-import { Configuration } from "../../../singleton/configuration";
-import { bcryptConfig } from "./create.post";
-import { hasErrors } from "../../../utils/api";
-import { flushUserInfoFromRedis } from "../../../model/oauth/oauth";
-import { ScopeManager } from "../../../singleton/scope-manager";
-import UserValidator from "../../../validator/user";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import UserModel from "../../../model/mongo/user.js";
+import { Configuration } from "../../../singleton/configuration.js";
+import { bcryptConfig } from "./create.post.js";
+import { hasErrors } from "../../../utils/api.js";
+import { flushUserInfoFromRedis } from "../../../model/oauth/oauth.js";
+import { ScopeManager } from "../../../singleton/scope-manager.js";
+import UserValidator from "../../../validator/user.js";
 
 const userValidator = new UserValidator(body);
 

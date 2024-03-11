@@ -1,8 +1,8 @@
 import express from "express";
-import OAuthRouter from "./oauth/router";
-import UserRouter from "./user/router";
-import ClientRouter from "./client/router";
-import SystemRouter from "./system/router";
+import OAuthRouter from "./oauth/router.js";
+import UserRouter from "./user/router.js";
+import ClientRouter from "./client/router.js";
+import SystemRouter from "./system/router.js";
 
 export class Api {
   public initialize(app: express.Application): void {

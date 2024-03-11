@@ -1,4 +1,4 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/admin-api/update.patch" });
 
 import { Request, Response } from "express";
@@ -6,17 +6,17 @@ import { body } from "express-validator";
 import bcrypt from "bcrypt";
 import { isValidObjectId } from "mongoose";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import UserModel, { UserInterface, userSchema } from "../../../../model/mongo/user";
-import { Configuration } from "../../../../singleton/configuration";
-import Role from "../../../../enum/role";
-import { bcryptConfig } from "../create.post";
-import { hasErrors } from "../../../../utils/api";
-import { PATCH_MeValidator } from "../me.patch";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth";
-import { isRoleRankHigher } from "../../../../utils/role";
-import { ScopeManager } from "../../../../singleton/scope-manager";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import UserModel, { UserInterface, userSchema } from "../../../../model/mongo/user.js";
+import { Configuration } from "../../../../singleton/configuration.js";
+import Role from "../../../../enum/role.js";
+import { bcryptConfig } from "../create.post.js";
+import { hasErrors } from "../../../../utils/api.js";
+import { PATCH_MeValidator } from "../me.patch.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
+import { isRoleRankHigher } from "../../../../utils/role.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
 
 export const PATCH_UpdateValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

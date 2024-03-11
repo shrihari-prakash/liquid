@@ -1,13 +1,13 @@
-import { Logger } from "../../../../singleton/logger";
+import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/shared/roles.get" });
 
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../../utils/response";
-import Role from "../../../../enum/role";
-import { ScopeManager } from "../../../../singleton/scope-manager";
-import { extractRank, findRoleRank } from "../../../../utils/role";
+import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
+import Role from "../../../../enum/role.js";
+import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { extractRank, findRoleRank } from "../../../../utils/role.js";
 
 const GET_Roles = async (_: Request, res: Response) => {
   try {

@@ -1,5 +1,5 @@
 import mongoose, { ObjectId, Schema } from "mongoose";
-import { Configuration } from "../../singleton/configuration";
+import { Configuration } from "../../singleton/configuration.js";
 
 const loginHistorySchema = {
   userAgent: {

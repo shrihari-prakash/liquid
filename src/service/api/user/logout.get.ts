@@ -1,15 +1,15 @@
-import { Logger } from "../../../singleton/logger";
+import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/logout.get" });
 
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response";
-import { Pusher } from "../../../singleton/pusher";
-import { PushEvent } from "../../pusher/pusher";
-import { PushEventList } from "../../../enum/push-events";
-import OAuthModel from "../../../model/oauth/oauth";
-import { Redis } from "../../../singleton/redis";
+import { errorMessages, statusCodes } from "../../../utils/http-status.js";
+import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { Pusher } from "../../../singleton/pusher.js";
+import { PushEvent } from "../../pusher/pusher.js";
+import { PushEventList } from "../../../enum/push-events.js";
+import OAuthModel from "../../../model/oauth/oauth.js";
+import { Redis } from "../../../singleton/redis.js";
 import { Token } from "@node-oauth/oauth2-server";
 
 const GET_Logout = async (req: Request, res: Response) => {
