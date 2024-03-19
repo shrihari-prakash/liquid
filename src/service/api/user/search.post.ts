@@ -20,7 +20,7 @@ export const POST_SearchValidator = [body("query").exists().isString().isLength(
 const filterBlockedUsers = async (loggedInUserId: string, results: UserInterface[]) => {
   const blockedUsers: { sourceId: any; targetId: any }[] = await BlockModel.find(
     { targetId: loggedInUserId, sourceId: { $in: results.map((user) => user._id) } },
-    { sourceId: 1 }
+    { sourceId: 1 },
   );
   const blockedUserIds = blockedUsers.map((user) => user.sourceId.toString());
   log.debug("Blocked users: %o for search from user %s", blockedUserIds, loggedInUserId);
@@ -47,7 +47,10 @@ const POST_Search = async (req: Request, res: Response) => {
     }
     log.info("Cache miss for query: " + query);
     const queryRegex = new RegExp(query, "i");
-    const $or = Configuration.get("user.search.search-fields").map((field: string) => ({ [field]: queryRegex }));
+    const strictFields = new Set(Configuration.get("user.search.strict-match-fields"));
+    const $or = Configuration.get("user.search.search-fields").map((field: string) => ({
+      [field]: strictFields.has(field) ? query : queryRegex,
+    }));
     if (Configuration.get("privilege.user.search.can-use-id") && isValidObjectId(query)) {
       log.debug("Search by ID is enabled.");
       $or.push({ _id: query });
@@ -66,7 +69,7 @@ const POST_Search = async (req: Request, res: Response) => {
     }
     log.debug("Search query is: %o", $or);
     const results = (await UserModel.find({ $or }, UserProjection).limit(
-      Configuration.get("user.search-results.limit")
+      Configuration.get("user.search-results.limit"),
     )) as unknown as UserInterface[];
     await hydrateUserProfile(results);
     const cacheKey = `${redisPrefix}${query}`;
