@@ -839,6 +839,14 @@
     "default": "username,firstName,lastName,email"
   },
   {
+    "name": "user.search.strict-match-fields",
+    "displayName": "User Search Strict Match Fields",
+    "envName": "USER_SEARCH_STRICT_MATCH_FIELDS",
+    "description": "Specifies the fields that should be returned only if the search query matches the string in the field exactly. The field should also be a part of `user.search.search-fields`.",
+    "type": "stringArray",
+    "default": ""
+  },
+  {
     "name": "privilege.user.search.can-use-id",
     "displayName": "Can Use ID for User Search",
     "envName": "USER_SEARCH_CAN_USE_ID",
