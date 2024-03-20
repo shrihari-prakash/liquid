@@ -43,7 +43,7 @@ const POST_Login = async (req: Request, res: Response) => {
     if (email) {
       query.email = sanitizeEmailAddress(email);
     } else {
-      query.username = username;
+      query.username = username.toLowerCase();
     }
     const user = (await UserModel.findOne(query, select).exec()) as unknown as UserInterface;
     if (!user) return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));

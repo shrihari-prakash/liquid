@@ -168,7 +168,7 @@ const POST_Create = async (req: Request, res: Response) => {
       log.warn("Invalid JSON found in `user.account-creation.custom-data.default-value`.");
     }
     const toInsert: any = {
-      username,
+      username: username.toLowerCase(),
       firstName,
       lastName,
       email: sanitizeEmailAddress(email),
