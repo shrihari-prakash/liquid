@@ -33,6 +33,7 @@
   "message.verification-instructions": "Un code de vérification a été envoyé à votre adresse e-mail.",
   "message.recover-instructions": "Entrez votre adresse e-mail pour récupérer votre compte.",
   "message.reset-password-instructions": "Un code de vérification a été envoyé à votre adresse e-mail.",
+  "message.page-not-found": "Cette page est introuvable",
 
   "button.login": "Se connecter",
   "button.signup": "Créer un compte",
