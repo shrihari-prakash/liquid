@@ -40,7 +40,7 @@ export default function GetCode() {
                 if (response.responseJSON.additionalInfo && response.status === 400) {
                     return onFieldError({ response });
                 }
-                onSubmitError({ errorText: i18next.t("error.inavlid-login") });
+                onSubmitError({ errorText: i18next.t("error.invalid-login") });
             })
             .always(function () {
                 setSubmitting(false);

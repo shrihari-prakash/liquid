@@ -20,7 +20,7 @@
   "error.too-many-retries": "Too Many Retries",
   "error.too-many-requests": "Too Many Requests",
   "error.account-not-verified": "Account not verified",
-  "error.inavlid-login": "Invalid Login",
+  "error.invalid-login": "Invalid Login",
   "error.bad-email-domain": "Bad email domain",
   "error.duplicate-account": "Account already exists",
   "error.signup-error": "Signup error",

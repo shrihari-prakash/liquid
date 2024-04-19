@@ -20,7 +20,7 @@
   "error.too-many-retries": "Trop de tentatives",
   "error.too-many-requests": "Trop de demandes",
   "error.account-not-verified": "Compte non vérifié",
-  "error.inavlid-login": "Identifiant invalide",
+  "error.invalid-login": "Identifiant invalide",
   "error.bad-email-domain": "Mauvais domaine de messagerie",
   "error.duplicate-account": "Le compte existe déjà",
   "error.signup-error": "Erreur d'inscription",

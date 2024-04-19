@@ -97,7 +97,7 @@ export default function Login() {
         if (response.status === 400 && response.responseJSON.additionalInfo) {
           return onFieldError({ response });
         }
-        onSubmitError({ errorText: i18next.t("error.inavlid-login") });
+        onSubmitError({ errorText: i18next.t("error.invalid-login") });
       })
       .always(function () {
         setSubmitting(false);

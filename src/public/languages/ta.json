@@ -20,7 +20,7 @@
     "error.too-many-retries": "மிக அதிகமான முயற்சிகள்",
     "error.too-many-requests": "மிக அதிகமான கோரிக்கைகள்",
     "error.account-not-verified": "கணக்கு சரிபார்க்கப்படவில்லை",
-    "error.inavlid-login": "தவறான புகுபதிவு",
+    "error.invalid-login": "தவறான புகுபதிவு",
     "error.bad-email-domain": "தவறான மின்னஞ்சல் டொமைன்",
     "error.duplicate-account": "கணக்கு ஏற்கனவே உள்ளது",
     "error.signup-error": "பதிவு பிழை",
