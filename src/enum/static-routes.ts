@@ -7,4 +7,5 @@ export const StaticRoutes = {
   RESET_PASSWORD: "/reset-password",
   CONSENT: "/consent",
   "2FA": "/2fa",
+  NOT_FOUND: "/not-found"
 };
