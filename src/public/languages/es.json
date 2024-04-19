@@ -1,0 +1,77 @@
+{
+  "title.login": "Inicia sesión en",
+  "title.signup": "Crear una cuenta",
+  "title.2fa": "Verificación en dos pasos",
+  "title.consent": "Consentimiento requerido",
+  "title.get-code": "Verifica Tu Identidad",
+  "title.reset-password": "Reestablece tu contraseña",
+  "title.verify-account": "Verifica Tu Cuenta",
+  "title.verify-your-identity": "Verifica Tu Identidad",
+
+  "heading.login": "Inicia sesión en",
+  "heading.signup": "Crear una cuenta",
+  "heading.2fa": "Verificación en dos pasos",
+  "heading.consent": "Consentimiento requerido",
+  "heading.get-code": "Verifica Tu Identidad",
+  "heading.reset-password": "Reestablece tu contraseña",
+  "heading.verify-account": "Verifica Tu Cuenta",
+  "heading.verify-your-identity": "Verifica Tu Identidad",
+
+  "error.too-many-retries": "Demasiados Reintentos",
+  "error.too-many-requests": "Demasiadas Peticiones",
+  "error.account-not-verified": "Cuenta no verificada",
+  "error.invalid-login": "Inicio de sesión inválido",
+  "error.bad-email-domain": "Dominio de e-mail erróneo",
+  "error.duplicate-account": "La cuenta ya existe",
+  "error.signup-error": "Error en el registro",
+  "error.invalid-field": "{{field_name}} inválido/a",
+  "error.invalid-code": "Código inválido",
+
+  "message.enter-login-code": "Para iniciar sesión, introduce el código de verificación enviado a tu dirección de correo electrónico.",
+  "message.consent": "{{app_name}} quiere acceder a tu cuenta. Si aceptas los términos, {{app_name}} podrá:",
+  "message.consent-warning": "Antes de consentir, asegúrate de que confías en esta aplicación ya que podrías estar compartiendo información sensible.",
+  "message.verification-instructions": "Un código de verificación ha sido enviado a tu dirección de correo electrónico.",
+  "message.recover-instructions": "Introduce tu dirección de correo electrónico para recuperar tu cuenta.",
+  "message.reset-password-instructions": "Un código de verificación ha sido enviado a tu dirección de correo electrónico.",
+
+  "button.login": "Iniciar sesión",
+  "button.signup": "Crear una cuenta",
+  "button.submit": "Enviar",
+  "button.consent": "Consentir",
+  "button.refuse": "Denegar",
+  "button.get-code": "Obtener código",
+  "button.change-password": "Cambiar contraseña",
+  "button.verify": "Verificar",
+
+  "field.label.username": "Usuario",
+  "field.placeholder.username": "tu_usuario",
+
+  "field.label.invite-code": "Código de invitación",
+  "field.placeholder.invite-code": "TU-CÓDIGO-DE-INVITACIÓN",
+
+  "field.label.verification-code": "Código de verificación",
+  "field.placeholder.verification-code": "000000",
+
+  "field.label.first-name": "Nombre",
+  "field.placeholder.first-name": "Tu Nombre",
+
+  "field.label.last-name": "Apellidos",
+  "field.placeholder.last-name": "Tus Apellidos",
+
+  "field.label.email": "E-mail",
+  "field.placeholder.email": "tu@email.com",
+
+  "field.label.username-or-email": "Usuario o e-mail",
+  "field.placeholder.username-or-email": "tu_usuario",
+
+  "field.label.password": "Contraseña",
+  "field.placeholder.password": "********",
+
+  "field.label.new-password": "Nueva contraseña",
+  "field.placeholder.new-password": "********",
+
+  "link.create-account": "Crear cuenta",
+  "link.forgot-password": "¿Olvidaste tu contraseña?",
+  "link.login": "¿Tienes una cuenta? Inicia sesión",
+  "link.login-minimal": "Iniciar sesión"
+}
