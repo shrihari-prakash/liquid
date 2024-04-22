@@ -20,7 +20,7 @@
   "error.too-many-retries": "Too Many Retries",
   "error.too-many-requests": "Too Many Requests",
   "error.account-not-verified": "Account not verified",
-  "error.inavlid-login": "Invalid Login",
+  "error.invalid-login": "Invalid Login",
   "error.bad-email-domain": "Bad email domain",
   "error.duplicate-account": "Account already exists",
   "error.signup-error": "Signup error",
@@ -33,6 +33,7 @@
   "message.verification-instructions": "A verification code was sent to your email address.",
   "message.recover-instructions": "Enter your email address to recover your account.",
   "message.reset-password-instructions": "A verification code was sent to your email address.",
+  "message.page-not-found": "This page could not be found",
 
   "button.login": "Login",
   "button.signup": "Create Account",
