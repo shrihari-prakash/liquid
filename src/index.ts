@@ -160,8 +160,15 @@ if (Configuration.get("system.use-built-in-static-ui")) {
 }
 // ********** End UI / Static Pages ********** //
 
-app.all("*", function (_, res) {
-  res.status(statusCodes.notFound).json(new ErrorResponse(errorMessages.notFound));
+app.all("*", function (req, res) {
+  const apiPattern = /^(\/user\/|\/system\/|\/oauth\/)/;
+  if (!apiPattern.test(req.path) && Configuration.get("system.use-built-in-static-ui")) {
+    const staticFolder = path.join(__dirname, "public");
+    const index = path.join(staticFolder, "index.html");
+    res.sendFile(index);
+  } else {
+    res.status(statusCodes.notFound).json(new ErrorResponse(errorMessages.notFound));
+  }
 });
 
 // ********** Reverse Proxy Setup ********** //
