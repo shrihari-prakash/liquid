@@ -31,7 +31,8 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 
 ## Translation Credits
 
-¸¸¸¸
+* **Spanish (es):** [@juliolopeztorres](https://github.com/juliolopeztorres)
+* **Tamil (ta):** [@shrihari-prakash](https://github.com/shrihari-prakash)
 
 ## ⚙️ Setup
 
