@@ -29,6 +29,11 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 - **Multiple Language Support:** Liquid is available in English, French and Tamil. More translations in progress!
 - **Small Image Size:** Tiny ~60MB image download.
 
+## Translation Credits
+
+- **Spanish:** [@juliolopeztorres](https://github.com/juliolopeztorres)
+- **Tamil:** [@shrihari-prakash](https://github.com/shrihari-prakash)
+
 ## ⚙️ Setup
 
 #### For setup instructions and documentation, see the [Liquid Wiki](https://github.com/shrihari-prakash/liquid/wiki).
