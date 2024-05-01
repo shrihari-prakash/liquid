@@ -41,10 +41,10 @@ export default function SignUp() {
 
   function signup(event) {
     event.preventDefault();
-    const username = document.getElementById("username").value;
-    const firstName = document.getElementById("firstName").value;
-    const lastName = document.getElementById("lastName").value;
-    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value.trim();
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const submit = document.getElementById("submit");
     const user = {
@@ -188,7 +188,7 @@ export default function SignUp() {
           aria-label="Last Name"
           aria-required="true"
           placeholder={getPlaceholder(i18next.t("field.placeholder.last-name"), configuration)}
-          minLength="3"
+          minLength="1"
           autoCorrect="off"
           autoCapitalize="on"
           spellCheck="false"
