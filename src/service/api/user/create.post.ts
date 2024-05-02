@@ -147,11 +147,10 @@ const POST_Create = async (req: Request, res: Response) => {
       if (existingUser.emailVerified)
         return res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
       else {
-        await Mailer.generateAndSendEmailVerification(existingUser, VerificationCodeType.SIGNUP);
-        const response = {
-          user: existingUser,
-        };
-        return res.status(statusCodes.created).json(new SuccessResponse(response));
+        await UserModel.deleteOne({ _id: existingUser._id });
+        log.info("Deleted unverified user %s", existingUser.username);
+        await InviteCodeModel.deleteMany({ sourceId: existingUser._id });
+        log.info("Deleted invite codes for user %s", existingUser.username);
       }
     }
     session = await MongoDB.startSession();
