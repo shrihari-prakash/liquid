@@ -67,7 +67,7 @@ async function validateInviteCode(req: Request, res: Response, user: UserInterfa
 async function useInviteCode(
   user: UserInterface,
   code: string,
-  sessionOptions: { session: ClientSession } | undefined
+  sessionOptions: { session: ClientSession } | undefined,
 ) {
   if (
     Configuration.get("user.account-creation.enable-invite-only") ||
@@ -110,7 +110,7 @@ const POST_Create = async (req: Request, res: Response) => {
           log.info(
             "Duplicate account creation for ip %s throttled. %s seconds left for lifting the throttle.",
             req.ip,
-            window - difference
+            window - difference,
           );
           return res.status(statusCodes.tooManyRequests).json(new ErrorResponse(errorMessages.creationThrottled));
         }
@@ -147,10 +147,15 @@ const POST_Create = async (req: Request, res: Response) => {
       if (existingUser.emailVerified)
         return res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
       else {
-        await UserModel.deleteOne({ _id: existingUser._id });
-        log.info("Deleted unverified user %s", existingUser.username);
+        const inviteCode = await InviteCodeModel.findOne({ targetId: existingUser._id });
+        if (inviteCode) {
+          await InviteCodeModel.updateOne({ targetId: existingUser._id }, { $set: { targetId: null } });
+          log.info("Revoked invite code for user %s", existingUser.username);
+        }
         await InviteCodeModel.deleteMany({ sourceId: existingUser._id });
         log.info("Deleted invite codes for user %s", existingUser.username);
+        await UserModel.deleteOne({ _id: existingUser._id });
+        log.info("Deleted unverified user %s", existingUser.username);
       }
     }
     session = await MongoDB.startSession();
@@ -212,3 +217,4 @@ const POST_Create = async (req: Request, res: Response) => {
 };
 
 export default POST_Create;
+
