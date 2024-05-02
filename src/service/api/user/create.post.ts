@@ -147,13 +147,15 @@ const POST_Create = async (req: Request, res: Response) => {
       if (existingUser.emailVerified)
         return res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
       else {
-        const inviteCode = await InviteCodeModel.findOne({ targetId: existingUser._id });
-        if (inviteCode) {
-          await InviteCodeModel.updateOne({ targetId: existingUser._id }, { $set: { targetId: null } });
-          log.info("Revoked invite code for user %s", existingUser.username);
+        if (Configuration.get("user.account-creation.enable-invite-only")) {
+          const inviteCode = await InviteCodeModel.findOne({ targetId: existingUser._id });
+          if (inviteCode) {
+            await InviteCodeModel.updateOne({ targetId: existingUser._id }, { $set: { targetId: null } });
+            log.info("Revoked invite code for user %s", existingUser.username);
+          }
+          await InviteCodeModel.deleteMany({ sourceId: existingUser._id });
+          log.info("Deleted invite codes for user %s", existingUser.username);
         }
-        await InviteCodeModel.deleteMany({ sourceId: existingUser._id });
-        log.info("Deleted invite codes for user %s", existingUser.username);
         await UserModel.deleteOne({ _id: existingUser._id });
         log.info("Deleted unverified user %s", existingUser.username);
       }
