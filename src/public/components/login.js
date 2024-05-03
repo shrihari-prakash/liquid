@@ -187,7 +187,17 @@ export default function Login() {
           </span>
         )}
       </div>
-      <input type="submit" disabled={submitting} className={"button" + (hasError ? " shake" : "")} value={buttonText} />
+      <div className="flex flex-col gap">
+        <input
+          type="submit"
+          disabled={submitting}
+          className={"button" + (hasError ? " shake" : "")}
+          value={buttonText}
+        />
+        <button type="button" disabled={submitting} className={"button outline"}>
+          <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signin.google")}
+        </button>
+      </div>
     </form>
   );
 }

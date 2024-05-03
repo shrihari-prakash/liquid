@@ -18,6 +18,16 @@
   appearance: button;
   width: 100%;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.outline {
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--form-input-border-color) !important;
 }
 
 .button:hover {

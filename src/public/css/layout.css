@@ -84,6 +84,15 @@ h3 {
   display: flex !important;
 }
 
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap {
+  gap: 1rem;
+}
+
 .noflex {
   display: block !important;
 }

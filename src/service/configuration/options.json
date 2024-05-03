@@ -799,6 +799,14 @@
     "default": 3600
   },
   {
+    "name": "user.account-creation.sso.google.enabled",
+    "displayName": "User Account Creation Enable Google SSO",
+    "envName": "USER_ACCOUNT_CREATION_SSO_GOOGLE_ENABLED",
+    "description": "Specifies if Google signon should be enabled.",
+    "type": "boolean",
+    "default": false
+  },
+  {
     "name": "user.profile.editable-fields",
     "displayName": "Profile Editable Fields",
     "envName": "USER_PROFILE_EDITABLE_FIELDS",
@@ -1106,7 +1114,8 @@
       "privilege.can-reset-password",
       "system.demo-mode",
       "user.login.require-browser-info",
-      "user.login.require-os-info"
+      "user.login.require-os-info",
+      "user.account-creation.sso.google.enabled"
     ]
   }
 ]
