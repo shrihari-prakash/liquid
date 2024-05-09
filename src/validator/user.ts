@@ -42,7 +42,7 @@ class UserValidator {
     return this.fn(field)
       [requiredFn]()
       .isString()
-      .isLength({ min: 8, max: 30 })
+      .isLength({ min: 1, max: 30 })
       .matches(new RegExp(Configuration.get("user.profile.username-validation-regex"), "i"));
   }
 
