@@ -144,7 +144,7 @@ export default function Login() {
           aria-label="Username or Email"
           aria-required="true"
           placeholder={getPlaceholder(i18next.t("field.placeholder.username-or-email"), configuration)}
-          minLength="8"
+          minLength="1"
           autoComplete="username"
           autoCorrect="off"
           autoCapitalize="off"
