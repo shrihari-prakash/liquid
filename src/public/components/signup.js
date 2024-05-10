@@ -132,7 +132,7 @@ export default function SignUp() {
           type="text"
           className="form-control"
           placeholder={getPlaceholder(i18next.t("field.placeholder.username"), configuration)}
-          minLength="1"
+          minLength="6"
           aria-label="Username"
           aria-required="true"
           autoCorrect="off"
