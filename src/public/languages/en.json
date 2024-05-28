@@ -21,7 +21,7 @@
   "error.too-many-requests": "Too Many Requests",
   "error.account-not-verified": "Account not verified",
   "error.invalid-login": "Invalid Login",
-  "error.bad-email-domain": "Bad email domain",
+  "error.bad-email-domain": "Unsupported Email Provider",
   "error.duplicate-account": "Account already exists",
   "error.signup-error": "Signup error",
   "error.invalid-field": "Invalid {{field_name}}",
