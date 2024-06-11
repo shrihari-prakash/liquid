@@ -23,6 +23,7 @@
   "error.invalid-login": "Invalid Login",
   "error.bad-email-domain": "Unsupported Email Provider",
   "error.duplicate-account": "Account already exists",
+  "error.duplicate-username": "Username is already taken",
   "error.signup-error": "Signup error",
   "error.invalid-field": "Invalid {{field_name}}",
   "error.invalid-code": "Invalid Code",

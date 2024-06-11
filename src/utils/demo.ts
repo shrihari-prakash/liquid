@@ -53,7 +53,7 @@ async function createAdminUser() {
   }
 }
 
-export const initializeDemo = () => {
+export const initializeDemo = async () => {
   if (!Configuration.get("system.demo-mode")) {
     return;
   }

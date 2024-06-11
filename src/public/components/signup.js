@@ -85,6 +85,9 @@ export default function SignUp() {
           return onSubmitError({ errorText: i18next.t("error.bad-email-domain") });
         }
         if (response.status === 409) {
+          if (response.responseJSON.additionalInfo.duplicateFields.includes("username")) {
+            return onSubmitError({ errorText: i18next.t("error.duplicate-username") });
+          }
           return onSubmitError({ errorText: i18next.t("error.duplicate-account") });
         }
         if (response.status === 429) {
