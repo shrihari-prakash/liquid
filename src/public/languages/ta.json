@@ -23,6 +23,7 @@
   "error.invalid-login": "தவறான புகுபதிவு",
   "error.bad-email-domain": "தவறான மின்னஞ்சல் டொமைன்",
   "error.duplicate-account": "கணக்கு ஏற்கனவே உள்ளது",
+  "error.duplicate-username": "கைப்பிடி ஏற்கனவே எடுக்கப்பட்டது",
   "error.signup-error": "பதிவு பிழை",
   "error.invalid-field": "தவறான {{field_name}}",
   "error.invalid-code": "தவறான குறியீடு",

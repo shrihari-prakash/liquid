@@ -23,6 +23,7 @@
   "error.invalid-login": "Inicio de sesión inválido",
   "error.bad-email-domain": "Dominio de e-mail erróneo",
   "error.duplicate-account": "La cuenta ya existe",
+  "error.duplicate-username": "Username is already taken",
   "error.signup-error": "Error en el registro",
   "error.invalid-field": "{{field_name}} inválido/a",
   "error.invalid-code": "Código inválido",
