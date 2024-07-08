@@ -44,6 +44,8 @@
   "button.get-code": "Get Code",
   "button.change-password": "Change Password",
   "button.verify": "Verify",
+  "button.signup.google": "Signup with Google",
+  "button.signin.google": "Continue with Google",
 
   "field.label.username": "Username",
   "field.placeholder.username": "your_username",
