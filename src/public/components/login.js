@@ -37,6 +37,12 @@ export default function Login() {
           onLogin({});
         }
       }
+      const urlParams = new URLSearchParams(window.location.search);
+      const ssoToken = urlParams.get("ssoToken");
+      if (ssoToken) {
+        setIsLoggedIn(true);
+        onSSOComplete(ssoToken);
+      }
     })();
   }, []);
 
@@ -60,6 +66,7 @@ export default function Login() {
   }
 
   async function onLogin(data) {
+    console.log("Login successful", data);
     if (data["2faEnabled"]) {
       const urlParams = new URLSearchParams(window.location.search);
       urlParams.set("target", data.userInfo._id);
@@ -103,6 +110,19 @@ export default function Login() {
         setSubmitting(false);
       });
   }
+
+  const onSSOComplete = async (ssoToken) => {
+    console.log("SSO Complete");
+    $.get("/sso/google/success", { ssoToken })
+      .done(function () {
+        console.log("SSO after login");
+        afterLogin(configuration);
+      })
+      .fail(function () {
+        setIsLoggedIn(false);
+        onSubmitError({ errorText: i18next.t("error.invalid-login") });
+      });
+  };
 
   if (isLoggedIn) {
     return (
@@ -194,9 +214,11 @@ export default function Login() {
           className={"button" + (hasError ? " shake" : "")}
           value={buttonText}
         />
-        <button type="button" disabled={submitting} className={"button outline"}>
-          <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signin.google")}
-        </button>
+        <a href={"/sso/google"} className="ghost-link">
+          <button type="button" disabled={submitting} className={"button outline"}>
+            <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signin.google")}
+          </button>
+        </a>
       </div>
     </form>
   );

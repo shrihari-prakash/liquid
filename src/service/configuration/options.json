@@ -8,6 +8,14 @@
     "default": "production"
   },
   {
+    "name": "system.app-host",
+    "displayName": "Application Host",
+    "envName": "SYSTEM_APP_HOST",
+    "description": "Hostname of Liquid",
+    "type": "string",
+    "default": "http://localhost:2000"
+  },
+  {
     "name": "system.enable-swagger",
     "displayName": "Enable Swagger",
     "envName": "SYSTEM_ENABLE_SWAGGER",
