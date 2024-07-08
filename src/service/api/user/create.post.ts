@@ -17,10 +17,11 @@ import { Configuration } from "../../../singleton/configuration.js";
 import { sanitizeEmailAddress } from "../../../utils/email.js";
 import InviteCodeModel from "../../../model/mongo/invite-code.js";
 import { MongoDB } from "../../../singleton/mongo-db.js";
+import { ClientSession } from "mongoose";
+import { generateInviteCode } from "../../../utils/invite-code.js";
 import UserValidator from "../../../validator/user.js";
 import { Mailer } from "../../../singleton/mailer.js";
 import { VerificationCodeType } from "../../../enum/verification-code.js";
-import { useInviteCode, validateInviteCode } from "./core/create.js";
 
 export const bcryptConfig = {
   salt: 10,
@@ -38,6 +39,61 @@ export const POST_CreateValidator = [
   userValidator.phone(),
   body("inviteCode").optional().isString(),
 ];
+
+async function validateInviteCode(req: Request, res: Response, user: UserInterface) {
+  if (!Configuration.get("user.account-creation.enable-invite-only")) {
+    return true;
+  }
+  if (!req.body.inviteCode) {
+    const errors = [
+      {
+        msg: "Invalid value",
+        param: "inviteCode",
+        location: "body",
+      },
+    ];
+    res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+    return false;
+  }
+  const inviteCode = await InviteCodeModel.findOne({ code: req.body.inviteCode });
+  if (!inviteCode || inviteCode.targetId) {
+    res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidInviteCode));
+    return false;
+  }
+  user.invitedBy = inviteCode.sourceId.toString();
+  return true;
+}
+
+async function useInviteCode(
+  user: UserInterface,
+  code: string,
+  sessionOptions: { session: ClientSession } | undefined,
+) {
+  if (
+    Configuration.get("user.account-creation.enable-invite-only") ||
+    Configuration.get("user.account-creation.force-generate-invite-codes")
+  ) {
+    const inviteCodeCount = Configuration.get("user.account-creation.invites-per-person");
+    const inviteCodes = [];
+    for (let j = 0; j < inviteCodeCount; j++) {
+      inviteCodes.push({
+        code: generateInviteCode(),
+        sourceId: user._id,
+      });
+    }
+    if (sessionOptions) {
+      await InviteCodeModel.insertMany(inviteCodes, sessionOptions);
+    } else {
+      await InviteCodeModel.insertMany(inviteCodes);
+    }
+    log.debug("Invite codes generated for user %s", user.username);
+  }
+  if (Configuration.get("user.account-creation.enable-invite-only")) {
+    const updateUsedBy = InviteCodeModel.updateOne({ code: code }, { $set: { targetId: user._id } });
+    if (sessionOptions) updateUsedBy.session(sessionOptions.session);
+    await updateUsedBy;
+  }
+}
 
 const POST_Create = async (req: Request, res: Response) => {
   let session = "";
