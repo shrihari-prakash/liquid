@@ -269,7 +269,8 @@ export default function SignUp() {
         {configuration["user.account-creation.sso.google.enabled"] && (
           <a href={"/sso/google"} className="ghost-link">
             <button type="button" disabled={submitting} className={"button outline"}>
-              <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signup.google")}
+              <img src={`/images/google-icon-${theme === "light" ? "black" : "white"}.svg`} alt="Google" height="20" />
+              {i18next.t("button.signup.google")}
             </button>
           </a>
         )}
