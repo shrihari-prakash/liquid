@@ -23,7 +23,7 @@
   "error.invalid-login": "Identifiant invalide",
   "error.bad-email-domain": "Mauvais domaine de messagerie",
   "error.duplicate-account": "Le compte existe déjà",
-  "error.duplicate-username": "Username is already taken",
+  "error.duplicate-username": "Le username n'est pas disponible",
   "error.signup-error": "Erreur d'inscription",
   "error.invalid-field": "{{field_name}} invalide",
   "error.invalid-code": "Code invalide",
