@@ -263,13 +263,13 @@ export default function SignUp() {
           className={"button" + (hasError ? " shake" : "")}
           value={buttonText}
         />
-        <button
-          type="button"
-          disabled={submitting}
-          className={"button outline"}
-        >
-          <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signup.google")}
-        </button>
+        {configuration["user.account-creation.sso.google.enabled"] && (
+          <a href={"/sso/google"} className="ghost-link">
+            <button type="button" disabled={submitting} className={"button outline"}>
+              <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signup.google")}
+            </button>
+          </a>
+        )}
       </div>
       <div className="fineprint">
         {(termsAndConditions || privacyPolicy) && "By clicking on Create Account, you"}

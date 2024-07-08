@@ -214,11 +214,13 @@ export default function Login() {
           className={"button" + (hasError ? " shake" : "")}
           value={buttonText}
         />
-        <a href={"/sso/google"} className="ghost-link">
-          <button type="button" disabled={submitting} className={"button outline"}>
-            <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signin.google")}
-          </button>
-        </a>
+        {configuration["user.account-creation.sso.google.enabled"] && (
+          <a href={"/sso/google"} className="ghost-link">
+            <button type="button" disabled={submitting} className={"button outline"}>
+              <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signin.google")}
+            </button>
+          </a>
+        )}
       </div>
     </form>
   );
