@@ -36,6 +36,14 @@ const environment = Configuration.get("environment");
 process.env.NODE_ENV = environment;
 log.info("Environment: %s", environment);
 
+if (
+  Configuration.get("user.account-creation.sso.google.enabled") &&
+  Configuration.get("user.account-creation.enable-invite-only")
+) {
+  Configuration.set("user.account-creation.enable-invite-only", false);
+  log.warn("Invite only mode cannot be enabled when SSO is enabled. Disabling invite only mode.");
+}
+
 import { MongoDB } from "./singleton/mongo-db.js";
 import { Api } from "./singleton/api.js";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter.js";
@@ -192,9 +200,7 @@ if (Configuration.get("user.account-creation.allow-only-whitelisted-email-domain
 }
 
 app.listen(Configuration.get("system.app-port"), () => {
-  log.info(
-    `${Configuration.get("system.app-name")} auth is listening at ${Configuration.get("system.app-host")}`,
-  );
+  log.info(`${Configuration.get("system.app-name")} auth is listening at ${Configuration.get("system.app-host")}`);
 });
 
 sanitizeEditableFields();
