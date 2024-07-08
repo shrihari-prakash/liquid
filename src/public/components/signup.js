@@ -16,7 +16,7 @@ export default function SignUp() {
 
   const appName = configuration["content.app-name"];
   const termsAndConditions = configuration["content.terms-and-conditions-url"];
-  const privacyPolicy = configuration["content.privacy-policy-url"]
+  const privacyPolicy = configuration["content.privacy-policy-url"];
 
   React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.signup")), []);
 
@@ -67,7 +67,7 @@ export default function SignUp() {
         console.log(response);
         if (configuration["user.account-creation.require-email-verification"]) {
           const urlParams = new URLSearchParams(window.location.search);
-          urlParams.set('target', response.data.user._id);
+          urlParams.set("target", response.data.user._id);
           window.location = `/verify-account?${urlParams.toString()}`;
         } else {
           window.location = `/login${window.location.search}`;
@@ -97,7 +97,7 @@ export default function SignUp() {
       })
       .always(function () {
         setSubmitting(false);
-      })
+      });
   }
 
   if (!configuration["privilege.can-create-account"]) {
@@ -111,15 +111,13 @@ export default function SignUp() {
           {i18next.t("heading.signup")} &#x2022;&nbsp;
           {configuration[`assets.header-icon-${theme}`] ? (
             <div className="app-icon-header">
-              <div
-                style={{ display: miniIconLoaded ? "none" : "block" }}
-                className="spinner"
-              />
+              <div style={{ display: miniIconLoaded ? "none" : "block" }} className="spinner" />
               <img
                 style={{ display: miniIconLoaded ? "block" : "none" }}
                 onLoad={() => setMiniIconLoaded(true)}
                 alt={appName}
-                src={configuration[`assets.header-icon-${theme}`]} />
+                src={configuration[`assets.header-icon-${theme}`]}
+              />
             </div>
           ) : (
             <strong className="app-name">{appName}</strong>
@@ -145,7 +143,7 @@ export default function SignUp() {
           required
         />
       </div>
-      {configuration["user.account-creation.enable-invite-only"] &&
+      {configuration["user.account-creation.enable-invite-only"] && (
         <div className="form-group">
           <label className="noselect" htmlFor="email">
             {i18next.t("field.label.invite-code")}
@@ -162,7 +160,7 @@ export default function SignUp() {
             required
           />
         </div>
-      }
+      )}
       <div className="form-group">
         <label className="noselect" htmlFor="firstName">
           {i18next.t("field.label.first-name")}
@@ -214,24 +212,19 @@ export default function SignUp() {
           required
         />
       </div>
-      {configuration["privilege.can-use-phone-number"]
-        && <div className="form-group phone-group">
+      {configuration["privilege.can-use-phone-number"] && (
+        <div className="form-group phone-group">
           <label className="noselect" htmlFor="phone">
             Phone
           </label>
           <span className="form-control-multi flex">
-            <select
-              name="phoneCountryCode"
-              id="phoneCountryCode"
-              className="dropdown"
-            >
+            <select name="phoneCountryCode" id="phoneCountryCode" className="dropdown">
               <option disabled selected value>
                 XX (+00)
               </option>
-              {countryCodes.map((countryCode) =>
-                <option value={countryCode.code}>
-                  {`${countryCode.iso} (${countryCode.code})`}
-                </option>)}
+              {countryCodes.map((countryCode) => (
+                <option value={countryCode.code}>{`${countryCode.iso} (${countryCode.code})`}</option>
+              ))}
             </select>
             <input
               type="tel"
@@ -243,7 +236,8 @@ export default function SignUp() {
               id="phone"
             />
           </span>
-        </div>}
+        </div>
+      )}
       <div className="form-group last mb-3">
         <label htmlFor="password">{i18next.t("field.label.password")}</label>
         <input
@@ -265,28 +259,35 @@ export default function SignUp() {
           </a>
         </span>
       </div>
-      <input
-        type="submit"
-        disabled={submitting}
-        className={"button" + (hasError ? " shake" : "")}
-        value={buttonText}
-      />
+      <div className="flex flex-col gap">
+        <input
+          type="submit"
+          disabled={submitting}
+          className={"button" + (hasError ? " shake" : "")}
+          value={buttonText}
+        />
+        {configuration["user.account-creation.sso.google.enabled"] && (
+          <a href={"/sso/google"} className="ghost-link">
+            <button type="button" disabled={submitting} className={"button outline"}>
+              <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signup.google")}
+            </button>
+          </a>
+        )}
+      </div>
       <div className="fineprint">
-        {(termsAndConditions || privacyPolicy) &&
-          "By clicking on Create Account, you"
-        }
-        {termsAndConditions &&
+        {(termsAndConditions || privacyPolicy) && "By clicking on Create Account, you"}
+        {termsAndConditions && (
           <>
             &nbsp;agree to the <a href={termsAndConditions}> terms & conditions</a> of {appName}
             {!privacyPolicy && "."}
           </>
-        }
-        {privacyPolicy &&
+        )}
+        {privacyPolicy && (
           <>
             &nbsp;{termsAndConditions && "and "}
             confirm that you've read our <a href={privacyPolicy}>privacy policy</a>.
           </>
-        }
+        )}
       </div>
     </form>
   );

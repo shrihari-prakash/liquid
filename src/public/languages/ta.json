@@ -44,6 +44,8 @@
   "button.get-code": "குறியீடு பெற",
   "button.change-password": "கடவுச்சொல்லை மாற்று",
   "button.verify": "சரிபார்க்கவும்",
+  "button.signup.google": "Signup with Google",
+  "button.signin.google": "Continue with Google",
 
   "field.label.username": "கணக்கு கைப்பிடி",
   "field.placeholder.username": "கணக்கு_கைப்பிடி",
@@ -77,3 +79,4 @@
   "link.login": "கணக்கு உள்ளதா? உள்நுழைய",
   "link.login-minimal": "உள்நுழைய"
 }
+

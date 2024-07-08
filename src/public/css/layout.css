@@ -68,6 +68,11 @@ a {
   transition: 0.3s all ease;
 }
 
+.ghost-link {
+  color: inherit;
+  text-decoration: none;
+}
+
 a:hover {
   text-decoration: none !important;
 }
@@ -82,6 +87,15 @@ h3 {
 
 .flex {
   display: flex !important;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap {
+  gap: 1rem;
 }
 
 .noflex {

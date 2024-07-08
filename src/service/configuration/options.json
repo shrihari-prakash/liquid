@@ -8,6 +8,14 @@
     "default": "production"
   },
   {
+    "name": "system.app-host",
+    "displayName": "Application Host",
+    "envName": "SYSTEM_APP_HOST",
+    "description": "Hostname of Liquid",
+    "type": "string",
+    "default": "http://localhost:2000"
+  },
+  {
     "name": "system.enable-swagger",
     "displayName": "Enable Swagger",
     "envName": "SYSTEM_ENABLE_SWAGGER",
@@ -799,6 +807,28 @@
     "default": 3600
   },
   {
+    "name": "user.account-creation.sso.google.enabled",
+    "displayName": "User Account Creation Enable Google SSO",
+    "envName": "USER_ACCOUNT_CREATION_SSO_GOOGLE_ENABLED",
+    "description": "Specifies if Google signon should be enabled.",
+    "type": "boolean",
+    "default": false
+  },
+  {
+    "name": "user.account-creation.sso.google.client-id",
+    "displayName": "User Account Creation Google SSO Client ID",
+    "envName": "USER_ACCOUNT_CREATION_SSO_GOOGLE_CLIENT_ID",
+    "description": "Specifies the client ID for Google SSO.",
+    "type": "string"
+  },
+  {
+    "name": "user.account-creation.sso.google.client-secret",
+    "displayName": "User Account Creation Google SSO Client Secret",
+    "envName": "USER_ACCOUNT_CREATION_SSO_GOOGLE_CLIENT_SECRET",
+    "description": "Specifies the client secret for Google SSO.",
+    "type": "string"
+  },
+  {
     "name": "user.profile.editable-fields",
     "displayName": "Profile Editable Fields",
     "envName": "USER_PROFILE_EDITABLE_FIELDS",
@@ -1106,7 +1136,8 @@
       "privilege.can-reset-password",
       "system.demo-mode",
       "user.login.require-browser-info",
-      "user.login.require-os-info"
+      "user.login.require-os-info",
+      "user.account-creation.sso.google.enabled"
     ]
   }
 ]

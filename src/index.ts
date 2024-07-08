@@ -1,10 +1,10 @@
-import 'dotenv/config';
+import "dotenv/config";
 
 import { Logger } from "./singleton/logger.js";
 const log = Logger.getLogger().child({ from: "main" });
 
 import * as path from "path";
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from "url";
 import * as fs from "fs";
 import cors from "cors";
 import express from "express";
@@ -36,6 +36,14 @@ const environment = Configuration.get("environment");
 process.env.NODE_ENV = environment;
 log.info("Environment: %s", environment);
 
+if (
+  Configuration.get("user.account-creation.sso.google.enabled") &&
+  Configuration.get("user.account-creation.enable-invite-only")
+) {
+  Configuration.set("user.account-creation.enable-invite-only", false);
+  log.warn("Invite only mode cannot be enabled when SSO is enabled. Disabling invite only mode.");
+}
+
 import { MongoDB } from "./singleton/mongo-db.js";
 import { Api } from "./singleton/api.js";
 import { activateRateLimiters } from "./service/rate-limiter/rate-limiter.js";
@@ -46,6 +54,7 @@ import { ErrorResponse } from "./utils/response.js";
 import { sanitizeEditableFields } from "./utils/user.js";
 import { initializeDemo } from "./utils/demo.js";
 import { StaticRoutes } from "./enum/static-routes.js";
+import { Passport } from "./singleton/passport.js";
 
 const app = express();
 app.disable("x-powered-by");
@@ -98,6 +107,11 @@ if (cookieMaxAge) {
 app.use(session(sessionOptions));
 // ********** End Sessions ********** //
 
+// ********** Passport Auth ********** //
+Passport.initialize();
+Passport.session();
+// ********** End Passport Auth ********** //
+
 // ********** CORS ********** //
 const systemCORS = Configuration.get("cors.allowed-origins") as string[];
 log.debug("CORS origins %o", systemCORS);
@@ -105,7 +119,7 @@ app.use(
   cors({
     credentials: true,
     origin: systemCORS,
-  })
+  }),
 );
 // ********** End CORS ********** //
 
@@ -155,19 +169,21 @@ if (Configuration.get("system.use-built-in-static-ui")) {
     express.static(staticFolder, {
       index: false,
       extensions: ["html"],
-    })
+    }),
   );
 }
 // ********** End UI / Static Pages ********** //
 
 app.all("*", function (req, res) {
-  const apiPattern = /^(\/user\/|\/system\/|\/oauth\/)/;
+  const apiPattern = /^(\/user\/|\/system\/|\/oauth\/|\/sso\/)/;
   if (!apiPattern.test(req.path) && Configuration.get("system.use-built-in-static-ui")) {
     const staticFolder = path.join(__dirname, "public");
     const index = path.join(staticFolder, "index.html");
     res.sendFile(index);
   } else {
-    res.status(statusCodes.notFound).json(new ErrorResponse(errorMessages.notFound));
+    res
+      .status(statusCodes.notFound)
+      .json(new ErrorResponse(errorMessages.notFound, { method: req.method, path: req.path }));
   }
 });
 
@@ -184,13 +200,10 @@ if (Configuration.get("user.account-creation.allow-only-whitelisted-email-domain
 }
 
 app.listen(Configuration.get("system.app-port"), () => {
-  log.info(
-    `${Configuration.get("system.app-name")} auth is listening at http://localhost:${Configuration.get(
-      "system.app-port"
-    )}`
-  );
+  log.info(`${Configuration.get("system.app-name")} auth is listening at ${Configuration.get("system.app-host")}`);
 });
 
 sanitizeEditableFields();
 
 export default app;
+

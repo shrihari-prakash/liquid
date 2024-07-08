@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
-import { errorMessages, statusCodes } from "../../../utils/http-status.js";
-import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
+import { statusCodes } from "../../../utils/http-status.js";
+import { SuccessResponse } from "../../../utils/response.js";
 import OAuthModel from "../../../model/oauth/oauth.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 import { UserProjection } from "../../../model/mongo/user.js";
@@ -22,7 +22,7 @@ const ALL_Introspect = async (req: Request, res: Response) => {
     });
   }
   if (errors.length) {
-    return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden, { errors }));
+    return res.status(statusCodes.success).json(new SuccessResponse({ tokenInfo: null }));
   }
   const token = req.query.token || req.body.token;
   const tokenInfo = await OAuthModel.getAccessToken(token);
