@@ -10,15 +10,14 @@ export class Passport {
     const googleStrategy = new GoogleStrategy();
     if (Configuration.get("user.account-creation.sso.google.enabled") && googleStrategy.strategy) {
       passport.use(googleStrategy.strategy);
-      passport.serializeUser(function (user, done) {
-        done(null, user);
-      });
-
-      passport.deserializeUser(function (user, done) {
-        done(null, user as any);
-      });
-      log.info("Passport created.");
     }
+    passport.serializeUser(function (user, done) {
+      done(null, user);
+    });
+    passport.deserializeUser(function (user, done) {
+      done(null, user as any);
+    });
+    log.info("Passport created.");
   }
 
   public initialize() {
