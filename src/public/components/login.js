@@ -113,9 +113,8 @@ export default function Login() {
 
   const onSSOComplete = async (ssoToken) => {
     console.log("SSO Complete");
-    $.get("/sso/google/success", { ssoToken })
+    $.get("/sso/google/success", { ssoToken, userAgent: window.navigator.userAgent })
       .done(function () {
-        console.log("SSO after login");
         afterLogin(configuration);
       })
       .fail(function () {

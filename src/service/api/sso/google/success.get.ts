@@ -14,7 +14,14 @@ import { Configuration } from "../../../../singleton/configuration.js";
 import LoginHistoryModel, { LoginHistoryInterface } from "../../../../model/mongo/login-history.js";
 import { hasErrors } from "../../../../utils/api.js";
 
-export const GET_GoogleSuccessValidator = [query("ssoToken").exists().isString().isLength({ max: 64 })];
+export const GET_GoogleSuccessValidator = [
+  query("ssoToken").exists().isString().isLength({ max: 64 }),
+  query("userAgent")
+    .if(() => Configuration.get("user.login.require-user-agent"))
+    .exists()
+    .isString()
+    .isLength({ max: 1024 }),
+];
 
 const GET_GoogleSuccess = async (req: Request, res: Response) => {
   if (hasErrors(req, res)) return;
@@ -39,8 +46,8 @@ const GET_GoogleSuccess = async (req: Request, res: Response) => {
   if (Configuration.get("user.login.record-successful-attempts")) {
     let loginMeta: LoginHistoryInterface = {
       targetId: user._id.toString(),
-      userAgent: "Google",
-      ipAddress: "0.0.0.0",
+      userAgent: req.body.userAgent,
+      ipAddress: req.ip,
       success: true,
     };
     await new LoginHistoryModel(loginMeta).save();
