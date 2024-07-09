@@ -612,9 +612,21 @@ export const userSchema = {
       write: SensitivityLevel.EXTREME,
     },
   },
+  ssoEnabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+    willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW,
+    },
+  },
   ssoProvider: {
     type: String,
-    enum: ["google", "facebook", "twitter", "github", "linkedin", "microsoft", "apple"],
+    enum: ["google"],
     required: false,
     willProjectForUserSelect: false,
     willProjectForUserAdminSelect: false,
@@ -719,7 +731,8 @@ export type UserInterface = {
   isDeleted: boolean;
   deletedDate: Date;
   creationIp: string;
-  ssoProvider: "google" | "facebook" | "twitter" | "github" | "linkedin" | "microsoft" | "apple";
+  ssoEnabled: boolean;
+  ssoProvider: "google";
   customData: string;
   createdAt: Date;
   updatedAt: Date;
