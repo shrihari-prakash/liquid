@@ -39,7 +39,10 @@ export class Passport {
     const existingUser = await UserModel.findOne({ email: profile.emails[0].value }).lean();
     if (existingUser) {
       log.info("User found from Google profile.");
-      UserModel.updateOne({ _id: existingUser._id }, { ssoEnabled: true, ssoProvider: "google" }).exec();
+      UserModel.updateOne(
+        { _id: existingUser._id },
+        { ssoEnabled: true, ssoProvider: "google", googleProfileId: profile.id },
+      ).exec();
       return cb(null, existingUser);
     }
     log.info("Creating user from Google profile.");
@@ -60,6 +63,7 @@ export class Passport {
       emailVerified: true,
       ssoEnabled: true,
       ssoProvider: "google",
+      googleProfileId: profile.id,
       scope: Configuration.get("user.account-creation.default-scope"),
       creationIp: "0.0.0.0",
       role,

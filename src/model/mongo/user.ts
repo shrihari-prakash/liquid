@@ -636,6 +636,17 @@ export const userSchema = {
       write: SensitivityLevel.LOW,
     },
   },
+  googleProfileId: {
+    type: String,
+    required: false,
+    willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM,
+    },
+  },
   creationIp: {
     type: String,
     required: true,
@@ -733,6 +744,7 @@ export type UserInterface = {
   creationIp: string;
   ssoEnabled: boolean;
   ssoProvider: "google";
+  googleProfileId: string;
   customData: string;
   createdAt: Date;
   updatedAt: Date;
