@@ -44,8 +44,8 @@
   "button.get-code": "Obtener código",
   "button.change-password": "Cambiar contraseña",
   "button.verify": "Verificar",
-  "button.signup.google": "Signup with Google",
-  "button.signin.google": "Continue with Google",
+  "button.signup.google": "Regístrate con Google",
+  "button.signin.google": "Continuar con Google",
 
   "field.label.username": "Usuario",
   "field.placeholder.username": "tu_usuario",
