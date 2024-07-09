@@ -3,12 +3,13 @@ const log = Logger.getLogger().child({ from: "passport" });
 
 import passport from "passport";
 import { Configuration } from "../../singleton/configuration.js";
-import { googleStrategy } from "./strategies/google.js";
+import GoogleStrategy from "./strategies/google.js";
 
 export class Passport {
   constructor() {
-    if (Configuration.get("user.account-creation.sso.google.enabled")) {
-      passport.use(googleStrategy);
+    const googleStrategy = new GoogleStrategy();
+    if (Configuration.get("user.account-creation.sso.google.enabled") && googleStrategy.strategy) {
+      passport.use(googleStrategy.strategy);
       passport.serializeUser(function (user, done) {
         done(null, user);
       });
