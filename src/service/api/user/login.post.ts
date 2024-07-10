@@ -46,7 +46,8 @@ const POST_Login = async (req: Request, res: Response) => {
       query.username = username.toLowerCase();
     }
     const user = (await UserModel.findOne(query, select).exec()) as unknown as UserInterface;
-    if (!user) return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    if (!user || !user.password)
+      return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
     if (!user.emailVerified)
       return res.status(statusCodes.resourceNotActive).json(new ErrorResponse(errorMessages.resourceNotActive));
     let loginMeta: LoginHistoryInterface = {
@@ -107,3 +108,4 @@ const POST_Login = async (req: Request, res: Response) => {
 };
 
 export default POST_Login;
+
