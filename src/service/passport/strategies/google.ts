@@ -46,8 +46,12 @@ class GoogleStrategy {
       customData = "{}";
       log.warn("Invalid JSON found in `user.account-creation.custom-data.default-value`.");
     }
+    let username = profile.username;
+    if (!username) {
+      username = profile.emails[0].value.split("@")[0];
+    }
     const newUser = new UserModel({
-      email: profile.emails[0].value,
+      email: username,
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
       username: profile.emails[0].value,
