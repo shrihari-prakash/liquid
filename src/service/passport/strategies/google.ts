@@ -51,10 +51,10 @@ class GoogleStrategy {
       username = profile.emails[0].value.split("@")[0];
     }
     const newUser = new UserModel({
-      email: username,
+      email: profile.emails[0].value,
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
-      username: profile.emails[0].value,
+      username,
       emailVerified: true,
       ssoEnabled: true,
       ssoProvider: "google",
