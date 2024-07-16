@@ -113,14 +113,22 @@ export default function Login() {
 
   const onSSOComplete = async (ssoToken) => {
     console.log("SSO Complete");
-    $.get("/sso/google/success", { ssoToken, userAgent: window.navigator.userAgent })
-      .done(function () {
+    $.ajax({
+      url: "/sso/google/success",
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        ssoToken: ssoToken,
+        userAgent: window.navigator.userAgent
+      }),
+      success: function () {
         afterLogin(configuration);
-      })
-      .fail(function () {
+      },
+      error: function () {
         setIsLoggedIn(false);
         onSubmitError({ errorText: i18next.t("error.invalid-login") });
-      });
+      }
+    });
   };
 
   if (isLoggedIn) {
