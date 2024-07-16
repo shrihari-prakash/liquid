@@ -25,7 +25,7 @@ export const POST_GoogleSuccessValidator = [
 
 const POST_GoogleSuccess = async (req: Request, res: Response) => {
   if (hasErrors(req, res)) return;
-  const userId = await SSOTokenModel.findOne({ token: req.query.ssoToken }).lean();
+  const userId = await SSOTokenModel.findOne({ token: req.body.ssoToken }).lean();
   if (!userId) {
     log.warn("SSO token not found %s.", req.query.ssoToken);
     return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
