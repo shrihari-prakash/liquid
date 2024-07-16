@@ -1,4 +1,4 @@
-import { query } from "express-validator";
+import { body } from "express-validator";
 import SSOTokenModel from "../../../../model/mongo/sso-token.js";
 import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "sso/google/success.get" });
@@ -14,16 +14,16 @@ import { Configuration } from "../../../../singleton/configuration.js";
 import LoginHistoryModel, { LoginHistoryInterface } from "../../../../model/mongo/login-history.js";
 import { hasErrors } from "../../../../utils/api.js";
 
-export const GET_GoogleSuccessValidator = [
-  query("ssoToken").exists().isString().isLength({ max: 64 }),
-  query("userAgent")
+export const POST_GoogleSuccessValidator = [
+  body("ssoToken").exists().isString().isLength({ max: 64 }),
+  body("userAgent")
     .if(() => Configuration.get("user.login.require-user-agent"))
     .exists()
     .isString()
     .isLength({ max: 1024 }),
 ];
 
-const GET_GoogleSuccess = async (req: Request, res: Response) => {
+const POST_GoogleSuccess = async (req: Request, res: Response) => {
   if (hasErrors(req, res)) return;
   const userId = await SSOTokenModel.findOne({ token: req.query.ssoToken }).lean();
   if (!userId) {
@@ -62,5 +62,5 @@ const GET_GoogleSuccess = async (req: Request, res: Response) => {
   });
 };
 
-export default GET_GoogleSuccess;
+export default POST_GoogleSuccess;
 
