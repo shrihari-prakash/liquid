@@ -1,7 +1,7 @@
 import express from "express";
 import { Passport } from "../../../../singleton/passport.js";
 import GET_GoogleCallback from "./callback.get.js";
-import GET_GoogleSuccess from "./success.get.js";
+import { POST_GoogleSuccessValidator }, POST_GoogleSuccess from "./success.get.js";
 
 const GoogleRouter = express.Router();
 
@@ -14,7 +14,7 @@ GoogleRouter.get(
 
 GoogleRouter.get("/callback", Passport.authenticate("google"), GET_GoogleCallback);
 
-GoogleRouter.get("/success", GET_GoogleSuccess);
+GoogleRouter.post("/success", GoogleSuccessValidator, POST_GoogleSuccess);
 
 export default GoogleRouter;
 
