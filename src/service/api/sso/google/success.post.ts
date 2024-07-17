@@ -15,7 +15,7 @@ import LoginHistoryModel, { LoginHistoryInterface } from "../../../../model/mong
 import { hasErrors } from "../../../../utils/api.js";
 
 export const POST_GoogleSuccessValidator = [
-  body("ssoToken").exists().isString().isLength({ max: 64 }),
+  body("ssoToken").exists().isString().isLength({ max: 512 }),
   body("userAgent")
     .if(() => Configuration.get("user.login.require-user-agent"))
     .exists()
@@ -48,6 +48,7 @@ const POST_GoogleSuccess = async (req: Request, res: Response) => {
       targetId: user._id.toString(),
       userAgent: req.body.userAgent,
       ipAddress: req.ip,
+      source: "google",
       success: true,
     };
     await new LoginHistoryModel(loginMeta).save();

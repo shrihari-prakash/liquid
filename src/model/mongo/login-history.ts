@@ -15,6 +15,11 @@ const loginHistorySchema = {
   reason: {
     type: String,
   },
+  source: {
+    type: String,
+    enum: ["password", "google"],
+    required: true,
+  },
   targetId: {
     type: Schema.Types.ObjectId,
     ref: "user",
@@ -42,5 +47,6 @@ export type LoginHistoryInterface = {
   ipAddress?: string;
   success?: boolean;
   reason?: string;
+  source: "password" | "google";
   targetId: string | ObjectId;
 };

@@ -53,6 +53,7 @@ const POST_Login = async (req: Request, res: Response) => {
     let loginMeta: LoginHistoryInterface = {
       targetId: user._id,
       userAgent: req.body.userAgent,
+      source: "password",
       ipAddress: req.ip,
     };
     const isPasswordValid = await bcrypt.compare(password, user.password || "");
