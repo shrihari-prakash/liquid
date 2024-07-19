@@ -11,7 +11,7 @@ import { getBlockStatus } from "../../../utils/block.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user.js";
 
-const GET__UserId = async (req: Request, res: Response) => {
+const GET_UserId = async (req: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:read", res)) {
       return;
@@ -43,4 +43,4 @@ const GET__UserId = async (req: Request, res: Response) => {
   }
 };
 
-export default GET__UserId;
+export default GET_UserId;

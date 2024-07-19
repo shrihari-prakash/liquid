@@ -6,7 +6,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
 import { Configuration } from "../../../singleton/configuration.js";
 
-const GET__SettingsInsecure = async (_: Request, res: Response) => {
+const GET_SettingsInsecure = async (_: Request, res: Response) => {
   try {
     const settings: any = {};
     Configuration.get("system.exposed-options.insecure").forEach((optionName: string) => {
@@ -19,4 +19,4 @@ const GET__SettingsInsecure = async (_: Request, res: Response) => {
   }
 };
 
-export default GET__SettingsInsecure;
+export default GET_SettingsInsecure;

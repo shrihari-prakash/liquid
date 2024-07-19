@@ -10,7 +10,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 
-const GET__Stats = async (_: Request, res: Response) => {
+const GET_Stats = async (_: Request, res: Response) => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:system:all", res)) {
       return;
@@ -34,4 +34,4 @@ const GET__Stats = async (_: Request, res: Response) => {
   }
 };
 
-export default GET__Stats;
+export default GET_Stats;
