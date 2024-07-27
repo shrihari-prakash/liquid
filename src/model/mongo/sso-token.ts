@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { Configuration } from "../../singleton/configuration.js";
 
 const ssoTokenSchema = {
   token: {
@@ -14,8 +15,15 @@ const ssoTokenSchema = {
 };
 
 const schemaInstance = new mongoose.Schema(ssoTokenSchema, {
-    timestamps: true,
-  }),
-  SSOTokenModel = mongoose.model("sso-token", schemaInstance);
+  timestamps: true,
+});
+schemaInstance.index(
+  { createdAt: 1 },
+  {
+    expireAfterSeconds: Configuration.get("user.login.sso.token-lifetime"),
+  }
+);
+const SSOTokenModel = mongoose.model("sso-token", schemaInstance);
 
 export default SSOTokenModel;
+
