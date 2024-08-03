@@ -135,6 +135,14 @@
     "default": false
   },
   {
+    "name": "system.iframe.action",
+    "displayName": "Iframe Action",
+    "envName": "SYSTEM_IFRAME_ACTION",
+    "description": "Specifies the action to be taken when the application is loaded in an iframe. Possible values are `DENY`, `ALLOW`, `SAMEORIGIN`",
+    "type": "string",
+    "default": "SAMEORIGIN"
+  },
+  {
     "name": "cookie.session-secret",
     "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",

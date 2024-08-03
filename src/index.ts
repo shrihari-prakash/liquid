@@ -74,6 +74,15 @@ if (Configuration.get("system.stats.enable-request-counting")) {
 }
 // ********** End Rate Limiting ********** //
 
+// ********** iframe blocking ********** //
+let iframeAction = Configuration.get("system.iframe.action");
+app.use((_, res, next) => {
+  if (iframeAction !== "ALLOW") {
+    res.setHeader("X-Frame-Options", iframeAction);
+  }
+  next();
+});
+
 app.use(bodyParser.json({ limit: Configuration.get("system.request-body.json.max-size") }));
 app.use(bodyParser.urlencoded({ extended: false }));
 

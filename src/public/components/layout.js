@@ -153,7 +153,7 @@ export default function Layout({ children }) {
               <div className="sidebar-wrapper">
                 <div className="sidebar" style={{ backgroundImage: `url(${sidebarImage})` }}>
                   {configuration["system.demo-mode"] &&
-                    <div class="ribbon">
+                    <div className="ribbon">
                       Demo Mode
                     </div>
                   }
