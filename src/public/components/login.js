@@ -8,6 +8,7 @@ import {
   uuidv4,
   errorTextTimeout,
   afterLogin,
+  humanReadableToSnakeCase,
 } from "../utils/utils.js";
 
 export default function Login() {
@@ -111,15 +112,39 @@ export default function Login() {
       });
   }
 
+  const handleSSOClick = (event) => {
+    event.preventDefault();
+    const authorizationParams = prepareAuthorizationParams(configuration);
+    const appName = humanReadableToSnakeCase(configuration["content.app-name"]);
+    sessionStorage.setItem(`${appName}.authorization-params`, JSON.stringify(authorizationParams));
+    window.location = "/sso/google";
+  };
+
   const onSSOComplete = async (ssoToken) => {
     console.log("SSO Complete");
+    const appName = humanReadableToSnakeCase(configuration["content.app-name"]);
+    let authParams = sessionStorage.getItem(`${appName}.authorization-params`);
+    try {
+      authParams = JSON.parse(authParams);
+      console.log("Authorization params", authParams);
+      const urlParams = new URLSearchParams(window.location.search);
+      const authorizationParams = new URLSearchParams(authParams);
+      for (const [key, value] of authorizationParams) {
+        urlParams.set(key, value);
+      }
+      console.log("URL Params", urlParams.toString());
+      urlParams.delete("ssoToken");
+      window.history.replaceState({}, "", `${window.location.pathname}?${urlParams.toString()}`);
+    } catch (e) {
+      console.error("Failed to parse authorization params", e);
+    }
     $.ajax({
       url: "/sso/google/success",
       type: "POST",
       contentType: "application/json",
       data: JSON.stringify({
         ssoToken: ssoToken,
-        userAgent: window.navigator.userAgent
+        userAgent: window.navigator.userAgent,
       }),
       success: function () {
         afterLogin(configuration);
@@ -127,7 +152,7 @@ export default function Login() {
       error: function () {
         setIsLoggedIn(false);
         onSubmitError({ errorText: i18next.t("error.invalid-login") });
-      }
+      },
     });
   };
 
@@ -222,7 +247,7 @@ export default function Login() {
           value={buttonText}
         />
         {configuration["user.account-creation.sso.google.enabled"] && (
-          <a href={"/sso/google"} className="ghost-link">
+          <a onClick={handleSSOClick} className="ghost-link">
             <button type="button" disabled={submitting} className={"button outline"}>
               <img src={`/images/google-icon-${theme === "light" ? "black" : "white"}.svg`} alt="Google" height="20" />
               {i18next.t("button.signin.google")}

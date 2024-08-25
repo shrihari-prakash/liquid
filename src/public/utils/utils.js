@@ -110,3 +110,10 @@ export async function afterLogin(configuration) {
 }
 
 export const errorTextTimeout = 6000;
+
+export const humanReadableToSnakeCase = (str) => {
+  return str
+    .replace(/([a-z])([A-Z])/g, "$1_$2")
+    .replace(/\s+/g, "_")
+    .toLowerCase();
+}
