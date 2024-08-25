@@ -1,7 +1,7 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
 import { countryCodes } from "../utils/country-codes.js";
-import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
+import { errorTextTimeout, getPlaceholder, humanReadableToSnakeCase, prepareAuthorizationParams, useTitle } from "../utils/utils.js";
 
 export default function SignUp() {
   const submitButtonText = i18next.t("button.signup");
@@ -99,6 +99,14 @@ export default function SignUp() {
         setSubmitting(false);
       });
   }
+
+  const handleSSOClick = (event) => {
+    event.preventDefault();
+    const authorizationParams = prepareAuthorizationParams(configuration);
+    const appName = humanReadableToSnakeCase(configuration["content.app-name"]);
+    sessionStorage.setItem(`${appName}.authorization-params`, JSON.stringify(authorizationParams));
+    window.location = "/sso/google";
+  };
 
   if (!configuration["privilege.can-create-account"]) {
     return null;
@@ -267,7 +275,7 @@ export default function SignUp() {
           value={buttonText}
         />
         {configuration["user.account-creation.sso.google.enabled"] && (
-          <a href={"/sso/google"} className="ghost-link">
+          <a onClick={handleSSOClick} className="ghost-link">
             <button type="button" disabled={submitting} className={"button outline"}>
               <img src={`/images/google-icon-${theme === "light" ? "black" : "white"}.svg`} alt="Google" height="20" />
               {i18next.t("button.signup.google")}
