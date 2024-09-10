@@ -10,7 +10,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'Liquid',
   tagline: '✨ Seamless and highly customizable authentication and user management server for any project. ✨',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/liquid-icon-mini.png',
 
   // Set the production url of your site here
   url: 'https://your-docusaurus-site.example.com',
