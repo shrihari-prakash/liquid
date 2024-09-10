@@ -18,7 +18,7 @@ For setting up Liquid, refer to the [Setup](/Setup) page.
 
 :::danger
 
-**You should NEVER use the Quickstart for production deployments. For production usage, please follow the [Setup](/Setup) page and then refer to the [Production Guide](/Making-Liquid-Production-Ready) to make your instance production ready.**
+**You should NEVER use the Quickstart for production deployments. For production usage, please follow the [Setup](/Setup) page and then refer to the [Production Guide](/Making-Liquid-Production-Ready).**
 
 :::
 
@@ -61,7 +61,7 @@ The Quickstart script by default runs in "Demo Mode", which means, an applicatio
 
 :::danger
 
-**Again, you should NEVER use the Quickstart for production deployments. For production usage, please follow the [Setup](/Setup) page and then refer to the [Production Guide](/Making-Liquid-Production-Ready) to make your instance production ready.**
+**Again, you should NEVER use the Quickstart for production deployments. For production usage, please follow the [Setup](/Setup) page and then refer to the [Production Guide](/Making-Liquid-Production-Ready).**
 
 :::
 
