@@ -16,7 +16,7 @@ Think of Liquid like integrating a readymade authentication and user management 
 
 :::danger
 
-**You should NEVER use the Quickstart for production deployments. For production usage, please read this page further and after the first time setup, and then refer to the [Production Guide](/Making-Liquid-Production-Ready) to make your instance production ready.**
+**You should NEVER use the Quickstart for production deployments. For production usage, please read this page further and after the first time setup, refer to the [Production Guide](/Making-Liquid-Production-Ready) to make your instance production ready.**
 
 :::
 
@@ -28,8 +28,8 @@ curl -sSL --insecure https://raw.githubusercontent.com/shrihari-prakash/liquid/m
 curl -sSL --insecure https://raw.githubusercontent.com/shrihari-prakash/liquid/main/quickstart/app-config.service.json > app-config.service.json
 curl -sSL --insecure https://raw.githubusercontent.com/shrihari-prakash/liquid/main/quickstart/app-config.static.json > app-config.static.json
 ```
-2. In the `app-config.service.json` file, add your frontend origin in `cors.allowed-origins` array.
-3. Run `docker-compose up -d`. 
+1. In the `app-config.service.json` file, add your frontend origin in `cors.allowed-origins` array.
+2. Run `docker-compose up -d`. 
 
 This is useful if you want to try and evaluate Liquid to see if it fits your needs or to locally develop your apps with Liquid.
 
