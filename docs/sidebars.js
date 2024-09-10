@@ -20,6 +20,7 @@ const sidebars = {
 
   tutorialSidebar: [
     "Intro",
+    "Setup",
     "Making-Liquid-Production-Ready",
     "Understanding-Access-Control-and-Integrating-with-Other-Microservices",
     "Debugging-Common-Errors",
