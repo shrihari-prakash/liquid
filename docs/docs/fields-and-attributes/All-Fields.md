@@ -75,6 +75,8 @@ globalLogoutAt | LOW | Date | No | No | No | No
 
 Liquid provides granular control on who can change what fields of a user.
 
+Most of these fields can be updated using [Update User Fields (Delegated)](/api-documentation/API-Documentation-Delegated#update-user-info) or [Update User Fields (Admin)](/api-documentation/API-Documentation-Admin#update-user-info), but some fields are special and cannot be updated directly by PATCH APIs. Such fields are related to special features of Liquid and the documentation for usage is linked in the `Related API` field of the table above.
+
 ### For delegated users
 
 When fields are changed by a user themselves, it is possible to control which fields they can edit by listing the editable fields in the option `user.profile.editable-fields`.
@@ -92,8 +94,6 @@ Once you have identified the level of write access you want to provide a user, y
 By default, Liquid does not allow editing anything before assigning the sensitivity scopes.
 
 When editing roles, the role sent in the body should be of less priority in ranking than the user that is requesting the API unless the requesting user is a super_admin. For instance, a user with role ‘user’ cannot make someone an ‘admin’.
-
-Most of these fields can be updated using [Update User Fields (Delegated)](/api-documentation/API-Documentation-Delegated#update-user-info) or [Update User Fields (Admin)](/api-documentation/API-Documentation-Admin#update-user-info), but some fields are special and cannot be updated directly by PATCH APIs. Such fields are related to special features of Liquid and the documentation for usage is linked in the `Related API` field of the table above.
 
 ### More Fields
 

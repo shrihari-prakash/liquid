@@ -536,7 +536,7 @@ Requires delegated authentication.
 
 #### Before You Start
 
-Read about editing users [here](/fields-and-attributes/General-Fields#updating-fields)
+Read about editing users [here](/fields-and-attributes/All-Fields#updating-fields)
 
 #### URL
 
