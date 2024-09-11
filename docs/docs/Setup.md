@@ -139,7 +139,7 @@ services:
       - .env
 ```
 
-9. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. If the rest of your project is running on Node, you can use the [Liquid Node Connector](https://www.npmjs.com/package/liquid-node-connector) to authenticate users connecting to your service and also to get client tokens to interact with Liquid client APIs. [Click here for Swagger](https://shrihari-prakash.github.io/liquid-docs). Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
+9. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. If the rest of your project is running on Node, you can use the [Liquid Node Connector](https://www.npmjs.com/package/liquid-node-connector) to authenticate users connecting to your service and also to get client tokens to interact with Liquid client APIs. [Click here for API documentation](/api-documentation/API-Documentation-OAuth-2.0). Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
 10. As a general best practice, whenever you launch Liquid, always look for any warnings in the logs. This can help you catch misconfigurations very early before your users notice them.
 
 ## First time setup
