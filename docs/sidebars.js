@@ -28,7 +28,7 @@ const sidebars = {
       type: "category",
       label: "Fields and Attributes",
       items: [
-        "fields-and-attributes/General-Fields",
+        "fields-and-attributes/All-Fields",
         "fields-and-attributes/Special-Fields",
         "fields-and-attributes/Custom-Data",
       ],

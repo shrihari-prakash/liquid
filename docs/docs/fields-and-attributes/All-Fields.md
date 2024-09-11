@@ -1,10 +1,10 @@
 ---
-title: General Fields
+title: All Fields
 ---
 
 Liquid offers a large variety of fields and attributes that you can use for various purposes. These fields are typically categorized into 3 categories according to how sensitive they are. Below is a list of all fields along with their sensitivity levels:
 
-Field Name | Sensitivity Level (Write) | Type | Readable by Admin | Readable by Client | Readable by Delegated User | Patchable
+Field Name | Sensitivity Level (Write) | Type | Readable by Admin | Readable by Client | Readable by Delegated User | Patchable / Related API
 --- | --- | --- | --- | --- | --- | ---
 username | HIGH | String | Yes | Yes | Yes | Yes
 password | HIGH | String | No | No | No | Yes
@@ -92,6 +92,8 @@ Once you have identified the level of write access you want to provide a user, y
 By default, Liquid does not allow editing anything before assigning the sensitivity scopes.
 
 When editing roles, the role sent in the body should be of less priority in ranking than the user that is requesting the API unless the requesting user is a super_admin. For instance, a user with role ‘user’ cannot make someone an ‘admin’.
+
+Most of these fields can be updated using [Update User Fields (Delegated)](/api-documentation/API-Documentation-Delegated#update-user-info) or [Update User Fields (Admin)](/api-documentation/API-Documentation-Admin#update-user-info), but some fields are special and cannot be updated directly by PATCH APIs. Such fields are related to special features of Liquid and the documentation for usage is linked in the `Related API` field of the table above.
 
 ### More Fields
 
