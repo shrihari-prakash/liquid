@@ -75,7 +75,7 @@ globalLogoutAt | LOW | Date | No | No | No | No
 
 Liquid provides granular control on who can change what fields of a user.
 
-Most of these fields can be updated using [Update User Fields (Delegated)](/api-documentation/API-Documentation-Delegated#update-user-info) or [Update User Fields (Admin)](/api-documentation/API-Documentation-Admin#update-user-info), but some fields are special and cannot be updated directly by PATCH APIs. Such fields are related to special features of Liquid and the documentation for usage is linked in the `Related API` field of the table above.
+Most of these fields can be updated using [Update User Fields (Delegated)](/api-documentation/API-Documentation-Delegated#update-user-info) or [Update User Fields (Admin)](/api-documentation/API-Documentation-Admin#update-user-info), but some fields are special and cannot be updated directly by PATCH APIs. Such fields are related to special features of Liquid and the documentation for usage is linked in the `Related API` column of the table above.
 
 ### For delegated users
 
