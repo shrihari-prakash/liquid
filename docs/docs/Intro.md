@@ -30,13 +30,13 @@ curl -sSL --insecure https://raw.githubusercontent.com/shrihari-prakash/liquid/m
 curl -sSL --insecure https://raw.githubusercontent.com/shrihari-prakash/liquid/main/quickstart/app-config.service.json > app-config.service.json
 curl -sSL --insecure https://raw.githubusercontent.com/shrihari-prakash/liquid/main/quickstart/app-config.static.json > app-config.static.json
 ```
-1. In the `app-config.service.json` file, add your frontend origin in `cors.allowed-origins` array.
+1. In the `app-config.service.json` file, add your frontend origin in `cors.allowed-origins` array (just the origin, not the redirect URI).
 2. Run `docker-compose up -d`. 
 
 This is useful if you want to try and evaluate Liquid to see if it fits your needs or to locally develop your apps with Liquid.
 
 ## Connecting Your Frontend Application to Liquid Quickstart Instance
-For Liquid to securely allow your frontend to authenticate, you will need to update your frontend domain in a few places:
+For Liquid to securely allow your frontend to authenticate, you will need to add your frontend redirect URI to the trusted list.
 
 ### Nitrogen Configuration
 1. Login to the [Nitrogen admin panel](http://localhost:2001).
