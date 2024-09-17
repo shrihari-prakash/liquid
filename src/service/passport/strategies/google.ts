@@ -53,6 +53,9 @@ class GoogleStrategy {
       if (username.length < 6) {
         if (!email.includes("@gmail")) {
           username = email.replaceAll("@", ".");
+          if (username.length > 30) {
+            username = username.substring(0, 30);
+          }
         }
       }
     }
