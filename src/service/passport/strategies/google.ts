@@ -47,11 +47,17 @@ class GoogleStrategy {
       log.warn("Invalid JSON found in `user.account-creation.custom-data.default-value`.");
     }
     let username = profile.username;
+    let email = profile.emails[0].value;
     if (!username) {
-      username = profile.emails[0].value.split("@")[0];
+      username = email.split("@")[0];
+      if (username.length < 6) {
+        if (!email.includes("@gmail")) {
+          username = email.replaceAll("@", ".");
+        }
+      }
     }
     const newUser = new UserModel({
-      email: profile.emails[0].value,
+      email,
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
       username,
