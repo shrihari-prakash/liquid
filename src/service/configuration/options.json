@@ -935,8 +935,8 @@
   },
   {
     "name": "admin-api.user.search.search-fields",
-    "displayName": "User Search Fields",
-    "envName": "ADMIN_API_USER_SEARCH_SEARCH_FIELDS (Admin API)",
+    "displayName": "User Search Fields (Admin API)",
+    "envName": "ADMIN_API_USER_SEARCH_SEARCH_FIELDS",
     "description": "Specifies the field names that can be used to search for users.",
     "type": "stringArray",
     "default": "username,firstName,lastName,email"

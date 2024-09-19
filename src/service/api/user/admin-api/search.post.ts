@@ -33,6 +33,7 @@ const POST_Search = async (req: Request, res: Response) => {
     }
     log.info("Cache miss for query: " + query);
     const queryRegex = new RegExp(query, "i");
+    log.debug("Admin search fields: %o", Configuration.get("admin-api.user.search.search-fields"));
     const $or = Configuration.get("admin-api.user.search.search-fields").map((field: string) => ({ [field]: queryRegex }));
     if (Configuration.get("admin-api.privilege.user.search.can-use-id") && isValidObjectId(query)) {
       log.debug("Search by ID is enabled.");
