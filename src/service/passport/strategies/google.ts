@@ -2,6 +2,7 @@ import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "google-strategy" });
 
 import { Strategy as googleStrategy, Profile } from "passport-google-oauth20";
+import { generateFromEmail, generateUsername } from "unique-username-generator";
 
 import { Configuration } from "../../../singleton/configuration.js";
 import UserModel from "../../../model/mongo/user.js";
@@ -27,12 +28,13 @@ class GoogleStrategy {
     if (!profile.emails || !profile.emails[0] || !profile.name || !profile.name.givenName || !profile.name.familyName) {
       return cb(new Error("No email found in Google profile."), undefined);
     }
-    const existingUser = await UserModel.findOne({ email: profile.emails[0].value }).lean();
+    const existingUser = await UserModel.findOne({ googleProfileId: profile.id }).lean();
+    let email = profile.emails[0].value;
     if (existingUser) {
       log.info("User found from Google profile.");
       UserModel.updateOne(
         { _id: existingUser._id },
-        { ssoEnabled: true, ssoProvider: "google", googleProfileId: profile.id },
+        { ssoEnabled: true, ssoProvider: "google", googleProfileId: profile.id, email },
       ).exec();
       return cb(null, existingUser);
     }
@@ -47,17 +49,15 @@ class GoogleStrategy {
       log.warn("Invalid JSON found in `user.account-creation.custom-data.default-value`.");
     }
     let username = profile.username;
-    let email = profile.emails[0].value;
     if (!username) {
-      username = email.split("@")[0];
-      if (username.length < 6) {
-        if (!email.includes("@gmail")) {
-          username = email.replaceAll("@", ".");
-          if (username.length > 30) {
-            username = username.substring(0, 30);
-          }
-        }
-      }
+      username = generateFromEmail(email);
+      log.debug("Generated username from email: %s", username);
+    }
+    const isDuplicateUsername = await UserModel.findOne({ username }).lean();
+    log.debug("Duplicate username check: %o", isDuplicateUsername);
+    if (isDuplicateUsername) {
+      username = generateUsername("", 3);
+      log.debug("Generated unique username: %s", username);
     }
     const newUser = new UserModel({
       email,
