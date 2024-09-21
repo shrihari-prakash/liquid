@@ -53,9 +53,10 @@ class GoogleStrategy {
       username = generateFromEmail(email);
       log.debug("Generated username from email: %s", username);
     }
+    const isLengthOK = username.length >= 6 && username.length <= 32;
     const isDuplicateUsername = await UserModel.findOne({ username }).lean();
     log.debug("Duplicate username check: %o", isDuplicateUsername);
-    if (isDuplicateUsername) {
+    if (!isLengthOK || isDuplicateUsername) {
       username = generateUsername("", 3);
       log.debug("Generated unique username: %s", username);
     }
