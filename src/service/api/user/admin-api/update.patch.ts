@@ -55,7 +55,7 @@ const PATCH_Update = async (req: Request, res: Response) => {
       if (
         !ScopeManager.isScopeAllowed(
           `admin:profile:sensitive:${fieldSensitivityScore}:write`,
-          res.locals?.oauth?.token?.scope
+          res.locals?.oauth?.token?.scope,
         )
       ) {
         return res
@@ -83,8 +83,8 @@ const PATCH_Update = async (req: Request, res: Response) => {
     if (password) {
       req.body.password = await bcrypt.hash(password, bcryptConfig.salt);
     }
-    await UserModel.updateOne({ _id: userId }, { $set: { ...req.body } }).exec();
-    res.status(statusCodes.success).json(new SuccessResponse());
+    const result = await UserModel.findByIdAndUpdate(userId, { $set: { ...req.body } }).exec();
+    res.status(statusCodes.success).json(new SuccessResponse({ user: result }));
     flushUserInfoFromRedis(userId);
   } catch (err: any) {
     log.error(err);
@@ -100,3 +100,4 @@ const PATCH_Update = async (req: Request, res: Response) => {
 };
 
 export default PATCH_Update;
+
