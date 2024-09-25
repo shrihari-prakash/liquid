@@ -77,8 +77,8 @@ const PATCH_Me = async (req: Request, res: Response) => {
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
     }
-    await UserModel.updateOne({ _id: userId }, { $set: { ...req.body } }).exec();
-    res.status(statusCodes.success).json(new SuccessResponse());
+    const result = await UserModel.findByIdAndUpdate(userId, { $set: { ...req.body } }).exec();
+    res.status(statusCodes.success).json(new SuccessResponse({ user: result }));
     flushUserInfoFromRedis(userId);
   } catch (err: any) {
     log.error(err);
@@ -94,3 +94,4 @@ const PATCH_Me = async (req: Request, res: Response) => {
 };
 
 export default PATCH_Me;
+
