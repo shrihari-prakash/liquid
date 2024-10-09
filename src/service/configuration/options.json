@@ -486,6 +486,15 @@
     "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-rabbitmq"]
   },
   {
+    "name": "system.push-events.prefix",
+    "displayName": "System Push Events Prefix",
+    "envName": "SYSTEM_PUSH_EVENTS_PREFIX",
+    "description": "Prefix to be used for push events send by Liquid.",
+    "type": "stringArray",
+    "default": "liquid.",
+    "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-rabbitmq"]
+  },
+  {
     "name": "rabbitmq.connectionString",
     "displayName": "RabbitMQ Connection String",
     "envName": "RABBITMQ_CONNECTION_STRING",
