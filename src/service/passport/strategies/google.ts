@@ -6,6 +6,9 @@ import { generateFromEmail, generateUsername } from "unique-username-generator";
 
 import { Configuration } from "../../../singleton/configuration.js";
 import UserModel from "../../../model/mongo/user.js";
+import { Pusher } from "../../../singleton/pusher.js";
+import { PushEvent } from "../../pusher/pusher.js";
+import { PushEventList } from "../../../enum/push-events.js";
 
 class GoogleStrategy {
   strategy: googleStrategy | null = null;
@@ -36,6 +39,7 @@ class GoogleStrategy {
         { _id: existingUser._id },
         { ssoEnabled: true, ssoProvider: "google", googleProfileId: profile.id, email },
       ).exec();
+      Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user: existingUser }));
       return cb(null, existingUser);
     }
     log.info("Creating user from Google profile.");
@@ -75,6 +79,7 @@ class GoogleStrategy {
       credits,
     });
     const savedUser = await newUser.save();
+    Pusher.publish(new PushEvent(PushEventList.USER_CREATE, { user: savedUser }));
     return cb(null, savedUser);
   };
 }
