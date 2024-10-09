@@ -490,7 +490,7 @@
     "displayName": "System Push Events Prefix",
     "envName": "SYSTEM_PUSH_EVENTS_PREFIX",
     "description": "Prefix to be used for push events send by Liquid.",
-    "type": "stringArray",
+    "type": "string",
     "default": "liquid.",
     "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-rabbitmq"]
   },
