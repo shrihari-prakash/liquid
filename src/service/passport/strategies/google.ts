@@ -3,12 +3,14 @@ const log = Logger.getLogger().child({ from: "google-strategy" });
 
 import { Strategy as googleStrategy, Profile } from "passport-google-oauth20";
 import { generateFromEmail, generateUsername } from "unique-username-generator";
+import * as express from "express";
 
 import { Configuration } from "../../../singleton/configuration.js";
 import UserModel from "../../../model/mongo/user.js";
 import { Pusher } from "../../../singleton/pusher.js";
 import { PushEvent } from "../../pusher/pusher.js";
 import { PushEventList } from "../../../enum/push-events.js";
+import { GoogleLoginType } from "../../../enum/google-login-type.js";
 
 class GoogleStrategy {
   strategy: googleStrategy | null = null;
@@ -20,13 +22,26 @@ class GoogleStrategy {
           clientSecret: Configuration.get("user.account-creation.sso.google.client-secret"),
           callbackURL: `${Configuration.get("system.app-host")}/sso/google/callback`,
           scope: ["profile"],
+          passReqToCallback: true,
         },
         this.onVerify.bind(this),
       );
     }
   }
 
-  private onVerify = async (_: string, __: string, profile: Profile, cb: (err: Error | null, user: any) => void) => {
+  private onVerify = async (
+    req: express.Request,
+    _: string,
+    __: string,
+    profile: Profile,
+    cb: (err: Error | null, user: any) => void,
+  ) => {
+    let type = GoogleLoginType.SIGNUP;
+    let state = req.query.state;
+    try {
+      state = JSON.parse(state as string);
+      if ((state as { type: string }).type === GoogleLoginType.LOGIN) type = GoogleLoginType.LOGIN;
+    } catch {}
     log.info("Google profile received: %o", profile);
     if (!profile.emails || !profile.emails[0] || !profile.name || !profile.name.givenName || !profile.name.familyName) {
       return cb(new Error("No email found in Google profile."), undefined);
@@ -42,6 +57,7 @@ class GoogleStrategy {
       Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user: existingUser }));
       return cb(null, existingUser);
     }
+    if (type === GoogleLoginType.LOGIN) return cb(null, {});
     log.info("Creating user from Google profile.");
     const role = Configuration.get("system.role.default");
     const credits = Configuration.get("user.account-creation.initial-credit-count");

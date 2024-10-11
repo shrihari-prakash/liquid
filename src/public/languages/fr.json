@@ -22,6 +22,7 @@
   "error.account-not-verified": "Compte non vérifié",
   "error.invalid-login": "Identifiant invalide",
   "error.bad-email-domain": "Mauvais domaine de messagerie",
+  "error.account-does-not-exist": "Le compte n'existe pas. Veuillez vous inscrire pour continuer.",
   "error.duplicate-account": "Le compte existe déjà",
   "error.duplicate-username": "Le username n'est pas disponible",
   "error.signup-error": "Erreur d'inscription",

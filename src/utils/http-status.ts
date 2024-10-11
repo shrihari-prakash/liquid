@@ -39,4 +39,5 @@ export const errorMessages = {
   incompleteSubmission: "IncompleteSubmission",
   resourceNotActive: "ResourceNotActive",
   insufficientCredits: "InsufficientCredits",
+  accountDoesNotExist: "AccountDoesNotExist",
 };

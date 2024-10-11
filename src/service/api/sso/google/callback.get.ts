@@ -13,6 +13,11 @@ import { makeToken } from "../../../../utils/token.js";
 const GET_GoogleCallback = async (req: Request, res: Response) => {
   try {
     const user = req.user as UserInterface;
+    if (!user || !user._id) {
+      console.log("user not found");
+      const params = new URLSearchParams({ message: "error.account-does-not-exist" });
+      return res.redirect(`/not-found?${params.toString()}`);
+    }
     const token = makeToken(128);
     const ssoToken = {
       userId: user._id,

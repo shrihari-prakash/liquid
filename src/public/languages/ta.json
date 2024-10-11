@@ -22,6 +22,7 @@
   "error.account-not-verified": "கணக்கு சரிபார்க்கப்படவில்லை",
   "error.invalid-login": "தவறான புகுபதிவு",
   "error.bad-email-domain": "தவறான மின்னஞ்சல் டொமைன்",
+  "error.account-does-not-exist": "கணக்கு இல்லை. தொடர, பதிவு செய்யவும்.",
   "error.duplicate-account": "கணக்கு ஏற்கனவே உள்ளது",
   "error.duplicate-username": "கைப்பிடி ஏற்கனவே எடுக்கப்பட்டது",
   "error.signup-error": "பதிவு பிழை",

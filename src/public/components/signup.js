@@ -111,7 +111,8 @@ export default function SignUp() {
     const authorizationParams = prepareAuthorizationParams(configuration);
     const appName = humanReadableToSnakeCase(configuration["content.app-name"]);
     sessionStorage.setItem(`${appName}.authorization-params`, JSON.stringify(authorizationParams));
-    window.location = "/sso/google";
+    const params = new URLSearchParams({ type: "signup" });
+    window.location = `/sso/google?${params.toString()}`;
   };
 
   if (!configuration["privilege.can-create-account"]) {

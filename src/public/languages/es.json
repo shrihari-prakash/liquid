@@ -22,6 +22,7 @@
   "error.account-not-verified": "Cuenta no verificada",
   "error.invalid-login": "Inicio de sesión inválido",
   "error.bad-email-domain": "Dominio de e-mail erróneo",
+  "error.account-does-not-exist": "La cuenta no existe. Por favor regístrate para continuar.",
   "error.duplicate-account": "La cuenta ya existe",
   "error.duplicate-username": "El nombre de usuario no está disponible",
   "error.signup-error": "Error en el registro",

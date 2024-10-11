@@ -117,7 +117,8 @@ export default function Login() {
     const authorizationParams = prepareAuthorizationParams(configuration);
     const appName = humanReadableToSnakeCase(configuration["content.app-name"]);
     sessionStorage.setItem(`${appName}.authorization-params`, JSON.stringify(authorizationParams));
-    window.location = "/sso/google";
+    const params = new URLSearchParams({ type: "login" });
+    window.location = `/sso/google?${params.toString()}`;
   };
 
   const onSSOComplete = async (ssoToken) => {
