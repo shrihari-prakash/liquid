@@ -161,7 +161,6 @@ export default function Login() {
     return (
       <div className="form-loader">
         <div className="spinner"></div>
-        Redirecting... Please Wait...
       </div>
     );
   }
