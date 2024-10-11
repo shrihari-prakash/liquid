@@ -35,6 +35,7 @@
   "message.recover-instructions": "Enter your email address to recover your account.",
   "message.reset-password-instructions": "A verification code was sent to your email address.",
   "message.page-not-found": "This page could not be found",
+  "message.terms-and-conditions": "By continuing, you agree to our policies",
 
   "button.login": "Login",
   "button.signup": "Create Account",
@@ -46,6 +47,8 @@
   "button.verify": "Verify",
   "button.signup.google": "Signup with Google",
   "button.signin.google": "Continue with Google",
+  "button.terms-of-use": "Terms of use",
+  "button.privacy-policy": "Privacy Policy",
 
   "field.label.username": "Username",
   "field.placeholder.username": "your_username",

@@ -35,6 +35,7 @@
   "message.recover-instructions": "Entrez votre adresse e-mail pour récupérer votre compte.",
   "message.reset-password-instructions": "Un code de vérification a été envoyé à votre adresse e-mail.",
   "message.page-not-found": "Cette page est introuvable",
+  "message.terms-and-conditions": "En continuant, vous acceptez nos politiques",
 
   "button.login": "Se connecter",
   "button.signup": "Créer un compte",
@@ -46,6 +47,8 @@
   "button.verify": "Vérifier",
   "button.signup.google": "Inscrivez-vous avec Google",
   "button.signin.google": "Continuer avec Google",
+  "button.terms-of-use": "Conditions d'utilisation",
+  "button.privacy-policy": "Politique de confidentialité",
 
   "field.label.username": "Nom d'utilisateur",
   "field.placeholder.username": "ton_nom_d'utilisateur",

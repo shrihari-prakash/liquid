@@ -1,7 +1,13 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
 import { countryCodes } from "../utils/country-codes.js";
-import { errorTextTimeout, getPlaceholder, humanReadableToSnakeCase, prepareAuthorizationParams, useTitle } from "../utils/utils.js";
+import {
+  errorTextTimeout,
+  getPlaceholder,
+  humanReadableToSnakeCase,
+  prepareAuthorizationParams,
+  useTitle,
+} from "../utils/utils.js";
 
 export default function SignUp() {
   const submitButtonText = i18next.t("button.signup");
@@ -284,19 +290,15 @@ export default function SignUp() {
         )}
       </div>
       <div className="fineprint">
-        {(termsAndConditions || privacyPolicy) && "By clicking on Create Account, you"}
-        {termsAndConditions && (
-          <>
-            &nbsp;agree to the <a href={termsAndConditions}> terms & conditions</a> of {appName}
-            {!privacyPolicy && "."}
-          </>
-        )}
-        {privacyPolicy && (
-          <>
-            &nbsp;{termsAndConditions && "and "}
-            confirm that you've read our <a href={privacyPolicy}>privacy policy</a>.
-          </>
-        )}
+        {(termsAndConditions || privacyPolicy) && i18next.t("message.terms-and-conditions")}
+        <div className="policies-container">
+          {termsAndConditions && <a href={termsAndConditions}>{i18next.t("button.terms-of-use")}</a>}
+          {privacyPolicy && (
+            <>
+              • <a href={termsAndConditions}>{i18next.t("button.privacy-policy")}</a>
+            </>
+          )}
+        </div>
       </div>
     </form>
   );

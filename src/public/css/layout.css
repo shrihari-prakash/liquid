@@ -288,6 +288,13 @@ h3 {
   color: var(--text-lighter-color);
 }
 
+.policies-container {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
 .ribbon {
   background-color: rgba(0, 0, 0, 0.5);
   text-transform: uppercase;

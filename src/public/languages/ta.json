@@ -35,6 +35,7 @@
   "message.recover-instructions": "உங்கள் கணக்கை மீட்டெடுக்க உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும்.",
   "message.reset-password-instructions": "உங்கள் மின்னஞ்சல் முகவரிக்கு சரிபார்ப்புக் குறியீடு அனுப்பப்பட்டது.",
   "message.page-not-found": "இந்த பக்கத்தை எங்களால் கண்டுபிடிக்க முடியவில்லை",
+  "message.terms-and-conditions": "தொடர்வதன் மூலம், எங்கள் கொள்கைகளை ஏற்கிறீர்கள்",
 
   "button.login": "உள்நுழைக",
   "button.signup": "கணக்கை துவங்குங்கள்",
@@ -46,6 +47,8 @@
   "button.verify": "சரிபார்க்கவும்",
   "button.signup.google": "Google மூலம் பதிவு செய்யவும்",
   "button.signin.google": "Google மூலம் தொடரவும்",
+  "button.terms-of-use": "பயன்பாட்டு விதிமுறைகள்",
+  "button.privacy-policy": "தனியுரிமைக் கொள்கை",
 
   "field.label.username": "கணக்கு கைப்பிடி",
   "field.placeholder.username": "கணக்கு_கைப்பிடி",
