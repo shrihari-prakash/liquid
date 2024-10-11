@@ -298,9 +298,9 @@ export default function SignUp() {
               {i18next.t("button.terms-of-use")}
             </a>
           )}
+          •
           {privacyPolicy && (
             <>
-              •{" "}
               <a href={privacyPolicy} target="_blank">
                 {i18next.t("button.privacy-policy")}
               </a>
