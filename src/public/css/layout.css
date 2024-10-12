@@ -105,6 +105,7 @@ h3 {
 .multi-action {
   width: 100%;
   display: flex;
+  gap: 0.5rem;
   align-items: center;
   justify-content: space-between;
 }
