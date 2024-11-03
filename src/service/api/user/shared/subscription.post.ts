@@ -58,6 +58,7 @@ const POST_Subscription = async (req: Request, res: Response) => {
     const query = {
       $set: {
         isSubscribed: state,
+        subscriptionActivatedAt: moment().toDate(),
         subscriptionExpiry: moment(expiry).toDate(),
         subscriptionTier: tier || null,
       },

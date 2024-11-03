@@ -423,6 +423,18 @@ export const userSchema = {
       write: SensitivityLevel.MEDIUM,
     },
   },
+  subscriptionActivatedAt: {
+    type: Date,
+    required: false,
+    default: Date.now,
+    willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM,
+    },
+  },
   subscriptionExpiry: {
     type: Date,
     required: false,
@@ -724,6 +736,7 @@ export type UserInterface = {
   pincode: number;
   organization: string;
   isSubscribed: boolean;
+  subscriptionActivatedAt: Date;
   subscriptionExpiry: Date;
   subscriptionTier: string;
   credits: number;
