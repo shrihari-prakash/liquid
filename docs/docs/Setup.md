@@ -107,7 +107,7 @@ Here's a sample `app-config.static.json` file:
 Now that we have our configuration files ready, let's boot up liquid with them.
 
 1. Pull the docker image by using command `docker pull shrihariprakash/liquid`.
-2. Update properties `oauth.client-id` and `oauth.redirect-uri` in your `app-config.static.json` to values of `system.default-client.id` and `system.default-client.redirect-uris` in your backend config file respectively. Feel free to explore other options related to UI customizations.
+2. Update properties `oauth.client-id` and `oauth.redirect-uri` in your `app-config.static.json` to value of `system.default-client.id` and one of the values of `system.default-client.redirect-uris` in your backend config file respectively. Feel free to explore other options related to UI customizations.
 3. Now open terminal in the folder that contains your `app-config.static.json` and `app-config.service.json`.
 4. If you are on Windows, run:
 
