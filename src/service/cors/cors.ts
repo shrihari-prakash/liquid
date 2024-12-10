@@ -5,7 +5,7 @@ import ClientModel from "../../model/mongo/client.js";
 import { Configuration } from "../../singleton/configuration.js";
 
 export class CORS {
-  allowedOrigins = new Set();
+  allowedOrigins = new Set(Configuration.get("cors.allowed-origins"));
 
   extractOrigin(uri: string): string {
     const url = new URL(uri);
