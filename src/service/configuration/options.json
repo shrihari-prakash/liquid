@@ -8,6 +8,79 @@
     "default": "production"
   },
   {
+    "name": "system.super-admin.username",
+    "displayName": "Super Admin Username",
+    "envName": "SYSTEM_SUPER_ADMIN_USERNAME",
+    "description": "Username of the super admin user.",
+    "type": "string",
+    "relatedOptions": ["system.super-admin.*"]
+  },
+  {
+    "name": "system.super-admin.password",
+    "displayName": "Super Admin Password",
+    "envName": "SYSTEM_SUPER_ADMIN_PASSWORD",
+    "description": "Password of the super admin user.",
+    "type": "string",
+    "relatedOptions": ["system.super-admin.*"]
+  },
+  {
+    "name": "system.super-admin.first-name",
+    "displayName": "Super Admin First Name",
+    "envName": "SYSTEM_SUPER_ADMIN_FIRST_NAME",
+    "description": "First name of the super admin user.",
+    "type": "string",
+    "relatedOptions": ["system.super-admin.*"]
+  },
+  {
+    "name": "system.super-admin.last-name",
+    "displayName": "Super Admin Last Name",
+    "envName": "SYSTEM_SUPER_ADMIN_LAST_NAME",
+    "description": "Last name of the super admin user.",
+    "type": "string",
+    "relatedOptions": ["system.super-admin.*"]
+  },
+  {
+    "name": "system.super-admin.email",
+    "displayName": "Super Admin Email",
+    "envName": "SYSTEM_SUPER_ADMIN_EMAIL",
+    "description": "Email of the super admin user.",
+    "type": "string",
+    "relatedOptions": ["system.super-admin.*"]
+  },
+  {
+    "name": "system.default-client.id",
+    "displayName": "Default Client ID",
+    "envName": "SYSTEM_DEFAULT_CLIENT_ID",
+    "description": "Client ID of the default client.",
+    "type": "string",
+    "relatedOptions": ["system.default-client.*"]
+  },
+  {
+    "name": "system.default-client.secret",
+    "displayName": "Default Client Secret",
+    "envName": "SYSTEM_DEFAULT_CLIENT_SECRET",
+    "description": "Client secret of the default client.",
+    "type": "string",
+    "relatedOptions": ["system.default-client.*"]
+  },
+  {
+    "name": "system.default-client.display-name",
+    "displayName": "Default Client Display Name",
+    "envName": "SYSTEM_DEFAULT_CLIENT_DISPLAY_NAME",
+    "description": "Display name of the default client.",
+    "type": "string",
+    "relatedOptions": ["system.default-client.*"]
+  },
+  {
+    "name": "system.default-client.redirect-uris",
+    "displayName": "Default Client Redirect URIs",
+    "envName": "SYSTEM_DEFAULT_CLIENT_REDIRECT_URIS",
+    "description": "Redirect URIs of the default client.",
+    "type": "stringArray",
+    "default": ["http://localhost:2000", "http://localhost:2001"],
+    "relatedOptions": ["system.default-client.*"]
+  },
+  {
     "name": "system.app-host",
     "displayName": "Application Host",
     "envName": "SYSTEM_APP_HOST",
@@ -20,14 +93,6 @@
     "displayName": "Enable Swagger",
     "envName": "SYSTEM_ENABLE_SWAGGER",
     "description": "Specifies if swagger UI is available. If enabled, swagger will be available on /docs",
-    "type": "boolean",
-    "default": false
-  },
-  {
-    "name": "system.demo-mode",
-    "displayName": "Demo Mode",
-    "envName": "SYSTEM_DEMO_MODE",
-    "description": "Specifies if Liquid is running in the demo mode.",
     "type": "boolean",
     "default": false
   },
@@ -1159,7 +1224,6 @@
       "user.account-creation.enable-invite-only",
       "user.account-creation.require-email-verification",
       "privilege.can-reset-password",
-      "system.demo-mode",
       "user.login.require-browser-info",
       "user.login.require-os-info",
       "user.account-creation.sso.google.enabled"

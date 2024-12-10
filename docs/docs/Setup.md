@@ -64,10 +64,26 @@ Here's a sample `app-config.service.json` file for a very minimal Liquid setup:
   "system.rate-limit.medium-api-max-limit": 100000000,
   "system.rate-limit.heavy-api-max-limit": 100000000,
   "system.rate-limit.extreme-api-max-limit": 100000000,
-  "system.demo-mode": true
+
+  "system.super-admin.username": "liquid_demo",
+  "system.super-admin.password": "liquid_demo",
+  "system.super-admin.email": "liquid_demo@example.com",
+  "system.super-admin.first-name": "Liquid",
+  "system.super-admin.last-name": "Demo",
+
+  "system.default-client.id": "application_client",
+  "system.default-client.secret": "super-secure-client-secret",
+  "system.default-client.display-name": "Application Client",
+  "system.default-client.redirect-uris": ["http://localhost:2000", "http://localhost:2001"]
 }
 
 ```
+
+:::danger
+
+**The backend configuration (app-config.service.json) normally contains sensitive stuff like database passwords, super admin password, client secret, etc. We recommend you keep this file only on your production server and not make it a part of your source code check-in.**
+
+:::
 
 ### Frontend
 
@@ -91,27 +107,9 @@ Here's a sample `app-config.static.json` file:
 Now that we have our configuration files ready, let's boot up liquid with them.
 
 1. Pull the docker image by using command `docker pull shrihariprakash/liquid`.
-2. Create a collection in your database named `clients` and insert the following document into the collection (Make sure you edit the frontend URIs and secret in the document below):
-
-```json
-{
-  "id": "application_client",
-  "grants": ["client_credentials", "authorization_code", "refresh_token"],
-  "redirectUris": [
-    "{{frontend-redirect-uri-1}}",
-    "{{frontend-redirect-uri-2}}"
-  ],
-  "secret": "super-secure-client-secret",
-  "role": "internal_client",
-  "scope": ["*"],
-  "displayName": "Application Client"
-}
-```
-
-3. Update properties `oauth.client-id` and `oauth.redirect-uri` in your `app-config.json` to values from the document you just inserted into `clients` collection. Feel free to explore other options related to UI customizations.
-4. Have your backend configurations ready in the file **`.env`** (preferably put it on the same folder as your app-config.json).
-5. Now open terminal in the folder that contains your `app-config.json` and `.env`.
-6. If you are on Windows, run:
+2. Update properties `oauth.client-id` and `oauth.redirect-uri` in your `app-config.static.json` to values of `system.default-client.id` and `system.default-client.redirect-uris` in your backend config file respectively. Feel free to explore other options related to UI customizations.
+3. Now open terminal in the folder that contains your `app-config.static.json` and `app-config.service.json`.
+4. If you are on Windows, run:
 
 ```bash
 docker run -p 2000:2000 -v "%cd%":/environment --env "SYSTEM_SERVICE_APP_CONFIG_FILE_PATH=/environment/app-config.service.json" --name liquid -itd shrihariprakash/liquid:latest
@@ -141,30 +139,6 @@ services:
 
 9. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. If the rest of your project is running on Node, you can use the [Liquid Node Connector](https://www.npmjs.com/package/liquid-node-connector) to authenticate users connecting to your service and also to get client tokens to interact with Liquid client APIs. [Click here for API documentation](/api-documentation/API-Documentation-OAuth-2.0). Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
 10. As a general best practice, whenever you launch Liquid, always look for any warnings in the logs. This can help you catch misconfigurations very early before your users notice them.
-
-## First time setup
-
-Now we have our liquid instance running. That's fantastic! There's just one more thing to do. Assign someone as the system administrator. Liquid needs a super admin for the system that can provide access to all other users in the system. To do this, create an account on Liquid by doing the following:
-
-1. Visit `/signup` and fill the details.
-2. Click on Create Account.
-3. If you have email verifications enabled, a code is sent to your email. Enter this code on the verification page. If you have verifications disabled, you are redirected to the login page. **DO NOT LOGIN YET!**.
-
-Once you sign up for an account, you would need to make yourself super admin by editing the database entry for your account. This is the last time you will touch the database manually. Run the following commands in your MongoDB instance:
-
-```bash
-use liquid
-
-db.users.updateOne( { username: "your_username" },
-{
-  $set: {
-    role: "super_admin",
-    scope: ["*"]
-  }
-})
-```
-
-This would give you full access to the system. 
 
 ### Login
 

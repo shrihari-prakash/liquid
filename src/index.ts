@@ -52,10 +52,10 @@ import { Redis } from "./singleton/redis.js";
 import { errorMessages, statusCodes } from "./utils/http-status.js";
 import { ErrorResponse } from "./utils/response.js";
 import { sanitizeEditableFields } from "./utils/user.js";
-import { initializeDemo } from "./utils/demo.js";
 import { StaticRoutes } from "./enum/static-routes.js";
 import { Passport } from "./singleton/passport.js";
 import { CORS } from "./singleton/cors.js";
+import { Bootstrap } from "./service/bootstrap/bootstrap.js";
 
 const app = express();
 app.disable("x-powered-by");
@@ -147,10 +147,7 @@ if (Configuration.get("system.enable-response-compression")) {
 
 // ********** Singleton Init ********** //
 if (environment !== "test") {
-  MongoDB.connect().then(() => {
-    // Runs only if system.demo-mode = true.
-    initializeDemo();
-  });
+  MongoDB.connect();
 }
 Api.initialize(app);
 Mailer.initialize(app);
@@ -219,6 +216,9 @@ app.listen(Configuration.get("system.app-port"), () => {
 });
 
 sanitizeEditableFields();
+
+const bootstrapService = new Bootstrap();
+bootstrapService.configure();
 
 export default app;
 

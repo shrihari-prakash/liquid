@@ -152,11 +152,6 @@ export default function Layout({ children }) {
             {configuration["content.sidebar.enabled"] && showSidebar && (
               <div className="sidebar-wrapper">
                 <div className="sidebar" style={{ backgroundImage: `url(${sidebarImage})` }}>
-                  {configuration["system.demo-mode"] &&
-                    <div className="ribbon">
-                      Demo Mode
-                    </div>
-                  }
                   {configuration["content.sidebar.content-enabled"] && (
                     <div className="intro">
                       <div className="title1">{configuration["content.sidebar.intro.title1"]}</div>
