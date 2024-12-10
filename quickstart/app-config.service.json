@@ -9,6 +9,7 @@
   "system.static.app-config-file-path": "/environment/app-config.static.json",
   "privilege.can-reset-password": false,
   "user.account-creation.require-email-verification": false,
+  "system.app-host": "http://localhost:2000",
   "system.email-adapter": "print",
   "system.rate-limit.light-api-max-limit": 100000000,
   "system.rate-limit.medium-api-max-limit": 100000000,
