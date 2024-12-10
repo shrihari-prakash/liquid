@@ -55,6 +55,7 @@ import { sanitizeEditableFields } from "./utils/user.js";
 import { initializeDemo } from "./utils/demo.js";
 import { StaticRoutes } from "./enum/static-routes.js";
 import { Passport } from "./singleton/passport.js";
+import { CORS } from "./singleton/cors.js";
 
 const app = express();
 app.disable("x-powered-by");
@@ -122,12 +123,17 @@ Passport.session();
 // ********** End Passport Auth ********** //
 
 // ********** CORS ********** //
-const systemCORS = Configuration.get("cors.allowed-origins") as string[];
-log.debug("CORS origins %o", systemCORS);
+CORS.scanOrigins();
 app.use(
   cors({
     credentials: true,
-    origin: systemCORS,
+    origin: (origin, callback) => {
+      if (CORS.isAllowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
   }),
 );
 // ********** End CORS ********** //
