@@ -5,7 +5,8 @@ import ClientModel from "../../model/mongo/client.js";
 import { Configuration } from "../../singleton/configuration.js";
 
 export class CORS {
-  allowedOrigins = new Set(Configuration.get("cors.allowed-origins"));
+  systemOrigins = [...Configuration.get("cors.system-origins"), Configuration.get("system.app-host")];
+  allowedOrigins = new Set(this.systemOrigins);
 
   extractOrigin(uri: string): string {
     const url = new URL(uri);
@@ -14,7 +15,7 @@ export class CORS {
   }
 
   public async scanOrigins() {
-    this.allowedOrigins = new Set(Configuration.get("cors.allowed-origins"));
+    this.allowedOrigins = new Set(this.systemOrigins);
     const clients = await ClientModel.find();
     if (!clients) {
       log.warn("No clients found. Skipping origin scan.");

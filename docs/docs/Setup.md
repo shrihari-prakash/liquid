@@ -59,6 +59,7 @@ Here's a sample `app-config.service.json` file for a very minimal Liquid setup:
   "system.static.app-config-file-path": "/environment/app-config.static.json",
   "privilege.can-reset-password": false,
   "user.account-creation.require-email-verification": false,
+  "system.app-host": "https://your-liquid-host-name",
   "system.email-adapter": "print",
   "system.rate-limit.light-api-max-limit": 100000000,
   "system.rate-limit.medium-api-max-limit": 100000000,
@@ -74,9 +75,12 @@ Here's a sample `app-config.service.json` file for a very minimal Liquid setup:
   "system.default-client.id": "application_client",
   "system.default-client.secret": "super-secure-client-secret",
   "system.default-client.display-name": "Application Client",
-  "system.default-client.redirect-uris": ["http://localhost:2000", "http://localhost:2001"]
+  "system.default-client.redirect-uris": [
+    "http://localhost:2000",
+    "http://localhost:2001",
+    "https://your.frontend.origin"
+  ]
 }
-
 ```
 
 :::danger
