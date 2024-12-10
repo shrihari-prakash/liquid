@@ -11,6 +11,7 @@ import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import ClientModel from "../../../../model/mongo/client.js";
 import { hasErrors } from "../../../../utils/api.js";
 import Role from "../../../../enum/role.js";
+import { CORS } from "../../../../singleton/cors.js";
 
 export const DELETE_DeleteValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -30,6 +31,7 @@ const DELETE_Delete = async (req: Request, res: Response) => {
     log.debug("Client deleted successfully.");
     log.debug(deleted);
     res.status(statusCodes.success).json(new SuccessResponse());
+    CORS.scanOrigins();
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

@@ -11,6 +11,7 @@ import Role from "../../../../enum/role.js";
 import ClientModel from "../../../../model/mongo/client.js";
 import { hasErrors } from "../../../../utils/api.js";
 import { Configuration } from "../../../../singleton/configuration.js";
+import { CORS } from "../../../../singleton/cors.js";
 
 export const POST_CreateValidator = [
   body("id").exists().isString().isLength({ min: 8, max: 30 }).matches(new RegExp(Configuration.get("client.id-validation-regex"), "i")),
@@ -42,6 +43,7 @@ const POST_Create = async (req: Request, res: Response) => {
     log.debug("Client created successfully.");
     log.debug(inserted);
     res.status(statusCodes.success).json(new SuccessResponse({ client: inserted }));
+    CORS.scanOrigins();
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));

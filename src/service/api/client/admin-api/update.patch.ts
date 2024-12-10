@@ -12,6 +12,7 @@ import Role from "../../../../enum/role.js";
 import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import { Configuration } from "../../../../singleton/configuration.js";
+import { CORS } from "../../../../singleton/cors.js";
 
 export const PATCH_UpdateValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -52,6 +53,7 @@ const PATCH_Update = async (req: Request, res: Response) => {
     await ClientModel.updateOne({ _id: target }, req.body);
     log.debug("Client updated successfully.");
     res.status(statusCodes.success).json(new SuccessResponse());
+    CORS.scanOrigins();
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
