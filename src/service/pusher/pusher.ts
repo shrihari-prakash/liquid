@@ -57,7 +57,7 @@ export default class Pusher {
 
   async publish(event: PushEvent) {
     const prefix = Configuration.get("system.push-events.prefix");
-    if (prefix) event.name = `${prefix}.${event.name}`;
+    if (prefix) event.name = `${prefix}${event.name}`;
     log.debug("Pusher publish called: %o", event);
     if (!this.queue) return;
     if (!Configuration.get("system.push-events").includes(event.name)) {
