@@ -586,6 +586,14 @@
     "default": "http://localhost:3000"
   },
   {
+    "name": "cors.scan-interval",
+    "displayName": "CORS Scan Interval",
+    "envName": "CORS_SCAN_INTERVAL",
+    "description": "Interval in seconds to scan for new origins.",
+    "type": "number",
+    "default": 300
+  },
+  {
     "name": "privilege.can-use-cache",
     "displayName": "Can Use Cache",
     "envName": "CAN_USE_CACHE",

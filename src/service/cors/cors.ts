@@ -5,13 +5,24 @@ import ClientModel from "../../model/mongo/client.js";
 import { Configuration } from "../../singleton/configuration.js";
 
 export class CORS {
-  systemOrigins = [...Configuration.get("cors.system-origins"), Configuration.get("system.app-host")];
+  systemOrigins = [...Configuration.get("cors.allowed-origins"), Configuration.get("system.app-host")];
   allowedOrigins = new Set(this.systemOrigins);
 
   extractOrigin(uri: string): string {
     const url = new URL(uri);
     const origin = url.origin;
     return origin;
+  }
+
+  public scheduleScan() {
+    this.scanOrigins();
+    setInterval(
+      () => {
+        log.debug("Scanning for new CORS origins...");
+        this.scanOrigins();
+      },
+      Configuration.get("cors.scan-interval") * 1000,
+    );
   }
 
   public async scanOrigins() {
@@ -43,6 +54,11 @@ export class CORS {
       return true;
     }
     return false;
+  }
+
+  public initialize() {
+    this.scanOrigins();
+    this.scheduleScan();
   }
 }
 

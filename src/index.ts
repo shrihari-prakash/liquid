@@ -123,7 +123,7 @@ Passport.session();
 // ********** End Passport Auth ********** //
 
 // ********** CORS ********** //
-CORS.scanOrigins();
+CORS.initialize();
 app.use(
   cors({
     credentials: true,
