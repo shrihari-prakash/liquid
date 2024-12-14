@@ -292,21 +292,23 @@ export default function SignUp() {
       </div>
       <div className="fineprint">
         {(termsAndConditions || privacyPolicy) && i18next.t("message.terms-and-conditions")}
-        <div className="policies-container">
-          {termsAndConditions && (
-            <a href={termsAndConditions} target="_blank">
-              {i18next.t("button.terms-of-use")}
-            </a>
-          )}
-          •
-          {privacyPolicy && (
-            <>
-              <a href={privacyPolicy} target="_blank">
-                {i18next.t("button.privacy-policy")}
+        {(termsAndConditions || privacyPolicy) && (
+          <div className="policies-container">
+            {termsAndConditions && (
+              <a href={termsAndConditions} target="_blank">
+                {i18next.t("button.terms-of-use")}
               </a>
-            </>
-          )}
-        </div>
+            )}
+            {termsAndConditions && privacyPolicy ? "•" : null}
+            {privacyPolicy && (
+              <>
+                <a href={privacyPolicy} target="_blank">
+                  {i18next.t("button.privacy-policy")}
+                </a>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </form>
   );

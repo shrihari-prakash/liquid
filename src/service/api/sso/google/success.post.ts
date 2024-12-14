@@ -1,9 +1,9 @@
-import { body } from "express-validator";
-import SSOTokenModel from "../../../../model/mongo/sso-token.js";
 import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "sso/google/success.get" });
 
 import { Request, Response } from "express";
+import { body } from "express-validator";
+
 import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel from "../../../../model/mongo/user.js";
@@ -13,6 +13,7 @@ import { PushEventList } from "../../../../enum/push-events.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import LoginHistoryModel, { LoginHistoryInterface } from "../../../../model/mongo/login-history.js";
 import { hasErrors } from "../../../../utils/api.js";
+import SSOTokenModel from "../../../../model/mongo/sso-token.js";
 
 export const POST_GoogleSuccessValidator = [
   body("ssoToken").exists().isString().isLength({ max: 512 }),
