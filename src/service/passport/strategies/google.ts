@@ -58,6 +58,10 @@ class GoogleStrategy {
       return cb(null, existingUser);
     }
     if (type === GoogleLoginType.LOGIN) return cb(null, {});
+    if (!Configuration.get("privilege.can-create-account")) {
+      log.warn("Account creation is disabled.");
+      return cb(new Error("Account creation is disabled."), undefined);
+    }
     log.info("Creating user from Google profile.");
     const role = Configuration.get("system.role.default");
     const credits = Configuration.get("user.account-creation.initial-credit-count");
