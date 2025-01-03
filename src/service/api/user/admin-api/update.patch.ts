@@ -10,13 +10,13 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel, { UserInterface, userSchema } from "../../../../model/mongo/user.js";
 import { Configuration } from "../../../../singleton/configuration.js";
-import Role from "../../../../enum/role.js";
 import { bcryptConfig } from "../create.post.js";
 import { hasErrors } from "../../../../utils/api.js";
 import { PATCH_MeValidator } from "../me.patch.js";
 import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
 import { isRoleRankHigher } from "../../../../utils/role.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { Role } from "../../../../singleton/role.js";
 
 export const PATCH_UpdateValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -66,16 +66,15 @@ const PATCH_Update = async (req: Request, res: Response) => {
     const currentUserRole = res.locals.user.role;
     const target = (await UserModel.findOne({ _id: userId })) as unknown as UserInterface;
     // Allow changing data only upto the current user's role score.
-    if (!isRoleRankHigher(currentUserRole, target.role) && currentUserRole !== Role.SUPER_ADMIN) {
+    if (!isRoleRankHigher(currentUserRole, target.role) && currentUserRole !== Role.SystemRoles.SUPER_ADMIN) {
       return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
     }
     const role = req.body.role;
     if (role) {
-      const allRoles = Object.values(Role);
-      if (!allRoles.includes(role)) {
+      if (!Role.isValidRole(role)) {
         return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
       }
-      if (!isRoleRankHigher(currentUserRole, role) && currentUserRole !== Role.SUPER_ADMIN) {
+      if (!isRoleRankHigher(currentUserRole, role) && currentUserRole !== Role.SystemRoles.SUPER_ADMIN) {
         return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       }
     }

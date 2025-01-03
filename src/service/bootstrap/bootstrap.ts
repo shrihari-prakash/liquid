@@ -7,6 +7,7 @@ import { Configuration } from "../../singleton/configuration.js";
 import { bcryptConfig } from "../api/user/create.post.js";
 import UserModel from "../../model/mongo/user.js";
 import ClientModel from "../../model/mongo/client.js";
+import { Role } from "../../singleton/role.js";
 
 export class Bootstrap {
   public verifyAdminConfig() {
@@ -92,6 +93,7 @@ export class Bootstrap {
     log.info("Bootstrapping system...");
     await this.createSuperAdmin();
     await this.createDefaultClient();
+    await Role.createDefaultRoles();
     log.info("System bootstrapping complete.");
   }
 }

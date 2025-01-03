@@ -187,7 +187,7 @@ if (Configuration.get("system.use-built-in-static-ui")) {
 // ********** End UI / Static Pages ********** //
 
 app.all("*", function (req, res) {
-  const apiPattern = /^(\/user\/|\/system\/|\/oauth\/|\/sso\/)/;
+  const apiPattern = /^(\/user\/|\/system\/|\/oauth\/|\/sso\/|\/roles\/)/;
   if (!apiPattern.test(req.path) && Configuration.get("system.use-built-in-static-ui")) {
     const staticFolder = path.join(__dirname, "public");
     const index = path.join(staticFolder, "index.html");

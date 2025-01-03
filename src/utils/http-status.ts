@@ -40,4 +40,6 @@ export const errorMessages = {
   resourceNotActive: "ResourceNotActive",
   insufficientCredits: "InsufficientCredits",
   accountDoesNotExist: "AccountDoesNotExist",
+  systemRoleDelete: "SystemRoleDelete",
+  systemRoleUpdate: "SystemRoleUpdate",
 };

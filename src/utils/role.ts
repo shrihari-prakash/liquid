@@ -1,7 +1,8 @@
 import { Configuration } from "../singleton/configuration.js";
+import { Role } from "../singleton/role.js";
 
-export const extractRank = (roleRank: string) => {
-  return (roleRank.match(/\(([^)]+)\)/) as string[])[1];
+export const extractRank = (role: string) => {
+  return Role.getRoleRank(role);
 };
 
 export const findRoleRank = (role: string) => {
@@ -13,7 +14,7 @@ export const isRoleRankHigher = (currentRole: string, comparisonRole: string) =>
   const currentRoleRank = extractRank(findRoleRank(currentRole));
   const comparisonRoleRank = extractRank(findRoleRank(comparisonRole));
   if (Configuration.get("admin-api.user.profile.can-edit-peer-data")) {
-    return parseInt(currentRoleRank) <= parseInt(comparisonRoleRank);
+    return currentRoleRank <= comparisonRoleRank;
   }
-  return parseInt(currentRoleRank) < parseInt(comparisonRoleRank);
+  return currentRoleRank < comparisonRoleRank;
 };

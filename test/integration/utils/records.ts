@@ -9,6 +9,8 @@ import MemoryStore from "../store";
 import FollowModel from "../../../src/model/mongo/follow";
 import BlockModel from "../../../src/model/mongo/block";
 import ClientModel from "../../../src/model/mongo/client";
+import RoleModel from "../../../src/model/mongo/role";
+import { Role } from "../../../src/singleton/role";
 
 export const MockData = JSON.parse(JSON.stringify(MemoryStore));
 
@@ -19,6 +21,7 @@ export const setupUsers = async () => {
   await BlockModel.deleteMany({});
   await ClientModel.deleteMany({});
   await VerificationCodeModel.deleteMany({});
+  await RoleModel.deleteMany({});
 
   const mockData = MockData;
   try {
@@ -86,7 +89,11 @@ export const setupUsers = async () => {
     user: MemoryStore.users.user3,
   };
   await new TokenModel(token3).save();
-  await new ClientModel(MemoryStore.client).save();
+  try {
+    await new ClientModel(MemoryStore.client).save();
+  } catch {}
   const client = await ClientModel.findOne({ id: MemoryStore.client.id });
   MemoryStore.client._id = (client as unknown as any)._id;
+  await Role.createDefaultRoles();
 };
+

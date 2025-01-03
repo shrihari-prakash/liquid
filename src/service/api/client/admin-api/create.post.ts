@@ -7,18 +7,22 @@ import { body } from "express-validator";
 import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
-import Role from "../../../../enum/role.js";
 import ClientModel from "../../../../model/mongo/client.js";
 import { hasErrors } from "../../../../utils/api.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import { CORS } from "../../../../singleton/cors.js";
+import { Role } from "../../../../singleton/role.js";
 
 export const POST_CreateValidator = [
-  body("id").exists().isString().isLength({ min: 8, max: 30 }).matches(new RegExp(Configuration.get("client.id-validation-regex"), "i")),
+  body("id")
+    .exists()
+    .isString()
+    .isLength({ min: 8, max: 30 })
+    .matches(new RegExp(Configuration.get("client.id-validation-regex"), "i")),
   body("grants").exists().isArray().isIn(["client_credentials", "authorization_code", "refresh_token", "password"]),
   body("redirectUris").exists().isArray(),
   body("secret").exists().isString().isLength({ min: 8, max: 256 }),
-  body("role").exists().isString().isIn([Role.INTERNAL_CLIENT, Role.EXTERNAL_CLIENT]),
+  body("role").exists().isString().isIn([Role.SystemRoles.INTERNAL_CLIENT, Role.SystemRoles.EXTERNAL_CLIENT]),
   body("scope").optional().isArray().isIn(Object.keys(ScopeManager.getScopes())),
   body("displayName").exists().isString().isLength({ min: 8, max: 96 }),
 ];
@@ -26,7 +30,10 @@ export const POST_CreateValidator = [
 const POST_Create = async (req: Request, res: Response) => {
   try {
     if (hasErrors(req, res)) return;
-    const requiredScope = req.body.role === Role.INTERNAL_CLIENT ? "admin:system:internal-client:write" : "admin:system:external-client:write"
+    const requiredScope =
+      req.body.role === Role.SystemRoles.INTERNAL_CLIENT
+        ? "admin:system:internal-client:write"
+        : "admin:system:external-client:write";
     if (!ScopeManager.isScopeAllowedForSession(requiredScope, res)) {
       return;
     }
@@ -51,3 +58,4 @@ const POST_Create = async (req: Request, res: Response) => {
 };
 
 export default POST_Create;
+

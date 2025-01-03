@@ -73,7 +73,6 @@ describe("oauth.token", () => {
       refresh_token: accessToken.refreshToken,
       client_id: MemoryStore.client.client_id,
     });
-    console.log("res.body", res.body);
     chai.expect(res.status).to.equal(200);
     chai.expect(res.body).to.have.property("access_token");
     chai.expect(res.body).to.have.property("refresh_token");

@@ -8,7 +8,6 @@ import AuthorizationCodeModel from "../mongo/authorization-code.js";
 import ClientModel from "../mongo/client.js";
 import TokenModel from "../mongo/token.js";
 import UserModel, { UserInterface } from "../mongo/user.js";
-import Role from "../../enum/role.js";
 import { ScopeManager } from "../../singleton/scope-manager.js";
 import {
   AuthorizationCode,
@@ -22,6 +21,7 @@ import {
   RefreshToken,
 } from "@node-oauth/oauth2-server";
 import { isTokenInvalidated } from "../../utils/session.js";
+import { Role } from "../../singleton/role.js";
 
 interface Client {
   id: string;
@@ -79,7 +79,7 @@ const getUserInfo = async (userId: string) => {
       await Redis.setEx(
         getPrefixedUserId(userId),
         JSON.stringify(userInfo),
-        Configuration.get("oauth.refresh-token-lifetime") as number
+        Configuration.get("oauth.refresh-token-lifetime") as number,
       );
     }
   } else {
@@ -89,7 +89,8 @@ const getUserInfo = async (userId: string) => {
 };
 
 const isApplicationClient = (user: any) => {
-  const appplicationClient = user.role === Role.INTERNAL_CLIENT || user.role === Role.EXTERNAL_CLIENT;
+  const appplicationClient =
+    user.role === Role.SystemRoles.INTERNAL_CLIENT || user.role === Role.SystemRoles.EXTERNAL_CLIENT;
   return appplicationClient;
 };
 
@@ -137,13 +138,13 @@ const OAuthModel: OAuthModel = {
         await Redis.setEx(
           getPrefixedToken(token.accessToken),
           serialized,
-          Configuration.get("oauth.access-token-lifetime") as number
+          Configuration.get("oauth.access-token-lifetime") as number,
         );
         if (token.refreshToken)
           await Redis.setEx(
             getPrefixedToken(token.refreshToken),
             serialized,
-            Configuration.get("oauth.refresh-token-lifetime") as number
+            Configuration.get("oauth.refresh-token-lifetime") as number,
           );
         return token;
       }
@@ -178,7 +179,7 @@ const OAuthModel: OAuthModel = {
         if (hasNegativeScopeDiff) {
           log.debug(
             "Some scopes were revoked for user %s since last token grant. Token has been invalidated.",
-            cacheToken.user.username
+            cacheToken.user.username,
           );
           return null;
         }
@@ -280,7 +281,7 @@ const OAuthModel: OAuthModel = {
         await Redis.setEx(
           getPrefixedCode(authorizationCode.authorizationCode),
           JSON.stringify(authorizationCode),
-          Configuration.get("oauth.authorization-code-lifetime") as number
+          Configuration.get("oauth.authorization-code-lifetime") as number,
         );
         return authorizationCode;
       }
@@ -340,7 +341,7 @@ const OAuthModel: OAuthModel = {
         log.debug(
           "Scope validation for client %s failed due to insufficient access. Requested scope: %s",
           client.id,
-          scope
+          scope,
         );
         return resolve(false);
       }
@@ -354,12 +355,12 @@ const OAuthModel: OAuthModel = {
       // Sometimes, the frontends do not know the scopes a user can request ahead of time.
       // Since there is usually a higher amount of trust for internal clients in the system,
       // it is okay to return all scopes that a user has access to.
-      if (client.role === Role.INTERNAL_CLIENT) {
+      if (client.role === Role.SystemRoles.INTERNAL_CLIENT) {
         scope = user.scope;
         log.debug(
           "Granting all allowed scopes (%s) for user %s due to request from internal client",
           scope,
-          user.username
+          user.username,
         );
         return resolve(scope);
       }

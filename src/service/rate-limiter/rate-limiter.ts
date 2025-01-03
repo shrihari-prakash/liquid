@@ -48,6 +48,7 @@ export function activateRateLimiters(app: any) {
   app.use(/\/system\/(?!client-api|admin-api).*/, RateLimiter.MEDIUM);
   app.use(/\/user\/(?!client-api|admin-api).*/, RateLimiter.MEDIUM);
   app.use(/\/client\/(?!client-api|admin-api).*/, RateLimiter.MEDIUM);
+  app.use(/\/roles\/(?!client-api|admin-api).*/, RateLimiter.MEDIUM);
 
   // Medium rate limit for everything in OAuth except for introspecting tokens.
   app.use(/\/oauth\/(?!introspect).*/, RateLimiter.MEDIUM);
@@ -56,6 +57,7 @@ export function activateRateLimiters(app: any) {
   app.use("/system/admin-api", RateLimiter.LIGHT);
   app.use("/user/admin-api", RateLimiter.LIGHT);
   app.use("/client/admin-api", RateLimiter.LIGHT);
+  app.use("/roles/admin-api", RateLimiter.LIGHT);
 
   // Potentially dangerous APIs for the system. Treated as extreme APIs.
   app.post("/user/create", RateLimiter.EXTREME);
