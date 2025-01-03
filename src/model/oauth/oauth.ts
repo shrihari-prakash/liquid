@@ -22,6 +22,7 @@ import {
 } from "@node-oauth/oauth2-server";
 import { isTokenInvalidated } from "../../utils/session.js";
 import { Role } from "../../singleton/role.js";
+import { RedisPrefixes } from "../../enum/redis.js";
 
 interface Client {
   id: string;
@@ -48,14 +49,11 @@ type OAuthModel =
 
 const useTokenCache = Configuration.get("privilege.can-use-cache");
 
-const tokenPrefix = "token:";
-const getPrefixedToken = (token: string) => `${tokenPrefix}${token}`;
+const getPrefixedToken = (token: string) => `${RedisPrefixes.TOKEN}${token}`;
 
-const codePrefix = "code:";
-const getPrefixedCode = (code: string) => `${codePrefix}${code}`;
+const getPrefixedCode = (code: string) => `${RedisPrefixes.CODE}${code}`;
 
-const userIdPrefix = "user:";
-const getPrefixedUserId = (userId: string) => `${userIdPrefix}${userId}`;
+const getPrefixedUserId = (userId: string) => `${RedisPrefixes.USER}${userId}`;
 
 export const flushUserInfoFromRedis = async (userIds: string | string[]) => {
   if (typeof userIds === "string") {
@@ -356,7 +354,6 @@ const OAuthModel: OAuthModel = {
       // Since there is usually a higher amount of trust for internal clients in the system,
       // it is okay to return all scopes that a user has access to.
       if (client.role === Role.SystemRoles.INTERNAL_CLIENT) {
-        scope = user.scope;
         log.debug(
           "Granting all allowed scopes (%s) for user %s due to request from internal client",
           scope,

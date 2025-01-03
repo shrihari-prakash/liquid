@@ -54,6 +54,7 @@ export class ScopeManager {
   isScopeAllowedForSharedSession(scope: string, res: Response) {
     const token = res.locals?.oauth?.token;
     const allowedScopes = token?.scope || [];
+    const roleAllowedScopes = Role.getRoleScopes(token?.user?.role);
     const clientAllowedScopes = token?.client.scope || [];
     const role = token?.user?.role;
     const isAllowedForClient = this.isScopeAllowed(scope.replace("<ENTITY>", "client"), allowedScopes);
@@ -66,7 +67,7 @@ export class ScopeManager {
     that the user is having a session with. Many times, it might be possible that the user has elevated permissions,
     but the client is not granted those permissions. This is especially the case with third party connected apps. */
     const isAllowedForUser =
-      (this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), allowedScopes) &&
+      (this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), [...allowedScopes, ...roleAllowedScopes]) &&
         this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), clientAllowedScopes)) ||
       role === Role.SystemRoles.SUPER_ADMIN;
     if (!isAllowedForUser && !isAllowedForClient) {
