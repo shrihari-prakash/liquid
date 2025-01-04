@@ -5,6 +5,7 @@ import { ClientSession } from "mongoose";
 import RoleModel, { RoleInterface } from "../../model/mongo/role.js";
 
 import DefaultRoles from "./default-roles.json" assert { type: "json" };
+import { Configuration } from "../../singleton/configuration.js";
 
 export class Role {
   roles: Map<string, RoleInterface> = new Map();
@@ -18,6 +19,7 @@ export class Role {
 
   constructor() {
     log.debug("Role service initialized.");
+    this.scheduleScan();
   }
 
   public getRolesMap(roles: RoleInterface[]): Map<string, RoleInterface> {
@@ -32,6 +34,17 @@ export class Role {
     const dbRoles = (await RoleModel.find().lean()) as RoleInterface[];
     this.roles = this.getRolesMap(dbRoles);
     log.debug("Roles refreshed. %d roles found.", dbRoles.length);
+  }
+
+  public scheduleScan() {
+    this.refreshRoles();
+    setInterval(
+      () => {
+        log.debug("Scanning for new roles...");
+        this.refreshRoles();
+      },
+      Configuration.get("system.roles.scan-interval") * 1000,
+    );
   }
 
   public async createDefaultRoles() {

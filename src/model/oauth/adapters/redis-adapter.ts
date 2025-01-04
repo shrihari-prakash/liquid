@@ -67,7 +67,12 @@ class RedisAdapter {
       );
       return null;
     }
-    token.accessTokenExpiresAt = new Date(token.accessTokenExpiresAt);
+    if (token.accessTokenExpiresAt) {
+      token.accessTokenExpiresAt = new Date(token.accessTokenExpiresAt);
+    }
+    if (token.refreshTokenExpiresAt) {
+      token.refreshTokenExpiresAt = new Date(token.refreshTokenExpiresAt);
+    }
     return token;
   }
 

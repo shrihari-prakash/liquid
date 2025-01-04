@@ -208,6 +208,14 @@
     "default": "SAMEORIGIN"
   },
   {
+    "name": "system.roles.scan-interval",
+    "displayName": "Roles Scan Interval",
+    "envName": "SYSTEM_ROLES_SCAN_INTERVAL",
+    "description": "Specifies the interval in seconds to scan for new roles.",
+    "type": "number",
+    "default": 300
+  },
+  {
     "name": "cookie.session-secret",
     "displayName": "Cookie Session Secret",
     "envName": "COOKIE_SESSION_SECRET",

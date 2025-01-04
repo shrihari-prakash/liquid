@@ -11,6 +11,7 @@ import { Role } from "../../../../singleton/role.js";
 import UserModel from "../../../../model/mongo/user.js";
 import { MongoDB } from "../../../../singleton/mongo-db.js";
 import { hasErrors } from "../../../../utils/api.js";
+import { Configuration } from "../../../../singleton/configuration.js";
 
 export const POST_DeleteValidator = [body("target").isString().isLength({ min: 1, max: 128 })];
 
@@ -30,7 +31,7 @@ const POST_Delete = async (req: Request, res: Response) => {
     session = await MongoDB.startSession();
     MongoDB.startTransaction(session);
     const sessionOptions = MongoDB.getSessionOptions(session);
-    await UserModel.updateMany({ role: id }, { role: Role.SystemRoles.USER }, sessionOptions);
+    await UserModel.updateMany({ role: id }, { role: Configuration.get("system.role.default") }, sessionOptions);
     await Role.deleteRole(id, sessionOptions);
     await MongoDB.commitTransaction(session);
     return res.status(statusCodes.success).json(new SuccessResponse({}));
