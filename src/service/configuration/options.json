@@ -1202,6 +1202,7 @@
     "description": "Comma separated list of options that a user can have access to after logging in. This will also include insecure settings.",
     "type": "stringArray",
     "default": [
+      "system.app-name",
       "admin-api.user.profile.can-edit-peer-data",
       "pagination.default-limit",
       "pagination.max-limit",
