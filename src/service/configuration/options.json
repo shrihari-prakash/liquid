@@ -1170,24 +1170,6 @@
     "default": "user"
   },
   {
-    "name": "system.role.extended-roles",
-    "displayName": "Extended Roles",
-    "envName": "SYSTEM_ROLE_EXTENDED_ROLES",
-    "description": "Additional roles to be considered in the system. `system.role.ranking` SHOULD be updated along with this option to specify hierarchy of roles.",
-    "type": "stringArray",
-    "default": "",
-    "relatedOptions": ["system.role.ranking"]
-  },
-  {
-    "name": "system.role.ranking",
-    "displayName": "Role Rank",
-    "envName": "SYSTEM_ROLE_RANKING",
-    "description": "Comma separated list of role names and their ranks in format `role(score)` specifying the order of priorities for roles. Lower numbers have higher priorities.",
-    "type": "stringArray",
-    "default": "super_admin(1),admin(2),internal_client(2),external_client(3),user(4)",
-    "relatedOptions": ["system.role.extended-roles"]
-  },
-  {
     "name": "2fa.email.enabled",
     "displayName": "2FA Enabled",
     "envName": "2FA_EMAIL_ENABLED",
@@ -1213,7 +1195,6 @@
     "type": "stringArray",
     "default": [
       "admin-api.user.profile.can-edit-peer-data",
-      "system.role.extended-roles",
       "pagination.default-limit",
       "pagination.max-limit",
       "user.account-creation.invites-per-person",

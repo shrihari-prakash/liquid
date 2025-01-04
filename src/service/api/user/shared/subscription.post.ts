@@ -11,8 +11,8 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel from "../../../../model/mongo/user.js";
 import { hasErrors } from "../../../../utils/api.js";
 import { Configuration } from "../../../../singleton/configuration.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 export const POST_SubscriptionValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

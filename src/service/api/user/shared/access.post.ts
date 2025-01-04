@@ -11,9 +11,12 @@ import { hasErrors } from "../../../../utils/api.js";
 import UserModel from "../../../../model/mongo/user.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import ClientModel from "../../../../model/mongo/client.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
 import RoleModel from "../../../../model/mongo/role.js";
 import { Role } from "../../../../singleton/role.js";
+import { Redis } from "../../../../singleton/redis.js";
+import { Configuration } from "../../../../singleton/configuration.js";
+import { RedisPrefixes } from "../../../../enum/redis.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 const Operations = {
   ADD: "add",
@@ -133,6 +136,15 @@ const POST_Access = async (req: Request, res: Response) => {
         break;
       case "role":
         Role.refreshRoles();
+        const roles = await RoleModel.find({ id: { $in: req.body.targets } });
+        roles.forEach((role: any) => {
+          Redis.setEx(
+            `${RedisPrefixes.ROLE_INVALIDATION}${role.id}`,
+            new Date().toISOString(),
+            Configuration.get("oauth.refresh-token-lifetime"),
+          );
+          log.debug("Role cache invalidated: %s", role.id);
+        });
         break;
     }
   } catch (err) {

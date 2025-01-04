@@ -12,6 +12,7 @@ describe("roles.create.post", () => {
       id: "test",
       displayName: "Test",
       ranking: 1,
+      type: "user",
       description: "Test role",
     };
     const res = await chai

@@ -9,8 +9,8 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel from "../../../../model/mongo/user.js";
 import { hasErrors } from "../../../../utils/api.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 export const POST_RestrictValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

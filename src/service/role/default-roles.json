@@ -4,35 +4,40 @@
     "displayName": "Super Admin",
     "description": "The system super admin. Can perform any action.",
     "ranking": 1,
-    "scope": ["*"]
+    "scope": ["*"],
+    "type": "user"
   },
   {
     "id": "admin",
     "displayName": "Admin",
-    "description": "The system admin. No permissions assigned by default.",
+    "description": "The system admin.",
     "ranking": 2,
-    "scope": []
+    "scope": [],
+    "type": "user"
   },
   {
     "id": "user",
     "displayName": "User",
-    "description": "The system user. No permissions assigned by default.",
+    "description": "Has the lowest ranking of all.",
     "ranking": 100,
-    "scope": []
+    "scope": [],
+    "type": "user"
   },
   {
     "id": "internal_client",
     "displayName": "Internal Client",
-    "description": "The system internal client. Can perform internal system actions.",
+    "description": "First party and trusted applications.",
     "ranking": 2,
-    "scope": ["client:all"]
+    "scope": ["client:all"],
+    "type": "client"
   },
   {
     "id": "external_client",
     "displayName": "External Client",
-    "description": "The system external client.",
+    "description": "Third party applications. Ranked the same as users due to lower trust.",
     "ranking": 100,
-    "scope": []
+    "scope": [],
+    "type": "client"
   }
 ]
 

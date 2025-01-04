@@ -19,6 +19,11 @@ const roleSchema = {
     required: true,
     default: [],
   },
+  type: {
+    type: String,
+    required: true,
+    enum: ["user", "client"],
+  },
   description: String,
 };
 
@@ -32,6 +37,7 @@ export type RoleInterface = {
   displayName: string;
   ranking: number;
   scope: string[];
+  type: "user" | "client";
   description?: string | null;
 };
 

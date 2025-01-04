@@ -9,11 +9,11 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel from "../../../../model/mongo/user.js";
 import { hasErrors } from "../../../../utils/api.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
 import CreditTransactionModel from "../../../../model/mongo/credit-transaction.js";
 import { MongoDB } from "../../../../singleton/mongo-db.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 const Operations = {
   INCREMENT: "increment",

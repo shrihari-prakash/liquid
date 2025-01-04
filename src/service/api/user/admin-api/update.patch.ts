@@ -13,10 +13,10 @@ import { Configuration } from "../../../../singleton/configuration.js";
 import { bcryptConfig } from "../create.post.js";
 import { hasErrors } from "../../../../utils/api.js";
 import { PATCH_MeValidator } from "../me.patch.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
 import { isRoleRankHigher } from "../../../../utils/role.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import { Role } from "../../../../singleton/role.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 export const PATCH_UpdateValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -48,7 +48,7 @@ const PATCH_Update = async (req: Request, res: Response) => {
         .status(statusCodes.unauthorized)
         .json(new ErrorResponse(errorMessages.insufficientPrivileges, { errors }));
     }
-    // Edit is not allow for any field for the current user according to the scopes.
+    // Edit is not allowed for any field for the current user according to the scopes.
     for (let i = 0; i < fields.length; i++) {
       let field = fields[i];
       const fieldSensitivityScore = userSchema[field as keyof typeof userSchema]?.sensitivityScore?.write;

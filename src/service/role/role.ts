@@ -29,7 +29,7 @@ export class Role {
   }
 
   public async refreshRoles() {
-    const dbRoles = await RoleModel.find().lean();
+    const dbRoles = (await RoleModel.find().lean()) as RoleInterface[];
     this.roles = this.getRolesMap(dbRoles);
     log.debug("Roles refreshed. %d roles found.", dbRoles.length);
   }
@@ -47,7 +47,7 @@ export class Role {
   }
 
   public async createRole(role: RoleInterface) {
-    const newRole = await new RoleModel(role).save();
+    const newRole = await new RoleModel({ ...role, type: "user" }).save();
     log.info("Role created. Name: %s", role.id);
     await this.refreshRoles();
     return newRole;

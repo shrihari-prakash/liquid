@@ -54,7 +54,6 @@ export class ScopeManager {
   isScopeAllowedForSharedSession(scope: string, res: Response) {
     const token = res.locals?.oauth?.token;
     const allowedScopes = token?.scope || [];
-    const roleAllowedScopes = Role.getRoleScopes(token?.user?.role);
     const clientAllowedScopes = token?.client.scope || [];
     const role = token?.user?.role;
     const isAllowedForClient = this.isScopeAllowed(scope.replace("<ENTITY>", "client"), allowedScopes);
@@ -67,11 +66,11 @@ export class ScopeManager {
     that the user is having a session with. Many times, it might be possible that the user has elevated permissions,
     but the client is not granted those permissions. This is especially the case with third party connected apps. */
     const isAllowedForUser =
-      (this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), [...allowedScopes, ...roleAllowedScopes]) &&
+      (this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), allowedScopes) &&
         this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), clientAllowedScopes)) ||
       role === Role.SystemRoles.SUPER_ADMIN;
     if (!isAllowedForUser && !isAllowedForClient) {
-      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.clientId);
+      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.id);
       res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       return false;
     } else {
@@ -87,7 +86,7 @@ export class ScopeManager {
     if (this.isScopeAllowed(scope, allowedScopes) && this.isScopeAllowed(scope, clientAllowedScopes)) {
       return true;
     } else {
-      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.clientId);
+      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.id);
       res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       return false;
     }
@@ -102,7 +101,7 @@ export class ScopeManager {
     if (entity.role) {
       allowedScopes = [...allowedScopes, Role.getRoleScopes(entity.role)];
     }
-    return scopes.every((requestedScope: string) => this.isScopeAllowed(requestedScope, entity.scope));
+    return scopes.every((requestedScope: string) => this.isScopeAllowed(requestedScope, allowedScopes));
   }
 
   isScopeAllowed(scope: string, allowedScopes: string[] = []): boolean {
