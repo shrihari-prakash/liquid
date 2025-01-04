@@ -111,7 +111,7 @@ export class Role {
   }
 
   public async isValidRole(id: string) {
-    if (id in this.roles) {
+    if (this.roles.has(id)) {
       return true;
     }
     return false;
