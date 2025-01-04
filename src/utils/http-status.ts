@@ -42,4 +42,5 @@ export const errorMessages = {
   accountDoesNotExist: "AccountDoesNotExist",
   systemRoleDelete: "SystemRoleDelete",
   systemRoleUpdate: "SystemRoleUpdate",
+  duplicateResource: "DuplicateResource",
 };

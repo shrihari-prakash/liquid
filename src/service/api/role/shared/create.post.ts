@@ -11,7 +11,10 @@ import { Role } from "../../../../singleton/role.js";
 import { hasErrors } from "../../../../utils/api.js";
 
 export const POST_CreateValidator = [
-  body("id").isString().isLength({ min: 1, max: 128 }).matches(/^[a-zA-Z0-9_]+$/),
+  body("id")
+    .isString()
+    .isLength({ min: 1, max: 128 })
+    .matches(/^[a-zA-Z0-9_]+$/),
   body("displayName").isString().isLength({ min: 1, max: 128 }),
   body("ranking").isInt({ min: 1 }),
   body("description").optional().isString().isLength({ min: 1, max: 512 }),
@@ -29,7 +32,10 @@ const POST_Create = async (req: Request, res: Response) => {
     }
     const role = await Role.createRole(req.body);
     res.status(statusCodes.success).json(new SuccessResponse({ role }));
-  } catch (err) {
+  } catch (err: any) {
+    if (err?.message?.includes("E11000")) {
+      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.duplicateResource));
+    }
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
