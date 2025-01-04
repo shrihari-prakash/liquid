@@ -10,7 +10,7 @@ import UserModel from "../../../../model/mongo/user.js";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 export const POST_VerifyValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),

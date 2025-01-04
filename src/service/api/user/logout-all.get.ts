@@ -7,10 +7,10 @@ import { errorMessages, statusCodes } from "../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
 import GET_Logout from "./logout.get.js";
 import UserModel from "../../../model/mongo/user.js";
-import { flushUserInfoFromRedis } from "../../../model/oauth/oauth.js";
 import { Pusher } from "../../../singleton/pusher.js";
 import { PushEvent } from "../../pusher/pusher.js";
 import { PushEventList } from "../../../enum/push-events.js";
+import { flushUserInfoFromRedis } from "../../../model/oauth/cache.js";
 
 const GET_LogoutAll = async (req: Request, res: Response) => {
   try {

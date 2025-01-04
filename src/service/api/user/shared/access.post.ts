@@ -11,7 +11,12 @@ import { hasErrors } from "../../../../utils/api.js";
 import UserModel from "../../../../model/mongo/user.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import ClientModel from "../../../../model/mongo/client.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
+import RoleModel from "../../../../model/mongo/role.js";
+import { Role } from "../../../../singleton/role.js";
+import { Redis } from "../../../../singleton/redis.js";
+import { Configuration } from "../../../../singleton/configuration.js";
+import { RedisPrefixes } from "../../../../enum/redis.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 const Operations = {
   ADD: "add",
@@ -21,7 +26,7 @@ const Operations = {
 
 export const POST_AccessValidator = [
   body("targets").exists().isArray(),
-  body("targetType").exists().isString().isIn(["user", "client"]),
+  body("targetType").exists().isString().isIn(["user", "client", "role"]),
   body("scope").exists().isArray(),
   body("operation").exists().isString().isIn(Object.values(Operations)),
 ];
@@ -32,7 +37,11 @@ const POST_Access = async (req: Request, res: Response) => {
       return;
     }
     if (hasErrors(req, res)) return;
-    if (req.body.targets.some((t: string) => typeof t !== "string" || !isValidObjectId(t))) {
+    if (
+      req.body.targets.some(
+        (t: string) => typeof t !== "string" || (req.body.targetType !== "role" && !isValidObjectId(t)),
+      )
+    ) {
       const errors = [
         {
           msg: "Invalid value",
@@ -55,7 +64,7 @@ const POST_Access = async (req: Request, res: Response) => {
           */
           typeof s !== "string" ||
           typeof ScopeManager.getScopes()[s] === "undefined" ||
-          !ScopeManager.isScopeAllowed(s, res.locals.oauth.token.scope)
+          !ScopeManager.isScopeAllowed(s, res.locals.oauth.token.scope),
       )
     ) {
       const errors = [
@@ -74,7 +83,7 @@ const POST_Access = async (req: Request, res: Response) => {
       req.body.operation,
       req.body.scope,
       req.body.targets,
-      res.locals.oauth.token.user._id
+      res.locals.oauth.token.user._id,
     );
     let query: any = null;
     switch (req.body.operation) {
@@ -99,10 +108,45 @@ const POST_Access = async (req: Request, res: Response) => {
           },
         };
     }
-    const model = req.body.targetType === "user" ? UserModel : ClientModel;
-    await model.updateMany({ _id: { $in: req.body.targets } }, query);
+    let model = null;
+    switch (req.body.targetType) {
+      case "user":
+        model = UserModel;
+        break;
+      case "client":
+        model = ClientModel;
+        break;
+      case "role":
+        model = RoleModel;
+        break;
+    }
+    if (!model) {
+      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+    }
+    let searchField = "_id";
+    if (req.body.targetType === "role") {
+      searchField = "id";
+    }
+    log.debug("Query: %o, Search Field: %s", query, searchField);
+    await model.updateMany({ [searchField]: { $in: req.body.targets } }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
-    flushUserInfoFromRedis(req.body.targets);
+    switch (req.body.targetType) {
+      case "user":
+        flushUserInfoFromRedis(req.body.targets);
+        break;
+      case "role":
+        Role.refreshRoles();
+        const roles = await RoleModel.find({ id: { $in: req.body.targets } });
+        roles.forEach((role: any) => {
+          Redis.setEx(
+            `${RedisPrefixes.ROLE_INVALIDATION}${role.id}`,
+            new Date().toISOString(),
+            Configuration.get("oauth.refresh-token-lifetime"),
+          );
+          log.debug("Role cache invalidated: %s", role.id);
+        });
+        break;
+    }
   } catch (err) {
     log.error(err);
     return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
@@ -110,3 +154,4 @@ const POST_Access = async (req: Request, res: Response) => {
 };
 
 export default POST_Access;
+

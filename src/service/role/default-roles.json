@@ -1,0 +1,43 @@
+[
+  {
+    "id": "super_admin",
+    "displayName": "Super Admin",
+    "description": "The system super admin. Can perform any action.",
+    "ranking": 1,
+    "scope": ["*"],
+    "type": "user"
+  },
+  {
+    "id": "admin",
+    "displayName": "Admin",
+    "description": "The system admin.",
+    "ranking": 2,
+    "scope": [],
+    "type": "user"
+  },
+  {
+    "id": "user",
+    "displayName": "User",
+    "description": "Has the lowest ranking of all.",
+    "ranking": 100,
+    "scope": [],
+    "type": "user"
+  },
+  {
+    "id": "internal_client",
+    "displayName": "Internal Client",
+    "description": "First party and trusted applications.",
+    "ranking": 2,
+    "scope": ["client:all"],
+    "type": "client"
+  },
+  {
+    "id": "external_client",
+    "displayName": "External Client",
+    "description": "Third party applications. Ranked the same as users due to lower trust.",
+    "ranking": 100,
+    "scope": [],
+    "type": "client"
+  }
+]
+

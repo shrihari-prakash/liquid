@@ -4,11 +4,11 @@ const log = Logger.getLogger().child({ from: "scope-manager" });
 import { Response } from "express";
 import fs from "fs";
 
-import Scopes from "./scopes.json"  assert { type: "json" };
+import Scopes from "./scopes.json" assert { type: "json" };
 import { errorMessages, statusCodes } from "../../utils/http-status.js";
 import { ErrorResponse } from "../../utils/response.js";
-import Role from "../../enum/role.js";
 import { Configuration } from "../../singleton/configuration.js";
+import { Role } from "../../singleton/role.js";
 
 interface Scope {
   name: string;
@@ -43,7 +43,7 @@ export class ScopeManager {
 
   getScopeTree(scopes: Scope[], root: string | null | undefined = null) {
     return Object.fromEntries(
-      scopes.filter((scope) => scope.parent == root).map((s): any => [s.name, this.getScopeTree(scopes, s.name)])
+      scopes.filter((scope) => scope.parent == root).map((s): any => [s.name, this.getScopeTree(scopes, s.name)]),
     );
   }
 
@@ -60,7 +60,7 @@ export class ScopeManager {
     log.debug(
       "Shared session scope check. Scopes allowed: %o, client scopes allowed: %o.",
       allowedScopes,
-      clientAllowedScopes
+      clientAllowedScopes,
     );
     /* When checking permissions for a user, also check if the same permission is allowed for the client
     that the user is having a session with. Many times, it might be possible that the user has elevated permissions,
@@ -68,9 +68,9 @@ export class ScopeManager {
     const isAllowedForUser =
       (this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), allowedScopes) &&
         this.isScopeAllowed(scope.replace("<ENTITY>", "admin"), clientAllowedScopes)) ||
-      role === Role.SUPER_ADMIN;
+      role === Role.SystemRoles.SUPER_ADMIN;
     if (!isAllowedForUser && !isAllowedForClient) {
-      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.clientId);
+      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.id);
       res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       return false;
     } else {
@@ -86,7 +86,7 @@ export class ScopeManager {
     if (this.isScopeAllowed(scope, allowedScopes) && this.isScopeAllowed(scope, clientAllowedScopes)) {
       return true;
     } else {
-      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.clientId);
+      log.debug("Scope blocked for user %s, client %s.", token?.user?.username, token?.client?.id);
       res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
       return false;
     }
@@ -97,7 +97,11 @@ export class ScopeManager {
       log.debug("Scope not specified %s", scopes);
       return false;
     }
-    return scopes.every((requestedScope: string) => this.isScopeAllowed(requestedScope, entity.scope));
+    let allowedScopes = entity.scope || [];
+    if (entity.role) {
+      allowedScopes = [...allowedScopes, Role.getRoleScopes(entity.role)];
+    }
+    return scopes.every((requestedScope: string) => this.isScopeAllowed(requestedScope, allowedScopes));
   }
 
   isScopeAllowed(scope: string, allowedScopes: string[] = []): boolean {
@@ -115,3 +119,4 @@ export class ScopeManager {
     }
   }
 }
+

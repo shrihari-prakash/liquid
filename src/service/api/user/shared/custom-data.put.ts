@@ -11,7 +11,7 @@ import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel from "../../../../model/mongo/user.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 const userValidator = new UserValidator(body);
 
