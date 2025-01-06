@@ -37,7 +37,6 @@ export class Role {
   }
 
   public scheduleScan() {
-    this.refreshRoles();
     setInterval(
       () => {
         log.debug("Scanning for new roles...");
