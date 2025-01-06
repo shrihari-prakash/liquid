@@ -2,7 +2,7 @@
   {
     "id": "super_admin",
     "displayName": "Super Admin",
-    "description": "The system super admin. Can perform any action.",
+    "description": "The system super admin. Has all permissions and cannot be restricted.",
     "ranking": 1,
     "scope": ["*"],
     "type": "user"
@@ -10,7 +10,7 @@
   {
     "id": "admin",
     "displayName": "Admin",
-    "description": "The system admin.",
+    "description": "Ranks a little lower than Super Admin and has no permissions assigned by default.",
     "ranking": 2,
     "scope": [],
     "type": "user"
@@ -18,7 +18,7 @@
   {
     "id": "user",
     "displayName": "User",
-    "description": "Has the lowest ranking of all.",
+    "description": "Ranked the lowest. Has no permissions assigned by default.",
     "ranking": 100,
     "scope": [],
     "type": "user"

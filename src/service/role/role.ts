@@ -4,7 +4,7 @@ const log = Logger.getLogger().child({ from: "role-service" });
 import { ClientSession } from "mongoose";
 import RoleModel, { RoleInterface } from "../../model/mongo/role.js";
 
-import DefaultRoles from "./default-roles.json" assert { type: "json" };
+import DefaultRoles from "./default-roles.json" with { type: "json" };
 import { Configuration } from "../../singleton/configuration.js";
 
 export class Role {

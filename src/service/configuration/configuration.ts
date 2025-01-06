@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import Options from "./options.json" assert { type: "json" };
+import Options from "./options.json" with { type: "json" };
 
 interface Option {
   name: string;

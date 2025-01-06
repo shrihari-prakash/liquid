@@ -4,7 +4,7 @@ const log = Logger.getLogger().child({ from: "scope-manager" });
 import { Response } from "express";
 import fs from "fs";
 
-import Scopes from "./scopes.json" assert { type: "json" };
+import Scopes from "./scopes.json" with { type: "json" };
 import { errorMessages, statusCodes } from "../../utils/http-status.js";
 import { ErrorResponse } from "../../utils/response.js";
 import { Configuration } from "../../singleton/configuration.js";
