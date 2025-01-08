@@ -178,6 +178,7 @@ const POST_Create = async (req: Request, res: Response) => {
       firstName,
       lastName,
       email: sanitizeEmailAddress(email),
+      originalEmail: email,
       role,
       password,
       credits,

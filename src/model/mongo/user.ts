@@ -257,6 +257,18 @@ export const userSchema = {
       write: SensitivityLevel.MEDIUM,
     },
   },
+  originalEmail: {
+    type: String,
+    required: false,
+    default: null,
+    willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM,
+    },
+  },
   emailVerified: {
     type: Boolean,
     required: true,
@@ -720,6 +732,7 @@ export type UserInterface = {
   customLink: string;
   isPrivate: boolean;
   email: string;
+  originalEmail: string;
   emailVerified: boolean;
   phone: string;
   phoneCountryCode: string;

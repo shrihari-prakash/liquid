@@ -41,10 +41,14 @@ const POST_Login = async (req: Request, res: Response) => {
     const select = ["+password"];
     const query: any = {};
     if (email) {
-      query.email = sanitizeEmailAddress(email);
+      query.$or = [
+        { email: sanitizeEmailAddress(email) },
+        { originalEmail: email }
+      ];
     } else {
       query.username = username.toLowerCase();
     }
+    log.debug("Login query %o", query);
     const user = (await UserModel.findOne(query, select).exec()) as unknown as UserInterface;
     if (!user || !user.password)
       return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
