@@ -41,10 +41,7 @@ const POST_Login = async (req: Request, res: Response) => {
     const select = ["+password"];
     const query: any = {};
     if (email) {
-      query.$or = [
-        { email: sanitizeEmailAddress(email) },
-        { originalEmail: email }
-      ];
+      query.$or = [{ email: email }, { sanitizedEmail: sanitizeEmailAddress(email) }];
     } else {
       query.username = username.toLowerCase();
     }

@@ -257,9 +257,9 @@ export const userSchema = {
       write: SensitivityLevel.MEDIUM,
     },
   },
-  originalEmail: {
+  sanitizedEmail: {
     type: String,
-    required: false,
+    required: true,
     default: null,
     willProjectForUserSelect: true,
     willProjectForUserAdminSelect: true,
@@ -732,7 +732,7 @@ export type UserInterface = {
   customLink: string;
   isPrivate: boolean;
   email: string;
-  originalEmail: string;
+  sanitizedEmail: string;
   emailVerified: boolean;
   phone: string;
   phoneCountryCode: string;

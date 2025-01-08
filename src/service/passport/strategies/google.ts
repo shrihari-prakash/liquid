@@ -11,6 +11,7 @@ import { Pusher } from "../../../singleton/pusher.js";
 import { PushEvent } from "../../pusher/pusher.js";
 import { PushEventList } from "../../../enum/push-events.js";
 import { GoogleLoginType } from "../../../enum/google-login-type.js";
+import { sanitizeEmailAddress } from "../../../utils/email.js";
 
 class GoogleStrategy {
   strategy: googleStrategy | null = null;
@@ -86,6 +87,7 @@ class GoogleStrategy {
     }
     const newUser = new UserModel({
       email,
+      sanitizedEmail: sanitizeEmailAddress(email),
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
       username,

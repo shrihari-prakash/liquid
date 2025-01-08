@@ -138,12 +138,12 @@ const POST_Create = async (req: Request, res: Response) => {
         .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
     }
     const existingUser = (await UserModel.findOne({
-      $or: [{ email: sanitizeEmailAddress(email) }, { username }],
+      $or: [{ sanitizedEmail: sanitizeEmailAddress(email) }, { username }],
     }).exec()) as unknown as UserInterface;
     if (existingUser) {
       const duplicateFields = [];
       if (username === existingUser.username) duplicateFields.push("username");
-      if (email === existingUser.email) duplicateFields.push("email");
+      if (sanitizeEmailAddress(email) === sanitizeEmailAddress(existingUser.email)) duplicateFields.push("email");
       if (existingUser.emailVerified)
         return res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
       else {
@@ -177,8 +177,8 @@ const POST_Create = async (req: Request, res: Response) => {
       username: username.toLowerCase(),
       firstName,
       lastName,
-      email: sanitizeEmailAddress(email),
-      originalEmail: email,
+      email: email,
+      sanitizedEmail: sanitizeEmailAddress(email),
       role,
       password,
       credits,
