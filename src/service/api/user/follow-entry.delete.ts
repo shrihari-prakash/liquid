@@ -15,7 +15,7 @@ import { ScopeManager } from "../../../singleton/scope-manager.js";
 
 export const DELETE_FollowEntryValidator = [body("entry").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
-const DELETE_FollowEntry = async (req: Request, res: Response) => {
+const DELETE_FollowEntry = async (req: Request, res: Response): Promise<void> => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:remove", res)) {
@@ -44,7 +44,7 @@ const DELETE_FollowEntry = async (req: Request, res: Response) => {
   } catch (err) {
     log.error(err);
     await MongoDB.abortTransaction(session);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

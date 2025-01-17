@@ -39,7 +39,7 @@ export const PATCH_MeValidator = [
   userValidator.country(),
 ];
 
-const PATCH_Me = async (req: Request, res: Response) => {
+const PATCH_Me = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
@@ -68,14 +68,12 @@ const PATCH_Me = async (req: Request, res: Response) => {
         errors.push({ msg: "Invalid value", param: "phoneCountryCode", location: "body" });
       }
       if (errors.length)
-        return res
-          .status(statusCodes.clientInputError)
-          .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+        res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return;
     }
     if (errors.length) {
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return;
     }
     const result = await UserModel.findByIdAndUpdate(userId, { $set: { ...req.body } }).exec();
     res.status(statusCodes.success).json(new SuccessResponse({ user: result }));
@@ -85,11 +83,10 @@ const PATCH_Me = async (req: Request, res: Response) => {
     if (err?.name === "MongoServerError" && err?.code === 11000) {
       const keyPattern = Object.keys(err.keyPattern);
       const key = keyPattern[0];
-      return res
-        .status(statusCodes.conflict)
-        .json(new ErrorResponse(errorMessages.conflict, { duplicateFields: [key] }));
+      res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields: [key] }));
+      return;
     }
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

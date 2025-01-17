@@ -31,7 +31,7 @@ export const POST_AccessValidator = [
   body("operation").exists().isString().isIn(Object.values(Operations)),
 ];
 
-const POST_Access = async (req: Request, res: Response) => {
+const POST_Access = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:access:write", res)) {
       return;
@@ -49,9 +49,8 @@ const POST_Access = async (req: Request, res: Response) => {
           location: "body",
         },
       ];
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return;
     }
     if (
       req.body.scope.some(
@@ -74,9 +73,8 @@ const POST_Access = async (req: Request, res: Response) => {
           location: "body",
         },
       ];
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return;
     }
     log.info(
       "Executing operation '%s' for access list '%o' on targets '%o'. Source user: %s",
@@ -121,7 +119,8 @@ const POST_Access = async (req: Request, res: Response) => {
         break;
     }
     if (!model) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      return;
     }
     let searchField = "_id";
     if (req.body.targetType === "role") {
@@ -149,7 +148,7 @@ const POST_Access = async (req: Request, res: Response) => {
     }
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

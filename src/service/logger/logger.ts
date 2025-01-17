@@ -8,7 +8,7 @@ export class Logger {
   logger;
 
   constructor() {
-    const prettyStream = PinoPretty.default({
+    const prettyStream = PinoPretty({
       colorize: true,
       translateTime: "yyyy-dd-mm HH:MM:ss",
     });

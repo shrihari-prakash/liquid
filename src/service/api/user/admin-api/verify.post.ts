@@ -17,7 +17,7 @@ export const POST_VerifyValidator = [
   body("state").exists().isBoolean(),
 ];
 
-const POST_Verify = async (req: Request, res: Response) => {
+const POST_Verify = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("admin:profile:verifications:write", res)) {
       return;
@@ -32,7 +32,7 @@ const POST_Verify = async (req: Request, res: Response) => {
     flushUserInfoFromRedis(target);
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

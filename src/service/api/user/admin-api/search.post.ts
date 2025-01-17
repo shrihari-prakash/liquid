@@ -17,7 +17,7 @@ import { hydrateUserProfile } from "../../../../utils/user.js";
 export const POST_SearchValidator = [body("query").exists().isString().isLength({ max: 128 })];
 
 const redisPrefix = "search:";
-const POST_Search = async (req: Request, res: Response) => {
+const POST_Search = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("admin:profile:search", res)) {
       return;
@@ -29,7 +29,8 @@ const POST_Search = async (req: Request, res: Response) => {
     let cacheResults: any = await Redis.get(`${redisPrefix}${query}`);
     if (cacheResults) {
       cacheResults = JSON.parse(cacheResults);
-      return res.status(statusCodes.success).json(new SuccessResponse({ results: cacheResults }));
+      res.status(statusCodes.success).json(new SuccessResponse({ results: cacheResults }));
+      return;
     }
     log.info("Cache miss for query: " + query);
     const queryRegex = new RegExp(query, "i");
@@ -65,7 +66,7 @@ const POST_Search = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ results: results }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

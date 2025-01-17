@@ -16,7 +16,7 @@ export const GET_FollowStatusValidator = [
   query("target").exists().isString().isLength({ max: 128 }).custom(isValidObjectId),
 ];
 
-const GET_FollowStatus = async (req: Request, res: Response) => {
+const GET_FollowStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("client:social:follow:read", res)) {
       return;
@@ -29,7 +29,7 @@ const GET_FollowStatus = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ following: isFollowing ? true : false }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

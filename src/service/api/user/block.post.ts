@@ -22,17 +22,19 @@ function sendSuccess(res: Response, status: string) {
   res.status(statusCodes.success).json(new SuccessResponse({ status }));
 }
 
-const POST_Block = async (req: Request, res: Response) => {
+const POST_Block = async (req: Request, res: Response): Promise<void> => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:block:write", res)) {
       return;
-    };
+    }
     if (hasErrors(req, res)) return;
     const sourceAccount = res.locals.oauth.token.user._id;
     const blockedAccount = req.body.target;
-    if (sourceAccount === blockedAccount)
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+    if (sourceAccount === blockedAccount) {
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      return;
+    }
     session = await MongoDB.startSession();
     MongoDB.startTransaction(session);
     const sessionOptions = MongoDB.getSessionOptions(session);
@@ -76,8 +78,9 @@ const POST_Block = async (req: Request, res: Response) => {
     }
     log.error(err);
     await MongoDB.abortTransaction(session);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default POST_Block;
+

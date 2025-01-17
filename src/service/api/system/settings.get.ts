@@ -7,7 +7,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
 import { Configuration } from "../../../singleton/configuration.js";
 
-const GET_Settings = async (_: Request, res: Response) => {
+const GET_Settings = async (_: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("delegated:system:settings:read", res)) {
       return;
@@ -18,10 +18,10 @@ const GET_Settings = async (_: Request, res: Response) => {
         settings[optionName] = Configuration.get(optionName);
       }
     );
-    return res.status(statusCodes.success).json(new SuccessResponse({ settings }));
+    res.status(statusCodes.success).json(new SuccessResponse({ settings }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

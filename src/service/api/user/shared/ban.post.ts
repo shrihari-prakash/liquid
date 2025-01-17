@@ -18,7 +18,7 @@ export const POST_BanValidator = [
   body("reason").optional().isString().isLength({ min: 8, max: 128 }),
 ];
 
-const POST_Ban = async (req: Request, res: Response) => {
+const POST_Ban = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:ban:write", res)) {
       return;
@@ -41,7 +41,7 @@ const POST_Ban = async (req: Request, res: Response) => {
     flushUserInfoFromRedis(target);
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

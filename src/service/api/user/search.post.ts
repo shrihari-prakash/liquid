@@ -29,7 +29,7 @@ const filterBlockedUsers = async (loggedInUserId: string, results: UserInterface
 };
 
 const redisPrefix = "search:";
-const POST_Search = async (req: Request, res: Response) => {
+const POST_Search = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:search", res)) {
       return;
@@ -43,7 +43,8 @@ const POST_Search = async (req: Request, res: Response) => {
     if (cacheResults) {
       cacheResults = JSON.parse(cacheResults);
       const filteredResults = await filterBlockedUsers(loggedInUserId, cacheResults);
-      return res.status(statusCodes.success).json(new SuccessResponse({ results: filteredResults }));
+      res.status(statusCodes.success).json(new SuccessResponse({ results: filteredResults }));
+      return;
     }
     log.info("Cache miss for query: " + query);
     const queryRegex = new RegExp(query, "i");
@@ -87,8 +88,9 @@ const POST_Search = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ results: filteredResults }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default POST_Search;
+

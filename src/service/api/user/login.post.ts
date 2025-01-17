@@ -34,7 +34,7 @@ export const POST_LoginValidator = [
     .isLength({ max: 1024 }),
 ];
 
-const POST_Login = async (req: Request, res: Response) => {
+const POST_Login = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     const { username, email, password } = req.body;
@@ -47,10 +47,14 @@ const POST_Login = async (req: Request, res: Response) => {
     }
     log.debug("Login query %o", query);
     const user = (await UserModel.findOne(query, select).exec()) as unknown as UserInterface;
-    if (!user || !user.password)
-      return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
-    if (!user.emailVerified)
-      return res.status(statusCodes.resourceNotActive).json(new ErrorResponse(errorMessages.resourceNotActive));
+    if (!user || !user.password) {
+      res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+      return;
+    }
+    if (!user.emailVerified) {
+      res.status(statusCodes.resourceNotActive).json(new ErrorResponse(errorMessages.resourceNotActive));
+      return;
+    }
     let loginMeta: LoginHistoryInterface = {
       targetId: user._id,
       userAgent: req.body.userAgent,
@@ -64,7 +68,8 @@ const POST_Login = async (req: Request, res: Response) => {
         await new LoginHistoryModel(loginMeta).save();
         log.debug("Login history saved %o.", loginMeta);
       }
-      return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+      res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+      return;
     }
     loginMeta = { ...loginMeta, success: true };
     log.debug("Login metadata %o", loginMeta);
@@ -105,7 +110,7 @@ const POST_Login = async (req: Request, res: Response) => {
     }
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

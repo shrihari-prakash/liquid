@@ -27,7 +27,7 @@ export const POST_CreateValidator = [
   body("displayName").exists().isString().isLength({ min: 8, max: 96 }),
 ];
 
-const POST_Create = async (req: Request, res: Response) => {
+const POST_Create = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     const requiredScope =
@@ -53,7 +53,7 @@ const POST_Create = async (req: Request, res: Response) => {
     CORS.scanOrigins();
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

@@ -7,7 +7,7 @@ import { errorMessages, statusCodes } from "../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
 import { Role } from "../../../singleton/role.js";
 
-const GET_List = async (_: Request, res: Response) => {
+const GET_List = async (_: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("delegated:roles:read", res)) {
       return;
@@ -19,10 +19,10 @@ const GET_List = async (_: Request, res: Response) => {
       }
       return value;
     });
-    return res.status(statusCodes.success).json(new SuccessResponse({ roles: rolesArray }));
+    res.status(statusCodes.success).json(new SuccessResponse({ roles: rolesArray }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

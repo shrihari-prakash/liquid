@@ -11,7 +11,7 @@ import { getBlockStatus } from "../../../utils/block.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForNonFollowerGet } from "../../../utils/user.js";
 
-const GET_UserId = async (req: Request, res: Response) => {
+const GET_UserId = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:read", res)) {
       return;
@@ -19,13 +19,14 @@ const GET_UserId = async (req: Request, res: Response) => {
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.params.userId;
     if (!isValidObjectId(targetId)) {
-      return res.status(statusCodes.clientInputError).json(
+      res.status(statusCodes.clientInputError).json(
         new ErrorResponse(errorMessages.clientInputError, {
           msg: "Invalid value",
           param: "userId",
           location: "param",
-        })
+        }),
       );
+      return;
     }
     // The first two parameters reversed because we need to find if the target has blocked the source.
     const isBlocked = await getBlockStatus(targetId, sourceId, res);
@@ -39,8 +40,9 @@ const GET_UserId = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ user }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default GET_UserId;
+

@@ -12,7 +12,7 @@ import { PushEvent } from "../../pusher/pusher.js";
 import { PushEventList } from "../../../enum/push-events.js";
 import { flushUserInfoFromRedis } from "../../../model/oauth/cache.js";
 
-const GET_LogoutAll = async (req: Request, res: Response) => {
+const GET_LogoutAll = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!res.locals.oauth) {
       res.status(statusCodes.success).json(new SuccessResponse());
@@ -26,7 +26,7 @@ const GET_LogoutAll = async (req: Request, res: Response) => {
     Pusher.publish(new PushEvent(PushEventList.USER_LOGOUT_ALL, { user }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

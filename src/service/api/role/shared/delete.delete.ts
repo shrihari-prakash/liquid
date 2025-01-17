@@ -15,7 +15,7 @@ import { Configuration } from "../../../../singleton/configuration.js";
 
 export const POST_DeleteValidator = [body("target").isString().isLength({ min: 1, max: 128 })];
 
-const POST_Delete = async (req: Request, res: Response) => {
+const POST_Delete = async (req: Request, res: Response): Promise<void> => {
   if (hasErrors(req, res)) return;
   let session = "";
   try {
@@ -26,7 +26,8 @@ const POST_Delete = async (req: Request, res: Response) => {
     // do not allow deleting system roles
     const isSystemRole = Role.isSystemRole(id);
     if (isSystemRole) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.systemRoleDelete));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.systemRoleDelete));
+      return;
     }
     session = await MongoDB.startSession();
     MongoDB.startTransaction(session);
@@ -34,11 +35,11 @@ const POST_Delete = async (req: Request, res: Response) => {
     await UserModel.updateMany({ role: id }, { role: Configuration.get("system.role.default") }, sessionOptions);
     await Role.deleteRole(id, sessionOptions);
     await MongoDB.commitTransaction(session);
-    return res.status(statusCodes.success).json(new SuccessResponse({}));
+    res.status(statusCodes.success).json(new SuccessResponse({}));
   } catch (err) {
     log.error(err);
     await MongoDB.abortTransaction(session);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

@@ -24,19 +24,21 @@ export const POST_GoogleSuccessValidator = [
     .isLength({ max: 1024 }),
 ];
 
-const POST_GoogleSuccess = async (req: Request, res: Response) => {
+const POST_GoogleSuccess = async (req: Request, res: Response): Promise<void> => {
   if (hasErrors(req, res)) return;
   const userId = await SSOTokenModel.findOne({ token: req.body.ssoToken }).lean();
   if (!userId) {
     log.warn("SSO token not found %s.", req.query.ssoToken);
-    return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    return;
   }
   await SSOTokenModel.deleteOne({ token: req.query.ssoToken }).exec();
   log.info("SSO token found %s.", req.query.ssoToken);
   const user = await UserModel.findById(userId.userId).lean();
   if (!user) {
     log.warn("User not found %s.", userId.userId);
-    return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    return;
   }
   log.info("User found %s.", userId.userId);
   (user as any).password = undefined;

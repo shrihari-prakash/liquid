@@ -29,14 +29,17 @@ export const PATCH_UpdateValidator = [
   body("displayName").optional().isString().isLength({ min: 8, max: 96 }),
 ];
 
-const PATCH_Update = async (req: Request, res: Response) => {
+const PATCH_Update = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     const errors = [];
     const target = req.body.target;
     delete req.body.target;
     const client = await ClientModel.findOne({ _id: target });
-    if (!client) return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidTarget));
+    if (!client) {
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidTarget));
+      return;
+    }
     const requiredScope =
       client.role === Role.SystemRoles.INTERNAL_CLIENT
         ? "admin:system:internal-client:write"
@@ -53,7 +56,8 @@ const PATCH_Update = async (req: Request, res: Response) => {
       }
     }
     if (errors.length) {
-      return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.invalidField, { errors }));
+      res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.invalidField, { errors }));
+      return;
     }
     await ClientModel.updateOne({ _id: target }, req.body);
     log.debug("Client updated successfully.");
@@ -61,7 +65,7 @@ const PATCH_Update = async (req: Request, res: Response) => {
     CORS.scanOrigins();
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

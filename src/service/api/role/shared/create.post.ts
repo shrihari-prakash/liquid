@@ -20,7 +20,7 @@ export const POST_CreateValidator = [
   body("description").optional().isString().isLength({ min: 1, max: 512 }),
 ];
 
-const POST_Create = async (req: Request, res: Response) => {
+const POST_Create = async (req: Request, res: Response): Promise<void> => {
   if (hasErrors(req, res)) return;
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:roles:write", res)) {
@@ -34,10 +34,11 @@ const POST_Create = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ role }));
   } catch (err: any) {
     if (err?.message?.includes("E11000")) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.duplicateResource));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.duplicateResource));
+      return;
     }
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

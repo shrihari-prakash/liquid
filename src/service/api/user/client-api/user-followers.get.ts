@@ -17,7 +17,7 @@ export const GET_UserFollowersValidator = [
   query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
 ];
 
-const GET_UserFollowers = async (req: Request, res: Response) => {
+const GET_UserFollowers = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("client:social:follow:read", res)) {
       return;
@@ -36,7 +36,7 @@ const GET_UserFollowers = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

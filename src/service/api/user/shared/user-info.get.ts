@@ -13,7 +13,7 @@ import { hydrateUserProfile } from "../../../../utils/user.js";
 
 export const GET_UserInfoValidator = [query("targets").exists().isString()];
 
-const GET_UserInfo = async (req: Request, res: Response) => {
+const GET_UserInfo = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:read", res)) {
       return;
@@ -21,13 +21,14 @@ const GET_UserInfo = async (req: Request, res: Response) => {
     const targets = (req.query.targets as string).split(",");
     const isClient = res.locals.user.isClient;
     if (targets.length > (Configuration.get("get-user-max-items") as number)) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      return;
     }
     const users = (await UserModel.find(
       {
         _id: { $in: targets },
       },
-      isClient ? UserClientProjection : UserAdminProjection
+      isClient ? UserClientProjection : UserAdminProjection,
     )
       .lean()
       .exec()) as unknown as UserInterface[];
@@ -35,8 +36,9 @@ const GET_UserInfo = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ users }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default GET_UserInfo;
+

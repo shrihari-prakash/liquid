@@ -95,7 +95,7 @@ async function useInviteCode(
   }
 }
 
-const POST_Create = async (req: Request, res: Response) => {
+const POST_Create = async (req: Request, res: Response): Promise<void> => {
   let session = "";
   try {
     if (Configuration.get("user.account-creation.enable-ip-based-throttle")) {
@@ -112,7 +112,8 @@ const POST_Create = async (req: Request, res: Response) => {
             req.ip,
             window - difference,
           );
-          return res.status(statusCodes.tooManyRequests).json(new ErrorResponse(errorMessages.creationThrottled));
+          res.status(statusCodes.tooManyRequests).json(new ErrorResponse(errorMessages.creationThrottled));
+          return;
         }
       }
     }
@@ -122,7 +123,8 @@ const POST_Create = async (req: Request, res: Response) => {
       const domain = email.replace(/.*@/, "");
       const whitelistedEmailDomains = Configuration.get("user.account-creation.whitelisted-email-domains");
       if (!whitelistedEmailDomains.includes(domain)) {
-        return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.badEmailDomain));
+        res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.badEmailDomain));
+        return;
       }
     }
     if (phone && !phoneCountryCode) {
@@ -133,9 +135,8 @@ const POST_Create = async (req: Request, res: Response) => {
           location: "body",
         },
       ];
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return;
     }
     const existingUser = (await UserModel.findOne({
       $or: [{ sanitizedEmail: sanitizeEmailAddress(email) }, { email }, { username }],
@@ -144,9 +145,10 @@ const POST_Create = async (req: Request, res: Response) => {
       const duplicateFields = [];
       if (username === existingUser.username) duplicateFields.push("username");
       if (sanitizeEmailAddress(email) === sanitizeEmailAddress(existingUser.email)) duplicateFields.push("email");
-      if (existingUser.emailVerified)
-        return res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
-      else {
+      if (existingUser.emailVerified) {
+        res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
+        return;
+      } else {
         if (Configuration.get("user.account-creation.enable-invite-only")) {
           const inviteCode = await InviteCodeModel.findOne({ targetId: existingUser._id });
           if (inviteCode) {
@@ -211,11 +213,11 @@ const POST_Create = async (req: Request, res: Response) => {
     };
     await MongoDB.commitTransaction(session);
     Pusher.publish(new PushEvent(PushEventList.USER_CREATE, { user: newUser }));
-    return res.status(statusCodes.created).json(new SuccessResponse(response));
+    res.status(statusCodes.created).json(new SuccessResponse(response));
   } catch (err) {
     log.error(err);
     await MongoDB.abortTransaction(session);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

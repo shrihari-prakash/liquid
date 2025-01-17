@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import * as fs from "fs";
 import cors from "cors";
 import express from "express";
-import RedisStore from "connect-redis";
+import { RedisStore } from "connect-redis";
 import session from "express-session";
 import bodyParser from "body-parser";
 import compression from "compression";

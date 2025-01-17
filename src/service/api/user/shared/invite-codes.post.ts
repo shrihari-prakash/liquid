@@ -19,20 +19,24 @@ export const POST_InviteCodesValidator = [
   body("count").optional().isInt().isNumeric(),
 ];
 
-const POST_InviteCodes = async (req: Request, res: Response) => {
+const POST_InviteCodes = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:social:invite-code:write", res)) {
       return;
-    };
+    }
     if (hasErrors(req, res)) return;
     const targetId = req.body.target;
     const user = (await UserModel.findOne({ _id: targetId }).exec()) as unknown as UserInterface;
     if (!user) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidTarget));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidTarget));
+      return;
     }
     const inviteCodeCount = parseInt(req.body.count) || Configuration.get("user.account-creation.invites-per-person");
     if (inviteCodeCount > Configuration.get("invite-only.code-generation.max-limit-per-request")) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.generationTargetExceededForRequest));
+      res
+        .status(statusCodes.clientInputError)
+        .json(new ErrorResponse(errorMessages.generationTargetExceededForRequest));
+      return;
     }
     const inviteCodes = [];
     for (let j = 0; j < inviteCodeCount; j++) {
@@ -45,7 +49,7 @@ const POST_InviteCodes = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

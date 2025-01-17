@@ -33,7 +33,7 @@ export const POST_CreateValidator = [
   body("*.role").optional().isString().isLength({ min: 3, max: 32 }),
 ];
 
-const POST_Create = async (req: Request, res: Response) => {
+const POST_Create = async (req: Request, res: Response): Promise<void> => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:create:write", res)) {
@@ -57,9 +57,10 @@ const POST_Create = async (req: Request, res: Response) => {
     log.debug("Found %d duplicate users in bulk create", existingUsers.length);
     if (existingUsers.length) {
       await MongoDB.abortTransaction(session);
-      return res
+      res
         .status(statusCodes.clientInputError)
         .json(new ErrorResponse(errorMessages.clientInputError, { existingUsers }));
+      return;
     }
     log.debug("Bulk create started. Assembling %s records.", sourceList.length);
     const insertList: any[] = [];
@@ -80,7 +81,8 @@ const POST_Create = async (req: Request, res: Response) => {
       // Do not allow creation of users with more powerful roles.
       if (!isRoleRankHigher(currentUserRole, role)) {
         log.debug("Blocked account creation for role %s. Current user role: %s", role, currentUserRole);
-        return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+        res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+        return;
       }
       const credits = Configuration.get("user.account-creation.initial-credit-count");
       const user: any = {
@@ -132,12 +134,13 @@ const POST_Create = async (req: Request, res: Response) => {
     }
     await MongoDB.commitTransaction(session);
     log.info(`${insertList.length} records inserted.`);
-    return res.status(statusCodes.created).json(new SuccessResponse({ insertedCount: insertList.length }));
+    res.status(statusCodes.created).json(new SuccessResponse({ insertedCount: insertList.length }));
   } catch (err) {
     log.error(err);
     await MongoDB.abortTransaction(session);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default POST_Create;
+

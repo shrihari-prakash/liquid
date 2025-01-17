@@ -23,7 +23,7 @@ export const PATCH_UpdateValidator = [
   ...PATCH_MeValidator,
 ];
 
-const PATCH_Update = async (req: Request, res: Response) => {
+const PATCH_Update = async (req: Request, res: Response): Promise<void> => {
   if (!ScopeManager.isScopeAllowedForSession("admin:profile:write", res)) {
     return;
   }
@@ -44,9 +44,8 @@ const PATCH_Update = async (req: Request, res: Response) => {
       }
     }
     if (errors.length) {
-      return res
-        .status(statusCodes.unauthorized)
-        .json(new ErrorResponse(errorMessages.insufficientPrivileges, { errors }));
+      res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges, { errors }));
+      return;
     }
     // Edit is not allowed for any field for the current user according to the scopes.
     for (let i = 0; i < fields.length; i++) {
@@ -58,24 +57,26 @@ const PATCH_Update = async (req: Request, res: Response) => {
           res.locals?.oauth?.token?.scope,
         )
       ) {
-        return res
-          .status(statusCodes.unauthorized)
-          .json(new ErrorResponse(errorMessages.insufficientPrivileges, { field }));
+        res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges, { field }));
+        return;
       }
     }
     const currentUserRole = res.locals.user.role;
     const target = (await UserModel.findOne({ _id: userId })) as unknown as UserInterface;
     // Allow changing data only upto the current user's role score.
     if (!isRoleRankHigher(currentUserRole, target.role) && currentUserRole !== Role.SystemRoles.SUPER_ADMIN) {
-      return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+      res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+      return;
     }
     const role = req.body.role;
     if (role) {
       if (!Role.isValidRole(role)) {
-        return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+        res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+        return;
       }
       if (!isRoleRankHigher(currentUserRole, role) && currentUserRole !== Role.SystemRoles.SUPER_ADMIN) {
-        return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+        res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+        return;
       }
     }
     const password = req.body.password;
@@ -90,11 +91,10 @@ const PATCH_Update = async (req: Request, res: Response) => {
     if (err?.name === "MongoServerError" && err?.code === 11000) {
       const keyPattern = Object.keys(err.keyPattern);
       const key = keyPattern[0];
-      return res
-        .status(statusCodes.conflict)
-        .json(new ErrorResponse(errorMessages.conflict, { duplicateFields: [key] }));
+      res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields: [key] }));
+      return;
     }
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

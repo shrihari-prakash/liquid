@@ -17,12 +17,15 @@ export const DELETE_DeleteValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
 ];
 
-const DELETE_Delete = async (req: Request, res: Response) => {
+const DELETE_Delete = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     const target = req.body.target;
     const client = await ClientModel.findOne({ _id: target });
-    if (!client) return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidTarget));
+    if (!client) {
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.invalidTarget));
+      return;
+    }
     const requiredScope =
       client.role === Role.SystemRoles.INTERNAL_CLIENT
         ? "admin:system:internal-client:delete"
@@ -37,7 +40,7 @@ const DELETE_Delete = async (req: Request, res: Response) => {
     CORS.scanOrigins();
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

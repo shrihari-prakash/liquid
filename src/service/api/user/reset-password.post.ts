@@ -20,21 +20,22 @@ export const POST_ResetPasswordValidator = [
   body("password").exists().isString().isLength({ min: 8, max: 128 }),
 ];
 
-const POST_ResetPassword = async (req: Request, res: Response) => {
+const POST_ResetPassword = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     const { code, password: passwordBody, target } = req.body;
     const dbCode = await VerificationCodeModel.findOne({ $and: [{ belongsTo: target }, { code }] }).exec();
     if (!dbCode || dbCode.type !== VerificationCodeType.PASSWORD_RESET) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      return;
     }
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
     await UserModel.updateOne({ _id: dbCode.belongsTo }, { $set: { password: password } });
     VerificationCodeModel.deleteOne({ code }).exec();
-    return res.status(statusCodes.success).json(new SuccessResponse());
+    res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

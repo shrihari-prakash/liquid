@@ -11,9 +11,11 @@ import FollowModel from "../../../model/mongo/follow.js";
 import { hasErrors } from "../../../utils/api.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 
-export const GET_FollowStatusValidator = [query("target").optional().isString().isLength({ max: 64 }).custom(isValidObjectId)];
+export const GET_FollowStatusValidator = [
+  query("target").optional().isString().isLength({ max: 64 }).custom(isValidObjectId),
+];
 
-const GET_FollowStatus = async (req: Request, res: Response) => {
+const GET_FollowStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:read", res)) {
       return;
@@ -21,7 +23,7 @@ const GET_FollowStatus = async (req: Request, res: Response) => {
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     if (!req.params.userId && !req.query.target) {
-      return res.status(statusCodes.clientInputError).json(
+      res.status(statusCodes.clientInputError).json(
         new ErrorResponse(errorMessages.clientInputError, {
           errors: [
             {
@@ -30,12 +32,15 @@ const GET_FollowStatus = async (req: Request, res: Response) => {
               location: "query",
             },
           ],
-        })
+        }),
       );
+      return;
     }
     const targetId = req.params.userId || (req.query.target as string);
-    if (sourceId === targetId)
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+    if (sourceId === targetId) {
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      return;
+    }
     const followEntry = (await FollowModel.findOne({
       $and: [{ targetId }, { sourceId }],
     }).exec()) as unknown as any;
@@ -50,8 +55,9 @@ const GET_FollowStatus = async (req: Request, res: Response) => {
     }
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default GET_FollowStatus;
+

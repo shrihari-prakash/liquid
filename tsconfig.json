@@ -17,5 +17,5 @@
     "noUnusedLocals": true,
     "skipLibCheck": true
   },
-  "exclude": ["scripts", "test", "build", "node_modules", "gulpfile.js"]
+  "exclude": ["scripts", "test", "build", "node_modules", "gulpfile.js", "docs"]
 }

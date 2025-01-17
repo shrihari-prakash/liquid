@@ -20,7 +20,7 @@ export const PUT_CustomDataValidator = [
   userValidator.customData(true),
 ];
 
-const PUT_CustomData = async (req: Request, res: Response) => {
+const PUT_CustomData = async (req: Request, res: Response): Promise<void> => {
   if (hasErrors(req, res)) {
     return;
   }
@@ -36,7 +36,7 @@ const PUT_CustomData = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

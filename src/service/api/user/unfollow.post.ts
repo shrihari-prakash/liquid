@@ -14,7 +14,7 @@ import { PushEventList } from "../../../enum/push-events.js";
 import { MongoDB } from "../../../singleton/mongo-db.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 
-const POST_Unfollow = async (req: Request, res: Response) => {
+const POST_Unfollow = async (req: Request, res: Response): Promise<void> => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:unfollow", res)) {
@@ -23,8 +23,10 @@ const POST_Unfollow = async (req: Request, res: Response) => {
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
-    if (sourceId === targetId)
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+    if (sourceId === targetId) {
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      return;
+    }
     session = await MongoDB.startSession();
     MongoDB.startTransaction(session);
     const sessionOptions = MongoDB.getSessionOptions(session);
@@ -36,7 +38,8 @@ const POST_Unfollow = async (req: Request, res: Response) => {
     if (sessionOptions) intermQuery.session(sessionOptions.session);
     const result = await intermQuery;
     if (!result.deletedCount) {
-      return res.status(statusCodes.success).json(new SuccessResponse());
+      res.status(statusCodes.success).json(new SuccessResponse());
+      return;
     }
     await updateFollowCount(sourceId, targetId, -1, sessionOptions);
     await MongoDB.commitTransaction(session);
@@ -45,7 +48,7 @@ const POST_Unfollow = async (req: Request, res: Response) => {
   } catch (err) {
     log.error(err);
     await MongoDB.abortTransaction(session);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

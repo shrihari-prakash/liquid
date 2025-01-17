@@ -7,12 +7,12 @@ import { errorMessages, statusCodes } from "../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 
-const GET_Scopes = async (req: Request, res: Response) => {
+const GET_Scopes = async (req: Request, res: Response): Promise<void> => {
   try {
     res.status(statusCodes.success).json(new SuccessResponse({ scopes: ScopeManager.getScopes() }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

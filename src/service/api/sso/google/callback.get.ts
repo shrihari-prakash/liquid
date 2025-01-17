@@ -10,7 +10,7 @@ import { ErrorResponse } from "../../../../utils/response.js";
 import SSOTokenModel from "../../../../model/mongo/sso-token.js";
 import { makeToken } from "../../../../utils/token.js";
 
-const GET_GoogleCallback = async (req: Request, res: Response) => {
+const GET_GoogleCallback = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = req.user as UserInterface;
     if (!user || !user._id) {
@@ -28,7 +28,7 @@ const GET_GoogleCallback = async (req: Request, res: Response) => {
     res.redirect(redirectUrl);
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
