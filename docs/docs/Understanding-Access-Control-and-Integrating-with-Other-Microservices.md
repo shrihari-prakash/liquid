@@ -27,7 +27,7 @@ Body:
 }
 ```
 
-The above request provides an user permissions to edit other user's profile info, ban other users in the system and create OAuth clients that can access client APIs. `targetType` can be either `user` or `client` which means it is also possible to assign scopes to OAuth clients. Use operations `del` or `add` for more granular control.
+The above request provides an user permissions to edit other user's profile info, ban other users in the system and create OAuth clients that can access client APIs. `targetType` can be either `user`, `client` or `role`. Use operations `del` or `add` for more granular control. Users can be assigned scopes either directly by their ID or through their roles. During OAuth authorization, a requested scope is granted only when the user has the scope directly or via their role and the requesting client also has access to the respective scope.
 
 :::warning
 

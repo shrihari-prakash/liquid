@@ -1693,3 +1693,69 @@ NA
 ```
 
 </details>
+
+<details>
+<summary>
+### List Roles
+<br/>
+Retrieves a list of roles available in the system.
+</summary>
+
+#### Authentication
+
+Requires delegated authentication.
+
+#### Scope
+
+`delegated:roles:read`
+
+#### URL
+
+**GET /roles/list**
+
+#### Response Parameters
+
+| Parameter | Type  | Description            |
+| --------- | ----- | ---------------------- |
+| roles     | array | Array of role objects. |
+
+#### Response Sample
+
+```json
+{
+  "roles": [
+    {
+      "id": "role1",
+      "displayName": "Role 1",
+      "ranking": 1,
+      "description": "This is a description"
+      "system": true
+    },
+    {
+      "id": "role2",
+      "displayName": "Role 2",
+      "ranking": 2,
+      "description": "This is another description"
+      "system": true
+    }
+  ]
+}
+```
+
+#### Error Responses
+
+| Error Code    | Description                        |
+| ------------- | ---------------------------------- |
+| InternalError | An internal server error occurred. |
+
+#### Error Response Sample
+
+**InternalError**
+
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+</details>

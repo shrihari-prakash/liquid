@@ -3,12 +3,15 @@ title: "API-Documentation: Admin"
 ---
 
 # Introducing Liquid Nitrogen!
+
 To take administrative actions like managing users, connected apps and permissions, it is recommended that you use [The Nitrogen Project](https://github.com/shrihari-prakash/nitrogen) instead of rolling your own admin management portal. Nitrogen seamlessly connects with any Liquid instance with minimal configuration and uses the same administrative APIs under the hood.
 
 If you still want to use the admin APIs for some reason, all of them are documented in this page.
 
 ![Liquid Nitrogen](https://github.com/shrihari-prakash/nitrogen/raw/main/images/banner.png)
+
  
+
 # Admin APIs
 
 Restricted to system admins. Super Admin role has access to all these APIs. To provide access to other users, Super Admin needs to explicitly provide permissions using POST `user/admin-api/access` API. Needs an `authorization_code` grant login.
@@ -152,8 +155,8 @@ Requires delegated authentication.
 
 #### Scope
 
-* `admin:system:internal-client:write`
-* `admin:system:external-client:write`
+- `admin:system:internal-client:write`
+- `admin:system:external-client:write`
 
 #### URL
 
@@ -216,8 +219,8 @@ Requires delegated authentication.
 
 #### Scope
 
-* `admin:system:internal-client:write`
-* `admin:system:external-client:write`
+- `admin:system:internal-client:write`
+- `admin:system:external-client:write`
 
 #### URL
 
@@ -280,8 +283,8 @@ Requires delegated authentication.
 
 #### Scope
 
-* `admin:system:internal-client:delete`
-* `admin:system:external-client:delete`
+- `admin:system:internal-client:delete`
+- `admin:system:external-client:delete`
 
 #### URL
 
@@ -289,9 +292,9 @@ Requires delegated authentication.
 
 #### Request Body
 
-| Parameter    | Type                                                                         | Description                              | Required / Optional |
-| ------------ | ---------------------------------------------------------------------------- | ---------------------------------------- | ------------------- |
-| target       | string                                                                       | DBID of the client.                      | Required            |
+| Parameter | Type   | Description         | Required / Optional |
+| --------- | ------ | ------------------- | ------------------- |
+| target    | string | DBID of the client. | Required            |
 
 #### Request Sample (JSON)
 
@@ -365,6 +368,325 @@ Requires delegated authentication.
       "displayName": "My External Client"
     }
   ]
+}
+```
+
+</details>
+
+<details>
+<summary>
+### List Roles
+<br/>
+Retrieves a list of roles available in the system.
+</summary>
+
+#### Authentication
+
+Requires delegated authentication.
+
+#### Scope
+
+`delegated:roles:read`
+
+#### URL
+
+**GET /roles/list**
+
+#### Response Parameters
+
+| Parameter | Type  | Description            |
+| --------- | ----- | ---------------------- |
+| roles     | array | Array of role objects. |
+
+#### Response Sample
+
+```json
+{
+  "roles": [
+    {
+      "id": "role1",
+      "displayName": "Role 1",
+      "ranking": 1,
+      "description": "This is a description"
+      "system": true
+    },
+    {
+      "id": "role2",
+      "displayName": "Role 2",
+      "ranking": 2,
+      "description": "This is another description"
+      "system": true
+    }
+  ]
+}
+```
+
+#### Error Responses
+
+| Error Code    | Description                        |
+| ------------- | ---------------------------------- |
+| InternalError | An internal server error occurred. |
+
+#### Error Response Sample
+
+**InternalError**
+
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+</details>
+
+<details>
+<summary>
+### Create Role
+<br/>
+Creates a new role in the system.
+</summary>
+
+#### Authentication
+
+Requires delegated authentication.
+
+#### Scope
+
+`admin:roles:write`
+
+#### URL
+
+**POST /roles/admin-api/create**
+
+#### Request Body
+
+| Parameter   | Type   | Description                                                                                                            | Required / Optional |
+| ----------- | ------ | ---------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| id          | string | Unique identifier for the role. Must be alphanumeric and can include underscores. Length between 1 and 128 characters. | Required            |
+| displayName | string | Display name for the role. Length between 1 and 128 characters.                                                        | Required            |
+| ranking     | number | Ranking for the role. Must be an integer greater than or equal to 1. Lower the number, higher the ranking              | Required            |
+| description | string | Optional description for the role. Length between 1 and 512 characters.                                                | Optional            |
+
+#### Request Sample (JSON)
+
+```json
+{
+  "id": "example_role",
+  "displayName": "Example Role",
+  "ranking": 1,
+  "description": "This is an example role."
+}
+```
+
+#### Response Parameters
+
+| Parameter | Type   | Description             |
+| --------- | ------ | ----------------------- |
+| role      | object | The newly created role. |
+
+#### Response Sample
+
+```json
+{
+  "role": {
+    "id": "example_role",
+    "displayName": "Example Role",
+    "ranking": 1,
+    "description": "This is an example role."
+  }
+}
+```
+
+#### Error Responses
+
+| Error Code        | Description                        |
+| ----------------- | ---------------------------------- |
+| DuplicateResource | The role ID already exists.        |
+| InternalError     | An internal server error occurred. |
+
+#### Error Response Samples
+
+**DuplicateResource**
+
+```json
+{
+  "error": "Resource already exists."
+}
+```
+
+**InternalError**
+
+```json
+{
+  "error": "An internal server error occurred."
+}
+```
+
+</details>
+
+<details>
+<summary>
+### Update Role
+<br/>
+Updates an existing role with the provided details.
+</summary>
+
+#### Authentication
+
+Requires delegated authentication.
+
+#### Scope
+
+`admin:roles:write`
+
+#### URL
+
+**PATCH /roles/admin-api/update**
+
+#### Request Body
+
+| Parameter   | Type   | Description                                                                                                        | Required / Optional |
+| ----------- | ------ | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
+| target      | string | The ID of the role to update.                                                                                      | Required            |
+| displayName | string | The new display name for the role. Length between 1 and 128 characters.                                            | Optional            |
+| ranking     | number | The new ranking for the role. Must be an integer greater than or equal to 1. Lower the number, higher the ranking. | Optional            |
+| description | string | The new description for the role. Length between 1 and 512 characters.                                             | Optional            |
+
+#### Request Sample (JSON)
+
+```json
+{
+  "target": "example_role",
+  "displayName": "Updated Role",
+  "ranking": 2,
+  "description": "This is an updated description for the role."
+}
+```
+
+#### Response Parameters
+
+| Parameter | Type   | Description             |
+| --------- | ------ | ----------------------- |
+| role      | object | The updated role object |
+
+#### Response Sample
+
+```json
+{
+  "role": {
+    "id": "example_role",
+    "displayName": "Updated Role",
+    "ranking": 2,
+    "description": "This is an updated description for the role."
+  }
+}
+```
+
+#### Error Responses
+
+| Error Code       | Description                        |
+| ---------------- | ---------------------------------- |
+| SystemRoleUpdate | System roles cannot be updated.    |
+| NotFound         | Role not found.                    |
+| InternalError    | An internal server error occurred. |
+
+#### Error Response Samples
+
+**SystemRoleUpdate**
+
+```json
+{
+  "message": "System roles cannot be updated."
+}
+```
+
+**NotFound**
+
+```json
+{
+  "message": "Role not found."
+}
+```
+
+**InternalError**
+
+```json
+{
+  "message": "Internal server error."
+}
+```
+
+</details>
+
+<details>
+<summary>
+### Delete Role
+<br/>
+Deletes a user role.
+</summary>
+
+#### Authentication
+
+Requires delegated authentication.
+
+#### Scope
+
+`admin:roles:delete`
+
+#### URL
+
+**DELETE /roles/admin-api/delete**
+
+#### Request Body
+
+| Parameter | Type   | Description               | Required / Optional |
+| --------- | ------ | ------------------------- | ------------------- |
+| target    | string | The ID of the role to delete. | Required            |
+
+#### Request Sample (JSON)
+
+```json
+{
+  "target": "roleId"
+}
+```
+
+#### Response Parameters
+
+| Parameter | Type    | Description |
+| --------- | ------- | ----------- |
+| ok        | integer | 0 or 1      |
+
+#### Response Sample
+
+```json
+{
+  "ok": 1
+}
+```
+
+#### Error Responses
+
+| Error Code        | Description                        |
+| ----------------- | ---------------------------------- |
+| SystemRoleDelete  | The role is a system role and cannot be deleted. |
+| InternalError     | An internal server error occurred. |
+
+#### Error Response Samples
+
+**SystemRoleDelete**
+
+```json
+{
+  "error": "The role is a system role and cannot be deleted."
+}
+```
+
+**InternalError**
+
+```json
+{
+  "error": "An internal server error occurred."
 }
 ```
 
@@ -614,10 +936,10 @@ Read about custom data [here](/fields-and-attributes/Custom-Data)
 
 #### Request Body
 
-| Parameter        | Type   | Description                                                                 | Required / Optional |
-| ---------------- | ------ | --------------------------------------------------------------------------- | ------------------- |
-| target           | string | `_id` of the user.                                                          | Required            |
-| customData       | object | JSON data object                                                            | Required            |
+| Parameter  | Type   | Description        | Required / Optional |
+| ---------- | ------ | ------------------ | ------------------- |
+| target     | string | `_id` of the user. | Required            |
+| customData | object | JSON data object   | Required            |
 
 #### Request Sample (JSON)
 
