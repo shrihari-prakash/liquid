@@ -139,7 +139,7 @@ const POST_Create = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     const existingUser = (await UserModel.findOne({
-      $or: [{ sanitizedEmail: sanitizeEmailAddress(email) }, { email }, { username }],
+      $or: [{ sanitizedEmail: sanitizeEmailAddress(email) }, { email }, { username: username.toLowerCase() }],
     }).exec()) as unknown as UserInterface;
     if (existingUser) {
       const duplicateFields = [];

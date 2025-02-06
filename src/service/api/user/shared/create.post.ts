@@ -50,7 +50,7 @@ const POST_Create = async (req: Request, res: Response): Promise<void> => {
           email: { $in: sourceList.map((u: any) => sanitizeEmailAddress(u.email)) },
         },
         {
-          username: { $in: sourceList.map((u: any) => u.username) },
+          username: { $in: sourceList.map((u: any) => u.username.toLowerCase()) },
         },
       ],
     }).lean();
@@ -64,6 +64,7 @@ const POST_Create = async (req: Request, res: Response): Promise<void> => {
     }
     log.debug("Bulk create started. Assembling %s records.", sourceList.length);
     const insertList: any[] = [];
+    const credits = Configuration.get("user.account-creation.initial-credit-count");
     for (let i = 0; i < sourceList.length; i++) {
       const {
         username,
@@ -84,9 +85,8 @@ const POST_Create = async (req: Request, res: Response): Promise<void> => {
         res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
         return;
       }
-      const credits = Configuration.get("user.account-creation.initial-credit-count");
       const user: any = {
-        username,
+        username: username.toLowerCase(),
         firstName,
         lastName,
         email: email,
