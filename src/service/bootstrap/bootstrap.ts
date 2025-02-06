@@ -38,6 +38,7 @@ export class Bootstrap {
       firstName: Configuration.get("system.super-admin.first-name"),
       lastName: Configuration.get("system.super-admin.last-name"),
       email: Configuration.get("system.super-admin.email"),
+      sanitizedEmail: Configuration.get("system.super-admin.email"),
       password: hashedPassword,
       role: "super_admin",
       credits: 0,
