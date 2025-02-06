@@ -54,7 +54,7 @@ const uploadProfilePicture = profilePictureMulter.single("profilePicture");
 
 export const profilePicturePath = `${Configuration.get("storage.cloud-path")}/profile-pictures`;
 
-const PATCH_ProfilePicture = async (req: Request, res: Response) => {
+const PATCH_ProfilePicture = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
@@ -77,7 +77,7 @@ const PATCH_ProfilePicture = async (req: Request, res: Response) => {
     });
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

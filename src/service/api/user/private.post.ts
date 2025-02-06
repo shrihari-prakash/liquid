@@ -14,7 +14,7 @@ import { ScopeManager } from "../../../singleton/scope-manager.js";
 
 export const POST_PrivateValidator = [body("state").exists().isBoolean()];
 
-const POST_Private = async (req: Request, res: Response) => {
+const POST_Private = async (req: Request, res: Response): Promise<void> => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
@@ -53,7 +53,8 @@ const POST_Private = async (req: Request, res: Response) => {
         await intermQuery4;
       }
       await MongoDB.commitTransaction(session);
-      return res.status(statusCodes.success).json(new SuccessResponse({ acceptedCount: requestsToApprove.length }));
+      res.status(statusCodes.success).json(new SuccessResponse({ acceptedCount: requestsToApprove.length }));
+      return;
     } else {
       await MongoDB.commitTransaction(session);
     }
@@ -61,7 +62,7 @@ const POST_Private = async (req: Request, res: Response) => {
   } catch (err) {
     log.error(err);
     await MongoDB.abortTransaction(session);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

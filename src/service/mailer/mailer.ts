@@ -11,7 +11,7 @@ import { Configuration } from "../../singleton/configuration.js";
 import { UserInterface } from "../../model/mongo/user.js";
 import VerificationCodeModel from "../../model/mongo/verification-code.js";
 import { VerificationCodeType } from "../../enum/verification-code.js";
-import { v4 as uuidv4 } from "uuid";
+import { makeToken } from "../../utils/token.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -99,7 +99,7 @@ export class Mailer {
       type,
     };
     if (type === VerificationCodeType.LOGIN) {
-      code.sessionHash = uuidv4();
+      code.sessionHash = makeToken(64);
     }
     await new VerificationCodeModel(code).save();
     const appName = Configuration.get("system.app-name") as string;

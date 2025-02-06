@@ -1,9 +1,9 @@
-import { query } from "express-validator";
-import SSOTokenModel from "../../../../model/mongo/sso-token.js";
 import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "sso/google/success.get" });
 
 import { Request, Response } from "express";
+import { body } from "express-validator";
+
 import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel from "../../../../model/mongo/user.js";
@@ -13,22 +13,32 @@ import { PushEventList } from "../../../../enum/push-events.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import LoginHistoryModel, { LoginHistoryInterface } from "../../../../model/mongo/login-history.js";
 import { hasErrors } from "../../../../utils/api.js";
+import SSOTokenModel from "../../../../model/mongo/sso-token.js";
 
-export const GET_GoogleSuccessValidator = [query("ssoToken").exists().isString().isLength({ max: 64 })];
+export const POST_GoogleSuccessValidator = [
+  body("ssoToken").exists().isString().isLength({ max: 512 }),
+  body("userAgent")
+    .if(() => Configuration.get("user.login.require-user-agent"))
+    .exists()
+    .isString()
+    .isLength({ max: 1024 }),
+];
 
-const GET_GoogleSuccess = async (req: Request, res: Response) => {
+const POST_GoogleSuccess = async (req: Request, res: Response): Promise<void> => {
   if (hasErrors(req, res)) return;
-  const userId = await SSOTokenModel.findOne({ token: req.query.ssoToken }).lean();
+  const userId = await SSOTokenModel.findOne({ token: req.body.ssoToken }).lean();
   if (!userId) {
     log.warn("SSO token not found %s.", req.query.ssoToken);
-    return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    return;
   }
   await SSOTokenModel.deleteOne({ token: req.query.ssoToken }).exec();
   log.info("SSO token found %s.", req.query.ssoToken);
   const user = await UserModel.findById(userId.userId).lean();
   if (!user) {
     log.warn("User not found %s.", userId.userId);
-    return res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+    return;
   }
   log.info("User found %s.", userId.userId);
   (user as any).password = undefined;
@@ -39,8 +49,9 @@ const GET_GoogleSuccess = async (req: Request, res: Response) => {
   if (Configuration.get("user.login.record-successful-attempts")) {
     let loginMeta: LoginHistoryInterface = {
       targetId: user._id.toString(),
-      userAgent: "Google",
-      ipAddress: "0.0.0.0",
+      userAgent: req.body.userAgent,
+      ipAddress: req.ip,
+      source: "google",
       success: true,
     };
     await new LoginHistoryModel(loginMeta).save();
@@ -55,5 +66,5 @@ const GET_GoogleSuccess = async (req: Request, res: Response) => {
   });
 };
 
-export default GET_GoogleSuccess;
+export default POST_GoogleSuccess;
 

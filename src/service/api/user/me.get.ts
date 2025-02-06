@@ -10,7 +10,7 @@ import { Configuration } from "../../../singleton/configuration.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 import { hydrateUserProfile } from "../../../utils/user.js";
 
-const GET_Me = async (_: Request, res: Response) => {
+const GET_Me = async (_: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:read", res)) {
       return;
@@ -22,7 +22,7 @@ const GET_Me = async (_: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ user, editableFields }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

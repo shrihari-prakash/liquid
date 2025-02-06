@@ -15,7 +15,7 @@ import { ScopeManager } from "../../../singleton/scope-manager.js";
 
 export const PATCH_FollowRequestValidator = [body("request").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)];
 
-const PATCH_FollowRequest = async (req: Request, res: Response) => {
+const PATCH_FollowRequest = async (req: Request, res: Response): Promise<void> => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:accept", res)) {
@@ -41,7 +41,7 @@ const PATCH_FollowRequest = async (req: Request, res: Response) => {
   } catch (err) {
     log.error(err);
     await MongoDB.abortTransaction(session);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

@@ -8,7 +8,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 
-const GET_SubscriptionTiers = async (_: Request, res: Response) => {
+const GET_SubscriptionTiers = async (_: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:configuration:read", res)) {
       return;
@@ -23,7 +23,7 @@ const GET_SubscriptionTiers = async (_: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ subscriptionTiers: subscriptionTiers }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

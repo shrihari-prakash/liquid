@@ -15,7 +15,7 @@ export const GET_InviteCodesValidator = [
   query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId)
 ];
 
-const GET_InviteCodes = async (req: Request, res: Response) => {
+const GET_InviteCodes = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:social:invite-code:read", res)) {
       return;
@@ -26,7 +26,7 @@ const GET_InviteCodes = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ inviteCodes }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

@@ -17,24 +17,26 @@ export const GET_VerifyEmailValidator = [
   query("code").exists().isString(),
 ];
 
-const GET_VerifyEmail = async (req: Request, res: Response) => {
+const GET_VerifyEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     const target: string = req.query.target as string;
     const code: string = req.query.code as string;
     const dbCode = await VerificationCodeModel.findOne({ $and: [{ belongsTo: target }, { code }] }).exec();
     if (!dbCode || dbCode.type !== VerificationCodeType.SIGNUP) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      return;
     }
     await UserModel.updateOne({ _id: dbCode.belongsTo }, { $set: { emailVerified: true } });
     VerificationCodeModel.deleteOne({ code }).exec();
-    return res
+    res
       .status(statusCodes.success)
       .json(new SuccessResponse("Your email has been verified successfully. You can now login."));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default GET_VerifyEmail;
+

@@ -14,7 +14,7 @@ import { isFollowing, hydrateUserProfile, stripSensitiveFieldsForNonFollowerGet 
 import { FollowStatus } from "../../../enum/follow-status.js";
 import UserModel, { UserInterface, UserProjection } from "../../../model/mongo/user.js";
 
-const GET_Following = async (req: Request, res: Response) => {
+const GET_Following = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:read", res)) {
       return;
@@ -33,11 +33,12 @@ const GET_Following = async (req: Request, res: Response) => {
       if (isBlocked) return;
       const followResults = await isFollowing({ sourceId: loggedInUserId, targets: [user] });
       if (user.isPrivate && !followResults.results[0]) {
-        return res.status(statusCodes.forbidden).json(
+        res.status(statusCodes.forbidden).json(
           new ErrorResponse(errorMessages.forbidden, {
             reason: FollowStatus.NOT_FOLLOWING,
-          })
+          }),
         );
+        return;
       }
     } else {
       targetId = loggedInUserId;
@@ -64,8 +65,9 @@ const GET_Following = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default GET_Following;
+

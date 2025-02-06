@@ -22,6 +22,7 @@
   "error.account-not-verified": "Account not verified",
   "error.invalid-login": "Invalid Login",
   "error.bad-email-domain": "Unsupported Email Provider",
+  "error.account-does-not-exist": "Account does not exist. Please signup to continue.",
   "error.duplicate-account": "Account already exists",
   "error.duplicate-username": "Username is already taken",
   "error.signup-error": "Signup error",
@@ -35,6 +36,7 @@
   "message.recover-instructions": "Enter your email address to recover your account.",
   "message.reset-password-instructions": "A verification code was sent to your email address.",
   "message.page-not-found": "This page could not be found",
+  "message.terms-and-conditions": "By continuing, you agree to our policies",
 
   "button.login": "Login",
   "button.signup": "Create Account",
@@ -46,6 +48,8 @@
   "button.verify": "Verify",
   "button.signup.google": "Signup with Google",
   "button.signin.google": "Continue with Google",
+  "button.terms-of-use": "Terms of use",
+  "button.privacy-policy": "Privacy Policy",
 
   "field.label.username": "Username",
   "field.placeholder.username": "your_username",

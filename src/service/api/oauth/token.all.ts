@@ -11,7 +11,7 @@ const oauthOptions = {
   },
 };
 
-async function ALL__Token(req: Request, res: Response) {
+async function ALL__Token(req: Request, res: Response): Promise<void> {
   try {
     const token = await OAuthServer.server.token(new OAuthRequest(req), new OAuthResponse(res), oauthOptions);
     const response = {
@@ -24,7 +24,8 @@ async function ALL__Token(req: Request, res: Response) {
     res.status(statusCodes.success).json(response);
   } catch (error: any) {
     if (!error.name) {
-      return res.json({ error: "unknown_error" });
+      res.json({ error: "unknown_error" });
+      return;
     }
     res.status(statusCodes.unauthorized).json({ error: error.name, error_description: error.message });
   }

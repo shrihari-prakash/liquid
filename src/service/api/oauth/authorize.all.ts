@@ -41,21 +41,23 @@ function validatePKCEParameters(req: Request) {
   return { valid: true, error: null };
 }
 
-async function ALL__Authorize(req: Request, res: Response, next: NextFunction) {
+async function ALL__Authorize(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     if (Configuration.get("oauth.authorization.require-pkce")) {
       const validation = validatePKCEParameters(req);
       if (!validation.valid) {
-        return res.status(statusCodes.clientInputError).json({
+        res.status(statusCodes.clientInputError).json({
           error: "invalid_pkce_parameters",
           error_description: validation.error,
         });
+        return;
       }
     }
     const code = await OAuthServer.server.authorize(new OAuthRequest(req), new OAuthResponse(res), {
       authenticateHandler: {
         handle: async (req: Request) => {
           if (!req.session.user) {
+            log.debug("No user session found in authorize.");
             return null;
           }
           const userId = req.session.user._id;
@@ -81,14 +83,16 @@ async function ALL__Authorize(req: Request, res: Response, next: NextFunction) {
       url.searchParams.set("state", (req.query.state as string) || uuidv4());
       return res.redirect(url.toString());
     } else {
-      return res.json({ code: code.authorizationCode, state: (req.query.state as string) || uuidv4() });
+      res.json({ code: code.authorizationCode, state: (req.query.state as string) || uuidv4() });
+      return;
     }
   } catch (error: any) {
     let redirectUri;
     try {
       redirectUri = new URL(req.query.redirect_uri as string);
     } catch (error) {
-      return res.status(statusCodes.unauthorized).json({ error: "unknown_error", error_description: "Unknown error" });
+      res.status(statusCodes.unauthorized).json({ error: "unknown_error", error_description: "Unknown error" });
+      return;
     }
     redirectUri.searchParams.append("state", req.query.state as string);
     if (!error.name) {
@@ -97,15 +101,17 @@ async function ALL__Authorize(req: Request, res: Response, next: NextFunction) {
         redirectUri.searchParams.append("error_description", "Server error");
         return res.redirect(redirectUri.toString());
       }
-      return res.json({ error: "server_error" });
+      res.json({ error: "server_error" });
+      return;
     }
     if (Configuration.get("oauth.authorization.enable-redirect")) {
       redirectUri.searchParams.append("error", error.name);
       redirectUri.searchParams.append("error_description", error.message);
       return res.redirect(redirectUri.toString());
     }
-    return res.status(statusCodes.unauthorized).json({ error: error.name, error_description: error.message });
+    res.status(statusCodes.unauthorized).json({ error: error.name, error_description: error.message });
   }
 }
 
 export default ALL__Authorize;
+

@@ -6,7 +6,7 @@ import OAuthModel from "../../../model/oauth/oauth.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 import { UserProjection } from "../../../model/mongo/user.js";
 
-const ALL_Introspect = async (req: Request, res: Response) => {
+const ALL_Introspect = async (req: Request, res: Response): Promise<void> => {
   if (!ScopeManager.isScopeAllowedForSession("client:oauth:introspect", res)) {
     return;
   }
@@ -22,12 +22,14 @@ const ALL_Introspect = async (req: Request, res: Response) => {
     });
   }
   if (errors.length) {
-    return res.status(statusCodes.success).json(new SuccessResponse({ tokenInfo: null }));
+    res.status(statusCodes.success).json(new SuccessResponse({ tokenInfo: null }));
+    return;
   }
   const token = req.query.token || req.body.token;
   const tokenInfo = await OAuthModel.getAccessToken(token);
   if (!tokenInfo || tokenInfo.accessToken !== token) {
-    return res.status(statusCodes.success).json(new SuccessResponse({ tokenInfo: null }));
+    res.status(statusCodes.success).json(new SuccessResponse({ tokenInfo: null }));
+    return;
   }
   tokenInfo.authorizationCode = undefined;
   tokenInfo.refreshToken = undefined;

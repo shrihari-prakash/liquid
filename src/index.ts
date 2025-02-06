@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import * as fs from "fs";
 import cors from "cors";
 import express from "express";
-import RedisStore from "connect-redis";
+import { RedisStore } from "connect-redis";
 import session from "express-session";
 import bodyParser from "body-parser";
 import compression from "compression";
@@ -52,9 +52,10 @@ import { Redis } from "./singleton/redis.js";
 import { errorMessages, statusCodes } from "./utils/http-status.js";
 import { ErrorResponse } from "./utils/response.js";
 import { sanitizeEditableFields } from "./utils/user.js";
-import { initializeDemo } from "./utils/demo.js";
 import { StaticRoutes } from "./enum/static-routes.js";
 import { Passport } from "./singleton/passport.js";
+import { CORS } from "./singleton/cors.js";
+import { Bootstrap } from "./service/bootstrap/bootstrap.js";
 
 const app = express();
 app.disable("x-powered-by");
@@ -73,6 +74,15 @@ if (Configuration.get("system.stats.enable-request-counting")) {
   });
 }
 // ********** End Rate Limiting ********** //
+
+// ********** iframe blocking ********** //
+let iframeAction = Configuration.get("system.iframe.action");
+app.use((_, res, next) => {
+  if (iframeAction !== "ALLOW") {
+    res.setHeader("X-Frame-Options", iframeAction);
+  }
+  next();
+});
 
 app.use(bodyParser.json({ limit: Configuration.get("system.request-body.json.max-size") }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -113,12 +123,17 @@ Passport.session();
 // ********** End Passport Auth ********** //
 
 // ********** CORS ********** //
-const systemCORS = Configuration.get("cors.allowed-origins") as string[];
-log.debug("CORS origins %o", systemCORS);
+CORS.initialize();
 app.use(
   cors({
     credentials: true,
-    origin: systemCORS,
+    origin: (origin, callback) => {
+      if (CORS.isAllowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
   }),
 );
 // ********** End CORS ********** //
@@ -132,10 +147,7 @@ if (Configuration.get("system.enable-response-compression")) {
 
 // ********** Singleton Init ********** //
 if (environment !== "test") {
-  MongoDB.connect().then(() => {
-    // Runs only if system.demo-mode = true.
-    initializeDemo();
-  });
+  MongoDB.connect();
 }
 Api.initialize(app);
 Mailer.initialize(app);
@@ -175,7 +187,7 @@ if (Configuration.get("system.use-built-in-static-ui")) {
 // ********** End UI / Static Pages ********** //
 
 app.all("*", function (req, res) {
-  const apiPattern = /^(\/user\/|\/system\/|\/oauth\/|\/sso\/)/;
+  const apiPattern = /^(\/user\/|\/system\/|\/oauth\/|\/sso\/|\/roles\/)/;
   if (!apiPattern.test(req.path) && Configuration.get("system.use-built-in-static-ui")) {
     const staticFolder = path.join(__dirname, "public");
     const index = path.join(staticFolder, "index.html");
@@ -204,6 +216,9 @@ app.listen(Configuration.get("system.app-port"), () => {
 });
 
 sanitizeEditableFields();
+
+const bootstrapService = new Bootstrap();
+bootstrapService.configure();
 
 export default app;
 

@@ -14,7 +14,7 @@ export const GET_BlockStatusValidator = [
   query("target").exists().isString().isLength({ min: 8, max: 128 }),
 ];
 
-const GET_BlockStatus = async (req: Request, res: Response) => {
+const GET_BlockStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("client:social:block:read", res)) {
       return;
@@ -25,7 +25,7 @@ const GET_BlockStatus = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ blocked: isBlocked }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

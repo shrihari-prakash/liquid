@@ -21,7 +21,7 @@ import POST_Do2FA, { POST_Do2FAValidator } from "./do-2fa.post.js";
 import GET_Code, { GET_CodeValidator } from "./code.get.js";
 import GET_Followers from "./followers.get.js";
 import GET_Following from "./following.get.js";
-import GET__UserId from "./_userId.get.js";
+import GET_UserId from "./_userId.get.js";
 import GET_Me from "./me.get.js";
 import GET_VerifyEmail, { GET_VerifyEmailValidator } from "./verify-email.get.js";
 import GET_FollowRequests from "./follow-requests.get.js";
@@ -100,8 +100,8 @@ UserRouter.use("/admin-api", AdminApiRouter);
 // User info
 UserRouter.get("/me", ...DelegatedAuthFlow, GET_Me);
 UserRouter.patch("/me", ...DelegatedAuthFlow, PATCH_MeValidator, PATCH_Me);
-UserRouter.get("/:userId", ...DelegatedAuthFlow, GET__UserId);
-UserRouter.get("/info/:userId", ...DelegatedAuthFlow, GET__UserId);
+UserRouter.get("/:userId", ...DelegatedAuthFlow, GET_UserId);
+UserRouter.get("/info/:userId", ...DelegatedAuthFlow, GET_UserId);
 
 // Block - Unblock
 UserRouter.post("/block", ...DelegatedAuthFlow, POST_BlockValidator, POST_Block);

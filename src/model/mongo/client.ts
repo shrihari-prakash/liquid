@@ -18,6 +18,19 @@ export const clientSchema = {
   redirectUris: [String],
 };
 
+export interface ClientInterface {
+  id: string;
+  secret: string;
+  displayName: string;
+  role: string;
+  scope: string;
+  grants: string | string[];
+  redirectUris?: string[];
+  accessTokenLifetime?: number | undefined;
+  refreshTokenLifetime?: number | undefined;
+  [key: string]: any;
+}
+
 const schemaInstance = new mongoose.Schema(clientSchema),
   ClientModel = mongoose.model("client", schemaInstance);
 

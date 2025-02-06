@@ -9,11 +9,11 @@ import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel from "../../../../model/mongo/user.js";
 import { hasErrors } from "../../../../utils/api.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
 import CreditTransactionModel from "../../../../model/mongo/credit-transaction.js";
 import { MongoDB } from "../../../../singleton/mongo-db.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 const Operations = {
   INCREMENT: "increment",
@@ -27,7 +27,7 @@ export const POST_CreditsValidator = [
   body("value").exists().isInt({ min: 0 }),
 ];
 
-const POST_Credits = async (req: Request, res: Response) => {
+const POST_Credits = async (req: Request, res: Response): Promise<void> => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:credits:write", res)) {
@@ -68,7 +68,9 @@ const POST_Credits = async (req: Request, res: Response) => {
     if (sessionOptions) updateQuery.session(sessionOptions.session);
     const updateResult = await updateQuery;
     if (!updateResult.modifiedCount) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.insufficientCredits));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.insufficientCredits));
+      await MongoDB.abortTransaction(session);
+      return;
     }
     if (Configuration.get("privilege.can-use-credit-transaction-history")) {
       const sourceType = res.locals.user.isClient ? "client" : "user";
@@ -87,7 +89,7 @@ const POST_Credits = async (req: Request, res: Response) => {
   } catch (err) {
     log.error(err);
     await MongoDB.abortTransaction(session);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

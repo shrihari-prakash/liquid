@@ -11,9 +11,9 @@ import UserModel from "../../../model/mongo/user.js";
 import { Configuration } from "../../../singleton/configuration.js";
 import { bcryptConfig } from "./create.post.js";
 import { hasErrors } from "../../../utils/api.js";
-import { flushUserInfoFromRedis } from "../../../model/oauth/oauth.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 import UserValidator from "../../../validator/user.js";
+import { flushUserInfoFromRedis } from "../../../model/oauth/cache.js";
 
 const userValidator = new UserValidator(body);
 
@@ -39,7 +39,7 @@ export const PATCH_MeValidator = [
   userValidator.country(),
 ];
 
-const PATCH_Me = async (req: Request, res: Response) => {
+const PATCH_Me = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
@@ -68,29 +68,27 @@ const PATCH_Me = async (req: Request, res: Response) => {
         errors.push({ msg: "Invalid value", param: "phoneCountryCode", location: "body" });
       }
       if (errors.length)
-        return res
-          .status(statusCodes.clientInputError)
-          .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+        res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return;
     }
     if (errors.length) {
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return;
     }
-    await UserModel.updateOne({ _id: userId }, { $set: { ...req.body } }).exec();
-    res.status(statusCodes.success).json(new SuccessResponse());
+    const result = await UserModel.findByIdAndUpdate(userId, { $set: { ...req.body } }).exec();
+    res.status(statusCodes.success).json(new SuccessResponse({ user: result }));
     flushUserInfoFromRedis(userId);
   } catch (err: any) {
     log.error(err);
     if (err?.name === "MongoServerError" && err?.code === 11000) {
       const keyPattern = Object.keys(err.keyPattern);
       const key = keyPattern[0];
-      return res
-        .status(statusCodes.conflict)
-        .json(new ErrorResponse(errorMessages.conflict, { duplicateFields: [key] }));
+      res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields: [key] }));
+      return;
     }
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default PATCH_Me;
+

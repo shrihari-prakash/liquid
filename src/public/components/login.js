@@ -8,6 +8,7 @@ import {
   uuidv4,
   errorTextTimeout,
   afterLogin,
+  humanReadableToSnakeCase,
 } from "../utils/utils.js";
 
 export default function Login() {
@@ -111,24 +112,55 @@ export default function Login() {
       });
   }
 
+  const handleSSOClick = (event) => {
+    event.preventDefault();
+    const authorizationParams = prepareAuthorizationParams(configuration);
+    const appName = humanReadableToSnakeCase(configuration["content.app-name"]);
+    sessionStorage.setItem(`${appName}.authorization-params`, JSON.stringify(authorizationParams));
+    const params = new URLSearchParams({ type: "login" });
+    window.location = `/sso/google?${params.toString()}`;
+  };
+
   const onSSOComplete = async (ssoToken) => {
     console.log("SSO Complete");
-    $.get("/sso/google/success", { ssoToken })
-      .done(function () {
-        console.log("SSO after login");
+    const appName = humanReadableToSnakeCase(configuration["content.app-name"]);
+    let authParams = sessionStorage.getItem(`${appName}.authorization-params`);
+    try {
+      authParams = JSON.parse(authParams);
+      console.log("Authorization params", authParams);
+      const urlParams = new URLSearchParams(window.location.search);
+      const authorizationParams = new URLSearchParams(authParams);
+      for (const [key, value] of authorizationParams) {
+        urlParams.set(key, value);
+      }
+      console.log("URL Params", urlParams.toString());
+      urlParams.delete("ssoToken");
+      window.history.replaceState({}, "", `${window.location.pathname}?${urlParams.toString()}`);
+    } catch (e) {
+      console.error("Failed to parse authorization params", e);
+    }
+    $.ajax({
+      url: "/sso/google/success",
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        ssoToken: ssoToken,
+        userAgent: window.navigator.userAgent,
+      }),
+      success: function () {
         afterLogin(configuration);
-      })
-      .fail(function () {
+      },
+      error: function () {
         setIsLoggedIn(false);
         onSubmitError({ errorText: i18next.t("error.invalid-login") });
-      });
+      },
+    });
   };
 
   if (isLoggedIn) {
     return (
       <div className="form-loader">
         <div className="spinner"></div>
-        Redirecting... Please Wait...
       </div>
     );
   }
@@ -215,9 +247,10 @@ export default function Login() {
           value={buttonText}
         />
         {configuration["user.account-creation.sso.google.enabled"] && (
-          <a href={"/sso/google"} className="ghost-link">
+          <a onClick={handleSSOClick} className="ghost-link">
             <button type="button" disabled={submitting} className={"button outline"}>
-              <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signin.google")}
+              <img src={`/images/google-icon-${theme === "light" ? "black" : "white"}.svg`} alt="Google" height="20" />
+              {i18next.t("button.signin.google")}
             </button>
           </a>
         )}

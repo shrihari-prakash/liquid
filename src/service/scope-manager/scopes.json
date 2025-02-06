@@ -16,6 +16,18 @@
     "parent": "delegated:all"
   },
   {
+    "name": "delegated:roles:all",
+    "description": "View and manage your roles.",
+    "adminDescription": "View and manage user roles on behalf of a user.",
+    "parent": "delegated:all"
+  },
+  {
+    "name": "delegated:roles:read",
+    "description": "View your roles.",
+    "adminDescription": "View user roles on behalf of a user.",
+    "parent": "delegated:roles:all"
+  },
+  {
     "name": "delegated:profile:all",
     "description": "View and manage your profile information.",
     "adminDescription": "View and manage user profile information on behalf of a user.",
@@ -135,6 +147,26 @@
     "parent": "*"
   },
   {
+    "name": "client:roles:all",
+    "description": "View and manage roles in the system.",
+    "parent": "client:all"
+  },
+  {
+    "name": "client:roles:read",
+    "description": "View roles in the system.",
+    "parent": "client:roles:all"
+  },
+  {
+    "name": "client:roles:write",
+    "description": "Manage roles in the system.",
+    "parent": "client:roles:all"
+  },
+  {
+    "name": "client:roles:delete",
+    "description": "Delete roles in the system.",
+    "parent": "client:roles:all"
+  },
+  {
     "name": "client:system:all",
     "description": "View and manage the system.",
     "parent": "client:all"
@@ -248,6 +280,26 @@
     "name": "admin:all",
     "description": "View and manage user accounts in the system using admin APIs.",
     "parent": "*"
+  },
+  {
+    "name": "admin:roles:all",
+    "description": "View and manage roles in the system.",
+    "parent": "admin:all"
+  },
+  {
+    "name": "admin:roles:read",
+    "description": "View roles in the system.",
+    "parent": "admin:roles:all"
+  },
+  {
+    "name": "admin:roles:write",
+    "description": "Manage roles in the system.",
+    "parent": "admin:roles:all"
+  },
+  {
+    "name": "admin:roles:delete",
+    "description": "Delete roles in the system.",
+    "parent": "admin:roles:all"
   },
   {
     "name": "admin:system:all",

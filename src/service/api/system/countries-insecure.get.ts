@@ -6,13 +6,13 @@ import { errorMessages, statusCodes } from "../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
 import { countries } from "../../../utils/country-codes.js";
 
-const GET__CountriesInsecure = async (_: Request, res: Response) => {
+const GET_CountriesInsecure = async (_: Request, res: Response): Promise<void> => {
   try {
-    return res.status(statusCodes.success).json(new SuccessResponse({ countries }));
+    res.status(statusCodes.success).json(new SuccessResponse({ countries }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
-export default GET__CountriesInsecure;
+export default GET_CountriesInsecure;

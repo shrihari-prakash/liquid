@@ -8,11 +8,12 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
 import UserModel from "../../../model/mongo/user.js";
 import { isTokenInvalidated } from "../../../utils/session.js";
 
-const GET_SessionState = async (req: Request, res: Response) => {
+const GET_SessionState = async (req: Request, res: Response): Promise<void> => {
   try {
     const sessionUser = req.session?.user;
     if (!sessionUser) {
-      return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
+      res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
+      return;
     }
     const user = await await UserModel.findById(sessionUser._id).lean();
     if (user) {
@@ -21,15 +22,15 @@ const GET_SessionState = async (req: Request, res: Response) => {
       if (isTokenInvalidated(globalLogoutAt, currentLoginAt)) {
         log.debug("Expired session detected.");
         req.session.destroy(() => {});
-        return null;
+        return;
       }
-      return res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
+      res.status(statusCodes.success).json(new SuccessResponse({ userInfo: user }));
     } else {
-      return res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
+      res.status(statusCodes.forbidden).json(new ErrorResponse(errorMessages.forbidden));
     }
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

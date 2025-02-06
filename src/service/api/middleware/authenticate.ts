@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { Request as OAuthRequest, Response as OAuthResponse } from "@node-oauth/oauth2-server";
 
-import Role from "../../../enum/role.js";
 import { OAuthServer } from "../../../singleton/oauth-server.js";
 import { errorMessages, statusCodes } from "../../../utils/http-status.js";
 import { ErrorResponse } from "../../../utils/response.js";
+import { Role } from "../../../singleton/role.js";
 
 const AuthenticateUser = async (_: Request, res: Response, next: NextFunction) => {
   try {
@@ -23,7 +23,10 @@ const AuthenticateUser = async (_: Request, res: Response, next: NextFunction) =
 const AuthenticateClient = async (_: Request, res: Response, next: NextFunction) => {
   try {
     res.locals.user = res.locals.oauth.token.user;
-    if (res.locals.user.role !== Role.INTERNAL_CLIENT && res.locals.user.role !== Role.EXTERNAL_CLIENT) {
+    if (
+      res.locals.user.role !== Role.SystemRoles.INTERNAL_CLIENT &&
+      res.locals.user.role !== Role.SystemRoles.EXTERNAL_CLIENT
+    ) {
       throw statusCodes.unauthorized;
     }
     res.locals.user.isClient = true;
@@ -59,3 +62,4 @@ export const AuthenticateSilent = async (req: Request, res: Response, next: Next
 
 export const DelegatedAuthFlow = [Authenticate, AuthenticateUser];
 export const ClientAuthFlow = [Authenticate, AuthenticateClient];
+

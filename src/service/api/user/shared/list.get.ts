@@ -10,7 +10,7 @@ import { getPaginationLimit } from "../../../../utils/pagination.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import { hydrateUserProfile } from "../../../../utils/user.js";
 
-const GET_List = async (req: Request, res: Response) => {
+const GET_List = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:read", res)) {
       return;
@@ -31,8 +31,9 @@ const GET_List = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ users, totalUsers }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default GET_List;
+

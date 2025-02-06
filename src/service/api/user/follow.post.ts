@@ -25,7 +25,7 @@ function sendSuccess(res: Response, status: string) {
   res.status(statusCodes.success).json(new SuccessResponse({ status }));
 }
 
-const POST_Follow = async (req: Request, res: Response) => {
+const POST_Follow = async (req: Request, res: Response): Promise<void> => {
   let session = "";
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:social:follow:request", res)) {
@@ -34,8 +34,10 @@ const POST_Follow = async (req: Request, res: Response) => {
     if (hasErrors(req, res)) return;
     const sourceId = res.locals.oauth.token.user._id;
     const targetId = req.body.target;
-    if (sourceId === targetId)
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+    if (sourceId === targetId) {
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      return;
+    }
     const isBlocked = await getBlockStatus(targetId, sourceId, res, true);
     if (isBlocked) return;
     session = await MongoDB.startSession();
@@ -67,7 +69,7 @@ const POST_Follow = async (req: Request, res: Response) => {
       return sendSuccess(res, FollowStatus.DUPLICATE);
     }
     log.error(err);
-    return res
+    res
       .status(statusCodes.internalError)
       .json(new ErrorResponse(errorMessages.internalError, { transactionId: session }));
   }

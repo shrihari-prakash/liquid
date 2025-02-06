@@ -1,4 +1,4 @@
-import chai from "chai";
+import chai, { expect } from "chai";
 import "chai-http";
 
 import app from "../../../../src";
@@ -7,6 +7,7 @@ import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
 import { setupUsers } from "../../utils/records";
 import TokenModel from "../../../../src/model/mongo/token";
 import ClientModel from "../../../../src/model/mongo/client";
+import RoleModel from "../../../../src/model/mongo/role";
 
 describe("admin-api.access.post", () => {
   before(setupUsers);
@@ -116,5 +117,24 @@ describe("admin-api.access.post", () => {
     chai.expect(res.status).to.eql(200);
     const client = (await ClientModel.findOne({ _id: MemoryStore.client._id })) as any;
     chai.expect(client.scope.includes("client:all")).to.eql(true);
+  });
+
+  it("should update for target type role", async () => {
+    await TokenModel.updateOne({ accessToken: "john_doe_access_token" }, { $set: { scope: ["*"] } });
+    const res = await chai
+      .request(app)
+      .post(`/user/admin-api/access`)
+      .send({
+        targets: ["admin"],
+        targetType: "role",
+        scope: ["client:all", "admin:all", "delegated:all"],
+        operation: "add",
+      })
+      .set({ Authorization: `Bearer john_doe_access_token` });
+    chai.expect(res.status).to.eql(200);
+    const role = (await RoleModel.findOne({ id: "admin" })) as any;
+    expect(role.scope.includes("client:all")).to.eql(true);
+    expect(role.scope.includes("admin:all")).to.eql(true);
+    expect(role.scope.includes("delegated:all")).to.eql(true);
   });
 });

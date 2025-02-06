@@ -13,7 +13,7 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 
 ## ⭐ Features
 
-- **Plug & Play:** With the Liquid docker package, say goodbye to complex environment setup. Once you have docker installed, [setup](https://github.com/shrihari-prakash/liquid/wiki#quick-start) takes less than 5 minutes!
+- **Plug & Play:** With the Liquid docker package, say goodbye to complex environment setup. Once you have docker installed, [setup](https://shrihari-prakash.github.io/liquid/) takes less than 5 minutes!
 - **Endless Customizations:** Customize and configure every part of the UI and service so login pages can look like your own.
   ![Liquid Login Page](images/liquid-customizations.png)
 - **OAuth Based Authentication:** Secure and seamless authentication based on a battle tested OAuth core powered by [node-oauth2-server](https://github.com/node-oauth/node-oauth2-server) from [@node-oauth](https://github.com/node-oauth).
@@ -23,6 +23,7 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 - **Admin Controls:** With [Liquid Nitrogen](https://github.com/shrihari-prakash/nitrogen), spinning up an admin panel takes minutes, but if you want to build your own, Liquid offers administrative APIs that let you edit profile information, ban users, restrict accounts and do a lot more.
   ![Nitrogen](https://github.com/shrihari-prakash/nitrogen/blob/main/images/banner.png?raw=true)
 - **Profile Pictures:** Provide users with the option to personalize their profiles with profile pictures.
+- **Google SSO:** The Google SSO integration ensures your users can sign-in with ease.
 - **Microservice Integration:** Seamlessly integrate Liquid into your project, allowing other microservices to utilize its robust authentication and user management capabilities.
 - **Advanced Permission Management:** Granular access control to APIs through Liquid's sophisticated scope management solution. Liquid also lets you add your own scopes into it so you can also use scopes in your other microservices.
 - **Gamification Support:** Includes APIs for reward points mechanisms. This can be used for inroducing features like loyalty points, or in-app virtual money.
@@ -36,7 +37,7 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 
 ## ⚙️ Setup
 
-#### For setup instructions and documentation, see the [Liquid Wiki](https://github.com/shrihari-prakash/liquid/wiki).
+#### For setup instructions and documentation, see the [Liquid Wiki](https://shrihari-prakash.github.io/liquid/).
 
 ## 🪪 License
 

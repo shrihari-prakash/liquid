@@ -13,7 +13,6 @@ import POST_InviteCodes, { POST_InviteCodesValidator } from "../shared/invite-co
 import GET_List from "../shared/list.get.js";
 import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get.js";
 import GET_EditableFields from "./editable-fields.get.js";
-import GET_Roles from "../shared/roles.get.js";
 import PATCH_Update, { PATCH_UpdateValidator } from "./update.patch.js";
 import GET_SubscriptionTiers from "../shared/subscription-tiers.get.js";
 import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get.js";
@@ -26,7 +25,6 @@ const AdminApiRouter = express.Router();
 AdminApiRouter.get("/user-info", ...DelegatedAuthFlow, GET_UserInfoValidator, GET_UserInfo);
 AdminApiRouter.post("/access", ...DelegatedAuthFlow, POST_AccessValidator, POST_Access);
 AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, GET_EditableFields);
-AdminApiRouter.get("/roles", ...DelegatedAuthFlow, GET_Roles);
 AdminApiRouter.patch("/update", ...DelegatedAuthFlow, PATCH_UpdateValidator, PATCH_Update);
 AdminApiRouter.post("/ban", ...DelegatedAuthFlow, POST_BanValidator, POST_Ban);
 AdminApiRouter.post("/credits", ...DelegatedAuthFlow, POST_CreditsValidator, POST_Credits);

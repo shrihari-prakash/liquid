@@ -1,19 +1,24 @@
+import moment from "moment";
+import { RedisPrefixes } from "../enum/redis.js";
 import { Configuration } from "../singleton/configuration.js";
-
-export const extractRank = (roleRank: string) => {
-  return (roleRank.match(/\(([^)]+)\)/) as string[])[1];
-};
-
-export const findRoleRank = (role: string) => {
-  const roleRanking = Configuration.get("system.role.ranking");
-  return roleRanking.find((r: string) => r.split("(")[0] === role);
-};
+import { Redis } from "../singleton/redis.js";
+import { Role } from "../singleton/role.js";
 
 export const isRoleRankHigher = (currentRole: string, comparisonRole: string) => {
-  const currentRoleRank = extractRank(findRoleRank(currentRole));
-  const comparisonRoleRank = extractRank(findRoleRank(comparisonRole));
+  const currentRoleRank = Role.getRoleRank(currentRole);
+  const comparisonRoleRank = Role.getRoleRank(comparisonRole);
   if (Configuration.get("admin-api.user.profile.can-edit-peer-data")) {
-    return parseInt(currentRoleRank) <= parseInt(comparisonRoleRank);
+    return currentRoleRank <= comparisonRoleRank;
   }
-  return parseInt(currentRoleRank) < parseInt(comparisonRoleRank);
+  return currentRoleRank < comparisonRoleRank;
 };
+
+export const isRoleInvalidated = async (role: string, currentEntityRegisteredAt: string | Date) => {
+  const invalidateTime = await Redis.get(`${RedisPrefixes.ROLE_INVALIDATION}${role}`);
+  if (!invalidateTime) {
+    return false;
+  }
+  const isInvalid = moment(invalidateTime).isAfter(moment(currentEntityRegisteredAt));
+  return isInvalid;
+};
+

@@ -10,7 +10,7 @@ import { S3 } from "../../../singleton/s3.js";
 import { profilePicturePath } from "./profile-picture.patch.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 
-const DELETE_ProfilePicture = async (req: Request, res: Response) => {
+const DELETE_ProfilePicture = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:write", res)) {
       return;
@@ -22,7 +22,7 @@ const DELETE_ProfilePicture = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

@@ -257,6 +257,18 @@ export const userSchema = {
       write: SensitivityLevel.MEDIUM,
     },
   },
+  sanitizedEmail: {
+    type: String,
+    required: true,
+    default: null,
+    willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM,
+    },
+  },
   emailVerified: {
     type: Boolean,
     required: true,
@@ -415,6 +427,18 @@ export const userSchema = {
     type: Boolean,
     required: true,
     default: false,
+    willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM,
+    },
+  },
+  subscriptionActivatedAt: {
+    type: Date,
+    required: false,
+    default: Date.now,
     willProjectForUserSelect: true,
     willProjectForUserAdminSelect: true,
     willProjectForUserClientSelect: true,
@@ -612,9 +636,21 @@ export const userSchema = {
       write: SensitivityLevel.EXTREME,
     },
   },
+  ssoEnabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+    willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.LOW,
+      write: SensitivityLevel.LOW,
+    },
+  },
   ssoProvider: {
     type: String,
-    enum: ["google", "facebook", "twitter", "github", "linkedin", "microsoft", "apple"],
+    enum: ["google"],
     required: false,
     willProjectForUserSelect: false,
     willProjectForUserAdminSelect: false,
@@ -622,6 +658,17 @@ export const userSchema = {
     sensitivityScore: {
       read: SensitivityLevel.LOW,
       write: SensitivityLevel.LOW,
+    },
+  },
+  googleProfileId: {
+    type: String,
+    required: false,
+    willProjectForUserSelect: false,
+    willProjectForUserAdminSelect: false,
+    willProjectForUserClientSelect: false,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM,
     },
   },
   creationIp: {
@@ -685,6 +732,7 @@ export type UserInterface = {
   customLink: string;
   isPrivate: boolean;
   email: string;
+  sanitizedEmail: string;
   emailVerified: boolean;
   phone: string;
   phoneCountryCode: string;
@@ -701,6 +749,7 @@ export type UserInterface = {
   pincode: number;
   organization: string;
   isSubscribed: boolean;
+  subscriptionActivatedAt: Date;
   subscriptionExpiry: Date;
   subscriptionTier: string;
   credits: number;
@@ -719,7 +768,9 @@ export type UserInterface = {
   isDeleted: boolean;
   deletedDate: Date;
   creationIp: string;
-  ssoProvider: "google" | "facebook" | "twitter" | "github" | "linkedin" | "microsoft" | "apple";
+  ssoEnabled: boolean;
+  ssoProvider: "google";
+  googleProfileId: string;
   customData: string;
   createdAt: Date;
   updatedAt: Date;

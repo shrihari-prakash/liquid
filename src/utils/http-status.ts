@@ -39,4 +39,8 @@ export const errorMessages = {
   incompleteSubmission: "IncompleteSubmission",
   resourceNotActive: "ResourceNotActive",
   insufficientCredits: "InsufficientCredits",
+  accountDoesNotExist: "AccountDoesNotExist",
+  systemRoleDelete: "SystemRoleDelete",
+  systemRoleUpdate: "SystemRoleUpdate",
+  duplicateResource: "DuplicateResource",
 };

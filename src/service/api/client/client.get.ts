@@ -11,11 +11,11 @@ import { hasErrors } from "../../../utils/api.js";
 
 export const GET_ClientValidator = [query("id").optional().isString().isLength({ min: 3, max: 256 })];
 
-const GET_Client = async (req: Request, res: Response) => {
+const GET_Client = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     if (!req.params.clientId && !req.query.id) {
-      return res.status(statusCodes.clientInputError).json(
+      res.status(statusCodes.clientInputError).json(
         new ErrorResponse(errorMessages.clientInputError, {
           errors: [
             {
@@ -26,13 +26,14 @@ const GET_Client = async (req: Request, res: Response) => {
           ],
         })
       );
+      return;
     }
     const id = req.params.clientId || req.query.id;
     const client = (await ClientModel.findOne({ id }, { id: 1, role: 1, displayName: 1, _id: 0 }).lean().exec()) as any;
     res.status(statusCodes.success).json(new SuccessResponse({ client }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

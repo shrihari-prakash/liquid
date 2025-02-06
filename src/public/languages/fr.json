@@ -22,6 +22,7 @@
   "error.account-not-verified": "Compte non vérifié",
   "error.invalid-login": "Identifiant invalide",
   "error.bad-email-domain": "Mauvais domaine de messagerie",
+  "error.account-does-not-exist": "Le compte n'existe pas. Veuillez vous inscrire pour continuer.",
   "error.duplicate-account": "Le compte existe déjà",
   "error.duplicate-username": "Le username n'est pas disponible",
   "error.signup-error": "Erreur d'inscription",
@@ -35,6 +36,7 @@
   "message.recover-instructions": "Entrez votre adresse e-mail pour récupérer votre compte.",
   "message.reset-password-instructions": "Un code de vérification a été envoyé à votre adresse e-mail.",
   "message.page-not-found": "Cette page est introuvable",
+  "message.terms-and-conditions": "En continuant, vous acceptez nos politiques",
 
   "button.login": "Se connecter",
   "button.signup": "Créer un compte",
@@ -44,8 +46,10 @@
   "button.get-code": "Obtenir le code",
   "button.change-password": "Changer le mot de passe",
   "button.verify": "Vérifier",
-  "button.signup.google": "Signup with Google",
-  "button.signin.google": "Continue with Google",
+  "button.signup.google": "Inscrivez-vous avec Google",
+  "button.signin.google": "Continuer avec Google",
+  "button.terms-of-use": "Conditions d'utilisation",
+  "button.privacy-policy": "Politique de confidentialité",
 
   "field.label.username": "Nom d'utilisateur",
   "field.placeholder.username": "ton_nom_d'utilisateur",

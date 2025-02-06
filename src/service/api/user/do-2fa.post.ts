@@ -21,7 +21,7 @@ export const POST_Do2FAValidator = [
   body("sessionHash").exists().isString().isLength({ min: 3, max: 128 }),
 ];
 
-const POST_Do2FA = async (req: Request, res: Response) => {
+const POST_Do2FA = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     const target = req.body.target;
@@ -35,7 +35,8 @@ const POST_Do2FA = async (req: Request, res: Response) => {
         await new LoginHistoryModel(loginMeta).save();
         log.info("Login metadata saved to database %o.", loginMeta);
       }
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      return;
     }
     await VerificationCodeModel.deleteOne({ code });
     const user = (await UserModel.findOne({ _id: target }).exec()) as unknown as UserInterface;
@@ -55,8 +56,9 @@ const POST_Do2FA = async (req: Request, res: Response) => {
     });
   } catch (err: any) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default POST_Do2FA;
+

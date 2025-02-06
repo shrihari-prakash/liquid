@@ -13,7 +13,7 @@ import { VerificationCodeType } from "../../../enum/verification-code.js";
 
 export const GET_CodeValidator = [query("email").exists().isEmail()];
 
-const GET_Code = async (req: Request, res: Response) => {
+const GET_Code = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     const { email } = req.query;
@@ -21,15 +21,16 @@ const GET_Code = async (req: Request, res: Response) => {
       email,
     }).exec()) as unknown as UserInterface;
     if (!existingUser) {
-      return res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
     } else {
       await Mailer.generateAndSendEmailVerification(existingUser, VerificationCodeType.PASSWORD_RESET);
-      return res.status(statusCodes.created).json(new SuccessResponse({ target: existingUser._id }));
+      res.status(statusCodes.created).json(new SuccessResponse({ target: existingUser._id }));
     }
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default GET_Code;
+

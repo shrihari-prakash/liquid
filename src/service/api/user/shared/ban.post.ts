@@ -9,8 +9,8 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel from "../../../../model/mongo/user.js";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 export const POST_BanValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -18,7 +18,7 @@ export const POST_BanValidator = [
   body("reason").optional().isString().isLength({ min: 8, max: 128 }),
 ];
 
-const POST_Ban = async (req: Request, res: Response) => {
+const POST_Ban = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:ban:write", res)) {
       return;
@@ -41,7 +41,7 @@ const POST_Ban = async (req: Request, res: Response) => {
     flushUserInfoFromRedis(target);
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

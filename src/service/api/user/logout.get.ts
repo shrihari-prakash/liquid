@@ -12,7 +12,7 @@ import OAuthModel from "../../../model/oauth/oauth.js";
 import { Redis } from "../../../singleton/redis.js";
 import { Token } from "@node-oauth/oauth2-server";
 
-const GET_Logout = async (req: Request, res: Response) => {
+const GET_Logout = async (req: Request, res: Response): Promise<void> => {
   try {
     const token = res.locals?.oauth?.token;
     const user = token ? { ...res.locals.oauth.token.user } : null;
@@ -36,7 +36,7 @@ const GET_Logout = async (req: Request, res: Response) => {
     }
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

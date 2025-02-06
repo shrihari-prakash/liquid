@@ -11,8 +11,8 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import UserModel from "../../../../model/mongo/user.js";
 import { hasErrors } from "../../../../utils/api.js";
 import { Configuration } from "../../../../singleton/configuration.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 export const POST_SubscriptionValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -21,11 +21,11 @@ export const POST_SubscriptionValidator = [
   body("tier").optional().isString().isLength({ max: 128 }),
 ];
 
-const POST_Subscription = async (req: Request, res: Response) => {
+const POST_Subscription = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:subscriptions:write", res)) {
       return;
-    };
+    }
     if (hasErrors(req, res)) return;
     const target = req.body.target;
     const state = req.body.state;
@@ -39,9 +39,8 @@ const POST_Subscription = async (req: Request, res: Response) => {
           location: "body",
         },
       ];
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return;
     }
     if (tier && !Configuration.get("user.subscription.tier-list").includes(tier)) {
       const errors = [
@@ -51,13 +50,13 @@ const POST_Subscription = async (req: Request, res: Response) => {
           location: "body",
         },
       ];
-      return res
-        .status(statusCodes.clientInputError)
-        .json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
+      return;
     }
     const query = {
       $set: {
         isSubscribed: state,
+        subscriptionActivatedAt: moment().toDate(),
         subscriptionExpiry: moment(expiry).toDate(),
         subscriptionTier: tier || null,
       },
@@ -67,8 +66,9 @@ const POST_Subscription = async (req: Request, res: Response) => {
     flushUserInfoFromRedis(target);
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 
 export default POST_Subscription;
+

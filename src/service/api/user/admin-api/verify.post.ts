@@ -10,14 +10,14 @@ import UserModel from "../../../../model/mongo/user.js";
 import { body } from "express-validator";
 import { hasErrors } from "../../../../utils/api.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
-import { flushUserInfoFromRedis } from "../../../../model/oauth/oauth.js";
+import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
 
 export const POST_VerifyValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
   body("state").exists().isBoolean(),
 ];
 
-const POST_Verify = async (req: Request, res: Response) => {
+const POST_Verify = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("admin:profile:verifications:write", res)) {
       return;
@@ -32,7 +32,7 @@ const POST_Verify = async (req: Request, res: Response) => {
     flushUserInfoFromRedis(target);
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

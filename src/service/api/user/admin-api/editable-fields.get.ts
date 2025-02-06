@@ -9,7 +9,7 @@ import { Configuration } from "../../../../singleton/configuration.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import { userSchema } from "../../../../model/mongo/user.js";
 
-const GET_EditableFields = async (_: Request, res: Response) => {
+const GET_EditableFields = async (_: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("admin:configuration:read", res)) {
       return;
@@ -26,7 +26,7 @@ const GET_EditableFields = async (_: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ editableFields }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

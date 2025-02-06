@@ -12,7 +12,7 @@ import { ScopeManager } from "../../../singleton/scope-manager.js";
 
 export const POST_2FAValidator = [body("state").exists().isBoolean()];
 
-const POST_2FA = async (req: Request, res: Response) => {
+const POST_2FA = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSession("delegated:profile:2fa:write", res)) {
       return;
@@ -21,10 +21,10 @@ const POST_2FA = async (req: Request, res: Response) => {
     const userId = res.locals.oauth.token.user._id;
     const state = req.body.state;
     await UserModel.updateOne({ _id: userId }, { $set: { "2faEnabled": state, "2faMedium": "email" } });
-    return res.status(statusCodes.success).json(new SuccessResponse());
+    res.status(statusCodes.success).json(new SuccessResponse());
   } catch (err: any) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

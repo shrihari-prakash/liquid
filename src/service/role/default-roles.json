@@ -1,0 +1,43 @@
+[
+  {
+    "id": "super_admin",
+    "displayName": "Super Admin",
+    "description": "The system super admin. Has all permissions and cannot be restricted.",
+    "ranking": 1,
+    "scope": ["*"],
+    "type": "user"
+  },
+  {
+    "id": "admin",
+    "displayName": "Admin",
+    "description": "Ranks a little lower than Super Admin and has no permissions assigned by default.",
+    "ranking": 2,
+    "scope": [],
+    "type": "user"
+  },
+  {
+    "id": "user",
+    "displayName": "User",
+    "description": "Ranked the lowest. Has no permissions assigned by default.",
+    "ranking": 100,
+    "scope": [],
+    "type": "user"
+  },
+  {
+    "id": "internal_client",
+    "displayName": "Internal Client",
+    "description": "First party and trusted applications.",
+    "ranking": 2,
+    "scope": ["client:all"],
+    "type": "client"
+  },
+  {
+    "id": "external_client",
+    "displayName": "External Client",
+    "description": "Third party applications. Ranked the same as users due to lower trust.",
+    "ranking": 100,
+    "scope": [],
+    "type": "client"
+  }
+]
+

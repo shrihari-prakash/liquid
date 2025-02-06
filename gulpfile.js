@@ -5,7 +5,11 @@ import replace from "gulp-replace";
 import { deleteAsync } from "del";
 
 export function staticCopy() {
-  return gulp.src("./src/public/**/*").pipe(gulp.dest("build/public"));
+  return gulp.src(["./src/public/**/*", "!./src/public/images/**"]).pipe(gulp.dest("build/public"));
+}
+
+export function assetsCopy() {
+  return gulp.src(["./src/public/images/**"], { encoding: false }).pipe(gulp.dest("build/public/images"));
 }
 
 export function staticClean() {
@@ -18,8 +22,8 @@ export function staticCompile() {
     .pipe(debug({ title: "Ready for compile" }))
     .pipe(
       babel({
-        presets: ["@babel/react"]
-      })
+        presets: ["@babel/react"],
+      }),
     )
     .pipe(gulp.dest("./build/public/compiled"));
 }
@@ -33,5 +37,5 @@ export function staticSwapReactProduction() {
     .pipe(gulp.dest("./build/public"));
 }
 
-export const static_build = gulp.series(staticCopy, staticCompile, staticSwapReactProduction, staticClean);
+export const static_build = gulp.series(staticCopy, assetsCopy, staticCompile, staticSwapReactProduction, staticClean);
 

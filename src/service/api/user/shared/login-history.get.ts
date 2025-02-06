@@ -15,7 +15,7 @@ export const GET_LoginHistoryValidator = [
   query("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
 ];
 
-const GET_LoginHistory = async (req: Request, res: Response) => {
+const GET_LoginHistory = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:login-history:read", res)) {
       return;
@@ -31,7 +31,7 @@ const GET_LoginHistory = async (req: Request, res: Response) => {
     res.status(statusCodes.success).json(new SuccessResponse({ records }));
   } catch (err) {
     log.error(err);
-    return res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
+    res.status(statusCodes.internalError).json(new ErrorResponse(errorMessages.internalError));
   }
 };
 

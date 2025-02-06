@@ -1,7 +1,13 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
 import { countryCodes } from "../utils/country-codes.js";
-import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
+import {
+  errorTextTimeout,
+  getPlaceholder,
+  humanReadableToSnakeCase,
+  prepareAuthorizationParams,
+  useTitle,
+} from "../utils/utils.js";
 
 export default function SignUp() {
   const submitButtonText = i18next.t("button.signup");
@@ -99,6 +105,15 @@ export default function SignUp() {
         setSubmitting(false);
       });
   }
+
+  const handleSSOClick = (event) => {
+    event.preventDefault();
+    const authorizationParams = prepareAuthorizationParams(configuration);
+    const appName = humanReadableToSnakeCase(configuration["content.app-name"]);
+    sessionStorage.setItem(`${appName}.authorization-params`, JSON.stringify(authorizationParams));
+    const params = new URLSearchParams({ type: "signup" });
+    window.location = `/sso/google?${params.toString()}`;
+  };
 
   if (!configuration["privilege.can-create-account"]) {
     return null;
@@ -267,26 +282,32 @@ export default function SignUp() {
           value={buttonText}
         />
         {configuration["user.account-creation.sso.google.enabled"] && (
-          <a href={"/sso/google"} className="ghost-link">
+          <a onClick={handleSSOClick} className="ghost-link">
             <button type="button" disabled={submitting} className={"button outline"}>
-              <img src="/images/icon-google.png" alt="Google" height="20" /> {i18next.t("button.signup.google")}
+              <img src={`/images/google-icon-${theme === "light" ? "black" : "white"}.svg`} alt="Google" height="20" />
+              {i18next.t("button.signup.google")}
             </button>
           </a>
         )}
       </div>
       <div className="fineprint">
-        {(termsAndConditions || privacyPolicy) && "By clicking on Create Account, you"}
-        {termsAndConditions && (
-          <>
-            &nbsp;agree to the <a href={termsAndConditions}> terms & conditions</a> of {appName}
-            {!privacyPolicy && "."}
-          </>
-        )}
-        {privacyPolicy && (
-          <>
-            &nbsp;{termsAndConditions && "and "}
-            confirm that you've read our <a href={privacyPolicy}>privacy policy</a>.
-          </>
+        {(termsAndConditions || privacyPolicy) && i18next.t("message.terms-and-conditions")}
+        {(termsAndConditions || privacyPolicy) && (
+          <div className="policies-container">
+            {termsAndConditions && (
+              <a href={termsAndConditions} target="_blank">
+                {i18next.t("button.terms-of-use")}
+              </a>
+            )}
+            {termsAndConditions && privacyPolicy ? "•" : null}
+            {privacyPolicy && (
+              <>
+                <a href={privacyPolicy} target="_blank">
+                  {i18next.t("button.privacy-policy")}
+                </a>
+              </>
+            )}
+          </div>
         )}
       </div>
     </form>
