@@ -37,72 +37,84 @@ class GoogleStrategy {
     profile: Profile,
     cb: (err: Error | null, user: any) => void,
   ) => {
-    let type = GoogleLoginType.SIGNUP;
-    let state = req.query.state;
     try {
-      state = JSON.parse(state as string);
-      if ((state as { type: string }).type === GoogleLoginType.LOGIN) type = GoogleLoginType.LOGIN;
-    } catch {}
-    log.info("Google profile received: %o", profile);
-    if (!profile.emails || !profile.emails[0] || !profile.name || !profile.name.givenName || !profile.name.familyName) {
+      let type = GoogleLoginType.SIGNUP;
+      let state = req.query.state;
+      try {
+        state = JSON.parse(state as string);
+        if ((state as { type: string }).type === GoogleLoginType.LOGIN) type = GoogleLoginType.LOGIN;
+      } catch {}
+      log.info("Google profile received: %o", profile);
+      if (
+        !profile.emails ||
+        !profile.emails[0] ||
+        !profile.name ||
+        !profile.name.givenName ||
+        !profile.name.familyName
+      ) {
+        return cb(new Error("No email found in Google profile."), undefined);
+      }
+      const existingUser = await UserModel.findOne({ googleProfileId: profile.id }).lean();
+      let email = profile.emails[0].value;
+      if (existingUser) {
+        log.info("User found from Google profile.");
+        UserModel.updateOne(
+          { _id: existingUser._id },
+          { ssoEnabled: true, ssoProvider: "google", googleProfileId: profile.id, email },
+        ).exec();
+        Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user: existingUser }));
+        return cb(null, existingUser);
+      }
+      if (type === GoogleLoginType.LOGIN) return cb(null, {});
+      if (!Configuration.get("privilege.can-create-account")) {
+        log.warn("Account creation is disabled.");
+        return cb(new Error("Account creation is disabled."), undefined);
+      }
+      log.info("Creating user from Google profile.");
+      const role = Configuration.get("system.role.default");
+      const credits = Configuration.get("user.account-creation.initial-credit-count");
+      let customData = Configuration.get("user.account-creation.custom-data.default-value");
+      try {
+        JSON.parse(customData);
+      } catch {
+        customData = "{}";
+        log.warn("Invalid JSON found in `user.account-creation.custom-data.default-value`.");
+      }
+      let username = profile.username;
+      if (!username) {
+        username = generateFromEmail(email);
+        log.debug("Generated username from email: %s", username);
+      }
+      const isLengthOK = username.length >= 6 && username.length <= 32;
+      const isDuplicateUsername = await UserModel.findOne({ username }).lean();
+      log.debug("Duplicate username check: %o", isDuplicateUsername);
+      if (!isLengthOK || isDuplicateUsername) {
+        username = generateUsername("", 3);
+        log.debug("Generated unique username: %s", username);
+      }
+      const newUser = new UserModel({
+        email,
+        sanitizedEmail: sanitizeEmailAddress(email),
+        firstName: profile.name.givenName,
+        lastName: profile.name.familyName,
+        username,
+        emailVerified: true,
+        ssoEnabled: true,
+        ssoProvider: "google",
+        googleProfileId: profile.id,
+        scope: Configuration.get("user.account-creation.default-scope"),
+        creationIp: "0.0.0.0",
+        role,
+        credits,
+      });
+      const savedUser = await newUser.save();
+      Pusher.publish(new PushEvent(PushEventList.USER_CREATE, { user: savedUser }));
+      return cb(null, savedUser);
+    } catch (err) {
+      log.error("Error in GoogleStrategy.onVerify: %o", err);
+      log.error("Google profile: %o", profile);
       return cb(new Error("No email found in Google profile."), undefined);
     }
-    const existingUser = await UserModel.findOne({ googleProfileId: profile.id }).lean();
-    let email = profile.emails[0].value;
-    if (existingUser) {
-      log.info("User found from Google profile.");
-      UserModel.updateOne(
-        { _id: existingUser._id },
-        { ssoEnabled: true, ssoProvider: "google", googleProfileId: profile.id, email },
-      ).exec();
-      Pusher.publish(new PushEvent(PushEventList.USER_LOGIN, { user: existingUser }));
-      return cb(null, existingUser);
-    }
-    if (type === GoogleLoginType.LOGIN) return cb(null, {});
-    if (!Configuration.get("privilege.can-create-account")) {
-      log.warn("Account creation is disabled.");
-      return cb(new Error("Account creation is disabled."), undefined);
-    }
-    log.info("Creating user from Google profile.");
-    const role = Configuration.get("system.role.default");
-    const credits = Configuration.get("user.account-creation.initial-credit-count");
-    let customData = Configuration.get("user.account-creation.custom-data.default-value");
-    try {
-      JSON.parse(customData);
-    } catch {
-      customData = "{}";
-      log.warn("Invalid JSON found in `user.account-creation.custom-data.default-value`.");
-    }
-    let username = profile.username;
-    if (!username) {
-      username = generateFromEmail(email);
-      log.debug("Generated username from email: %s", username);
-    }
-    const isLengthOK = username.length >= 6 && username.length <= 32;
-    const isDuplicateUsername = await UserModel.findOne({ username }).lean();
-    log.debug("Duplicate username check: %o", isDuplicateUsername);
-    if (!isLengthOK || isDuplicateUsername) {
-      username = generateUsername("", 3);
-      log.debug("Generated unique username: %s", username);
-    }
-    const newUser = new UserModel({
-      email,
-      sanitizedEmail: sanitizeEmailAddress(email),
-      firstName: profile.name.givenName,
-      lastName: profile.name.familyName,
-      username,
-      emailVerified: true,
-      ssoEnabled: true,
-      ssoProvider: "google",
-      googleProfileId: profile.id,
-      scope: Configuration.get("user.account-creation.default-scope"),
-      creationIp: "0.0.0.0",
-      role,
-      credits,
-    });
-    const savedUser = await newUser.save();
-    Pusher.publish(new PushEvent(PushEventList.USER_CREATE, { user: savedUser }));
-    return cb(null, savedUser);
   };
 }
 
