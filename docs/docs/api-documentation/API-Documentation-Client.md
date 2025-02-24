@@ -222,13 +222,14 @@ Requires client authentication.
 
 #### URL
 
-**GET /user/client-api/user-info**
+**POST /user/client-api/retrieve-user-info**
 
-#### Query Parameters
+#### Request Body
 
-| Parameter | Type   | Description                      | Required / Optional |
-| --------- | ------ | -------------------------------- | ------------------- |
-| targets   | string | Comma separated list of user IDs | Required            |
+| Parameter | Type                                  | Description                 | Required / Optional |
+| --------- | ------------------------------------- | --------------------------- | ------------------- |
+| targets   | string                                | Array of user IDs or emails | Required            |
+| field     | boolean (\_id, email, sanitizedEmail) |                             | Optional            |
 
 #### Response Data Parameters
 
@@ -302,10 +303,10 @@ Read about custom data [here](/fields-and-attributes/Custom-Data)
 
 #### Request Body
 
-| Parameter        | Type   | Description                                                                 | Required / Optional |
-| ---------------- | ------ | --------------------------------------------------------------------------- | ------------------- |
-| target           | string | `_id` of the user.                                                          | Required            |
-| customData       | object | JSON data object                                                            | Required            |
+| Parameter  | Type   | Description        | Required / Optional |
+| ---------- | ------ | ------------------ | ------------------- |
+| target     | string | `_id` of the user. | Required            |
+| customData | object | JSON data object   | Required            |
 
 #### Request Sample (JSON)
 

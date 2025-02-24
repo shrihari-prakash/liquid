@@ -639,8 +639,8 @@ Requires delegated authentication.
 
 #### Request Body
 
-| Parameter | Type   | Description               | Required / Optional |
-| --------- | ------ | ------------------------- | ------------------- |
+| Parameter | Type   | Description                   | Required / Optional |
+| --------- | ------ | ----------------------------- | ------------------- |
 | target    | string | The ID of the role to delete. | Required            |
 
 #### Request Sample (JSON)
@@ -667,10 +667,10 @@ Requires delegated authentication.
 
 #### Error Responses
 
-| Error Code        | Description                        |
-| ----------------- | ---------------------------------- |
-| SystemRoleDelete  | The role is a system role and cannot be deleted. |
-| InternalError     | An internal server error occurred. |
+| Error Code       | Description                                      |
+| ---------------- | ------------------------------------------------ |
+| SystemRoleDelete | The role is a system role and cannot be deleted. |
+| InternalError    | An internal server error occurred.               |
 
 #### Error Response Samples
 
@@ -782,13 +782,14 @@ Requires delegated authentication.
 
 #### URL
 
-**GET /user/admin-api/user-info**
+**POST /user/admin-api/retrieve-user-info**
 
-#### Query Parameters
+#### Request Body
 
-| Parameter | Type   | Description                      | Required / Optional |
-| --------- | ------ | -------------------------------- | ------------------- |
-| targets   | string | Comma separated list of user IDs | Required            |
+| Parameter | Type                                  | Description                 | Required / Optional |
+| --------- | ------------------------------------- | --------------------------- | ------------------- |
+| targets   | string                                | Array of user IDs or emails | Required            |
+| field     | boolean (\_id, email, sanitizedEmail) |                             | Optional            |
 
 #### Response Data Parameters
 

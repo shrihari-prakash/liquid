@@ -11,7 +11,7 @@ import POST_Create, { POST_CreateValidator } from "../shared/create.post.js";
 import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post.js";
 import POST_InviteCodes, { POST_InviteCodesValidator } from "../shared/invite-codes.post.js";
 import GET_List from "../shared/list.get.js";
-import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get.js";
+import POST_RetrieveUserInfo, { POST_RetrieveUserInfoValidator } from "../shared/retrieve-user-info.post.js";
 import GET_EditableFields from "./editable-fields.get.js";
 import PATCH_Update, { PATCH_UpdateValidator } from "./update.patch.js";
 import GET_SubscriptionTiers from "../shared/subscription-tiers.get.js";
@@ -22,7 +22,7 @@ import POST_Search, { POST_SearchValidator } from "./search.post.js";
 
 const AdminApiRouter = express.Router();
 
-AdminApiRouter.get("/user-info", ...DelegatedAuthFlow, GET_UserInfoValidator, GET_UserInfo);
+AdminApiRouter.post("/retrieve-user-info", ...DelegatedAuthFlow, POST_RetrieveUserInfoValidator, POST_RetrieveUserInfo);
 AdminApiRouter.post("/access", ...DelegatedAuthFlow, POST_AccessValidator, POST_Access);
 AdminApiRouter.get("/editable-fields", ...DelegatedAuthFlow, GET_EditableFields);
 AdminApiRouter.patch("/update", ...DelegatedAuthFlow, PATCH_UpdateValidator, PATCH_Update);
