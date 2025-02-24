@@ -21,7 +21,7 @@ import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-his
 
 const ClientApiRouter = express.Router();
 
-ClientApiRouter.get("/user-info", ...ClientAuthFlow, POST_RetrieveUserInfoValidator, POST_RetrieveUserInfo);
+ClientApiRouter.post("/retrieve-user-info", ...ClientAuthFlow, POST_RetrieveUserInfoValidator, POST_RetrieveUserInfo);
 ClientApiRouter.post("/ban", ...ClientAuthFlow, POST_BanValidator, POST_Ban);
 ClientApiRouter.post("/credits", ...ClientAuthFlow, POST_CreditsValidator, POST_Credits);
 ClientApiRouter.post("/restrict", ...ClientAuthFlow, POST_RestrictValidator, POST_Restrict);
