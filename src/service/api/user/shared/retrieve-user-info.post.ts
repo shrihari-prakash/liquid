@@ -2,7 +2,7 @@ import { Logger } from "../../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/shared/user-info.get" });
 
 import { Request, Response } from "express";
-import { query } from "express-validator";
+import { body } from "express-validator";
 
 import { errorMessages, statusCodes } from "../../../../utils/http-status.js";
 import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
@@ -11,14 +11,19 @@ import { Configuration } from "../../../../singleton/configuration.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import { hydrateUserProfile } from "../../../../utils/user.js";
 
-export const GET_UserInfoValidator = [query("targets").exists().isString()];
+export const POST_RetrieveUserInfoValidator = [
+  body("targets").exists().isArray(),
+  body("targets.*").isString(),
+  body("field").optional().isIn(["_id", "email", "sanitizedEmail", "secondaryEmail"]),
+];
 
-const GET_UserInfo = async (req: Request, res: Response): Promise<void> => {
+const POST_RetrieveUserInfo = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:read", res)) {
       return;
     }
-    const targets = (req.query.targets as string).split(",");
+    const field = (req.body.field as string) || "_id";
+    const targets = req.body.targets as string[];
     const isClient = res.locals.user.isClient;
     if (targets.length > (Configuration.get("get-user-max-items") as number)) {
       res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
@@ -26,7 +31,7 @@ const GET_UserInfo = async (req: Request, res: Response): Promise<void> => {
     }
     const users = (await UserModel.find(
       {
-        _id: { $in: targets },
+        [field]: { $in: targets },
       },
       isClient ? UserClientProjection : UserAdminProjection,
     )
@@ -40,5 +45,5 @@ const GET_UserInfo = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export default GET_UserInfo;
+export default POST_RetrieveUserInfo;
 

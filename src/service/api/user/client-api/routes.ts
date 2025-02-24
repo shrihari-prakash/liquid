@@ -10,7 +10,7 @@ import POST_Credits, { POST_CreditsValidator } from "../shared/credits.post.js";
 import POST_Access, { POST_AccessValidator } from "../shared/access.post.js";
 import POST_InviteCodes, { POST_InviteCodesValidator } from "../shared/invite-codes.post.js";
 import GET_FollowStatus, { GET_FollowStatusValidator } from "./follow-status.get.js";
-import GET_UserInfo, { GET_UserInfoValidator } from "../shared/user-info.get.js";
+import POST_RetrieveUserInfo, { POST_RetrieveUserInfoValidator } from "../shared/retrieve-user-info.post.js";
 import GET_UserFollowers, { GET_UserFollowersValidator } from "./user-followers.get.js";
 import GET_UserFollowing, { GET_UserFollowingValidator } from "./user-following.get.js";
 import GET_BlockStatus, { GET_BlockStatusValidator } from "./block-status.get.js";
@@ -21,7 +21,7 @@ import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-his
 
 const ClientApiRouter = express.Router();
 
-ClientApiRouter.get("/user-info", ...ClientAuthFlow, GET_UserInfoValidator, GET_UserInfo);
+ClientApiRouter.get("/user-info", ...ClientAuthFlow, POST_RetrieveUserInfoValidator, POST_RetrieveUserInfo);
 ClientApiRouter.post("/ban", ...ClientAuthFlow, POST_BanValidator, POST_Ban);
 ClientApiRouter.post("/credits", ...ClientAuthFlow, POST_CreditsValidator, POST_Credits);
 ClientApiRouter.post("/restrict", ...ClientAuthFlow, POST_RestrictValidator, POST_Restrict);
