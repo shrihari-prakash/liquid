@@ -20,26 +20,36 @@ const keyGenerator = (req: Request) => {
   return `${req.ip}-${req.method}-${req.path}`;
 };
 
-if (Configuration.get("privilege.can-use-cache")) {
-  standardOpts.store = new RedisStore({
-    prefix: "rate_limiter:",
-    // @ts-expect-error - Known issue: the `call` function is not present in @types/ioredis
-    sendCommand: (...args: string[]) => Redis.client.call(...args),
-  });
-}
-
 if (Configuration.get("system.rate-limit.count-by-route")) {
   log.info(
-    "API hits for rate limiting is counted per route for any given IP instead of a global counter. If you'd like to have a single counter per IP, disable the option `system.rate-limit.count-by-route`."
+    "API hits for rate limiting is counted per route for any given IP instead of a global counter. If you'd like to have a single counter per IP, disable the option `system.rate-limit.count-by-route`.",
   );
   standardOpts.keyGenerator = keyGenerator;
 }
 
+const rateLimiterSettings: { [key: string]: any } = {
+  LIGHT: { max: Configuration.get("system.rate-limit.light-api-max-limit"), ...standardOpts },
+  MEDIUM: { max: Configuration.get("system.rate-limit.medium-api-max-limit"), ...standardOpts },
+  HEAVY: { max: Configuration.get("system.rate-limit.heavy-api-max-limit"), ...standardOpts },
+  EXTREME: { max: Configuration.get("system.rate-limit.extreme-api-max-limit"), ...standardOpts },
+};
+
+if (Configuration.get("privilege.can-use-cache")) {
+  log.info("Rate limiter is using Redis for storing rate limit data.");
+  for (const key in rateLimiterSettings) {
+    rateLimiterSettings[key].store = new RedisStore({
+      prefix: `rate_limiter:${key}:`,
+      // @ts-expect-error - Known issue: the `call` function is not present in @types/ioredis
+      sendCommand: (...args: string[]) => Redis.client.call(...args),
+    });
+  }
+}
+
 export const RateLimiter = {
-  LIGHT: rateLimit({ max: Configuration.get("system.rate-limit.light-api-max-limit"), ...standardOpts }),
-  MEDIUM: rateLimit({ max: Configuration.get("system.rate-limit.medium-api-max-limit"), ...standardOpts }),
-  HEAVY: rateLimit({ max: Configuration.get("system.rate-limit.heavy-api-max-limit"), ...standardOpts }),
-  EXTREME: rateLimit({ max: Configuration.get("system.rate-limit.extreme-api-max-limit"), ...standardOpts }),
+  LIGHT: rateLimit(rateLimiterSettings.LIGHT),
+  MEDIUM: rateLimit(rateLimiterSettings.MEDIUM),
+  HEAVY: rateLimit(rateLimiterSettings.HEAVY),
+  EXTREME: rateLimit(rateLimiterSettings.EXTREME),
 };
 
 export function activateRateLimiters(app: any) {
