@@ -25,7 +25,6 @@ const POST_Search = async (req: Request, res: Response): Promise<void> => {
     if (hasErrors(req, res)) return;
     const query = req.body.query;
     const startTime = +new Date();
-    console.log(Redis);
     let cacheResults: any = await Redis.get(`${redisPrefix}${query}`);
     if (cacheResults) {
       cacheResults = JSON.parse(cacheResults);

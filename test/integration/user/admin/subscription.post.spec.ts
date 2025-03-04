@@ -53,7 +53,6 @@ describe("admin-api.subscriptions.post", () => {
       .post("/user/admin-api/retrieve-user-info")
       .send({ targets: [MemoryStore.users.user2._id] })
       .set({ Authorization: `Bearer john_doe_access_token` });
-    console.log(userInfoResponse.body);
     const user2: any = userInfoResponse.body.data.users[0];
     chai.expect(user2.isSubscribed).to.eql(false);
     chai.expect(user2.subscriptionTier).to.eql("basic");
