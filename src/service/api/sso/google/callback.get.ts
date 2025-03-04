@@ -14,7 +14,7 @@ const GET_GoogleCallback = async (req: Request, res: Response): Promise<void> =>
   try {
     const user = req.user as UserInterface;
     if (!user || !user._id) {
-      console.log("user not found");
+      log.info("user not found");
       const params = new URLSearchParams({ message: "error.account-does-not-exist" });
       return res.redirect(`/not-found?${params.toString()}`);
     }
