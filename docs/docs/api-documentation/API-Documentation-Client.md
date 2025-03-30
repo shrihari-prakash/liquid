@@ -280,6 +280,80 @@ Requires client authentication.
 
 <details>
 <summary>
+### Update User Info
+<br/>
+Updates a user's profile details.
+</summary>
+
+#### Authentication
+
+Requires delegated authentication.
+
+#### Scope
+
+- `client:profile:write`
+- `client:profile:sensitive:extreme:write`
+- `client:profile:sensitive:high:write`
+- `client:profile:sensitive:medium:write`
+- `client:profile:sensitive:low:write`
+
+#### Before You Start
+
+Read about editing users [here](/fields-and-attributes/All-Fields#updating-fields)
+
+#### URL
+
+**PATCH /user/client-api/update**
+
+#### Request Body
+
+| Parameter        | Type   | Description                                                                 | Required / Optional |
+| ---------------- | ------ | --------------------------------------------------------------------------- | ------------------- |
+| target           | string | `_id` of the user.                                                          | Optional            |
+| username         | string | Username for the user. Contains text, numbers and \_ and at least 8 letters | Optional            |
+| firstName        | string | First name of the user.                                                     | Optional            |
+| lastName         | string | Last name of the user.                                                      | Optional            |
+| email            | string | Email address of the user.                                                  | Optional            |
+| password         | string | Password for the user.                                                      | Optional            |
+| role             | string | Role of the user.                                                           | Optional            |
+| phoneCountryCode | string | Valid country code.                                                         | Optional            |
+| phone            | string | Phone number of the user.                                                   | Optional            |
+
+#### Request Sample (JSON)
+
+```json
+[
+  {
+    "username": "john_doe",
+    "firstName": "John",
+    "lastName": "Doe",
+    "role": "user",
+    "phoneCountryCode": "+00",
+    "phone": "0000000000",
+    "email": "user@example.com",
+    "password": "$uper&ecurePassw0rd"
+  }
+]
+```
+
+#### Response Parameters
+
+| Parameter | Type    | Description |
+| --------- | ------- | ----------- |
+| ok        | integer | 0 or 1      |
+
+#### Response Sample
+
+```json
+{
+  "ok": 1
+}
+```
+
+</details>
+
+<details>
+<summary>
 ### Update User Custom Data
 <br/>
 Updates a user's custom data.
@@ -291,7 +365,7 @@ Requires delegated authentication.
 
 #### Scope
 
-`admin:profile:custom-data:write`
+`client:profile:custom-data:write`
 
 #### Before You Start
 

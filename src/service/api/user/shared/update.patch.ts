@@ -17,6 +17,7 @@ import { isRoleRankHigher } from "../../../../utils/role.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import { Role } from "../../../../singleton/role.js";
 import { flushUserInfoFromRedis } from "../../../../model/oauth/cache.js";
+import { isApplicationClient } from "../../../../model/oauth/utils.js";
 
 export const PATCH_UpdateValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -24,7 +25,7 @@ export const PATCH_UpdateValidator = [
 ];
 
 const PATCH_Update = async (req: Request, res: Response): Promise<void> => {
-  if (!ScopeManager.isScopeAllowedForSession("admin:profile:write", res)) {
+  if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:profile:write", res)) {
     return;
   }
   try {
@@ -33,12 +34,21 @@ const PATCH_Update = async (req: Request, res: Response): Promise<void> => {
     delete req.body.target;
     const errors: any[] = [];
     const fields = Object.keys(req.body);
+    const currentUser = res.locals.oauth.token.user;
     // Any field name is invalid or is not editable by configuration value.
     for (let i = 0; i < fields.length; i++) {
       let field = fields[i];
-      if (!Configuration.get("admin-api.user.profile.editable-fields").includes(field)) {
-        errors.push({ msg: "Invalid value", param: field, location: "body" });
+      const invalidFieldError = { msg: "Invalid value", param: field, location: "body" };
+      if (isApplicationClient(currentUser)) {
+        if (!Configuration.get("client-api.user.profile.editable-fields").includes(field)) {
+          errors.push(invalidFieldError);
+        }
+      } else {
+        if (!Configuration.get("admin-api.user.profile.editable-fields").includes(field)) {
+          errors.push(invalidFieldError);
+        }
       }
+
       if (req.body[field] === "__unset__") {
         req.body[field] = null;
       }
@@ -52,10 +62,7 @@ const PATCH_Update = async (req: Request, res: Response): Promise<void> => {
       let field = fields[i];
       const fieldSensitivityScore = userSchema[field as keyof typeof userSchema]?.sensitivityScore?.write;
       if (
-        !ScopeManager.isScopeAllowed(
-          `admin:profile:sensitive:${fieldSensitivityScore}:write`,
-          res.locals?.oauth?.token?.scope,
-        )
+        !ScopeManager.isScopeAllowedForSharedSession(`<ENTITY>:profile:sensitive:${fieldSensitivityScore}:write`, res)
       ) {
         res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges, { field }));
         return;
@@ -65,17 +72,25 @@ const PATCH_Update = async (req: Request, res: Response): Promise<void> => {
     const target = (await UserModel.findOne({ _id: userId })) as unknown as UserInterface;
     // Allow changing data only upto the current user's role score.
     if (!isRoleRankHigher(currentUserRole, target.role) && currentUserRole !== Role.SystemRoles.SUPER_ADMIN) {
-      res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+      res.status(statusCodes.unauthorized).json(
+        new ErrorResponse(errorMessages.insufficientPrivileges, {
+          message: "Your role is not ranked high enough to edit this user.",
+        }),
+      );
       return;
     }
     const role = req.body.role;
     if (role) {
-      if (!Role.isValidRole(role)) {
+      if (!(await Role.isValidRole(role))) {
         res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
         return;
       }
       if (!isRoleRankHigher(currentUserRole, role) && currentUserRole !== Role.SystemRoles.SUPER_ADMIN) {
-        res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.insufficientPrivileges));
+        res.status(statusCodes.unauthorized).json(
+          new ErrorResponse(errorMessages.insufficientPrivileges, {
+            message: "The role you are trying to set is higher than your current role.",
+          }),
+        );
         return;
       }
     }
