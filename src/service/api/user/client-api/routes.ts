@@ -18,6 +18,8 @@ import GET_List from "../shared/list.get.js";
 import GET_InviteCodes, { GET_InviteCodesValidator } from "../shared/invite-codes.get.js";
 import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.put.js";
 import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get.js";
+import PATCH_Update, { PATCH_UpdateValidator } from "../shared/update.patch.js";
+import GET_EditableFields from "../shared/editable-fields.get.js";
 
 const ClientApiRouter = express.Router();
 
@@ -30,6 +32,8 @@ ClientApiRouter.get("/block-status", ...ClientAuthFlow, GET_BlockStatusValidator
 ClientApiRouter.post("/create", ...ClientAuthFlow, POST_CreateValidator, POST_Create);
 ClientApiRouter.get("/list", ...ClientAuthFlow, GET_List);
 ClientApiRouter.post("/access", ...ClientAuthFlow, POST_AccessValidator, POST_Access);
+ClientApiRouter.get("/editable-fields", ...ClientAuthFlow, GET_EditableFields);
+ClientApiRouter.patch("/update", ...ClientAuthFlow, PATCH_UpdateValidator, PATCH_Update);
 ClientApiRouter.put("/custom-data", ...ClientAuthFlow, PUT_CustomDataValidator, PUT_CustomData);
 ClientApiRouter.get("/login-history", ...ClientAuthFlow, GET_LoginHistoryValidator, GET_LoginHistory);
 

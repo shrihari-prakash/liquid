@@ -277,6 +277,41 @@
     "parent": "client:profile:write"
   },
   {
+    "name": "client:profile:sensitive:all",
+    "description": "Read and write to all levels sensitive fields of users.",
+    "parent": "client:all"
+  },
+  {
+    "name": "client:profile:sensitive:read",
+    "description": "Read all levels of sensitive fields of users.",
+    "parent": "client:profile:sensitive:all"
+  },
+  {
+    "name": "client:profile:sensitive:write",
+    "description": "Modify all levels of sensitive fields of users.",
+    "parent": "client:profile:sensitive:all"
+  },
+  {
+    "name": "client:profile:sensitive:low:write",
+    "description": "Modify low level sensitive fields of users.",
+    "parent": "client:profile:sensitive:write"
+  },
+  {
+    "name": "client:profile:sensitive:medium:write",
+    "description": "Modify medium level sensitive fields of users.",
+    "parent": "client:profile:sensitive:write"
+  },
+  {
+    "name": "client:profile:sensitive:high:write",
+    "description": "Modify high level sensitive fields of users.",
+    "parent": "client:profile:sensitive:write"
+  },
+  {
+    "name": "client:profile:sensitive:extreme:write",
+    "description": "Modify extreme level sensitive fields of users.",
+    "parent": "client:profile:sensitive:write"
+  },
+  {
     "name": "admin:all",
     "description": "View and manage user accounts in the system using admin APIs.",
     "parent": "*"

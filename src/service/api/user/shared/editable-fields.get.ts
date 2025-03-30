@@ -8,18 +8,30 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import { ScopeManager } from "../../../../singleton/scope-manager.js";
 import { userSchema } from "../../../../model/mongo/user.js";
+import { isApplicationClient } from "../../../../model/oauth/utils.js";
 
 const GET_EditableFields = async (_: Request, res: Response): Promise<void> => {
   try {
-    if (!ScopeManager.isScopeAllowedForSession("admin:configuration:read", res)) {
+    if (!ScopeManager.isScopeAllowedForSharedSession("<ENTITY>:configuration:read", res)) {
       return;
     }
-    const editableFieldsFromConfig = Configuration.get("admin-api.user.profile.editable-fields");
+    let editableFieldsFromConfig = [];
+    const currentUser = res.locals.oauth.token.user;
+    if (isApplicationClient(currentUser)) {
+      editableFieldsFromConfig = Configuration.get("client-api.user.profile.editable-fields");
+    } else {
+      editableFieldsFromConfig = Configuration.get("admin-api.user.profile.editable-fields");
+    }
     const editableFields = [];
     for (let i = 0; i < editableFieldsFromConfig.length; i++) {
       let field = editableFieldsFromConfig[i];
-      const fieldSensitivityScore = userSchema[(field as keyof typeof userSchema)]?.sensitivityScore?.write;
-      if (ScopeManager.isScopeAllowed(`admin:profile:sensitive:${fieldSensitivityScore}:write`, res.locals?.oauth?.token?.scope)) {
+      const fieldSensitivityScore = userSchema[field as keyof typeof userSchema]?.sensitivityScore?.write;
+      if (
+        ScopeManager.isScopeAllowed(
+          `${isApplicationClient(currentUser) ? "client" : "admin"}:profile:sensitive:${fieldSensitivityScore}:write`,
+          res.locals?.oauth?.token?.scope,
+        )
+      ) {
         editableFields.push(field);
       }
     }
@@ -31,3 +43,4 @@ const GET_EditableFields = async (_: Request, res: Response): Promise<void> => {
 };
 
 export default GET_EditableFields;
+
