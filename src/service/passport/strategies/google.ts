@@ -45,14 +45,17 @@ class GoogleStrategy {
         if ((state as { type: string }).type === GoogleLoginType.LOGIN) type = GoogleLoginType.LOGIN;
       } catch {}
       log.info("Google profile received: %o", profile);
-      if (
-        !profile.emails ||
-        !profile.emails[0] ||
-        !profile.name ||
-        !profile.name.givenName ||
-        !profile.name.familyName
-      ) {
-        return cb(new Error("No email found in Google profile."), undefined);
+      if (!profile.emails || !profile.emails[0]) {
+        return cb(new Error("Google profile does not contain a primary email address."), undefined);
+      }
+      if (!profile.name) {
+        return cb(new Error("Google profile does not contain name information."), undefined);
+      }
+      if (!profile.name.givenName) {
+        return cb(new Error("Google profile does not contain a given name."), undefined);
+      }
+      if (!profile.name.familyName) {
+        return cb(new Error("Google profile does not contain a family name."), undefined);
       }
       const existingUser = await UserModel.findOne({ googleProfileId: profile.id }).lean();
       let email = profile.emails[0].value;
