@@ -76,7 +76,7 @@ Verify delegated tokens.
 
 Any other microservice in your application apart from Liquid that need to provide an authentication to the frontend will use this API. For instance, let's say a chat service in your system needs to verify the user is authenticated to access your application. You will call this API with the Liquid access token and it would return the user information after verifying the authenticity of the token. The API also returns the scopes allowed for the token. Using all this information, you can choose to allow or disallow access to your chat API.
 
-For microservices running on node, use the [Liquid Node Connector](https://www.npmjs.com/package/liquid-node-connector). This will already use introspect API under the hood and makes your integration much easier.
+For microservices running on node, use the [Liquid Node Authenticator](https://www.npmjs.com/package/liquid-node-authenticator). This will already use introspect API under the hood and makes your integration much easier.
 
 For more information, see [Understanding Access Control and Integrating with Other Microservices](/Understanding-Access-Control-and-Integrating-with-Other-Microservices)
 

@@ -307,7 +307,7 @@
     "name": "system.email-adapter",
     "displayName": "System Email Adapter",
     "envName": "SYSTEM_EMAIL_ADAPTER",
-    "description": "Specifies the adapter to use to send emails to users. Possible values are `nodemailer`, `sendgrid`, `print`",
+    "description": "Specifies the adapter to use to send emails to users. Possible values are `nodemailer`, `sendgrid`, 'ses', `print`",
     "type": "string",
     "default": "sendgrid",
     "relatedOptions": ["nodemailer.*", "sendgrid.*"]
@@ -396,13 +396,37 @@
     "relatedOptions": ["sendgrid.*", "system.email-adapter"]
   },
   {
+    "name": "aws.ses.region",
+    "displayName": "AWS SES Region",
+    "envName": "AWS_SES_REGION",
+    "description": "AWS region for SES client.",
+    "type": "string",
+    "relatedOptions": ["aws.ses.access-key-id", "aws.ses.access-key-secret"]
+  },
+  {
+    "name": "aws.ses.access-key-id",
+    "displayName": "AWS SES Access Key ID",
+    "envName": "AWS_SES_ACCESS_KEY_ID",
+    "description": "AWS access key ID for SES client.",
+    "type": "string",
+    "relatedOptions": ["aws.ses.region", "aws.ses.access-key-secret"]
+  },
+  {
+    "name": "aws.ses.access-key-secret",
+    "displayName": "AWS SES Access Key Secret",
+    "envName": "AWS_SES_ACCESS_KEY_SECRET",
+    "description": "AWS access key secret for SES client.",
+    "type": "string",
+    "relatedOptions": ["aws.ses.region", "aws.ses.access-key-id"]
+  },
+  {
     "name": "email.outbound-address",
     "displayName": "Email Outbound Address",
     "envName": "EMAIL_OUTBOUND_ADDRESS",
     "description": "Email address to be used for outgoing emails from the system. This option is preferred over `sendgrid.outbound-email-address`",
     "type": "string",
     "default": "liquid@example.com",
-    "relatedOptions": ["nodemailer.*", "sendgrid.*", "system.email-adapter"]
+    "relatedOptions": ["nodemailer.*", "sendgrid.*", "aws.ses.*", "system.email-adapter"]
   },
   {
     "name": "email.verification-template",
@@ -1236,3 +1260,4 @@
     ]
   }
 ]
+

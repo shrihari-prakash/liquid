@@ -4,8 +4,9 @@ const log = Logger.getLogger().child({ from: "mailer" });
 import sgMail from "@sendgrid/mail";
 import nodemailer from "nodemailer";
 import * as path from "path";
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from "url";
 import * as fs from "fs";
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
 import { Configuration } from "../../singleton/configuration.js";
 import { UserInterface } from "../../model/mongo/user.js";
@@ -20,6 +21,7 @@ const Modes = {
   PRINT: "print",
   SENDGRID: "sendgrid",
   NODEMAILER: "nodemailer",
+  SES: "ses",
 };
 
 interface Email {
@@ -38,9 +40,11 @@ interface Email {
 export class Mailer {
   mode = Modes.PRINT;
   transporter?: ReturnType<typeof nodemailer.createTransport>;
+  sesClient?: SESClient;
   adapter = Configuration.get("system.email-adapter");
 
   public initialize(app: any) {
+    log.debug("System outbound email address: %s", Configuration.get("email.outbound-address"));
     if (this.adapter === Modes.SENDGRID) {
       this.mode = Modes.SENDGRID;
       sgMail.setApiKey(Configuration.get("sendgrid.api-key") as string);
@@ -69,6 +73,16 @@ export class Mailer {
           log.info("Nodemailer is ready.");
         }
       });
+    } else if (this.adapter === Modes.SES) {
+      this.mode = Modes.SES;
+      this.sesClient = new SESClient({
+        region: Configuration.get("aws.ses.region") as string,
+        credentials: {
+          accessKeyId: Configuration.get("aws.ses.access-key-id") as string,
+          secretAccessKey: Configuration.get("aws.ses.access-key-secret") as string,
+        },
+      });
+      log.info("AWS SES client initialized");
     }
     log.info("Mailer initialized in %s mode. ", this.mode);
   }
@@ -85,6 +99,41 @@ export class Mailer {
     } else if (this.mode === Modes.NODEMAILER) {
       (email.from as any) = `${email.from.name} <${email.from.email}>`;
       await (this.transporter as ReturnType<typeof nodemailer.createTransport>).sendMail(email as any);
+    } else if (this.mode === Modes.SES) {
+      const command = new SendEmailCommand({
+        Source: `${email.from.name} <${email.from.email}>`,
+        Destination: {
+          ToAddresses: [email.to],
+        },
+        Message: {
+          Subject: {
+            Data: email.subject,
+            Charset: "UTF-8",
+          },
+          Body: {
+            ...(email.html && {
+              Html: {
+                Data: email.html,
+                Charset: "UTF-8",
+              },
+            }),
+            ...(email.text && {
+              Text: {
+                Data: email.text,
+                Charset: "UTF-8",
+              },
+            }),
+          },
+        },
+      });
+
+      try {
+        await this.sesClient?.send(command);
+        log.info("Email sent successfully with AWS SES");
+      } catch (error) {
+        log.error("Error sending email with AWS SES:", error);
+        throw error;
+      }
     } else {
       log.info("%o", email);
     }
@@ -132,3 +181,4 @@ export class Mailer {
     return code;
   }
 }
+
