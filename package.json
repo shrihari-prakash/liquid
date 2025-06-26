@@ -6,7 +6,9 @@
   "type": "module",
   "browserslist": "> 0.25%, not dead",
   "scripts": {
-    "test": "mocha -r tsx 'test/integration/**/*.spec.ts' --exit --recursive --require test/integration/tester.spec.ts",
+    "test": "mocha -r tsx 'test/integration/**/*.spec.ts' --exit --recursive --require test/integration/tester.spec.ts --timeout 10000",
+    "test:unit": "mocha -r tsx 'test/unit/**/*.spec.ts' --exit --recursive --require test/unit/setup.ts --timeout 5000",
+    "test:all": "npm run test:unit && npm test",
     "start": "concurrently \"nodemon --inspect\" \"npx babel --watch ./src/public/components --out-dir ./src/public/compiled --presets @babel/preset-react\"",
     "build": "npm run build:server && npm run build:static",
     "copy-files": "copyfiles -u 1 \"src/**/*.yaml\" \"src/**/*.html\" \"src/**/*.json\" \"src/VERSION\" build/ && npm run copy-package-json",
@@ -36,6 +38,7 @@
     "@types/nodemailer": "^6.4.17",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
+    "@types/sinon-chai": "^3.2.12",
     "@types/uuid": "^10.0.0",
     "chai": "^4.4.1",
     "chai-http": "^4.3.0",
@@ -51,6 +54,7 @@
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
+    "sinon-chai": "^3.2.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   },
