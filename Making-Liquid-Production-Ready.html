@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.5.2">
 <title data-rh="true">Making Liquid Production Ready | Liquid</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://liquid.shrihariprakash.in/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://liquid.shrihariprakash.in/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://liquid.shrihariprakash.in/Making-Liquid-Production-Ready"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Making Liquid Production Ready | Liquid"><meta data-rh="true" name="description" content="Important backend configurations to update"><meta data-rh="true" property="og:description" content="Important backend configurations to update"><link data-rh="true" rel="icon" href="/img/liquid-icon-mini.png"><link data-rh="true" rel="canonical" href="https://liquid.shrihariprakash.in/Making-Liquid-Production-Ready"><link data-rh="true" rel="alternate" href="https://liquid.shrihariprakash.in/Making-Liquid-Production-Ready" hreflang="en"><link data-rh="true" rel="alternate" href="https://liquid.shrihariprakash.in/Making-Liquid-Production-Ready" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.f71b67dc.css">
-<script src="/assets/js/runtime~main.e11fe22d.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.45c76b18.js" defer="defer"></script>
 <script src="/assets/js/main.49164da5.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -12,44 +12,51 @@
 <p>To make Liquid production ready, there are a few recommended configurations to be done on the backend side:</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="cookie-configurations">Cookie Configurations:<a href="#cookie-configurations" class="hash-link" aria-label="Direct link to Cookie Configurations:" title="Direct link to Cookie Configurations:">​</a></h3>
 <ul>
-<li>Set <em><strong>cookie-session-secret</strong></em> to a secure random string. You can use <a href="https://www.uuidgenerator.net/guid" target="_blank" rel="noopener noreferrer">this tool</a> to generate one.</li>
-<li>Set <em><strong>cookie.secure</strong></em> to true.</li>
+<li>Set <strong><em>cookie-session-secret</em></strong> to a secure random string. You can use <a href="https://www.uuidgenerator.net/guid" target="_blank" rel="noopener noreferrer">this tool</a> to generate one.</li>
+<li>Set <strong><em>cookie.secure</em></strong> to true.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="core-environmental-configurations">Core Environmental Configurations:<a href="#core-environmental-configurations" class="hash-link" aria-label="Direct link to Core Environmental Configurations:" title="Direct link to Core Environmental Configurations:">​</a></h3>
 <ul>
-<li>Set <em><strong>system.reverse-proxy-mode</strong></em> to true if you intend to use a reverse proxy like Nginx.</li>
-<li>Set <em><strong>environment</strong></em> to production.</li>
+<li>Set <strong><em>system.reverse-proxy-mode</em></strong> to true if you intend to use a reverse proxy like Nginx.</li>
+<li>Set <strong><em>environment</em></strong> to production.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="account-creation-and-email-adapter-configurations">Account Creation and Email Adapter Configurations:<a href="#account-creation-and-email-adapter-configurations" class="hash-link" aria-label="Direct link to Account Creation and Email Adapter Configurations:" title="Direct link to Account Creation and Email Adapter Configurations:">​</a></h3>
 <ul>
-<li>Set <em><strong>email.outbound-address</strong></em> to the email address that you intend to send emails to users from. It is important that this address matches the email address configured in your mail adapter.</li>
-<li>Set <em><strong>user.account-creation.require-email-verification</strong></em> to true.</li>
-<li>Set <em><strong>privilege.can-reset-password</strong></em> to true.</li>
+<li>Set <strong><em>email.outbound-address</em></strong> to the email address that you intend to send emails to users from. It is important that this address matches the email address configured in your mail adapter.</li>
+<li>Set <strong><em>user.account-creation.require-email-verification</em></strong> to true.</li>
+<li>Set <strong><em>privilege.can-reset-password</em></strong> to true.</li>
 </ul>
 <p>To send outbound emails from Liquid, say, for account verification and password reset, you can either use a Sendgrid account or your own SMTP server by configuring Nodemailer.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="using-sendgrid">Using Sendgrid:<a href="#using-sendgrid" class="hash-link" aria-label="Direct link to Using Sendgrid:" title="Direct link to Using Sendgrid:">​</a></h4>
-<ul>
-<li>Set <em><strong>system.email-adapter</strong></em> to <em><strong>sendgrid</strong></em>.</li>
-<li>Set <em><strong>sendgrid.api-key</strong></em> to your SendGrid API key.</li>
-</ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="using-nodemailer">Using Nodemailer:<a href="#using-nodemailer" class="hash-link" aria-label="Direct link to Using Nodemailer:" title="Direct link to Using Nodemailer:">​</a></h4>
 <ul>
-<li>Set <em><strong>system.email-adapter</strong></em> to <code>nodemailer</code>.</li>
-<li>Set <em><strong>nodemailer.service-name</strong></em> to <code>gmail</code> or <code>outlook</code> if you use those services. Do not set if you are using a custom SMTP server.</li>
-<li>Set <em><strong>nodemailer.host</strong></em> to your SMTP server host.</li>
-<li>Set <em><strong>nodemailer.port</strong></em> to your SMTP server port.</li>
-<li>Set <em><strong>nodemailer.secure</strong></em> to true if your SMTP server uses a secure connection.</li>
-<li>Set <em><strong>nodemailer.username</strong></em> to the username of your SMTP account.</li>
-<li>Set <em><strong>nodemailer.password</strong></em> to the password of your SMTP account.</li>
+<li>Set <strong><em>system.email-adapter</em></strong> to <code>nodemailer</code>.</li>
+<li>Set <strong><em>nodemailer.service-name</em></strong> to <code>gmail</code> or <code>outlook</code> if you use those services. Do not set if you are using a custom SMTP server.</li>
+<li>Set <strong><em>nodemailer.host</em></strong> to your SMTP server host.</li>
+<li>Set <strong><em>nodemailer.port</em></strong> to your SMTP server port.</li>
+<li>Set <strong><em>nodemailer.secure</em></strong> to true if your SMTP server uses a secure connection.</li>
+<li>Set <strong><em>nodemailer.username</em></strong> to the username of your SMTP account.</li>
+<li>Set <strong><em>nodemailer.password</em></strong> to the password of your SMTP account.</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="using-amazon-ses">Using Amazon SES:<a href="#using-amazon-ses" class="hash-link" aria-label="Direct link to Using Amazon SES:" title="Direct link to Using Amazon SES:">​</a></h4>
+<ul>
+<li>Set <strong><em>system.email-adapter</em></strong> to <code>ses</code>.</li>
+<li>Set <strong><em>aws.ses.region</em></strong> to your AWS region.</li>
+<li>Set the <strong><em>aws.ses.access-key-id</em></strong>.</li>
+<li>Set the <strong><em>aws.ses.access-key-secret</em></strong>.</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="using-sendgrid">Using Sendgrid:<a href="#using-sendgrid" class="hash-link" aria-label="Direct link to Using Sendgrid:" title="Direct link to Using Sendgrid:">​</a></h4>
+<ul>
+<li>Set <strong><em>system.email-adapter</em></strong> to <code>sendgrid</code>.</li>
+<li>Set <strong><em>sendgrid.api-key</em></strong> to your SendGrid API key.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="caching">Caching:<a href="#caching" class="hash-link" aria-label="Direct link to Caching:" title="Direct link to Caching:">​</a></h3>
 <ul>
-<li>Set <em><strong>privilege.can-use-cache</strong></em> to true.</li>
-<li>Set <em><strong>redis.port</strong></em>, <em><strong>redis.host</strong></em>, <em><strong>redis.username</strong></em>, <em><strong>redis.password</strong></em>, and <em><strong>redis.db</strong></em>.</li>
+<li>Set <strong><em>privilege.can-use-cache</em></strong> to true.</li>
+<li>Set <strong><em>redis.port</em></strong>, <strong><em>redis.host</em></strong>, <strong><em>redis.username</em></strong>, <strong><em>redis.password</em></strong>, and <strong><em>redis.db</em></strong>.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="database">Database:<a href="#database" class="hash-link" aria-label="Direct link to Database:" title="Direct link to Database:">​</a></h3>
 <ul>
-<li>Set <em><strong>mongo-db.connection-string</strong></em> to your MongoDB URL.</li>
+<li>Set <strong><em>mongo-db.connection-string</em></strong> to your MongoDB URL.</li>
 </ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="recommended-configurations-for-mongodb">Recommended configurations for MongoDB<a href="#recommended-configurations-for-mongodb" class="hash-link" aria-label="Direct link to Recommended configurations for MongoDB" title="Direct link to Recommended configurations for MongoDB">​</a></h2>
 <p>In a production setup, we recommend turning on transactions by setting the option <code>mongo-db.use-transactions</code> to true. This makes sure API calls with multiple write operations don&#x27;t result in inconsistent database states if some of them fail and some of them succeed.</p>
@@ -57,8 +64,8 @@
 <p>To reduce the amount of spam accounts, Liquid has an IP based user account creation throttling mechanism.</p>
 <p>Use the following options to adjust this throttling:</p>
 <ul>
-<li>Set <em><strong>user.account-creation.enable-ip-based-throttle</strong></em> to <code>true</code>.</li>
-<li>The window size for the throttle can be controlled by setting the option <em><strong>user.account-creation.ip-based-throttle.window-size</strong></em> to the desired number of seconds. For example, if you set <em><strong>user.account-creation.ip-based-throttle.window-size</strong></em> to 3600, Liquid will allow only one account per hour to be created from the same IP.</li>
+<li>Set <strong><em>user.account-creation.enable-ip-based-throttle</em></strong> to <code>true</code>.</li>
+<li>The window size for the throttle can be controlled by setting the option <strong><em>user.account-creation.ip-based-throttle.window-size</em></strong> to the desired number of seconds. For example, if you set <strong><em>user.account-creation.ip-based-throttle.window-size</em></strong> to 3600, Liquid will allow only one account per hour to be created from the same IP.</li>
 </ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="special-configurations-for-nginx-reverse-proxy">Special Configurations for Nginx Reverse Proxy<a href="#special-configurations-for-nginx-reverse-proxy" class="hash-link" aria-label="Direct link to Special Configurations for Nginx Reverse Proxy" title="Direct link to Special Configurations for Nginx Reverse Proxy">​</a></h2>
 <p>It is important that you configure the <code>headers X-Forwarded-Proto</code> and <code>X-Forwarded-For</code> as follows to ensure that the security features work properly:</p>
