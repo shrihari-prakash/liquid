@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.5.2">
 <title data-rh="true">Making Liquid Production Ready | Liquid</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://liquid.shrihariprakash.in/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://liquid.shrihariprakash.in/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://liquid.shrihariprakash.in/Making-Liquid-Production-Ready"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Making Liquid Production Ready | Liquid"><meta data-rh="true" name="description" content="Important backend configurations to update"><meta data-rh="true" property="og:description" content="Important backend configurations to update"><link data-rh="true" rel="icon" href="/img/liquid-icon-mini.png"><link data-rh="true" rel="canonical" href="https://liquid.shrihariprakash.in/Making-Liquid-Production-Ready"><link data-rh="true" rel="alternate" href="https://liquid.shrihariprakash.in/Making-Liquid-Production-Ready" hreflang="en"><link data-rh="true" rel="alternate" href="https://liquid.shrihariprakash.in/Making-Liquid-Production-Ready" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.f71b67dc.css">
-<script src="/assets/js/runtime~main.1483bae3.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.9c3e4b13.js" defer="defer"></script>
 <script src="/assets/js/main.49164da5.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -50,14 +50,14 @@
 <li>Set <strong><em>sendgrid.api-key</em></strong> to your SendGrid API key.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="using-message-queue-pusher">Using Message Queue (Pusher):<a href="#using-message-queue-pusher" class="hash-link" aria-label="Direct link to Using Message Queue (Pusher):" title="Direct link to Using Message Queue (Pusher):">​</a></h4>
-<p>If none of the built-in email providers meet your needs, Liquid can put emails to a queue so that another service can consume them and send emails using your preferred custom provider.</p>
+<p>If none of the built-in email providers meet your needs, Liquid can put emails in a queue so that another service can consume them and send emails using your preferred custom provider.</p>
 <ul>
 <li>Set <strong><em>system.email-adapter</em></strong> to <code>pusher</code>.</li>
 <li>Set <strong><em>privilege.can-use-push-events</em></strong> to <code>true</code>.</li>
 <li>Configure your message queue by setting <strong><em>system.queue-adapter</em></strong> to either <code>redis</code> or <code>rabbitmq</code>.</li>
 <li>Configure the appropriate queue service (Redis or RabbitMQ) settings.</li>
 </ul>
-<p>You should now get a <code>liquid.email.send</code> when an email is triggered.</p>
+<p>You should now get a <code>liquid.email.send</code> event when an email is triggered.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="caching">Caching:<a href="#caching" class="hash-link" aria-label="Direct link to Caching:" title="Direct link to Caching:">​</a></h3>
 <ul>
 <li>Set <strong><em>privilege.can-use-cache</em></strong> to true.</li>
