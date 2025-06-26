@@ -7,40 +7,53 @@ title: Making Liquid Production Ready
 To make Liquid production ready, there are a few recommended configurations to be done on the backend side:
 
 ### Cookie Configurations:
-* Set ***cookie-session-secret*** to a secure random string. You can use [this tool](https://www.uuidgenerator.net/guid) to generate one.
-*  Set ***cookie.secure*** to true.
+
+- Set **_cookie-session-secret_** to a secure random string. You can use [this tool](https://www.uuidgenerator.net/guid) to generate one.
+- Set **_cookie.secure_** to true.
 
 ### Core Environmental Configurations:
-* Set ***system.reverse-proxy-mode*** to true if you intend to use a reverse proxy like Nginx.
-* Set ***environment*** to production.
+
+- Set **_system.reverse-proxy-mode_** to true if you intend to use a reverse proxy like Nginx.
+- Set **_environment_** to production.
 
 ### Account Creation and Email Adapter Configurations:
 
-* Set ***email.outbound-address*** to the email address that you intend to send emails to users from. It is important that this address matches the email address configured in your mail adapter.
-* Set ***user.account-creation.require-email-verification*** to true.
-* Set ***privilege.can-reset-password*** to true.
+- Set **_email.outbound-address_** to the email address that you intend to send emails to users from. It is important that this address matches the email address configured in your mail adapter.
+- Set **_user.account-creation.require-email-verification_** to true.
+- Set **_privilege.can-reset-password_** to true.
 
 To send outbound emails from Liquid, say, for account verification and password reset, you can either use a Sendgrid account or your own SMTP server by configuring Nodemailer.
 
-#### Using Sendgrid:
-* Set ***system.email-adapter*** to ***sendgrid***.
-* Set ***sendgrid.api-key*** to your SendGrid API key.
-
 #### Using Nodemailer:
-* Set ***system.email-adapter*** to `nodemailer`.
-* Set ***nodemailer.service-name*** to `gmail` or `outlook` if you use those services. Do not set if you are using a custom SMTP server.
-* Set ***nodemailer.host*** to your SMTP server host.
-* Set ***nodemailer.port*** to your SMTP server port.
-* Set ***nodemailer.secure*** to true if your SMTP server uses a secure connection.
-* Set ***nodemailer.username*** to the username of your SMTP account.
-* Set ***nodemailer.password*** to the password of your SMTP account.
+
+- Set **_system.email-adapter_** to `nodemailer`.
+- Set **_nodemailer.service-name_** to `gmail` or `outlook` if you use those services. Do not set if you are using a custom SMTP server.
+- Set **_nodemailer.host_** to your SMTP server host.
+- Set **_nodemailer.port_** to your SMTP server port.
+- Set **_nodemailer.secure_** to true if your SMTP server uses a secure connection.
+- Set **_nodemailer.username_** to the username of your SMTP account.
+- Set **_nodemailer.password_** to the password of your SMTP account.
+
+#### Using Amazon SES:
+
+- Set **_system.email-adapter_** to `ses`.
+- Set **_aws.ses.region_** to your AWS region.
+- Set the **_aws.ses.access-key-id_**.
+- Set the **_aws.ses.access-key-secret_**.
+
+#### Using Sendgrid:
+
+- Set **_system.email-adapter_** to `sendgrid`.
+- Set **_sendgrid.api-key_** to your SendGrid API key.
 
 ### Caching:
-* Set ***privilege.can-use-cache*** to true.
-* Set ***redis.port***, ***redis.host***, ***redis.username***, ***redis.password***, and ***redis.db***.
+
+- Set **_privilege.can-use-cache_** to true.
+- Set **_redis.port_**, **_redis.host_**, **_redis.username_**, **_redis.password_**, and **_redis.db_**.
 
 ### Database:
-* Set ***mongo-db.connection-string*** to your MongoDB URL.
+
+- Set **_mongo-db.connection-string_** to your MongoDB URL.
 
 ## Recommended configurations for MongoDB
 
@@ -51,8 +64,9 @@ In a production setup, we recommend turning on transactions by setting the optio
 To reduce the amount of spam accounts, Liquid has an IP based user account creation throttling mechanism.
 
 Use the following options to adjust this throttling:
-* Set ***user.account-creation.enable-ip-based-throttle*** to `true`. 
-* The window size for the throttle can be controlled by setting the option ***user.account-creation.ip-based-throttle.window-size*** to the desired number of seconds. For example, if you set ***user.account-creation.ip-based-throttle.window-size*** to 3600, Liquid will allow only one account per hour to be created from the same IP.
+
+- Set **_user.account-creation.enable-ip-based-throttle_** to `true`.
+- The window size for the throttle can be controlled by setting the option **_user.account-creation.ip-based-throttle.window-size_** to the desired number of seconds. For example, if you set **_user.account-creation.ip-based-throttle.window-size_** to 3600, Liquid will allow only one account per hour to be created from the same IP.
 
 ## Special Configurations for Nginx Reverse Proxy
 
@@ -65,3 +79,4 @@ location / {
   proxy_set_header X-Forwarded-For $remote_addr;
 }
 ```
+
