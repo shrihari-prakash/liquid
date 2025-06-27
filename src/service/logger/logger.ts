@@ -8,6 +8,12 @@ export class Logger {
   logger;
 
   constructor() {
+    // Silent logging in test environment
+    if (process.env.NODE_ENV === 'test') {
+      this.logger = Pino.default({ level: 'silent' });
+      return;
+    }
+
     const prettyStream = PinoPretty({
       colorize: true,
       translateTime: "yyyy-dd-mm HH:MM:ss",

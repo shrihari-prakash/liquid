@@ -1,11 +1,15 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { Role } from '../../../src/service/role/role';
+import RoleModel from '../../../src/model/mongo/role';
 
 describe('Role Service', () => {
   let sandbox: sinon.SinonSandbox;
+  let roleService: Role;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    roleService = new Role();
   });
 
   afterEach(() => {
@@ -13,22 +17,13 @@ describe('Role Service', () => {
   });
 
   describe('Role mapping logic', () => {
-    // Simulate the getRolesMap function without external dependencies
-    const simulateGetRolesMap = (roles: Array<{ id: string; name: string; scopes: string[] }>) => {
-      const rolesMap = new Map();
-      roles.forEach((role) => {
-        rolesMap.set(role.id, role);
-      });
-      return rolesMap;
-    };
-
     it('should create roles map from array of roles', () => {
       const roles = [
         { id: 'admin', name: 'Administrator', scopes: ['read', 'write'] },
         { id: 'user', name: 'User', scopes: ['read'] }
-      ];
+      ] as any[];
 
-      const rolesMap = simulateGetRolesMap(roles);
+      const rolesMap = roleService.getRolesMap(roles);
 
       expect(rolesMap.size).to.equal(2);
       expect(rolesMap.has('admin')).to.be.true;
@@ -38,9 +33,9 @@ describe('Role Service', () => {
     });
 
     it('should handle empty roles array', () => {
-      const roles: Array<{ id: string; name: string; scopes: string[] }> = [];
+      const roles: any[] = [];
       
-      const rolesMap = simulateGetRolesMap(roles);
+      const rolesMap = roleService.getRolesMap(roles);
 
       expect(rolesMap.size).to.equal(0);
     });
@@ -48,9 +43,9 @@ describe('Role Service', () => {
     it('should handle single role', () => {
       const roles = [
         { id: 'guest', name: 'Guest', scopes: [] }
-      ];
+      ] as any[];
 
-      const rolesMap = simulateGetRolesMap(roles);
+      const rolesMap = roleService.getRolesMap(roles);
 
       expect(rolesMap.size).to.equal(1);
       expect(rolesMap.has('guest')).to.be.true;
@@ -61,9 +56,9 @@ describe('Role Service', () => {
       const roles = [
         { id: 'admin', name: 'Administrator', scopes: ['read'] },
         { id: 'admin', name: 'Super Admin', scopes: ['read', 'write'] }
-      ];
+      ] as any[];
 
-      const rolesMap = simulateGetRolesMap(roles);
+      const rolesMap = roleService.getRolesMap(roles);
 
       expect(rolesMap.size).to.equal(1);
       expect(rolesMap.get('admin')).to.deep.equal(roles[1]); // Should be the last one
@@ -71,24 +66,16 @@ describe('Role Service', () => {
   });
 
   describe('System roles constants', () => {
-    const SystemRoles = {
-      SUPER_ADMIN: "super_admin",
-      ADMIN: "admin",
-      USER: "user",
-      INTERNAL_CLIENT: "internal_client",
-      EXTERNAL_CLIENT: "external_client",
-    };
-
     it('should have correct system role constants', () => {
-      expect(SystemRoles.SUPER_ADMIN).to.equal('super_admin');
-      expect(SystemRoles.ADMIN).to.equal('admin');
-      expect(SystemRoles.USER).to.equal('user');
-      expect(SystemRoles.INTERNAL_CLIENT).to.equal('internal_client');
-      expect(SystemRoles.EXTERNAL_CLIENT).to.equal('external_client');
+      expect(roleService.SystemRoles.SUPER_ADMIN).to.equal('super_admin');
+      expect(roleService.SystemRoles.ADMIN).to.equal('admin');
+      expect(roleService.SystemRoles.USER).to.equal('user');
+      expect(roleService.SystemRoles.INTERNAL_CLIENT).to.equal('internal_client');
+      expect(roleService.SystemRoles.EXTERNAL_CLIENT).to.equal('external_client');
     });
 
     it('should have unique role values', () => {
-      const values = Object.values(SystemRoles);
+      const values = Object.values(roleService.SystemRoles);
       const uniqueValues = new Set(values);
       
       expect(uniqueValues.size).to.equal(values.length);
@@ -96,7 +83,7 @@ describe('Role Service', () => {
 
     it('should contain all expected role types', () => {
       const expectedRoles = ['super_admin', 'admin', 'user', 'internal_client', 'external_client'];
-      const actualRoles = Object.values(SystemRoles);
+      const actualRoles = Object.values(roleService.SystemRoles);
       
       expectedRoles.forEach(role => {
         expect(actualRoles).to.include(role);
@@ -105,38 +92,59 @@ describe('Role Service', () => {
   });
 
   describe('Role validation logic', () => {
-    // Simulate role validation without database dependencies
-    const simulateRoleValidation = (roleId: string, availableRoles: string[]) => {
-      return availableRoles.includes(roleId);
-    };
+    let roleModelStub: sinon.SinonStub;
+
+    beforeEach(() => {
+      roleModelStub = sandbox.stub(RoleModel, 'find');
+    });
 
     it('should validate existing roles', () => {
       const availableRoles = ['admin', 'user', 'guest'];
       
-      expect(simulateRoleValidation('admin', availableRoles)).to.be.true;
-      expect(simulateRoleValidation('user', availableRoles)).to.be.true;
-      expect(simulateRoleValidation('guest', availableRoles)).to.be.true;
+      // Test role existence in map
+      const mockRoles = [
+        { id: 'admin', name: 'Administrator' },
+        { id: 'user', name: 'User' },
+        { id: 'guest', name: 'Guest' }
+      ] as any[];
+      
+      const rolesMap = roleService.getRolesMap(mockRoles);
+      
+      expect(rolesMap.has('admin')).to.be.true;
+      expect(rolesMap.has('user')).to.be.true;
+      expect(rolesMap.has('guest')).to.be.true;
     });
 
     it('should reject invalid roles', () => {
-      const availableRoles = ['admin', 'user'];
+      const mockRoles = [
+        { id: 'admin', name: 'Administrator' },
+        { id: 'user', name: 'User' }
+      ] as any[];
       
-      expect(simulateRoleValidation('guest', availableRoles)).to.be.false;
-      expect(simulateRoleValidation('invalid', availableRoles)).to.be.false;
-      expect(simulateRoleValidation('', availableRoles)).to.be.false;
+      const rolesMap = roleService.getRolesMap(mockRoles);
+      
+      expect(rolesMap.has('guest')).to.be.false;
+      expect(rolesMap.has('invalid')).to.be.false;
+      expect(rolesMap.has('')).to.be.false;
     });
 
     it('should handle empty available roles', () => {
-      const availableRoles: string[] = [];
+      const rolesMap = roleService.getRolesMap([]);
       
-      expect(simulateRoleValidation('admin', availableRoles)).to.be.false;
+      expect(rolesMap.has('admin')).to.be.false;
+      expect(rolesMap.size).to.equal(0);
     });
 
     it('should be case sensitive', () => {
-      const availableRoles = ['admin', 'user'];
+      const mockRoles = [
+        { id: 'admin', name: 'Administrator' },
+        { id: 'user', name: 'User' }
+      ] as any[];
       
-      expect(simulateRoleValidation('Admin', availableRoles)).to.be.false;
-      expect(simulateRoleValidation('USER', availableRoles)).to.be.false;
+      const rolesMap = roleService.getRolesMap(mockRoles);
+      
+      expect(rolesMap.has('Admin')).to.be.false;
+      expect(rolesMap.has('USER')).to.be.false;
     });
   });
 });

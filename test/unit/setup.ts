@@ -2,14 +2,15 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-// Setup chai with sinon-chai plugin
-chai.use(sinonChai);
+// Set NODE_ENV to test for silent logging
+process.env.NODE_ENV = 'test';
 
-// Make chai assertions globally available
+// Setup chai with sinon integration
+chai.use(sinonChai);
 (global as any).expect = chai.expect;
 (global as any).sinon = sinon;
 
-// Global cleanup to prevent hanging processes
+// Simple cleanup
 process.on('exit', () => {
   sinon.restore();
 });

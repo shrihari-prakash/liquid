@@ -1,5 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { isApplicationClient } from '../../../../src/model/oauth/utils';
+import { Role } from '../../../../src/singleton/role';
 
 describe('OAuth Utils', () => {
   let sandbox: sinon.SinonSandbox;
@@ -12,50 +14,33 @@ describe('OAuth Utils', () => {
     sandbox.restore();
   });
 
-  describe('isApplicationClient simulation', () => {
-    // Simulate the SystemRoles constants
-    const SystemRoles = {
-      SUPER_ADMIN: "super_admin",
-      ADMIN: "admin", 
-      USER: "user",
-      INTERNAL_CLIENT: "internal_client",
-      EXTERNAL_CLIENT: "external_client",
-    };
-
-    // Simulate the isApplicationClient function
-    const isApplicationClient = (user: any) => {
-      if (!user || !user.role) return false;
-      const applicationClient =
-        user.role === SystemRoles.INTERNAL_CLIENT || user.role === SystemRoles.EXTERNAL_CLIENT;
-      return applicationClient;
-    };
-
+  describe('isApplicationClient', () => {
     it('should return true for internal client role', () => {
-      const user = { role: SystemRoles.INTERNAL_CLIENT };
+      const user = { role: Role.SystemRoles.INTERNAL_CLIENT };
       const result = isApplicationClient(user);
       expect(result).to.be.true;
     });
 
     it('should return true for external client role', () => {
-      const user = { role: SystemRoles.EXTERNAL_CLIENT };
+      const user = { role: Role.SystemRoles.EXTERNAL_CLIENT };
       const result = isApplicationClient(user);
       expect(result).to.be.true;
     });
 
     it('should return false for user role', () => {
-      const user = { role: SystemRoles.USER };
+      const user = { role: Role.SystemRoles.USER };
       const result = isApplicationClient(user);
       expect(result).to.be.false;
     });
 
     it('should return false for admin role', () => {
-      const user = { role: SystemRoles.ADMIN };
+      const user = { role: Role.SystemRoles.ADMIN };
       const result = isApplicationClient(user);
       expect(result).to.be.false;
     });
 
     it('should return false for super admin role', () => {
-      const user = { role: SystemRoles.SUPER_ADMIN };
+      const user = { role: Role.SystemRoles.SUPER_ADMIN };
       const result = isApplicationClient(user);
       expect(result).to.be.false;
     });

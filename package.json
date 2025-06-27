@@ -7,7 +7,7 @@
   "browserslist": "> 0.25%, not dead",
   "scripts": {
     "test": "mocha -r tsx 'test/integration/**/*.spec.ts' --exit --recursive --require test/integration/tester.spec.ts --timeout 10000",
-    "test:unit": "mocha -r tsx 'test/unit/**/*.spec.ts' --exit --recursive --require test/unit/setup.ts --timeout 5000",
+    "test:unit": "NODE_ENV=test mocha -r tsx 'test/unit/**/*.spec.ts' --exit --recursive --require test/unit/setup.ts --timeout 5000",
     "test:all": "npm run test:unit && npm test",
     "start": "concurrently \"nodemon --inspect\" \"npx babel --watch ./src/public/components --out-dir ./src/public/compiled --presets @babel/preset-react\"",
     "build": "npm run build:server && npm run build:static",

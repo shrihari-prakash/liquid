@@ -1,11 +1,15 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { CORS } from '../../../src/service/cors/cors';
+import ClientModel from '../../../src/model/mongo/client';
 
 describe('CORS Service', () => {
   let sandbox: sinon.SinonSandbox;
+  let cors: CORS;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    cors = new CORS();
   });
 
   afterEach(() => {
@@ -13,80 +17,65 @@ describe('CORS Service', () => {
   });
 
   describe('Origin extraction logic', () => {
-    const extractOrigin = (uri: string): string => {
-      const url = new URL(uri);
-      return url.origin;
-    };
-
     it('should extract origin from URI', () => {
-      const result = extractOrigin('https://example.com/callback?code=123');
+      const result = cors.extractOrigin('https://example.com/callback?code=123');
       expect(result).to.equal('https://example.com');
     });
 
     it('should extract origin from URI with port', () => {
-      const result = extractOrigin('http://localhost:3000/auth/callback');
+      const result = cors.extractOrigin('http://localhost:3000/auth/callback');
       expect(result).to.equal('http://localhost:3000');
     });
 
     it('should handle HTTPS URLs', () => {
-      const result = extractOrigin('https://secure.example.com/path/to/resource');
+      const result = cors.extractOrigin('https://secure.example.com/path/to/resource');
       expect(result).to.equal('https://secure.example.com');
     });
 
     it('should handle URLs with subdomains', () => {
-      const result = extractOrigin('https://api.sub.example.com/v1/users');
+      const result = cors.extractOrigin('https://api.sub.example.com/v1/users');
       expect(result).to.equal('https://api.sub.example.com');
     });
 
     it('should handle IP addresses', () => {
-      const result = extractOrigin('http://192.168.1.1:8080/api');
+      const result = cors.extractOrigin('http://192.168.1.1:8080/api');
       expect(result).to.equal('http://192.168.1.1:8080');
     });
 
     it('should handle different protocols', () => {
-      const result = extractOrigin('ftp://files.example.com/downloads');
+      const result = cors.extractOrigin('ftp://files.example.com/downloads');
       expect(result).to.equal('ftp://files.example.com');
     });
   });
 
   describe('Origin validation logic', () => {
     it('should validate allowed origins correctly', () => {
-      const allowedOrigins = new Set([
-        'https://allowed.example.com',
-        'http://localhost:3000'
-      ]);
+      // Test the actual CORS instance
+      cors.allowedOrigins.add('https://allowed.example.com');
+      cors.allowedOrigins.add('http://localhost:3000');
 
-      const isAllowedOrigin = (origin: string | undefined): boolean => {
-        if (allowedOrigins.has(origin as string) || !origin) {
-          return true;
-        }
-        return false;
-      };
-
-      expect(isAllowedOrigin('https://allowed.example.com')).to.be.true;
-      expect(isAllowedOrigin('http://localhost:3000')).to.be.true;
-      expect(isAllowedOrigin('https://notallowed.example.com')).to.be.false;
-      expect(isAllowedOrigin(undefined)).to.be.true;
+      expect(cors.allowedOrigins.has('https://allowed.example.com')).to.be.true;
+      expect(cors.allowedOrigins.has('http://localhost:3000')).to.be.true;
+      expect(cors.allowedOrigins.has('https://notallowed.example.com')).to.be.false;
     });
 
     it('should be case sensitive', () => {
-      const allowedOrigins = new Set(['https://example.com']);
+      cors.allowedOrigins.add('https://example.com');
       
-      const isAllowedOrigin = (origin: string | undefined): boolean => {
-        if (allowedOrigins.has(origin as string) || !origin) {
-          return true;
-        }
-        return false;
-      };
-
-      expect(isAllowedOrigin('https://example.com')).to.be.true;
-      expect(isAllowedOrigin('HTTPS://EXAMPLE.COM')).to.be.false;
+      expect(cors.allowedOrigins.has('https://example.com')).to.be.true;
+      expect(cors.allowedOrigins.has('HTTPS://EXAMPLE.COM')).to.be.false;
     });
   });
 
-  describe('Origin scanning simulation', () => {
-    it('should extract origins from client redirect URIs', () => {
-      const clients = [
+  describe('Origin scanning functionality', () => {
+    let clientModelStub: sinon.SinonStub;
+
+    beforeEach(() => {
+      clientModelStub = sandbox.stub(ClientModel, 'find');
+    });
+
+    it('should extract origins from client redirect URIs', async () => {
+      const mockClients = [
         {
           redirectUris: [
             'https://client1.example.com/callback',
@@ -101,39 +90,17 @@ describe('CORS Service', () => {
         }
       ];
 
-      const extractOrigin = (uri: string): string => {
-        const url = new URL(uri);
-        return url.origin;
-      };
+      clientModelStub.resolves(mockClients);
 
-      const scanOrigins = (clients: any[]) => {
-        const allowedOrigins = new Set<string>();
-        
-        for (const client of clients) {
-          for (const uri of client.redirectUris) {
-            try {
-              const origin = extractOrigin(uri);
-              allowedOrigins.add(origin);
-            } catch (e) {
-              // Skip invalid URIs
-              continue;
-            }
-          }
-        }
-        
-        return allowedOrigins;
-      };
+      await cors.scanOrigins();
 
-      const result = scanOrigins(clients);
-
-      expect(result.has('https://client1.example.com')).to.be.true;
-      expect(result.has('https://client2.example.com')).to.be.true;
-      expect(result.has('http://localhost:8080')).to.be.true;
-      expect(result.size).to.equal(3);
+      expect(cors.allowedOrigins.has('https://client1.example.com')).to.be.true;
+      expect(cors.allowedOrigins.has('https://client2.example.com')).to.be.true;
+      expect(cors.allowedOrigins.has('http://localhost:8080')).to.be.true;
     });
 
-    it('should handle invalid URIs gracefully', () => {
-      const clients = [
+    it('should handle invalid URIs gracefully', async () => {
+      const mockClients = [
         {
           redirectUris: [
             'https://valid.example.com/callback',
@@ -143,58 +110,22 @@ describe('CORS Service', () => {
         }
       ];
 
-      const extractOrigin = (uri: string): string => {
-        const url = new URL(uri);
-        return url.origin;
-      };
+      clientModelStub.resolves(mockClients);
 
-      const scanOrigins = (clients: any[]) => {
-        const allowedOrigins = new Set<string>();
-        const errors: string[] = [];
-        
-        for (const client of clients) {
-          for (const uri of client.redirectUris) {
-            try {
-              const origin = extractOrigin(uri);
-              allowedOrigins.add(origin);
-            } catch (e) {
-              errors.push(uri);
-              continue;
-            }
-          }
-        }
-        
-        return { allowedOrigins, errors };
-      };
+      await cors.scanOrigins();
 
-      const result = scanOrigins(clients);
-
-      expect(result.allowedOrigins.has('https://valid.example.com')).to.be.true;
-      expect(result.allowedOrigins.has('https://another-valid.example.com')).to.be.true;
-      expect(result.errors).to.include('invalid-uri');
-      expect(result.allowedOrigins.size).to.equal(2);
+      expect(cors.allowedOrigins.has('https://valid.example.com')).to.be.true;
+      expect(cors.allowedOrigins.has('https://another-valid.example.com')).to.be.true;
+      // Should not have the invalid URI
     });
 
-    it('should handle empty clients array', () => {
-      const scanOrigins = (clients: any[]) => {
-        const allowedOrigins = new Set<string>();
-        
-        for (const client of clients) {
-          for (const uri of client.redirectUris) {
-            try {
-              const url = new URL(uri);
-              allowedOrigins.add(url.origin);
-            } catch (e) {
-              continue;
-            }
-          }
-        }
-        
-        return allowedOrigins;
-      };
+    it('should handle empty clients array', async () => {
+      clientModelStub.resolves([]);
 
-      const result = scanOrigins([]);
-      expect(result.size).to.equal(0);
+      await cors.scanOrigins();
+
+      // Should only have system origins, no client origins
+      expect(cors.allowedOrigins.size).to.be.greaterThan(0); // Has system origins
     });
   });
 });

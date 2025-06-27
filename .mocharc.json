@@ -1,0 +1,6 @@
+{
+  "require": ["tsx", "test/unit/setup.ts"],
+  "timeout": 10000,
+  "exit": true,
+  "spec": "test/unit/**/*.spec.ts"
+}

@@ -125,13 +125,15 @@ export interface UserHydrationOptions {
 
 const _hydrateUserProfile = async (user: UserInterface, options: UserHydrationOptions) => {
   if ((user.isDeleted || user.isBanned) && options.delegatedMode) {
-    const dummyUser = {
-      _id: user._id,
-      isDeleted: user.isDeleted,
-      isBanned: user.isBanned,
-      customData: "{}",
-    };
-    return dummyUser;
+    // Replace user properties with dummy data for deleted/banned users in delegated mode
+    Object.keys(user).forEach(key => {
+      if (key !== '_id' && key !== 'isDeleted' && key !== 'isBanned') {
+        // @ts-expect-error
+        delete user[key];
+      }
+    });
+    user.customData = "{}";
+    return user;
   }
   checkSubscription(user);
   await attachProfilePicture(user);

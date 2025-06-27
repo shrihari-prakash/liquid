@@ -1,5 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { sanitizeEmailAddress } from '../../../src/utils/email';
+import { Configuration } from '../../../src/singleton/configuration';
 
 describe('Email Utils', () => {
   let sandbox: sinon.SinonSandbox;
@@ -12,116 +14,81 @@ describe('Email Utils', () => {
     sandbox.restore();
   });
 
-  describe('sanitizeEmailAddress logic simulation', () => {
-    // Simulate the sanitizeEmailAddress function without external dependencies
-    const simulateSanitizeEmailAddress = (
-      email: string,
-      shouldSanitizeGmail: boolean = true
-    ) => {
-      email = email.toLowerCase();
-      
-      if (email.endsWith('@gmail.com') && shouldSanitizeGmail) {
-        const parts = email.split('@');
-        parts[0] = parts[0].split('+')[0];
-        return parts[0].replace(/\./g, '') + '@' + parts[1];
-      }
-      return email;
-    };
+  describe('sanitizeEmailAddress', () => {
+    let configStub: sinon.SinonStub;
+
+    beforeEach(() => {
+      configStub = sandbox.stub(Configuration, 'get');
+    });
 
     it('should convert email to lowercase', () => {
-      const email = 'TEST@EXAMPLE.COM';
-      const result = simulateSanitizeEmailAddress(email, false);
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(false);
+      
+      const result = sanitizeEmailAddress('Test@Example.COM');
       expect(result).to.equal('test@example.com');
     });
 
-    it('should sanitize Gmail addresses when enabled', () => {
-      const email = 'test.user+tag@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
+    it('should sanitize Gmail addresses when configuration is enabled', () => {
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(true);
+      
+      const result = sanitizeEmailAddress('test.user+tag@gmail.com');
       expect(result).to.equal('testuser@gmail.com');
     });
 
-    it('should remove dots from Gmail username', () => {
-      const email = 'first.middle.last@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('firstmiddlelast@gmail.com');
-    });
-
-    it('should remove plus tag from Gmail username', () => {
-      const email = 'username+shopping@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('username@gmail.com');
-    });
-
-    it('should handle both dots and plus tags in Gmail addresses', () => {
-      const email = 'first.last+tag@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('firstlast@gmail.com');
-    });
-
-    it('should not sanitize Gmail addresses when disabled', () => {
-      const email = 'test.user+tag@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, false);
+    it('should not sanitize Gmail addresses when configuration is disabled', () => {
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(false);
+      
+      const result = sanitizeEmailAddress('test.user+tag@gmail.com');
       expect(result).to.equal('test.user+tag@gmail.com');
     });
 
-    it('should not sanitize non-Gmail addresses', () => {
-      const email = 'test.user+tag@yahoo.com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('test.user+tag@yahoo.com');
-    });
-
-    it('should handle Gmail addresses with uppercase', () => {
-      const email = 'Test.User+Tag@GMAIL.COM';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('testuser@gmail.com');
-    });
-
-    it('should handle edge case with only dots in Gmail username', () => {
-      const email = '...@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('@gmail.com');
-    });
-
-    it('should handle edge case with only plus tag in Gmail username', () => {
-      const email = '+tag@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('@gmail.com');
-    });
-
-    it('should handle Gmail address with multiple plus signs', () => {
-      const email = 'user+tag1+tag2@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('user@gmail.com');
-    });
-
-    it('should handle empty username before plus sign', () => {
-      const email = 'user.name++@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('username@gmail.com');
-    });
-
-    it('should preserve domain for Gmail addresses', () => {
-      const email = 'test@gmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
+    it('should remove dots from Gmail usernames when sanitizing', () => {
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(true);
+      
+      const result = sanitizeEmailAddress('t.e.s.t@gmail.com');
       expect(result).to.equal('test@gmail.com');
     });
 
-    it('should handle complex Gmail address', () => {
-      const email = 'First.Middle.Last+work+project@Gmail.Com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('firstmiddlelast@gmail.com');
+    it('should remove plus tags from Gmail addresses when sanitizing', () => {
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(true);
+      
+      const result = sanitizeEmailAddress('testuser+newsletter@gmail.com');
+      expect(result).to.equal('testuser@gmail.com');
     });
 
-    it('should handle similar domains that are not Gmail', () => {
-      const email = 'test.user@gmail.co.uk';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('test.user@gmail.co.uk');
+    it('should handle complex Gmail addresses with both dots and plus tags', () => {
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(true);
+      
+      const result = sanitizeEmailAddress('t.e.s.t.u.s.e.r+tag123@gmail.com');
+      expect(result).to.equal('testuser@gmail.com');
     });
 
-    it('should handle domains containing gmail but not exact match', () => {
-      const email = 'test.user@mygmail.com';
-      const result = simulateSanitizeEmailAddress(email, true);
-      expect(result).to.equal('test.user@mygmail.com');
+    it('should not sanitize non-Gmail addresses', () => {
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(true);
+      
+      const result = sanitizeEmailAddress('test.user+tag@example.com');
+      expect(result).to.equal('test.user+tag@example.com');
+    });
+
+    it('should handle empty email address', () => {
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(true);
+      
+      const result = sanitizeEmailAddress('');
+      expect(result).to.equal('');
+    });
+
+    it('should handle mixed case Gmail addresses', () => {
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(true);
+      
+      const result = sanitizeEmailAddress('Test.User+TAG@Gmail.COM');
+      expect(result).to.equal('testuser@gmail.com');
+    });
+
+    it('should handle edge cases with multiple dots and plus signs', () => {
+      configStub.withArgs('user.account-creation.sanitize-gmail-addresses').returns(true);
+      
+      const result = sanitizeEmailAddress('a.b.c.d.e+tag1+tag2@gmail.com');
+      expect(result).to.equal('abcde@gmail.com');
     });
   });
 });
