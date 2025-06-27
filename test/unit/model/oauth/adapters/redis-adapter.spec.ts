@@ -1,21 +1,47 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import RedisAdapter from '../../../../../src/model/oauth/adapters/redis-adapter.js';
+import esmock from 'esmock';
 import { Redis } from '../../../../../src/singleton/redis.js';
 import { RedisPrefixes } from '../../../../../src/enum/redis.js';
 import { Configuration } from '../../../../../src/singleton/configuration.js';
 import { ScopeManager } from '../../../../../src/singleton/scope-manager.js';
 import { Role } from '../../../../../src/singleton/role.js';
-import * as oauthUtils from '../../../../../src/model/oauth/utils.js';
-import * as oauthCache from '../../../../../src/model/oauth/cache.js';
-import * as sessionUtils from '../../../../../src/utils/session.js';
-import * as roleUtils from '../../../../../src/utils/role.js';
 
 describe('RedisAdapter', () => {
   let sandbox: sinon.SinonSandbox;
+  let RedisAdapter: any;
+  let oauthUtilsStub: any;
+  let oauthCacheStub: any;
+  let sessionUtilsStub: any;
+  let roleUtilsStub: any;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     sandbox = sinon.createSandbox();
+    
+    // Create stubs for the utility modules
+    oauthUtilsStub = {
+      isApplicationClient: sandbox.stub()
+    };
+    
+    oauthCacheStub = {
+      getUserInfo: sandbox.stub()
+    };
+    
+    sessionUtilsStub = {
+      isTokenInvalidated: sandbox.stub()
+    };
+    
+    roleUtilsStub = {
+      isRoleInvalidated: sandbox.stub()
+    };
+    
+    // Use esmock to load RedisAdapter with stubbed dependencies
+    RedisAdapter = await esmock('../../../../../src/model/oauth/adapters/redis-adapter.js', {
+      '../../../../../src/model/oauth/utils.js': oauthUtilsStub,
+      '../../../../../src/model/oauth/cache.js': oauthCacheStub,
+      '../../../../../src/utils/session.js': sessionUtilsStub,
+      '../../../../../src/utils/role.js': roleUtilsStub
+    });
   });
 
   afterEach(() => {
@@ -97,29 +123,226 @@ describe('RedisAdapter', () => {
       expect(result).to.be.null;
     });
 
-    it.skip('should refresh user info for non-application clients', async () => {
-      // This test requires stubbing ES modules which is not currently supported in this setup
-      // The test would verify that getUserInfo is called for non-application clients
+    it('should refresh user info for non-application clients', async () => {
+      const originalUser = { _id: 'user-id-123', role: 'regular-user' };
+      const mockTokenString = JSON.stringify({
+        accessToken: 'access-token-123',
+        user: originalUser,
+        client: { id: 'client-id-123' },
+        registeredAt: '2025-01-01T00:00:00.000Z',
+        scope: ['read']
+      });
+
+      const refreshedUser = { 
+        _id: 'user-id-123', 
+        role: 'regular-user',
+        globalLogoutAt: null,
+        scope: ['read', 'write']
+      };
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(false);
+      oauthCacheStub.getUserInfo.resolves(refreshedUser);
+      roleUtilsStub.isRoleInvalidated.resolves(false);
+      sessionUtilsStub.isTokenInvalidated.returns(false);
+      
+      // Mock Role and ScopeManager
+      sandbox.stub(Role, 'getRole').returns({ 
+        id: 'regular-user',
+        displayName: 'Regular User',
+        ranking: 1,
+        type: 'user' as const,
+        scope: ['read', 'write', 'admin'] 
+      });
+      sandbox.stub(ScopeManager, 'isScopeAllowed').returns(true);
+
+      const result = await RedisAdapter.checkToken(mockTokenString);
+
+      expect(oauthUtilsStub.isApplicationClient).to.have.been.calledWith(originalUser);
+      expect(oauthCacheStub.getUserInfo).to.have.been.calledWith('user-id-123');
+      expect(result).to.not.be.null;
+      expect(result?.user).to.deep.equal(refreshedUser);
     });
 
-    it.skip('should return null if role is invalidated', async () => {
-      // This test requires stubbing ES modules which is not currently supported in this setup
-      // The test would verify that null is returned when role is invalidated
+    it('should not refresh user info for application clients', async () => {
+      const mockUser = { _id: 'client-id-123', role: 'internal-client', globalLogoutAt: null, scope: ['read'] };
+      const mockTokenString = JSON.stringify({
+        accessToken: 'access-token-123',
+        user: mockUser,
+        client: { id: 'client-id-123' },
+        registeredAt: '2025-01-01T00:00:00.000Z',
+        scope: ['read']
+      });
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(true);
+      roleUtilsStub.isRoleInvalidated.resolves(false);
+      sessionUtilsStub.isTokenInvalidated.returns(false);
+      
+      // Mock Role and ScopeManager
+      sandbox.stub(Role, 'getRole').returns({ 
+        id: 'internal-client',
+        displayName: 'Internal Client',
+        ranking: 1,
+        type: 'client' as const,
+        scope: ['read', 'write'] 
+      });
+      sandbox.stub(ScopeManager, 'isScopeAllowed').returns(true);
+
+      const result = await RedisAdapter.checkToken(mockTokenString);
+
+      expect(oauthUtilsStub.isApplicationClient).to.have.been.calledWith(mockUser);
+      expect(oauthCacheStub.getUserInfo).to.not.have.been.called;
+      expect(result).to.not.be.null;
+      expect(result?.user).to.deep.equal(mockUser);
     });
 
-    it.skip('should return null if token is invalidated', async () => {
-      // This test requires stubbing ES modules which is not currently supported in this setup
-      // The test would verify that null is returned when token is invalidated
+    it('should return null if role is invalidated', async () => {
+      const mockUser = { 
+        _id: 'user-id-123', 
+        role: 'regular-user',
+        globalLogoutAt: null,
+        scope: ['read']
+      };
+      const mockTokenString = JSON.stringify({
+        accessToken: 'access-token-123',
+        user: mockUser,
+        client: { id: 'client-id-123' },
+        registeredAt: '2025-01-01T00:00:00.000Z',
+        scope: ['read']
+      });
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(true);
+      roleUtilsStub.isRoleInvalidated.resolves(true); // Role is invalidated
+      sessionUtilsStub.isTokenInvalidated.returns(false);
+
+      const result = await RedisAdapter.checkToken(mockTokenString);
+
+      expect(roleUtilsStub.isRoleInvalidated).to.have.been.calledWith(
+        mockUser.role, 
+        '2025-01-01T00:00:00.000Z'
+      );
+      expect(result).to.be.null;
     });
 
-    it.skip('should return null if scope has been revoked', async () => {
-      // This test requires stubbing ES modules which is not currently supported in this setup  
-      // The test would verify that null is returned when scope has been revoked
+    it('should return null if token is invalidated', async () => {
+      const mockUser = { 
+        _id: 'user-id-123', 
+        role: 'regular-user',
+        globalLogoutAt: '2025-01-02T00:00:00.000Z', // Global logout after token registration
+        scope: ['read']
+      };
+      const mockTokenString = JSON.stringify({
+        accessToken: 'access-token-123',
+        user: mockUser,
+        client: { id: 'client-id-123' },
+        registeredAt: '2025-01-01T00:00:00.000Z',
+        scope: ['read']
+      });
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(true);
+      roleUtilsStub.isRoleInvalidated.resolves(false);
+      sessionUtilsStub.isTokenInvalidated.returns(true); // Token is invalidated
+      
+      // Mock Role and ScopeManager
+      sandbox.stub(Role, 'getRole').returns({ 
+        id: 'regular-user',
+        displayName: 'Regular User',
+        ranking: 1,
+        type: 'user' as const,
+        scope: ['read', 'write'] 
+      });
+      sandbox.stub(ScopeManager, 'isScopeAllowed').returns(true);
+
+      const result = await RedisAdapter.checkToken(mockTokenString);
+
+      expect(sessionUtilsStub.isTokenInvalidated).to.have.been.calledWith(
+        mockUser.globalLogoutAt, 
+        '2025-01-01T00:00:00.000Z'
+      );
+      expect(result).to.be.null;
     });
 
-    it.skip('should return token with parsed dates if all validations pass', async () => {
-      // This test requires stubbing ES modules which is not currently supported in this setup
-      // The test would verify that the token is returned with parsed dates when all validations pass
+    it('should return null if scope has been revoked', async () => {
+      const mockUser = { 
+        _id: 'user-id-123', 
+        role: 'regular-user',
+        globalLogoutAt: null,
+        scope: ['read'] // User only has read scope
+      };
+      const mockTokenString = JSON.stringify({
+        accessToken: 'access-token-123',
+        user: mockUser,
+        client: { id: 'client-id-123' },
+        registeredAt: '2025-01-01T00:00:00.000Z',
+        scope: ['read', 'write'] // Token has both read and write scopes
+      });
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(true);
+      roleUtilsStub.isRoleInvalidated.resolves(false);
+      sessionUtilsStub.isTokenInvalidated.returns(false);
+      
+      // Mock Role and ScopeManager - simulate that write scope is not allowed
+      sandbox.stub(Role, 'getRole').returns({ 
+        id: 'regular-user',
+        displayName: 'Regular User',
+        ranking: 1,
+        type: 'user' as const,
+        scope: ['read'] 
+      }); // Role only allows read
+      const scopeStub = sandbox.stub(ScopeManager, 'isScopeAllowed');
+      scopeStub.withArgs('read', ['read']).returns(true); // Read scope is allowed
+      scopeStub.withArgs('write', ['read']).returns(false); // Write scope is not allowed for role
+      scopeStub.withArgs('write', ['read']).returns(false); // Write scope is not allowed for user
+
+      const result = await RedisAdapter.checkToken(mockTokenString);
+
+      expect(result).to.be.null;
+    });
+
+    it('should return token with parsed dates if all validations pass', async () => {
+      const mockUser = { 
+        _id: 'user-id-123', 
+        role: 'regular-user',
+        globalLogoutAt: null,
+        scope: ['read', 'write']
+      };
+      const mockTokenString = JSON.stringify({
+        accessToken: 'access-token-123',
+        accessTokenExpiresAt: '2025-12-31T23:59:59.000Z',
+        refreshTokenExpiresAt: '2026-01-31T23:59:59.000Z',
+        user: mockUser,
+        client: { id: 'client-id-123' },
+        registeredAt: '2025-01-01T00:00:00.000Z',
+        scope: ['read', 'write']
+      });
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(true);
+      roleUtilsStub.isRoleInvalidated.resolves(false);
+      sessionUtilsStub.isTokenInvalidated.returns(false);
+      
+      // Mock Role and ScopeManager
+      sandbox.stub(Role, 'getRole').returns({ 
+        id: 'regular-user',
+        displayName: 'Regular User',
+        ranking: 1,
+        type: 'user' as const,
+        scope: ['read', 'write', 'admin'] 
+      });
+      sandbox.stub(ScopeManager, 'isScopeAllowed').returns(true);
+
+      const result = await RedisAdapter.checkToken(mockTokenString);
+
+      expect(result).to.not.be.null;
+      expect(result?.accessTokenExpiresAt).to.be.instanceof(Date);
+      expect(result?.refreshTokenExpiresAt).to.be.instanceof(Date);
+      expect(result?.accessTokenExpiresAt.toISOString()).to.equal('2025-12-31T23:59:59.000Z');
+      expect(result?.refreshTokenExpiresAt.toISOString()).to.equal('2026-01-31T23:59:59.000Z');
+      expect(result?.user).to.deep.equal(mockUser);
     });
   });
 

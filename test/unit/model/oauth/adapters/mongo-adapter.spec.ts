@@ -1,19 +1,45 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import MongoAdapter from '../../../../../src/model/oauth/adapters/mongo-adapter.js';
+import esmock from 'esmock';
 import TokenModel from '../../../../../src/model/mongo/token.js';
 import AuthorizationCodeModel from '../../../../../src/model/mongo/authorization-code.js';
 import ClientModel from '../../../../../src/model/mongo/client.js';
-import * as oauthUtils from '../../../../../src/model/oauth/utils.js';
-import * as oauthCache from '../../../../../src/model/oauth/cache.js';
-import * as sessionUtils from '../../../../../src/utils/session.js';
-import * as roleUtils from '../../../../../src/utils/role.js';
 
 describe('MongoAdapter', () => {
   let sandbox: sinon.SinonSandbox;
+  let MongoAdapter: any;
+  let oauthUtilsStub: any;
+  let oauthCacheStub: any;
+  let sessionUtilsStub: any;
+  let roleUtilsStub: any;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     sandbox = sinon.createSandbox();
+    
+    // Create stubs for the utility modules
+    oauthUtilsStub = {
+      isApplicationClient: sandbox.stub()
+    };
+    
+    oauthCacheStub = {
+      getUserInfo: sandbox.stub()
+    };
+    
+    sessionUtilsStub = {
+      isTokenInvalidated: sandbox.stub()
+    };
+    
+    roleUtilsStub = {
+      isRoleInvalidated: sandbox.stub()
+    };
+    
+    // Use esmock to load MongoAdapter with stubbed dependencies
+    MongoAdapter = await esmock('../../../../../src/model/oauth/adapters/mongo-adapter.js', {
+      '../../../../../src/model/oauth/utils.js': oauthUtilsStub,
+      '../../../../../src/model/oauth/cache.js': oauthCacheStub,
+      '../../../../../src/utils/session.js': sessionUtilsStub,
+      '../../../../../src/utils/role.js': roleUtilsStub
+    });
   });
 
   afterEach(() => {
@@ -53,24 +79,138 @@ describe('MongoAdapter', () => {
       expect(result).to.be.null;
     });
 
-    it.skip('should refresh user info for non-application clients', async () => {
-      // This test requires stubbing ES modules which is not currently supported in this setup
-      // The test would verify that getUserInfo is called for non-application clients
+    it('should refresh user info for non-application clients', async () => {
+      const originalUser = { _id: 'user-id-123', role: 'regular-user' };
+      const mockToken = {
+        accessToken: 'access-token-123',
+        user: originalUser,
+        client: { id: 'client-id-123' },
+        registeredAt: new Date('2025-01-01T00:00:00Z')
+      };
+
+      const refreshedUser = { 
+        _id: 'user-id-123', 
+        role: 'regular-user',
+        globalLogoutAt: null 
+      };
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(false);
+      oauthCacheStub.getUserInfo.resolves(refreshedUser);
+      roleUtilsStub.isRoleInvalidated.resolves(false);
+      sessionUtilsStub.isTokenInvalidated.returns(false);
+
+      const result = await MongoAdapter.checkToken(mockToken as any);
+
+      expect(oauthUtilsStub.isApplicationClient).to.have.been.calledWith(originalUser);
+      expect(oauthCacheStub.getUserInfo).to.have.been.calledWith('user-id-123');
+      expect(result).to.not.be.null;
+      expect(result?.user).to.deep.equal(refreshedUser);
     });
 
-    it.skip('should return null if role is invalidated', async () => {
-      // This test requires stubbing ES modules which is not currently supported in this setup
-      // The test would verify that null is returned when role is invalidated
+    it('should not refresh user info for application clients', async () => {
+      const mockToken = {
+        accessToken: 'access-token-123',
+        user: { _id: 'client-id-123', role: 'internal-client' },
+        client: { id: 'client-id-123' },
+        registeredAt: new Date('2025-01-01T00:00:00Z'),
+        globalLogoutAt: null
+      };
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(true);
+      roleUtilsStub.isRoleInvalidated.resolves(false);
+      sessionUtilsStub.isTokenInvalidated.returns(false);
+
+      const result = await MongoAdapter.checkToken(mockToken as any);
+
+      expect(oauthUtilsStub.isApplicationClient).to.have.been.calledWith(mockToken.user);
+      expect(oauthCacheStub.getUserInfo).to.not.have.been.called;
+      expect(result).to.not.be.null;
+      expect(result?.user).to.deep.equal(mockToken.user);
     });
 
-    it.skip('should return null if token is invalidated', async () => {
-      // This test requires stubbing ES modules which is not currently supported in this setup
-      // The test would verify that null is returned when token is invalidated
+    it('should return null if role is invalidated', async () => {
+      const mockToken = {
+        accessToken: 'access-token-123',
+        user: { 
+          _id: 'user-id-123', 
+          role: 'regular-user',
+          globalLogoutAt: null 
+        },
+        client: { id: 'client-id-123' },
+        registeredAt: new Date('2025-01-01T00:00:00Z')
+      };
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(true);
+      roleUtilsStub.isRoleInvalidated.resolves(true); // Role is invalidated
+      sessionUtilsStub.isTokenInvalidated.returns(false);
+
+      const result = await MongoAdapter.checkToken(mockToken as any);
+
+      expect(roleUtilsStub.isRoleInvalidated).to.have.been.calledWith(
+        mockToken.user.role, 
+        mockToken.registeredAt
+      );
+      expect(result).to.be.null;
     });
 
-    it.skip('should return token if all validations pass', async () => {
-      // This test requires stubbing ES modules which is not currently supported in this setup
-      // The test would verify that the token is returned when all validations pass
+    it('should return null if token is invalidated', async () => {
+      const mockToken = {
+        accessToken: 'access-token-123',
+        user: { 
+          _id: 'user-id-123', 
+          role: 'regular-user',
+          globalLogoutAt: '2025-01-02T00:00:00Z' // Global logout after token registration
+        },
+        client: { id: 'client-id-123' },
+        registeredAt: new Date('2025-01-01T00:00:00Z')
+      };
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(true);
+      roleUtilsStub.isRoleInvalidated.resolves(false);
+      sessionUtilsStub.isTokenInvalidated.returns(true); // Token is invalidated
+
+      const result = await MongoAdapter.checkToken(mockToken as any);
+
+      expect(sessionUtilsStub.isTokenInvalidated).to.have.been.calledWith(
+        mockToken.user.globalLogoutAt, 
+        mockToken.registeredAt
+      );
+      expect(result).to.be.null;
+    });
+
+    it('should return token if all validations pass', async () => {
+      const mockToken = {
+        accessToken: 'access-token-123',
+        user: { 
+          _id: 'user-id-123', 
+          role: 'regular-user',
+          globalLogoutAt: null 
+        },
+        client: { id: 'client-id-123' },
+        registeredAt: new Date('2025-01-01T00:00:00Z')
+      };
+
+      // Setup stubs
+      oauthUtilsStub.isApplicationClient.returns(true);
+      roleUtilsStub.isRoleInvalidated.resolves(false);
+      sessionUtilsStub.isTokenInvalidated.returns(false);
+
+      const result = await MongoAdapter.checkToken(mockToken as any);
+
+      expect(oauthUtilsStub.isApplicationClient).to.have.been.calledWith(mockToken.user);
+      expect(roleUtilsStub.isRoleInvalidated).to.have.been.calledWith(
+        mockToken.user.role, 
+        mockToken.registeredAt
+      );
+      expect(sessionUtilsStub.isTokenInvalidated).to.have.been.calledWith(
+        mockToken.user.globalLogoutAt, 
+        mockToken.registeredAt
+      );
+      expect(result).to.deep.equal(mockToken);
     });
   });
 
