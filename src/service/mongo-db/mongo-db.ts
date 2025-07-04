@@ -78,4 +78,26 @@ export class MongoDB {
       return { session };
     }
   }
+
+  public async disconnect() {
+    try {
+      // Close all active sessions
+      for (const [sessionId, session] of this.sessions) {
+        try {
+          await session.endSession();
+        } catch (e) {
+          log.warn("Error ending session %s: %o", sessionId, e);
+        }
+      }
+      this.sessions.clear();
+      
+      // Disconnect from MongoDB
+      if (this.connection) {
+        log.debug("Closing MongoDB connection...");
+        await mongoose.disconnect();
+      }
+    } catch (error) {
+      log.error("Error disconnecting from MongoDB: %o", error);
+    }
+  }
 }

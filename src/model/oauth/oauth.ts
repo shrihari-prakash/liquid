@@ -16,7 +16,9 @@ interface User {
   [key: string]: any;
 }
 
-const useTokenCache = Configuration.get("privilege.can-use-cache");
+const useTokenCache = (): boolean => {
+  return Configuration.get("privilege.can-use-cache");
+};
 
 const OAuthModel = {
   getClient: MongoAdapter.getClient,
@@ -39,7 +41,7 @@ const OAuthModel = {
       } else {
         token.user = user;
       }
-      if (useTokenCache) {
+      if (useTokenCache()) {
         return await RedisAdapter.saveToken(token);
       } else {
         return await MongoAdapter.saveToken(token);
@@ -53,7 +55,7 @@ const OAuthModel = {
 
   getAccessToken: async (accessToken: string) => {
     try {
-      if (useTokenCache) {
+      if (useTokenCache()) {
         return await RedisAdapter.getAccessToken(accessToken);
       } else {
         return await MongoAdapter.getAccessToken(accessToken);
@@ -66,7 +68,7 @@ const OAuthModel = {
   },
 
   getRefreshToken: async (refreshToken: string) => {
-    if (useTokenCache) {
+    if (useTokenCache()) {
       return await RedisAdapter.getRefreshToken(refreshToken);
     } else {
       return await MongoAdapter.getRefreshToken(refreshToken);
@@ -75,7 +77,7 @@ const OAuthModel = {
 
   revokeToken: async (token: RefreshToken) => {
     if (!token) return false;
-    if (useTokenCache) {
+    if (useTokenCache()) {
       return await RedisAdapter.revokeToken(token);
     } else {
       return await MongoAdapter.revokeToken(token);
@@ -89,7 +91,7 @@ const OAuthModel = {
         client: client || {},
         user: user || {},
       };
-      if (useTokenCache) {
+      if (useTokenCache()) {
         return await RedisAdapter.saveAuthorizationCode(authorizationCode);
       } else {
         return await MongoAdapter.saveAuthorizationCode(authorizationCode);
@@ -103,7 +105,7 @@ const OAuthModel = {
 
   getAuthorizationCode: async (authorizationCode: any) => {
     try {
-      if (useTokenCache) {
+      if (useTokenCache()) {
         return await RedisAdapter.getAuthorizationCode(authorizationCode);
       } else {
         return await MongoAdapter.getAuthorizationCode(authorizationCode);
@@ -118,7 +120,7 @@ const OAuthModel = {
   revokeAuthorizationCode: async (authorizationCode: any): Promise<boolean> => {
     try {
       const code = authorizationCode.authorizationCode;
-      if (useTokenCache) {
+      if (useTokenCache()) {
         return await RedisAdapter.revokeAuthorizationCode(code);
       } else {
         return await MongoAdapter.revokeAuthorizationCode(code);

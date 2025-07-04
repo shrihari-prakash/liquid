@@ -58,6 +58,13 @@ class Redis {
     log.debug("Delete from cache: %s: *****", this.isSensitiveKey(key) ? "*****" : key);
     return await this.client.del(key);
   }
+
+  async quit() {
+    if (this.client) {
+      log.debug("Closing Redis connection...");
+      await this.client.quit();
+    }
+  }
 }
 
 export default Redis;

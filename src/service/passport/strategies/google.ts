@@ -57,8 +57,10 @@ class GoogleStrategy {
       if (!profile.name.familyName) {
         return cb(new Error("Google profile does not contain a family name."), undefined);
       }
-      const existingUser = await UserModel.findOne({ googleProfileId: profile.id }).lean();
       let email = profile.emails[0].value;
+      const existingUser = await UserModel.findOne({
+        $or: [{ googleProfileId: profile.id }, { email: email }],
+      }).lean();
       if (existingUser) {
         log.info("User found from Google profile.");
         UserModel.updateOne(

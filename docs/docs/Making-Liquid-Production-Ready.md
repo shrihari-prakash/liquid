@@ -48,14 +48,14 @@ To send outbound emails from Liquid, say, for account verification and password 
 
 #### Using Message Queue (Pusher):
 
-If none of the built-in email providers meet your needs, Liquid can put emails to a queue so that another service can consume them and send emails using your preferred custom provider.
+If none of the built-in email providers meet your needs, Liquid can put emails in a queue so that another service can consume them and send emails using your preferred custom provider.
 
 - Set **_system.email-adapter_** to `pusher`.
 - Set **_privilege.can-use-push-events_** to `true`.
 - Configure your message queue by setting **_system.queue-adapter_** to either `redis` or `rabbitmq`.
 - Configure the appropriate queue service (Redis or RabbitMQ) settings.
 
-You should now get a `liquid.email.send` when an email is triggered.
+You should now get a `liquid.email.send` event when an email is triggered.
 
 ### Caching:
 
