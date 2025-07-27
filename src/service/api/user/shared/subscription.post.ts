@@ -19,6 +19,7 @@ export const POST_SubscriptionValidator = [
   body("state").exists().isBoolean(),
   body("expiry").optional().isISO8601(),
   body("tier").optional().isString().isLength({ max: 128 }),
+  body("subscriptionIdentifier").optional().custom((value) => typeof value === "string" || typeof value === "number"),
 ];
 
 const POST_Subscription = async (req: Request, res: Response): Promise<void> => {
@@ -31,6 +32,7 @@ const POST_Subscription = async (req: Request, res: Response): Promise<void> => 
     const state = req.body.state;
     const tier = req.body.tier;
     const expiry = req.body.expiry;
+    const subscriptionIdentifier = req.body.subscriptionIdentifier;
     if (state === true && !expiry) {
       const errors = [
         {
@@ -53,7 +55,7 @@ const POST_Subscription = async (req: Request, res: Response): Promise<void> => 
       res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError, { errors }));
       return;
     }
-    const query = {
+    const query: any = {
       $set: {
         isSubscribed: state,
         subscriptionActivatedAt: moment().toDate(),
@@ -61,6 +63,9 @@ const POST_Subscription = async (req: Request, res: Response): Promise<void> => 
         subscriptionTier: tier || null,
       },
     };
+    if (typeof subscriptionIdentifier !== 'undefined') {
+      query.$set.subscriptionIdentifier = subscriptionIdentifier;
+    }
     await UserModel.updateOne({ _id: target }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
     flushUserInfoFromRedis(target);

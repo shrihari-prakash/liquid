@@ -470,6 +470,17 @@ export const userSchema = {
       write: SensitivityLevel.MEDIUM,
     },
   },
+  subscriptionIdentifier: {
+    type: mongoose.Schema.Types.Mixed,
+    required: false,
+    willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM,
+    },
+  },
   credits: {
     type: Number,
     required: true,
@@ -752,6 +763,7 @@ export type UserInterface = {
   subscriptionActivatedAt: Date;
   subscriptionExpiry: Date;
   subscriptionTier: string;
+  subscriptionIdentifier?: string | number;
   credits: number;
   scope: string[];
   invitedBy: string | ObjectId;
@@ -820,3 +832,4 @@ const schemaInstance = new mongoose.Schema(userSchema, {
   UserModel = mongoose.model("user", schemaInstance);
 
 export default UserModel;
+
