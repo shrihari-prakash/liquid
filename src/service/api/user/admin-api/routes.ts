@@ -5,6 +5,7 @@ import { DelegatedAuthFlow } from "../../middleware/authenticate.js";
 import POST_Ban, { POST_BanValidator } from "../shared/ban.post.js";
 import POST_Restrict, { POST_RestrictValidator } from "../shared/restrict.post.js";
 import POST_Subscription, { POST_SubscriptionValidator } from "../shared/subscription.post.js";
+import POST_SubscriptionCancel, { POST_SubscriptionCancelValidator } from "../shared/subscription-cancel.post.js";
 import POST_Access, { POST_AccessValidator } from "../shared/access.post.js";
 import POST_Verify, { POST_VerifyValidator } from "./verify.post.js";
 import POST_Create, { POST_CreateValidator } from "../shared/create.post.js";
@@ -31,6 +32,7 @@ AdminApiRouter.post("/credits", ...DelegatedAuthFlow, POST_CreditsValidator, POS
 AdminApiRouter.post("/restrict", ...DelegatedAuthFlow, POST_RestrictValidator, POST_Restrict);
 AdminApiRouter.post("/verify", ...DelegatedAuthFlow, POST_VerifyValidator, POST_Verify);
 AdminApiRouter.post("/subscription", ...DelegatedAuthFlow, POST_SubscriptionValidator, POST_Subscription);
+AdminApiRouter.post("/subscription-cancel", ...DelegatedAuthFlow, POST_SubscriptionCancelValidator, POST_SubscriptionCancel);
 AdminApiRouter.get("/subscription-tiers", ...DelegatedAuthFlow, GET_SubscriptionTiers);
 AdminApiRouter.post("/create", ...DelegatedAuthFlow, POST_CreateValidator, POST_Create);
 AdminApiRouter.get("/list", ...DelegatedAuthFlow, GET_List);
