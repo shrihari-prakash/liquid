@@ -20,6 +20,7 @@ export const POST_SubscriptionValidator = [
   body("expiry").optional().isISO8601(),
   body("tier").optional().isString().isLength({ max: 128 }),
   body("subscriptionIdentifier").optional().custom((value) => typeof value === "string" || typeof value === "number"),
+  body("cancelled").optional().isBoolean(),
 ];
 
 const POST_Subscription = async (req: Request, res: Response): Promise<void> => {
@@ -33,6 +34,8 @@ const POST_Subscription = async (req: Request, res: Response): Promise<void> => 
     const tier = req.body.tier;
     const expiry = req.body.expiry;
     const subscriptionIdentifier = req.body.subscriptionIdentifier;
+    const cancelled = req.body.cancelled;
+    
     if (state === true && !expiry) {
       const errors = [
         {
@@ -65,6 +68,20 @@ const POST_Subscription = async (req: Request, res: Response): Promise<void> => 
     };
     if (typeof subscriptionIdentifier !== 'undefined') {
       query.$set.subscriptionIdentifier = subscriptionIdentifier;
+    }
+    
+    // Handle subscription cancellation
+    if (typeof cancelled !== 'undefined') {
+      query.$set.subscriptionCancelled = cancelled;
+      if (cancelled === true) {
+        query.$set.subscriptionCancelledAt = moment().toDate();
+      } else {
+        query.$set.subscriptionCancelledAt = null;
+      }
+    }
+    if (cancelled) {
+      query.$set.isSubscribed = false;
+      query.$set.subscriptionCancelledAt = moment().toDate();
     }
     await UserModel.updateOne({ _id: target }, query);
     res.status(statusCodes.success).json(new SuccessResponse());

@@ -481,6 +481,29 @@ export const userSchema = {
       write: SensitivityLevel.MEDIUM,
     },
   },
+  subscriptionCancelled: {
+    type: Boolean,
+    required: true,
+    default: false,
+    willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM,
+    },
+  },
+  subscriptionCancelledAt: {
+    type: Date,
+    required: false,
+    willProjectForUserSelect: true,
+    willProjectForUserAdminSelect: true,
+    willProjectForUserClientSelect: true,
+    sensitivityScore: {
+      read: SensitivityLevel.MEDIUM,
+      write: SensitivityLevel.MEDIUM,
+    },
+  },
   credits: {
     type: Number,
     required: true,
@@ -764,6 +787,8 @@ export type UserInterface = {
   subscriptionExpiry: Date;
   subscriptionTier: string;
   subscriptionIdentifier?: string | number;
+  subscriptionCancelled: boolean;
+  subscriptionCancelledAt?: Date;
   credits: number;
   scope: string[];
   invitedBy: string | ObjectId;
