@@ -36,9 +36,6 @@ const POST_SubscriptionCancel = async (req: Request, res: Response): Promise<voi
 
     if (cancelled === true) {
       query.$set.subscriptionCancelledAt = moment().toDate();
-      query.$set.isSubscribed = false;
-    } else {
-      query.$set.subscriptionCancelledAt = null;
     }
 
     await UserModel.updateOne({ _id: target }, query);

@@ -862,3 +862,86 @@ Read more about the Invite-Only system [here](/features/Invite-Only-Mode).
 ```
 
 </details>
+
+<details>
+<summary>
+### Subscription Management
+<br/>
+Manage user subscriptions, tiers, and cancellations.
+</summary>
+
+#### Authentication
+
+Requires client authentication.
+
+#### Scope
+
+`client:profile:subscriptions:write`
+
+#### Manage Subscription
+
+##### URL
+
+**POST /user/client-api/subscription**
+
+##### Request Body
+
+| Parameter              | Type              | Description                                | Required / Optional    |
+| ---------------------- | ----------------- | ------------------------------------------ | ---------------------- |
+| target                 | string            | User ID of the target user                 | Required               |
+| state                  | boolean           | Whether the subscription is active         | Required               |
+| expiry                 | string (ISO date) | Expiration date for the subscription       | Required if state=true |
+| tier                   | string            | The subscription tier (from configuration) | Optional               |
+| subscriptionIdentifier | string or number  | External identifier for the subscription   | Optional               |
+
+##### Request Sample
+
+```json
+{
+  "target": "507f1f77bcf86cd799439011",
+  "state": true,
+  "expiry": "2026-07-28T00:00:00.000Z",
+  "tier": "premium",
+  "subscriptionIdentifier": "subscription_12345"
+}
+```
+
+##### Response Sample
+
+```json
+{
+  "ok": 1
+}
+```
+
+#### Cancel Subscription
+
+##### URL
+
+**POST /user/client-api/subscription-cancel**
+
+##### Request Body
+
+| Parameter | Type    | Description                           | Required / Optional |
+| --------- | ------- | ------------------------------------- | ------------------- |
+| target    | string  | User ID of the target user            | Required            |
+| cancelled | boolean | Whether the subscription is cancelled | Required            |
+
+##### Request Sample
+
+```json
+{
+  "target": "507f1f77bcf86cd799439011",
+  "cancelled": true
+}
+```
+
+##### Response Sample
+
+```json
+{
+  "ok": 1
+}
+```
+
+</details>
