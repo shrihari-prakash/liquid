@@ -36,7 +36,7 @@ Credits are usually similar to virtual money that you can use for controlling pa
 
 ## Subscriptions
 
-Subscription fields manage user subscription status, tiers, and cancellation information. See usage [here](/api-documentation/API-Documentation-Client#subscription-management) (Client API) and [here](/api-documentation/API-Documentation-Admin#subscription-management) (Admin API)
+Subscription fields manage user subscription status, tiers, and cancellation information. See usage for managing subscriptions [here](/api-documentation/API-Documentation-Client#manage-subscription) (Client API) and [here](/api-documentation/API-Documentation-Admin#manage-subscription) (Admin API). See usage for cancelling subscriptions [here](/api-documentation/API-Documentation-Client#cancel-subscription) (Client API) and [here](/api-documentation/API-Documentation-Admin#cancel-subscription) (Admin API)
 
 1. isSubscribed - Boolean indicating if the user has an active subscription
 2. subscriptionTier - String representing the subscription tier (e.g., "basic", "premium")

@@ -1265,9 +1265,9 @@ Read more about the Invite-Only system [here](/features/Invite-Only-Mode).
 
 <details>
 <summary>
-### Subscription Management
+### Manage Subscription
 <br/>
-Manage user subscriptions, tiers, and cancellations.
+Activate, deactivate or modify a user's subscription.
 </summary>
 
 #### Authentication
@@ -1278,13 +1278,11 @@ Requires delegated authentication.
 
 `admin:profile:subscriptions:write` or role = `super_admin`
 
-#### Manage Subscription
-
-##### URL
+#### URL
 
 **POST /user/admin-api/subscription**
 
-##### Request Body
+#### Request Body
 
 | Parameter              | Type              | Description                                | Required / Optional    |
 | ---------------------- | ----------------- | ------------------------------------------ | ---------------------- |
@@ -1294,7 +1292,7 @@ Requires delegated authentication.
 | tier                   | string            | The subscription tier (from configuration) | Optional               |
 | subscriptionIdentifier | string or number  | External identifier for the subscription   | Optional               |
 
-##### Request Sample
+#### Request Sample
 
 ```json
 {
@@ -1306,7 +1304,7 @@ Requires delegated authentication.
 }
 ```
 
-##### Response Sample
+#### Response Sample
 
 ```json
 {
@@ -1314,20 +1312,35 @@ Requires delegated authentication.
 }
 ```
 
-#### Cancel Subscription
+</details>
 
-##### URL
+<details>
+<summary>
+### Cancel Subscription
+<br/>
+Cancel or revoke cancellation of a user's subscription.
+</summary>
+
+#### Authentication
+
+Requires delegated authentication.
+
+#### Scope
+
+`admin:profile:subscriptions:write` or role = `super_admin`
+
+#### URL
 
 **POST /user/admin-api/subscription-cancel**
 
-##### Request Body
+#### Request Body
 
 | Parameter | Type    | Description                           | Required / Optional |
 | --------- | ------- | ------------------------------------- | ------------------- |
 | target    | string  | User ID of the target user            | Required            |
 | cancelled | boolean | Whether the subscription is cancelled | Required            |
 
-##### Request Sample
+#### Request Sample
 
 ```json
 {
@@ -1336,7 +1349,7 @@ Requires delegated authentication.
 }
 ```
 
-##### Response Sample
+#### Response Sample
 
 ```json
 {
@@ -1344,13 +1357,28 @@ Requires delegated authentication.
 }
 ```
 
-#### Get Subscription Tiers
+</details>
 
-##### URL
+<details>
+<summary>
+### Get Subscription Tiers
+<br/>
+Retrieve the list of available subscription tiers.
+</summary>
+
+#### Authentication
+
+Requires delegated authentication.
+
+#### Scope
+
+`admin:profile:subscriptions:read` or role = `super_admin`
+
+#### URL
 
 **GET /user/admin-api/subscription-tiers**
 
-##### Response Sample
+#### Response Sample
 
 ```json
 {

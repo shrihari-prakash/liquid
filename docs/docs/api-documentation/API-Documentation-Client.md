@@ -865,9 +865,9 @@ Read more about the Invite-Only system [here](/features/Invite-Only-Mode).
 
 <details>
 <summary>
-### Subscription Management
+### Manage Subscription
 <br/>
-Manage user subscriptions, tiers, and cancellations.
+Activate, deactivate or modify a user's subscription.
 </summary>
 
 #### Authentication
@@ -878,13 +878,11 @@ Requires client authentication.
 
 `client:profile:subscriptions:write`
 
-#### Manage Subscription
-
-##### URL
+#### URL
 
 **POST /user/client-api/subscription**
 
-##### Request Body
+#### Request Body
 
 | Parameter              | Type              | Description                                | Required / Optional    |
 | ---------------------- | ----------------- | ------------------------------------------ | ---------------------- |
@@ -894,7 +892,7 @@ Requires client authentication.
 | tier                   | string            | The subscription tier (from configuration) | Optional               |
 | subscriptionIdentifier | string or number  | External identifier for the subscription   | Optional               |
 
-##### Request Sample
+#### Request Sample
 
 ```json
 {
@@ -906,7 +904,7 @@ Requires client authentication.
 }
 ```
 
-##### Response Sample
+#### Response Sample
 
 ```json
 {
@@ -914,20 +912,35 @@ Requires client authentication.
 }
 ```
 
-#### Cancel Subscription
+</details>
 
-##### URL
+<details>
+<summary>
+### Cancel Subscription
+<br/>
+Cancel or revoke cancellation of a user's subscription.
+</summary>
+
+#### Authentication
+
+Requires client authentication.
+
+#### Scope
+
+`client:profile:subscriptions:write`
+
+#### URL
 
 **POST /user/client-api/subscription-cancel**
 
-##### Request Body
+#### Request Body
 
 | Parameter | Type    | Description                           | Required / Optional |
 | --------- | ------- | ------------------------------------- | ------------------- |
 | target    | string  | User ID of the target user            | Required            |
 | cancelled | boolean | Whether the subscription is cancelled | Required            |
 
-##### Request Sample
+#### Request Sample
 
 ```json
 {
@@ -936,7 +949,7 @@ Requires client authentication.
 }
 ```
 
-##### Response Sample
+#### Response Sample
 
 ```json
 {
