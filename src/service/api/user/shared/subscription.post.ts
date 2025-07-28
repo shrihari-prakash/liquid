@@ -74,7 +74,6 @@ const POST_Subscription = async (req: Request, res: Response): Promise<void> => 
     const baseTier = Configuration.get("user.subscription.base-tier");
     if (tier && tier === baseTier) {
       query.$set.subscriptionCancelled = false;
-      query.$set.subscriptionCancelledAt = null;
     }
 
     await UserModel.updateOne({ _id: target }, query);
