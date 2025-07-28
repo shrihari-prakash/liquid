@@ -23,8 +23,12 @@ export const checkSubscription = (user: UserInterface) => {
     user.isSubscribed = false;
     user.subscriptionTier = baseTier;
     if (wasSubscribed) {
-      UserModel.updateOne({ _id: user._id }, { $set: { isSubscribed: false, subscriptionTier: baseTier } });
+      UserModel.updateOne(
+        { _id: user._id },
+        { $set: { isSubscribed: false, subscriptionTier: baseTier, subscriptionCancelled: false } },
+      );
     }
   }
   return user;
 };
+

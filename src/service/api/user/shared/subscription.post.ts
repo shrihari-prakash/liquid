@@ -70,6 +70,13 @@ const POST_Subscription = async (req: Request, res: Response): Promise<void> => 
       query.$set.subscriptionIdentifier = subscriptionIdentifier;
     }
 
+    // If tier is the base tier, ensure subscription is not marked as cancelled
+    const baseTier = Configuration.get("user.subscription.base-tier");
+    if (tier && tier === baseTier) {
+      query.$set.subscriptionCancelled = false;
+      query.$set.subscriptionCancelledAt = null;
+    }
+
     await UserModel.updateOne({ _id: target }, query);
     res.status(statusCodes.success).json(new SuccessResponse());
     flushUserInfoFromRedis(target);
