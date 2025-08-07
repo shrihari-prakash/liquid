@@ -41,7 +41,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Run integration tests
-      run: npm test
+      run: npm run test:integration
 
   test-summary:
     name: "Test Summary"
