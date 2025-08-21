@@ -252,11 +252,11 @@ describe("create.post", () => {
 
       const firstRes = await chai.request(app).post("/user/create").send(user);
       chai.expect(firstRes.status).to.eql(201);
-      const firstUserId = firstRes.body.user._id;
+      const firstUserId = firstRes.body.data.user._id;
 
       const secondRes = await chai.request(app).post("/user/create").send(user);
       chai.expect(secondRes.status).to.eql(201);
-      const secondUserId = secondRes.body.user._id;
+      const secondUserId = secondRes.body.data.user._id;
 
       chai.expect(secondUserId).to.eql(firstUserId);
 
@@ -271,11 +271,11 @@ describe("create.post", () => {
 
       const firstRes = await chai.request(app).post("/user/create").send(user);
       chai.expect(firstRes.status).to.eql(201);
-      const firstUserId = firstRes.body.user._id;
+      const firstUserId = firstRes.body.data.user._id;
 
       const secondRes = await chai.request(app).post("/user/create").send(user);
       chai.expect(secondRes.status).to.eql(201);
-      const secondUserId = secondRes.body.user._id;
+      const secondUserId = secondRes.body.data.user._id;
 
       chai.expect(secondUserId).to.not.eql(firstUserId);
 

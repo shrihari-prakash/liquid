@@ -204,7 +204,7 @@ const POST_Create = async (req: Request, res: Response): Promise<void> => {
     }
     if (existingUserId) {
       toInsert._id = existingUserId;
-      log.info("Reusing existing user ID %s for new user %s", existingUserId, username.toLowerCase());
+      log.info("Preserving existing user ID %s for new user %s", existingUserId, username.toLowerCase());
     }
     const isInviteCodeValid = await validateInviteCode(req, res, toInsert);
     if (!isInviteCodeValid) {
