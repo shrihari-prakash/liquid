@@ -97,6 +97,7 @@ async function useInviteCode(
 
 const POST_Create = async (req: Request, res: Response): Promise<void> => {
   let session = "";
+  let existingUserId = null;
   try {
     if (Configuration.get("user.account-creation.enable-ip-based-throttle")) {
       const ipResult = (await UserModel.findOne({ creationIp: req.ip })
@@ -149,6 +150,10 @@ const POST_Create = async (req: Request, res: Response): Promise<void> => {
         res.status(statusCodes.conflict).json(new ErrorResponse(errorMessages.conflict, { duplicateFields }));
         return;
       } else {
+        if (Configuration.get("user.account-creation.preserve-unverified-user-id")) {
+          existingUserId = existingUser._id;
+          log.info("Preserving existing user ID %s for user %s", existingUserId, existingUser.username);
+        }
         if (Configuration.get("user.account-creation.enable-invite-only")) {
           const inviteCode = await InviteCodeModel.findOne({ targetId: existingUser._id });
           if (inviteCode) {
@@ -196,6 +201,10 @@ const POST_Create = async (req: Request, res: Response): Promise<void> => {
       toInsert.phone = phone;
       toInsert.phoneCountryCode = phoneCountryCode;
       toInsert.phoneVerified = false;
+    }
+    if (existingUserId) {
+      toInsert._id = existingUserId;
+      log.info("Reusing existing user ID %s for new user %s", existingUserId, username.toLowerCase());
     }
     const isInviteCodeValid = await validateInviteCode(req, res, toInsert);
     if (!isInviteCodeValid) {

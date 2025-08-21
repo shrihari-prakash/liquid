@@ -231,4 +231,58 @@ describe("create.post", () => {
       chai.expect(dbUser.customData).to.eql("{}");
     });
   });
+
+  describe("test preserve unverified user id", () => {
+    beforeEach(async () => {
+      await UserModel.deleteMany({});
+      await VerificationCodeModel.deleteMany({});
+    });
+
+    const user = {
+      username: "test_preserve_id",
+      password: "testpassword",
+      firstName: "Test",
+      lastName: "User",
+      email: "testpreserveid@example.com",
+    };
+
+    it("should preserve existing user ID when replacing unverified user", async () => {
+      Configuration.set("user.account-creation.preserve-unverified-user-id", true);
+      Configuration.set("user.account-creation.require-email-verification", true);
+
+      const firstRes = await chai.request(app).post("/user/create").send(user);
+      chai.expect(firstRes.status).to.eql(201);
+      const firstUserId = firstRes.body.user._id;
+
+      const secondRes = await chai.request(app).post("/user/create").send(user);
+      chai.expect(secondRes.status).to.eql(201);
+      const secondUserId = secondRes.body.user._id;
+
+      chai.expect(secondUserId).to.eql(firstUserId);
+
+      const dbUsers = await UserModel.find({ username: user.username });
+      chai.expect(dbUsers.length).to.eql(1);
+      chai.expect(dbUsers[0]._id.toString()).to.eql(firstUserId);
+    });
+
+    it("should generate new user ID when preservation is disabled", async () => {
+      Configuration.set("user.account-creation.preserve-unverified-user-id", false);
+      Configuration.set("user.account-creation.require-email-verification", true);
+
+      const firstRes = await chai.request(app).post("/user/create").send(user);
+      chai.expect(firstRes.status).to.eql(201);
+      const firstUserId = firstRes.body.user._id;
+
+      const secondRes = await chai.request(app).post("/user/create").send(user);
+      chai.expect(secondRes.status).to.eql(201);
+      const secondUserId = secondRes.body.user._id;
+
+      chai.expect(secondUserId).to.not.eql(firstUserId);
+
+      const dbUsers = await UserModel.find({ username: user.username });
+      chai.expect(dbUsers.length).to.eql(1);
+      chai.expect(dbUsers[0]._id.toString()).to.eql(secondUserId);
+    });
+  });
 });
+

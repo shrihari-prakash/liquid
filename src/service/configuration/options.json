@@ -921,6 +921,14 @@
     "default": "{}"
   },
   {
+    "name": "user.account-creation.preserve-unverified-user-id",
+    "displayName": "User Account Creation Preserve Unverified User ID",
+    "envName": "USER_ACCOUNT_CREATION_PRESERVE_UNVERIFIED_USER_ID",
+    "description": "Specifies if the system should preserve the existing unverified user's ID when replacing them with a new user registration using the same credentials.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "user.account-creation.verificaton-code-lifetime",
     "displayName": "User Account Creation Verificaton Code Lifetime",
     "envName": "USER_ACCOUNT_CREATION_VERIFICATION_CODE_LIFETIME",
