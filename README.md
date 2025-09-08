@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/shrihari-prakash/liquid)
 [![Docker Image CI](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/docker-image.yml)
-[![Integration Tests CI](https://github.com/shrihari-prakash/liquid/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/integration-tests.yml)
+[![Integration Tests CI](https://github.com/shrihari-prakash/liquid/actions/workflows/tests.yml/badge.svg)](https://github.com/shrihari-prakash/liquid/actions/workflows/tests.yml)
 [![Acceptance Tests CI](https://github.com/gopalcs1988/liquid-acceptance-tests/actions/workflows/main.yml/badge.svg)](https://github.com/gopalcs1988/liquid-acceptance-tests/actions/workflows/main.yml)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/shrihari-prakash/liquid)
 ![GitHub Repo stars](https://img.shields.io/github/stars/shrihari-prakash/liquid?style=social)
@@ -32,8 +32,8 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 
 ## Translation Credits
 
-* **Spanish (es):** [@juliolopeztorres](https://github.com/juliolopeztorres)
-* **Tamil (ta):** [@shrihari-prakash](https://github.com/shrihari-prakash)
+- **Spanish (es):** [@juliolopeztorres](https://github.com/juliolopeztorres)
+- **Tamil (ta):** [@shrihari-prakash](https://github.com/shrihari-prakash)
 
 ## ⚙️ Setup
 
@@ -48,3 +48,4 @@ Liquid is released under the [MIT License](https://github.com/shrihari-prakash/l
 Have questions or need support? Open a discussion [here](https://github.com/shrihari-prakash/liquid/discussions).
 
 Experiencing issues? Open an issue [here](https://github.com/shrihari-prakash/liquid/issues).
+
