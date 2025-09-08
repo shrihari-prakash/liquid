@@ -4,49 +4,50 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Liquid',
-  tagline: '✨ Seamless and highly customizable authentication and user management server for any project. ✨',
-  favicon: 'img/liquid-icon-mini.png',
+  title: "Liquid",
+  tagline: "✨ Seamless and highly customizable authentication and user management server for any project. ✨",
+  favicon: "img/liquid-icon-mini.png",
 
   // Set the production url of your site here
-  url: 'https://liquid.shrihariprakash.in',
+  url: "https://liquid.shrihariprakash.in",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: "/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'shrihari-prakash', // Usually your GitHub org/user name.
-  projectName: 'liquid', // Usually your repo name.
+  organizationName: "shrihari-prakash", // Usually your GitHub org/user name.
+  projectName: "liquid", // Usually your repo name.
   trailingSlash: false,
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: "throw",
+  onBrokenMarkdownLinks: "warn",
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: "en",
+    locales: ["en"],
   },
 
   presets: [
     [
-      'classic',
+      "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: './sidebars.js',
-          routeBasePath: '/'
+          sidebarCollapsible: false,
+          sidebarPath: "./sidebars.js",
+          routeBasePath: "/",
         },
         blog: false,
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: "./src/css/custom.css",
         },
       }),
     ],
@@ -56,46 +57,46 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       colorMode: {
-        defaultMode: 'dark',
+        defaultMode: "dark",
         disableSwitch: false,
         respectPrefersColorScheme: false,
       },
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: "img/docusaurus-social-card.jpg",
       navbar: {
-        title: 'Liquid',
+        title: "Liquid",
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Docs',
+            type: "docSidebar",
+            sidebarId: "tutorialSidebar",
+            position: "left",
+            label: "Docs",
           },
           {
-            href: 'https://github.com/shrihari-prakash/liquid',
-            label: 'GitHub',
-            position: 'right',
+            href: "https://github.com/shrihari-prakash/liquid",
+            label: "GitHub",
+            position: "right",
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: "dark",
         links: [
           {
-            title: 'Docs',
+            title: "Docs",
             items: [
               {
-                label: 'Tutorial',
-                to: '/',
+                label: "Tutorial",
+                to: "/",
               },
             ],
           },
           {
-            title: 'More',
+            title: "More",
             items: [
               {
-                label: 'GitHub',
-                href: 'https://github.com/shrihari-prakash/liquid',
+                label: "GitHub",
+                href: "https://github.com/shrihari-prakash/liquid",
               },
             ],
           },
@@ -109,3 +110,4 @@ const config = {
 };
 
 export default config;
+
