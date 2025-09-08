@@ -23,6 +23,7 @@ const sidebars = {
     "Setup",
     "Making-Liquid-Production-Ready",
     "Understanding-Access-Control-and-Integrating-with-Other-Microservices",
+    "Push-Events",
     "Debugging-Common-Errors",
     {
       type: "category",
