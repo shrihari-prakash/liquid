@@ -959,6 +959,14 @@
     "type": "string"
   },
   {
+    "name": "user.account-creation.sso.google.use-given-name-as-last-name",
+    "displayName": "User Account Creation Google SSO Use Given Name As Last Name",
+    "envName": "USER_ACCOUNT_CREATION_SSO_GOOGLE_USE_GIVEN_NAME_AS_LAST_NAME",
+    "description": "Specifies if the given name should be used as the last name when family name is not available from Google profile.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "user.login.sso.token-lifetime",
     "displayName": "User Login Google SSO Token Lifetime",
     "envName": "USER_LOGIN_SSO_GOOGLE_SSO_TOKEN_LIFETIME",

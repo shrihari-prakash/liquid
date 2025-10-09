@@ -54,8 +54,21 @@ class GoogleStrategy {
       if (!profile.name.givenName) {
         return cb(new Error("Google profile does not contain a given name."), undefined);
       }
-      if (!profile.name.familyName) {
-        return cb(new Error("Google profile does not contain a family name."), undefined);
+
+      // Handle missing family name based on configuration
+      let firstName = profile.name.givenName;
+      let lastName = profile.name.familyName;
+
+      if (!profile.name.familyName || profile.name.familyName.trim() === "") {
+        const useGivenNameAsLastName = Configuration.get(
+          "user.account-creation.sso.google.use-given-name-as-last-name",
+        );
+        if (useGivenNameAsLastName) {
+          lastName = profile.name.givenName;
+          log.info("Family name not available, using given name as last name for Google profile: %s", profile.id);
+        } else {
+          return cb(new Error("Google profile does not contain a family name."), undefined);
+        }
       }
       let email = profile.emails[0].value;
       const existingUser = await UserModel.findOne({
@@ -100,8 +113,8 @@ class GoogleStrategy {
       const newUser = new UserModel({
         email,
         sanitizedEmail: sanitizeEmailAddress(email),
-        firstName: profile.name.givenName,
-        lastName: profile.name.familyName,
+        firstName: firstName,
+        lastName: lastName,
         username,
         emailVerified: true,
         ssoEnabled: true,
