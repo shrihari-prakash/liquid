@@ -1172,7 +1172,7 @@ Requires delegated authentication.
 | Parameter | Type                                  | Description                                     |
 | --------- | ------------------------------------- | ----------------------------------------------- |
 | target    | array                                 | `_id` of the user to be verified or unverified. |
-| operation | enum(`increment`, `decrement`, `set`) | Operation to be performed on the credit value.  |
+| type      | enum(`increment`, `decrement`, `set`) | Operation to be performed on the credit value.  |
 
 #### Request Sample
 
