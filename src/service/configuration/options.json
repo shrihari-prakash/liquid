@@ -1020,7 +1020,7 @@
     "envName": "USER_SEARCH_SEARCH_FIELDS",
     "description": "Specifies the field names that can be used to search for users.",
     "type": "stringArray",
-    "default": "username,firstName,lastName,email"
+    "default": "username,firstName,lastName,email,role"
   },
   {
     "name": "user.search.strict-match-fields",
@@ -1111,6 +1111,63 @@
     "description": "Specifies the maximum number of results to be returned in user search API.",
     "type": "number",
     "default": 10
+  },
+  {
+    "name": "admin-api.user.search.strict-match-fields",
+    "displayName": "User Search Strict Match Fields (Admin API)",
+    "envName": "ADMIN_API_USER_SEARCH_STRICT_MATCH_FIELDS",
+    "description": "Specifies the fields that should be returned only if the search query matches the string in the field exactly. The field should also be a part of `admin-api.user.search.search-fields`.",
+    "type": "stringArray",
+    "default": "role"
+  },
+  {
+    "name": "client-api.user.search.search-fields",
+    "displayName": "User Search Fields (Client API)",
+    "envName": "CLIENT_API_USER_SEARCH_SEARCH_FIELDS",
+    "description": "Specifies the field names that can be used to search for users.",
+    "type": "stringArray",
+    "default": "username,firstName,lastName,email"
+  },
+  {
+    "name": "client-api.user.search.strict-match-fields",
+    "displayName": "User Search Strict Match Fields (Client API)",
+    "envName": "CLIENT_API_USER_SEARCH_STRICT_MATCH_FIELDS",
+    "description": "Specifies the fields that should be returned only if the search query matches the string in the field exactly. The field should also be a part of `client-api.user.search.search-fields`.",
+    "type": "stringArray",
+    "default": "role"
+  },
+  {
+    "name": "client-api.user.search-results.cache-lifetime",
+    "displayName": "User Search Results Cache Lifetime (Client API)",
+    "envName": "CLIENT_API_USER_SEARCH_RESULTS_CACHE_LIFETIME",
+    "description": "Specifies in seconds the amount of time for which results for a search query will be cached.",
+    "type": "number",
+    "default": 30,
+    "relatedOptions": ["privilege.can-use-cache"]
+  },
+  {
+    "name": "client-api.user.search-results.limit",
+    "displayName": "User Search Results Limit (Client API)",
+    "envName": "CLIENT_API_USER_SEARCH_RESULTS_LIMIT",
+    "description": "Specifies the maximum number of results to be returned in user search API.",
+    "type": "number",
+    "default": 10
+  },
+  {
+    "name": "client-api.privilege.user.search.can-use-id",
+    "displayName": "Can Use ID for User Search (Client API)",
+    "envName": "CLIENT_API_USER_SEARCH_CAN_USE_ID",
+    "description": "Specifies if _id field of records can be used to search for users.",
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "name": "client-api.privilege.user.search.can-use-fullname",
+    "displayName": "Can Use Fullname for User Search (Client API)",
+    "envName": "CLIENT_API_USER_SEARCH_CAN_USE_FULLNAME",
+    "description": "Specifies if firstName and lastName fields can be concatenated and used to search for users.",
+    "type": "boolean",
+    "default": true
   },
   {
     "name": "user.block-status.cache-lifetime",

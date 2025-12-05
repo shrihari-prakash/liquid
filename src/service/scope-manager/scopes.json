@@ -277,6 +277,11 @@
     "parent": "client:profile:write"
   },
   {
+    "name": "client:profile:search",
+    "description": "Search for user accounts in the system.",
+    "parent": "client:profile:all"
+  },
+  {
     "name": "client:profile:sensitive:all",
     "description": "Read and write to all levels sensitive fields of users.",
     "parent": "client:all"
@@ -507,3 +512,4 @@
     "parent": "admin:profile:sensitive:write"
   }
 ]
+

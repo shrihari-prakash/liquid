@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { body } from "express-validator";
-import { runSearch } from "./shared/search.js";
+import { runSearch } from "../shared/search.js";
 
 export const POST_SearchValidator = [
   body("query")
@@ -13,10 +13,10 @@ export const POST_SearchValidator = [
 
 const POST_Search = async (req: Request, res: Response): Promise<void> => {
   await runSearch(req, res, {
-    scope: "delegated:profile:search",
-    baseConfigPrefix: "user",
-    privilegePrefix: "privilege.user",
-    filterBlocked: true,
+    scope: "client:profile:search",
+    baseConfigPrefix: "client-api.user",
+    privilegePrefix: "client-api.privilege.user",
+    filterBlocked: false,
   });
 };
 

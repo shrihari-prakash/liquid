@@ -21,6 +21,7 @@ import PUT_CustomData, { PUT_CustomDataValidator } from "../shared/custom-data.p
 import GET_LoginHistory, { GET_LoginHistoryValidator } from "../shared/login-history.get.js";
 import PATCH_Update, { PATCH_UpdateValidator } from "../shared/update.patch.js";
 import GET_EditableFields from "../shared/editable-fields.get.js";
+import POST_Search, { POST_SearchValidator } from "./search.post.js";
 
 const ClientApiRouter = express.Router();
 
@@ -29,7 +30,12 @@ ClientApiRouter.post("/ban", ...ClientAuthFlow, POST_BanValidator, POST_Ban);
 ClientApiRouter.post("/credits", ...ClientAuthFlow, POST_CreditsValidator, POST_Credits);
 ClientApiRouter.post("/restrict", ...ClientAuthFlow, POST_RestrictValidator, POST_Restrict);
 ClientApiRouter.post("/subscription", ...ClientAuthFlow, POST_SubscriptionValidator, POST_Subscription);
-ClientApiRouter.post("/subscription-cancel", ...ClientAuthFlow, POST_SubscriptionCancelValidator, POST_SubscriptionCancel);
+ClientApiRouter.post(
+  "/subscription-cancel",
+  ...ClientAuthFlow,
+  POST_SubscriptionCancelValidator,
+  POST_SubscriptionCancel,
+);
 ClientApiRouter.get("/block-status", ...ClientAuthFlow, GET_BlockStatusValidator, GET_BlockStatus);
 ClientApiRouter.post("/create", ...ClientAuthFlow, POST_CreateValidator, POST_Create);
 ClientApiRouter.get("/list", ...ClientAuthFlow, GET_List);
@@ -38,6 +44,7 @@ ClientApiRouter.get("/editable-fields", ...ClientAuthFlow, GET_EditableFields);
 ClientApiRouter.patch("/update", ...ClientAuthFlow, PATCH_UpdateValidator, PATCH_Update);
 ClientApiRouter.put("/custom-data", ...ClientAuthFlow, PUT_CustomDataValidator, PUT_CustomData);
 ClientApiRouter.get("/login-history", ...ClientAuthFlow, GET_LoginHistoryValidator, GET_LoginHistory);
+ClientApiRouter.post("/search", ...ClientAuthFlow, POST_SearchValidator, POST_Search);
 
 const canUseFollowAPIs = Configuration.get("privilege.can-use-follow-apis");
 if (canUseFollowAPIs) {
@@ -55,3 +62,4 @@ if (canUseInviteOnly) {
 }
 
 export default ClientApiRouter;
+

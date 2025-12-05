@@ -32,6 +32,7 @@ export interface ClientInterface {
 }
 
 const schemaInstance = new mongoose.Schema(clientSchema),
-  ClientModel = mongoose.model("client", schemaInstance);
+  ClientModel = mongoose.models.client || mongoose.model("client", schemaInstance);
 
 export default ClientModel;
+

@@ -958,3 +958,84 @@ Requires client authentication.
 ```
 
 </details>
+
+<details>
+<summary>
+### Search Users
+<br/>
+Returns a list of users for a search query
+</summary>
+
+#### Authentication
+
+Requires client authentication.
+
+#### Scope
+
+`client:profile:search`
+
+#### URL
+
+**POST /user/client-api/search**
+
+#### Request Body
+
+| Parameter | Type             | Description                                                                                                   | Required / Optional |
+| --------- | ---------------- | ------------------------------------------------------------------------------------------------------------- | ------------------- |
+| query     | string or object | Search query. Can be a simple text (freestyle search) or a MongoDB query object (e.g. `{ "role": "admin" }`). | Required            |
+
+#### Supported Operators
+
+The following MongoDB operators are supported in object queries:
+
+- **Comparison**: `$eq`, `$gt`, `$gte`, `$lt`, `$lte`, `$ne`, `$in`, `$nin`
+- **Logical**: `$or`, `$and`, `$not`
+- **Element**: `$exists`
+- **Evaluation**: `$regex`, `$options`
+
+#### Request Sample (Simple String)
+
+```json
+{
+  "query": "rick"
+}
+```
+
+#### Request Sample (Query Objects)
+
+```json
+{
+  "query": {
+    "$or": [{ "role": "admin" }, { "role": "moderator" }],
+    "username": { "$regex": "^john", "$options": "i" }
+  }
+}
+```
+
+#### Response Data Parameters
+
+| Parameter | Type  | Description     |
+| --------- | ----- | --------------- |
+| results   | array | Array of users. |
+
+#### Response Sample
+
+```json
+{
+  "ok": 1,
+  "data": {
+    "results": [
+      {
+        "_id": "507f1f77bcf86cd799439011",
+        "firstName": "Rick",
+        "lastName": "Asthley",
+        "username": "rick_asthley",
+        "role": "user",
+        "email": "rick@example.com"
+      }
+    ]
+  }
+}
+```
+
+</details>

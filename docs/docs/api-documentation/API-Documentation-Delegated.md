@@ -864,15 +864,35 @@ Requires delegated authentication.
 
 #### Request Body
 
-| Parameter | Type   | Description   | Required / Optional |
-| --------- | ------ | ------------- | ------------------- |
-| query     | string | Search query. | Required            |
+| Parameter | Type             | Description                                                                                                   | Required / Optional |
+| --------- | ---------------- | ------------------------------------------------------------------------------------------------------------- | ------------------- |
+| query     | string or object | Search query. Can be a simple text (freestyle search) or a MongoDB query object (e.g. `{ "role": "admin" }`). | Required            |
 
-#### Request Sample (JSON)
+#### Supported Operators
+
+The following MongoDB operators are supported in object queries:
+
+- **Comparison**: `$eq`, `$gt`, `$gte`, `$lt`, `$lte`, `$ne`, `$in`, `$nin`
+- **Logical**: `$or`, `$and`, `$not`
+- **Element**: `$exists`
+- **Evaluation**: `$regex`, `$options`
+
+#### Request Sample (Simple String)
 
 ```json
 {
   "query": "rick"
+}
+```
+
+#### Request Sample (Query Objects)
+
+```json
+{
+  "query": {
+    "$or": [{ "role": "admin" }, { "role": "moderator" }],
+    "username": { "$regex": "^john", "$options": "i" }
+  }
 }
 ```
 
@@ -1759,3 +1779,4 @@ Requires delegated authentication.
 ```
 
 </details>
+
