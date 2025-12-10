@@ -491,10 +491,11 @@ NA
 
 #### Request Body
 
-| Parameter | Type   | Description            | Required / Optional |
-| --------- | ------ | ---------------------- | ------------------- |
-| code      | string | Code received in email | Required            |
-| password  | string | New password           | Required            |
+| Parameter       | Type   | Description                                                                              | Required / Optional |
+| --------------- | ------ | ---------------------------------------------------------------------------------------- | ------------------- |
+| code            | string | Code received in email                                                                   | Required            |
+| password        | string | New password                                                                             | Required            |
+| currentPassword | string | Current password. Required if `user.password-reset.require-current-password` is enabled. | Optional            |
 
 #### Request Sample (JSON)
 

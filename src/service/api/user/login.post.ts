@@ -1,7 +1,6 @@
 import { Logger } from "../../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "user/login.post" });
 
-import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { body } from "express-validator";
 
@@ -20,6 +19,7 @@ import { Configuration } from "../../../singleton/configuration.js";
 import LoginHistoryModel, { LoginHistoryInterface } from "../../../model/mongo/login-history.js";
 import { isEmail2FA } from "../../../utils/2fa.js";
 import { LoginFailure } from "../../../enum/login-failure.js";
+import { checkPassword } from "./shared/auth.js";
 
 const userValidator = new UserValidator(body);
 
@@ -61,7 +61,7 @@ const POST_Login = async (req: Request, res: Response): Promise<void> => {
       source: "password",
       ipAddress: req.ip,
     };
-    const isPasswordValid = await bcrypt.compare(password, user.password || "");
+    const isPasswordValid = await checkPassword(password, user.password || "");
     if (!isPasswordValid) {
       loginMeta = { ...loginMeta, success: false, reason: LoginFailure.PASSWORD_REJECTED };
       if (Configuration.get("user.login.record-failed-attempts")) {

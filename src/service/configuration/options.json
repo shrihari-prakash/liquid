@@ -967,6 +967,14 @@
     "default": true
   },
   {
+    "name": "user.password-reset.require-current-password",
+    "displayName": "User Password Reset Require Current Password",
+    "envName": "USER_PASSWORD_RESET_REQUIRE_CURRENT_PASSWORD",
+    "description": "Specifies if the current password is required when resetting the password.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "user.login.sso.token-lifetime",
     "displayName": "User Login Google SSO Token Lifetime",
     "envName": "USER_LOGIN_SSO_GOOGLE_SSO_TOKEN_LIFETIME",
@@ -1329,7 +1337,8 @@
       "privilege.can-reset-password",
       "user.login.require-browser-info",
       "user.login.require-os-info",
-      "user.account-creation.sso.google.enabled"
+      "user.account-creation.sso.google.enabled",
+      "user.password-reset.require-current-password"
     ]
   }
 ]
