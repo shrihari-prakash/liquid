@@ -32,22 +32,23 @@ export const setupUsers = async () => {
     console.error(err);
   }
 
-  const users = await UserModel.find({});
-
+  const user1 = await UserModel.findOne({ username: mockData.users.user1.username });
   const user1password = MemoryStore.users.user1.password;
-  (MemoryStore.users.user1 as any) = users[0];
+  (MemoryStore.users.user1 as any) = user1;
   MemoryStore.users.user1.password = user1password;
   MemoryStore.users.user1._id = (MemoryStore.users.user1._id as any).toString();
   MemoryStore.users.user1.scope = ["*"];
 
+  const user2 = await UserModel.findOne({ username: mockData.users.user2.username });
   const user2password = MemoryStore.users.user2.password;
-  (MemoryStore.users.user2 as any) = users[1];
+  (MemoryStore.users.user2 as any) = user2;
   MemoryStore.users.user2.password = user2password;
   MemoryStore.users.user2._id = (MemoryStore.users.user2._id as any).toString();
   MemoryStore.users.user2.scope = ["*"];
 
+  const user3 = await UserModel.findOne({ username: mockData.users.user3.username });
   const user3password = MemoryStore.users.user3.password;
-  (MemoryStore.users.user3 as any) = users[2];
+  (MemoryStore.users.user3 as any) = user3;
   MemoryStore.users.user3.password = user3password;
   MemoryStore.users.user3._id = (MemoryStore.users.user3._id as any).toString();
   MemoryStore.users.user3.scope = ["*"];

@@ -71,7 +71,7 @@ const PATCH_Me = async (req: Request, res: Response): Promise<void> => {
       const protectedFields = Configuration.get("user.profile.update.protected-fields");
       const hasProtectedFields = protectedFields.some((field: string) => req.body[field] !== undefined);
       if (hasProtectedFields) {
-        const user = await UserModel.findById(userId).exec();
+        const user = await UserModel.findById(userId).select("+password").exec();
         if (!user) {
           res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
           return;
