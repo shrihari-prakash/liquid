@@ -226,4 +226,101 @@ describe("me.patch", () => {
         });
     });
   });
+
+  it("should fail to edit profile if current password is required but missing for protected field", () => {
+    process.env.USER_PROFILE_UPDATE_REQUIRE_CURRENT_PASSWORD = "true";
+    process.env.USER_PROFILE_UPDATE_PROTECTED_FIELDS = "password";
+    return new Promise<void>(async (resolve, reject) => {
+      const u = {
+        password: "newpassword",
+      };
+      return chai
+        .request(app)
+        .patch("/user/me")
+        .set({ Authorization: `Bearer rick_asthley_access_token` })
+        .send(u)
+        .then(async (res) => {
+          try {
+            chai.expect(res.status).to.eql(400);
+            resolve();
+          } catch (e) {
+            reject(e);
+          }
+        });
+    });
+  });
+
+  it("should fail to edit profile if current password is required but incorrect for protected field", () => {
+    process.env.USER_PROFILE_UPDATE_REQUIRE_CURRENT_PASSWORD = "true";
+    process.env.USER_PROFILE_UPDATE_PROTECTED_FIELDS = "password";
+    return new Promise<void>(async (resolve, reject) => {
+      const u = {
+        password: "newpassword",
+        currentPassword: "wrongpassword",
+      };
+      return chai
+        .request(app)
+        .patch("/user/me")
+        .set({ Authorization: `Bearer rick_asthley_access_token` })
+        .send(u)
+        .then(async (res) => {
+          try {
+            chai.expect(res.status).to.eql(401);
+            resolve();
+          } catch (e) {
+            reject(e);
+          }
+        });
+    });
+  });
+
+  it("should edit profile if current password is required and correct for protected field", () => {
+    process.env.USER_PROFILE_UPDATE_REQUIRE_CURRENT_PASSWORD = "true";
+    process.env.USER_PROFILE_UPDATE_PROTECTED_FIELDS = "password";
+    return new Promise<void>(async (resolve, reject) => {
+      const u = {
+        password: "newpassword",
+        currentPassword: MemoryStore.users.user2.password,
+      };
+      return chai
+        .request(app)
+        .patch("/user/me")
+        .set({ Authorization: `Bearer rick_asthley_access_token` })
+        .send(u)
+        .then(async (res) => {
+          try {
+            chai.expect(res.status).to.eql(200);
+            resolve();
+          } catch (e) {
+            reject(e);
+          }
+        });
+    });
+  });
+
+  it("should edit profile without current password if field is not protected", () => {
+    process.env.USER_PROFILE_UPDATE_REQUIRE_CURRENT_PASSWORD = "true";
+    process.env.USER_PROFILE_UPDATE_PROTECTED_FIELDS = "password";
+    return new Promise<void>(async (resolve, reject) => {
+      const u = {
+        firstName: "Rick",
+      };
+      return chai
+        .request(app)
+        .patch("/user/me")
+        .set({ Authorization: `Bearer rick_asthley_access_token` })
+        .send(u)
+        .then(async (res) => {
+          try {
+            chai.expect(res.status).to.eql(200);
+            const user = (await UserModel.findOne({ username: "rick_asth" })) as unknown as UserInterface;
+            chai.expect(user.firstName).to.eql(u.firstName);
+            resolve();
+          } catch (e) {
+            reject(e);
+          }
+        });
+    });
+  });
 });
+

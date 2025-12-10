@@ -13,18 +13,11 @@ import { ErrorResponse, SuccessResponse } from "../../../utils/response.js";
 import { bcryptConfig } from "./create.post.js";
 import { hasErrors } from "../../../utils/api.js";
 import { VerificationCodeType } from "../../../enum/verification-code.js";
-import { Configuration } from "../../../singleton/configuration.js";
-import { checkPassword } from "./shared/auth.js";
 
 export const POST_ResetPasswordValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
   body("code").exists().isString().isLength({ min: 3, max: 128 }),
   body("password").exists().isString().isLength({ min: 8, max: 128 }),
-  body("currentPassword")
-    .if(() => Configuration.get("user.password-reset.require-current-password"))
-    .exists()
-    .isString()
-    .isLength({ min: 8, max: 128 }),
 ];
 
 const POST_ResetPassword = async (req: Request, res: Response): Promise<void> => {
@@ -35,17 +28,6 @@ const POST_ResetPassword = async (req: Request, res: Response): Promise<void> =>
     if (!dbCode || dbCode.type !== VerificationCodeType.PASSWORD_RESET) {
       res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
       return;
-    }
-    if (Configuration.get("user.password-reset.require-current-password")) {
-      const user = await UserModel.findById(target).exec();
-      if (!user) {
-        res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
-        return;
-      }
-      if (!(await checkPassword(req.body.currentPassword, user.password || ""))) {
-        res.status(statusCodes.clientInputError).json(new ErrorResponse(errorMessages.clientInputError));
-        return;
-      }
     }
     const password = await bcrypt.hash(passwordBody, bcryptConfig.salt);
     await UserModel.updateOne({ _id: dbCode.belongsTo }, { $set: { password: password } });

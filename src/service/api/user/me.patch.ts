@@ -14,6 +14,7 @@ import { hasErrors } from "../../../utils/api.js";
 import { ScopeManager } from "../../../singleton/scope-manager.js";
 import UserValidator from "../../../validator/user.js";
 import { flushUserInfoFromRedis } from "../../../model/oauth/cache.js";
+import { checkPassword } from "./shared/auth.js";
 
 const userValidator = new UserValidator(body);
 
@@ -36,7 +37,17 @@ export const PATCH_MeValidator = [
   userValidator.customLink(),
   userValidator.pronouns(),
   userValidator.organization(),
+
   userValidator.country(),
+  body("currentPassword")
+    .if((value, { req }) => {
+      if (!Configuration.get("user.profile.update.require-current-password")) return false;
+      const protectedFields = Configuration.get("user.profile.update.protected-fields");
+      return protectedFields.some((field: string) => req.body[field] !== undefined);
+    })
+    .exists()
+    .isString()
+    .isLength({ min: 8, max: 128 }),
 ];
 
 const PATCH_Me = async (req: Request, res: Response): Promise<void> => {
@@ -55,6 +66,22 @@ const PATCH_Me = async (req: Request, res: Response): Promise<void> => {
         req.body[key] = null;
       }
     });
+
+    if (Configuration.get("user.profile.update.require-current-password")) {
+      const protectedFields = Configuration.get("user.profile.update.protected-fields");
+      const hasProtectedFields = protectedFields.some((field: string) => req.body[field] !== undefined);
+      if (hasProtectedFields) {
+        const user = await UserModel.findById(userId).exec();
+        if (!user) {
+          res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+          return;
+        }
+        if (!(await checkPassword(req.body.currentPassword, user.password || ""))) {
+          res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.unauthorized));
+          return;
+        }
+      }
+    }
     const password = req.body.password;
     if (password) {
       req.body.password = await bcrypt.hash(password, bcryptConfig.salt);

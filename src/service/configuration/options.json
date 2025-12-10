@@ -964,15 +964,24 @@
     "envName": "USER_ACCOUNT_CREATION_SSO_GOOGLE_USE_GIVEN_NAME_AS_LAST_NAME",
     "description": "Specifies if the given name should be used as the last name when family name is not available from Google profile.",
     "type": "boolean",
+    "default": true,
+    "relatedOptions": ["user.profile.update.require-current-password", "user.profile.update.protected-fields"]
+  },
+  {
+    "name": "user.profile.update.require-current-password",
+    "displayName": "User Profile Update Require Current Password",
+    "envName": "USER_PROFILE_UPDATE_REQUIRE_CURRENT_PASSWORD",
+    "description": "Specifies if the current password is required when updating protected fields in the profile.",
+    "type": "boolean",
     "default": true
   },
   {
-    "name": "user.password-reset.require-current-password",
-    "displayName": "User Password Reset Require Current Password",
-    "envName": "USER_PASSWORD_RESET_REQUIRE_CURRENT_PASSWORD",
-    "description": "Specifies if the current password is required when resetting the password.",
-    "type": "boolean",
-    "default": true
+    "name": "user.profile.update.protected-fields",
+    "displayName": "User Profile Update Protected Fields",
+    "envName": "USER_PROFILE_UPDATE_PROTECTED_FIELDS",
+    "description": "Comma separated list of fields that require current password to be updated.",
+    "type": "stringArray",
+    "default": "password"
   },
   {
     "name": "user.login.sso.token-lifetime",

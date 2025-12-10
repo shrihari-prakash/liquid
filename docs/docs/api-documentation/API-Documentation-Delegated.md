@@ -491,11 +491,10 @@ NA
 
 #### Request Body
 
-| Parameter       | Type   | Description                                                                              | Required / Optional |
-| --------------- | ------ | ---------------------------------------------------------------------------------------- | ------------------- |
-| code            | string | Code received in email                                                                   | Required            |
-| password        | string | New password                                                                             | Required            |
-| currentPassword | string | Current password. Required if `user.password-reset.require-current-password` is enabled. | Optional            |
+| Parameter | Type   | Description            | Required / Optional |
+| --------- | ------ | ---------------------- | ------------------- |
+| code      | string | Code received in email | Required            |
+| password  | string | New password           | Required            |
 
 #### Request Sample (JSON)
 
@@ -660,23 +659,26 @@ Requires delegated authentication.
 
 Adjust the editable fields for the system using option `user.profile.editable-fields`.
 
+You can also configure which fields require the current password to be updated using `user.profile.update.protected-fields`. By default, only `password` is protected. To enable this check, set `user.profile.update.require-current-password` to `true`.
+
 #### URL
 
 **PATCH /user/me**
 
 #### Request Body
 
-| Parameter        | Type   | Description                                                                 | Required / Optional |
-| ---------------- | ------ | --------------------------------------------------------------------------- | ------------------- |
-| target           | string | `_id` of the user.                                                          | Optional            |
-| username         | string | Username for the user. Contains text, numbers and \_ and at least 8 letters | Optional            |
-| firstName        | string | First name of the user.                                                     | Optional            |
-| lastName         | string | Last name of the user.                                                      | Optional            |
-| email            | string | Email address of the user.                                                  | Optional            |
-| password         | string | Password for the user.                                                      | Optional            |
-| role             | string | Role of the user.                                                           | Optional            |
-| phoneCountryCode | string | Valid country code.                                                         | Optional            |
-| phone            | string | Phone number of the user.                                                   | Optional            |
+| Parameter        | Type   | Description                                                                              | Required / Optional |
+| ---------------- | ------ | ---------------------------------------------------------------------------------------- | ------------------- |
+| target           | string | `_id` of the user.                                                                       | Optional            |
+| username         | string | Username for the user. Contains text, numbers and \_ and at least 8 letters              | Optional            |
+| firstName        | string | First name of the user.                                                                  | Optional            |
+| lastName         | string | Last name of the user.                                                                   | Optional            |
+| email            | string | Email address of the user.                                                               | Optional            |
+| password         | string | Password for the user.                                                                   | Optional            |
+| role             | string | Role of the user.                                                                        | Optional            |
+| phoneCountryCode | string | Valid country code.                                                                      | Optional            |
+| phone            | string | Phone number of the user.                                                                | Optional            |
+| currentPassword  | string | Current password. Required if `user.profile.update.require-current-password` is enabled. | Optional            |
 
 #### Request Sample (JSON)
 
