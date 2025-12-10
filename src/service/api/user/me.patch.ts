@@ -59,7 +59,7 @@ const PATCH_Me = async (req: Request, res: Response): Promise<void> => {
     const userId = res.locals.oauth.token.user._id;
     const errors: any[] = [];
     Object.keys(req.body).forEach((key) => {
-      if (!Configuration.get("user.profile.editable-fields").includes(key)) {
+      if (!Configuration.get("user.profile.editable-fields").includes(key) && key !== "currentPassword") {
         errors.push({ msg: "Invalid value", param: key, location: "body" });
       }
       if (req.body[key] === "__unset__") {
