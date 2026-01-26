@@ -15,8 +15,7 @@ export default function SignUp() {
   const configuration = React.useContext(ConfigurationContext);
   const theme = React.useContext(ThemeContext);
 
-  const [buttonText, setButtonText] = React.useState(submitButtonText);
-  const [hasError, setHasError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
   const [miniIconLoaded, setMiniIconLoaded] = React.useState(false);
 
@@ -27,15 +26,7 @@ export default function SignUp() {
   React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.signup")), []);
 
   const onSubmitError = (props) => {
-    if (hasError) {
-      return;
-    }
-    setHasError(true);
-    setButtonText(props.errorText);
-    setTimeout(() => {
-      setButtonText(submitButtonText);
-      setHasError(false);
-    }, errorTextTimeout);
+    setErrorMessage(props.errorText);
   };
 
   function onFieldError({ response }) {
@@ -47,6 +38,7 @@ export default function SignUp() {
 
   function signup(event) {
     event.preventDefault();
+    setErrorMessage("");
     const username = document.getElementById("username").value.trim();
     const firstName = document.getElementById("firstName").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
@@ -120,7 +112,7 @@ export default function SignUp() {
   }
 
   return (
-    <form className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`} onSubmit={signup}>
+    <form className="form" onSubmit={signup}>
       <div className="noselect">
         <h3>
           {i18next.t("heading.signup")} &#x2022;&nbsp;
@@ -275,12 +267,7 @@ export default function SignUp() {
         </span>
       </div>
       <div className="flex flex-col gap">
-        <input
-          type="submit"
-          disabled={submitting}
-          className={"button" + (hasError ? " shake" : "")}
-          value={buttonText}
-        />
+        <input type="submit" disabled={submitting} className="button" value={submitButtonText} />
         {configuration["user.account-creation.sso.google.enabled"] && (
           <a onClick={handleSSOClick} className="ghost-link">
             <button type="button" disabled={submitting} className={"button outline"}>
@@ -290,6 +277,7 @@ export default function SignUp() {
           </a>
         )}
       </div>
+      <div className="form-error-message">{errorMessage}</div>
       <div className="fineprint">
         {(termsAndConditions || privacyPolicy) && i18next.t("message.terms-and-conditions")}
         {(termsAndConditions || privacyPolicy) && (

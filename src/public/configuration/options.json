@@ -166,12 +166,6 @@
     "default": "0px"
   },
   {
-    "name": "form.animate-entrance",
-    "displayName": "Form Animate Entrance",
-    "description": "Specifies if forms should animate on entering the screen.",
-    "default": false
-  },
-  {
     "name": "theme.app-font-face",
     "displayName": "Theme - App Font Face",
     "description": "Specifies the Font Face to be used in static pages.",

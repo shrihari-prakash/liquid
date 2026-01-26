@@ -42,7 +42,7 @@ export default function ConsentScreen() {
   React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.consent")), []);
 
   return clientInfo && permissionsInfo ? (
-    <div className={`form ${configuration["form.animate-entrance"] && "animate-jelly"}`}>
+    <div className="form">
       <div className="noselect">
         <h3 className="long-header">
           {i18next.t("heading.consent")}<span className="header-separator">&nbsp;&#x2022;&nbsp;</span>
