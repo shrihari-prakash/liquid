@@ -882,18 +882,17 @@ Read about editing users [here](/fields-and-attributes/All-Fields#updating-field
 #### Request Sample (JSON)
 
 ```json
-[
-  {
-    "username": "john_doe",
-    "firstName": "John",
-    "lastName": "Doe",
-    "role": "user",
-    "phoneCountryCode": "+00",
-    "phone": "0000000000",
-    "email": "user@example.com",
-    "password": "$uper&ecurePassw0rd"
-  }
-]
+{
+  "target": "507f1f77bcf86cd799439011",
+  "username": "john_doe",
+  "firstName": "John",
+  "lastName": "Doe",
+  "role": "user",
+  "phoneCountryCode": "+00",
+  "phone": "0000000000",
+  "email": "user@example.com",
+  "password": "$uper&ecurePassw0rd"
+}
 ```
 
 #### Response Parameters
