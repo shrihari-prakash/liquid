@@ -1,6 +1,7 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { ThemeContext } from "../context/theme.js";
 import { prepareAuthorizationParams, getPlaceholder, useTitle } from "../utils/utils.js";
+import { get } from "../utils/api.js";
 
 export default function ConsentScreen() {
   const configuration = React.useContext(ConfigurationContext);
@@ -17,12 +18,12 @@ export default function ConsentScreen() {
 
   React.useEffect(() => {
     (async () => {
-      const clientInformation = await $.get(`/client/${authParams.client_id}`);
-      const permissionsInformation = await $.get("/user/scopes");
-      setClientInfo(clientInformation.data.client);
+      const clientResult = await get(`/client/${authParams.client_id}`);
+      const permissionsResult = await get("/user/scopes");
+      setClientInfo(clientResult.data.data.client);
       setRequiredScopes(authParams.scope.split(","));
-      setPermissionsInfo(permissionsInformation.data.scopes);
-      console.log(clientInformation.data, permissionsInformation.data);
+      setPermissionsInfo(permissionsResult.data.data.scopes);
+      console.log(clientResult.data.data, permissionsResult.data.data);
     })();
   }, []);
 
@@ -33,9 +34,9 @@ export default function ConsentScreen() {
 
   const onDeny = () => {
     const redirectUri = new URL(authParams.redirect_uri);
-    redirectUri.searchParams.append('error', 'access_denied');
-    redirectUri.searchParams.append('error_description', 'Access was denied by the user');
-    redirectUri.searchParams.append('state', authParams.state);
+    redirectUri.searchParams.append("error", "access_denied");
+    redirectUri.searchParams.append("error_description", "Access was denied by the user");
+    redirectUri.searchParams.append("state", authParams.state);
     window.location = redirectUri;
   };
 
@@ -45,7 +46,8 @@ export default function ConsentScreen() {
     <div className="form">
       <div className="noselect">
         <h3 className="long-header">
-          {i18next.t("heading.consent")}<span className="header-separator">&nbsp;&#x2022;&nbsp;</span>
+          {i18next.t("heading.consent")}
+          <span className="header-separator">&nbsp;&#x2022;&nbsp;</span>
           {configuration[`assets.header-icon-${theme}`] ? (
             <div className="app-icon-header">
               <div style={{ display: miniIconLoaded ? "none" : "block" }} className="spinner" />
@@ -61,9 +63,7 @@ export default function ConsentScreen() {
           )}
         </h3>
         <div className="consent-form">
-          <p>
-            {i18next.t("message.consent", { app_name: clientInfo.displayName })}
-          </p>
+          <p>{i18next.t("message.consent", { app_name: clientInfo.displayName })}</p>
           <ul className="scope-container">
             {requiredScopes.map((scope) => (
               <li className="scope-item" key={scope}>
@@ -74,9 +74,7 @@ export default function ConsentScreen() {
               </li>
             ))}
           </ul>
-          <p className="fineprint">
-            {i18next.t("message.consent-warning")}
-          </p>
+          <p className="fineprint">{i18next.t("message.consent-warning")}</p>
         </div>
       </div>
       <div className="page-links"></div>

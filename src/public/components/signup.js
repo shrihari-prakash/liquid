@@ -8,6 +8,7 @@ import {
   prepareAuthorizationParams,
   useTitle,
 } from "../utils/utils.js";
+import { post } from "../utils/api.js";
 
 export default function SignUp() {
   const submitButtonText = i18next.t("button.signup");
@@ -30,13 +31,13 @@ export default function SignUp() {
   };
 
   function onFieldError({ response }) {
-    let errorField = response.responseJSON.additionalInfo.errors[0].path;
+    let errorField = response.error.additionalInfo.errors[0].path;
     errorField = errorField.charAt(0).toUpperCase() + errorField.slice(1);
     onSubmitError({ errorText: i18next.t("error.invalid-field", { field_name: errorField }) });
     return;
   }
 
-  function signup(event) {
+  async function signup(event) {
     event.preventDefault();
     setErrorMessage("");
     const username = document.getElementById("username").value.trim();
@@ -60,42 +61,42 @@ export default function SignUp() {
       user.inviteCode = document.getElementById("inviteCode").value;
     }
     setSubmitting(true);
-    $.post("/user/create", user)
-      .done(function (response) {
-        console.log(response);
+    try {
+      const result = await post("/user/create", user);
+      if (result.ok) {
+        console.log(result.data);
         if (configuration["user.account-creation.require-email-verification"]) {
           const urlParams = new URLSearchParams(window.location.search);
-          urlParams.set("target", response.data.user._id);
+          urlParams.set("target", result.data.data.user._id);
           window.location = `/verify-account?${urlParams.toString()}`;
         } else {
           window.location = `/login${window.location.search}`;
         }
-      })
-      .fail(function (response) {
-        if (response.responseJSON.error === "RateLimitError") {
+      } else {
+        if (result.error.error === "RateLimitError") {
           onSubmitError({ errorText: i18next.t("error.too-many-requests") });
           return;
         }
-        if (response.status === 400 && response.responseJSON.additionalInfo) {
-          return onFieldError({ response });
+        if (result.status === 400 && result.error.additionalInfo) {
+          return onFieldError({ response: result });
         }
-        if (response.status === 400 && response.responseJSON.error === "BadEmailDomain") {
+        if (result.status === 400 && result.error.error === "BadEmailDomain") {
           return onSubmitError({ errorText: i18next.t("error.bad-email-domain") });
         }
-        if (response.status === 409) {
-          if (response.responseJSON.additionalInfo.duplicateFields.includes("username")) {
+        if (result.status === 409) {
+          if (result.error.additionalInfo.duplicateFields.includes("username")) {
             return onSubmitError({ errorText: i18next.t("error.duplicate-username") });
           }
           return onSubmitError({ errorText: i18next.t("error.duplicate-account") });
         }
-        if (response.status === 429) {
+        if (result.status === 429) {
           return onSubmitError({ errorText: i18next.t("error.too-many-requests") });
         }
         onSubmitError({ errorText: i18next.t("error.signup-error") });
-      })
-      .always(function () {
-        setSubmitting(false);
-      });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const handleSSOClick = (event) => {

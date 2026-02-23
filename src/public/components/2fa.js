@@ -1,5 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { afterLogin, errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
+import { post } from "../utils/api.js";
 
 export default function TwoFactorAuthentication() {
   const submitButtonText = i18next.t("button.submit");
@@ -15,7 +16,7 @@ export default function TwoFactorAuthentication() {
     setErrorMessage(props.errorText);
   };
 
-  function submit2fa(event) {
+  async function submit2fa(event) {
     event.preventDefault();
     setErrorMessage("");
     const code = document.getElementById("code").value;
@@ -23,20 +24,16 @@ export default function TwoFactorAuthentication() {
     const target = urlParams.get("target");
     const sessionHash = urlParams.get("session_hash");
     setSubmitting(true);
-    $.post("/user/do-2fa", {
-      target,
-      code,
-      sessionHash,
-    })
-      .done(function () {
+    try {
+      const result = await post("/user/do-2fa", { target, code, sessionHash });
+      if (result.ok) {
         afterLogin(configuration);
-      })
-      .fail(function () {
+      } else {
         onSubmitError({ errorText: i18next.t("error.invalid-code") });
-      })
-      .always(function () {
-        setSubmitting(false);
-      });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (

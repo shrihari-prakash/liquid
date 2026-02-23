@@ -1,5 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
+import { post } from "../utils/api.js";
 
 export default function ResetPassword() {
   const submitButtonText = i18next.t("button.change-password");
@@ -13,33 +14,28 @@ export default function ResetPassword() {
   React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.reset-password")), []);
 
   const onSubmitError = (props) => {
-    
     setErrorMessage(props.errorText);
   };
 
-  function resetPassword(event) {
+  async function resetPassword(event) {
     event.preventDefault();
     setErrorMessage("");
-    
+
     const code = document.getElementById("code").value;
     const password = document.getElementById("password").value;
     const urlParams = new URLSearchParams(window.location.search);
     const target = urlParams.get("target");
     setSubmitting(true);
-    $.post("/user/reset-password", {
-      target,
-      code,
-      password,
-    })
-      .done(function () {
+    try {
+      const result = await post("/user/reset-password", { target, code, password });
+      if (result.ok) {
         window.location = `/login${window.location.search}`;
-      })
-      .fail(function () {
+      } else {
         onSubmitError({ errorText: i18next.t("error.invalid-code") });
-      })
-      .always(function () {
-        setSubmitting(false);
-      });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (!configuration["privilege.can-reset-password"]) {
@@ -83,12 +79,7 @@ export default function ResetPassword() {
         />
       </div>
       <div className="page-links"></div>
-      <input
-        type="submit"
-        disabled={submitting}
-        className="button"
-        value={submitButtonText}
-      />
+      <input type="submit" disabled={submitting} className="button" value={submitButtonText} />
       <div className="form-error-message">{errorMessage}</div>
     </form>
   );

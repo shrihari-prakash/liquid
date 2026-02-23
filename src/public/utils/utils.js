@@ -1,6 +1,8 @@
+import { get } from "./api.js";
+
 export function uuidv4() {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
+    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16),
   );
 }
 
@@ -11,7 +13,7 @@ export function isEmail(str) {
 }
 
 export function useTitle(appName, string) {
-  $(".app-name-titlebar").text(`${appName} - ${string}`);
+  document.querySelector(".app-name-titlebar").textContent = `${appName} - ${string}`;
 }
 
 export function getTheme() {
@@ -75,14 +77,17 @@ export function getPlaceholder(text, configuration) {
 export function prepareAuthorizationParams(configuration) {
   const urlString = window.location;
   const url = new URL(urlString);
-  const redirect = url.searchParams.get("redirect") || url.searchParams.get("redirect_uri") || configuration["oauth.redirect-uri"];
+  const redirect =
+    url.searchParams.get("redirect") || url.searchParams.get("redirect_uri") || configuration["oauth.redirect-uri"];
   const state = url.searchParams.get("state") || uuidv4();
   let scope = url.searchParams.get("scope") || "delegated:all";
   // Remove any duplicate scopes.
   scope = Array.from(new Set(scope.split(","))).join(",");
   const codeChallenge = url.searchParams.get("codeChallenge") || url.searchParams.get("code_challenge");
-  const codeChallengeMethod = url.searchParams.get("codeChallengeMethod") || url.searchParams.get("code_challenge_method");
-  const clientId = url.searchParams.get("clientId") || url.searchParams.get("client_id") || configuration["oauth.client-id"];
+  const codeChallengeMethod =
+    url.searchParams.get("codeChallengeMethod") || url.searchParams.get("code_challenge_method");
+  const clientId =
+    url.searchParams.get("clientId") || url.searchParams.get("client_id") || configuration["oauth.client-id"];
   const params = {
     response_type: "code",
     client_id: clientId,
@@ -99,9 +104,9 @@ export function prepareAuthorizationParams(configuration) {
 
 export async function afterLogin(configuration) {
   let authParams = prepareAuthorizationParams(configuration);
-  const clientInfo = await $.get(`/client/${authParams.client_id}`);
-  console.log("Client role", clientInfo.data.role);
-  if (clientInfo.data.client.role === "internal_client") {
+  const clientResult = await get(`/client/${authParams.client_id}`);
+  console.log("Client role", clientResult.data.data.role);
+  if (clientResult.data.data.client.role === "internal_client") {
     authParams = new URLSearchParams(authParams);
     window.location = `/oauth/authorize?${authParams.toString()}`;
   } else {
@@ -116,4 +121,4 @@ export const humanReadableToSnakeCase = (str) => {
     .replace(/([a-z])([A-Z])/g, "$1_$2")
     .replace(/\s+/g, "_")
     .toLowerCase();
-}
+};

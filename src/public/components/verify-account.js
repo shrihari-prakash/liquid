@@ -1,5 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
+import { get } from "../utils/api.js";
 
 export default function VerifyAccount() {
   const submitButtonText = i18next.t("button.verify");
@@ -13,31 +14,27 @@ export default function VerifyAccount() {
   React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.verify-account")), []);
 
   const onSubmitError = (props) => {
-    
     setErrorMessage(props.errorText);
   };
 
-  function verifyAccount(event) {
+  async function verifyAccount(event) {
     event.preventDefault();
     setErrorMessage("");
-    
+
     const code = document.getElementById("code").value;
     const urlParams = new URLSearchParams(window.location.search);
     const target = urlParams.get("target");
     setSubmitting(true);
-    $.get("/user/verify-email", {
-      target,
-      code,
-    })
-      .done(function () {
+    try {
+      const result = await get("/user/verify-email", { target, code });
+      if (result.ok) {
         window.location = `/login${window.location.search}`;
-      })
-      .fail(function () {
+      } else {
         onSubmitError({ errorText: "Invalid Code" });
-      })
-      .always(function () {
-        setSubmitting(false);
-      });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (!configuration["user.account-creation.require-email-verification"]) {
@@ -72,12 +69,7 @@ export default function VerifyAccount() {
         />
       </div>
       <div className="page-links"></div>
-      <input
-        type="submit"
-        disabled={submitting}
-        className="button"
-        value={submitButtonText}
-      />
+      <input type="submit" disabled={submitting} className="button" value={submitButtonText} />
       <div className="form-error-message">{errorMessage}</div>
     </form>
   );

@@ -1,5 +1,6 @@
 import { ConfigurationContext } from "../context/configuration.js";
 import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
+import { get } from "../utils/api.js";
 
 export default function GetCode() {
   const submitButtonText = i18next.t("button.get-code");
@@ -13,33 +14,30 @@ export default function GetCode() {
   React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.verify-your-identity")), []);
 
   const onSubmitError = (props) => {
-    
     setErrorMessage(props.errorText);
   };
 
-  function getCode(event) {
+  async function getCode(event) {
     event.preventDefault();
     setErrorMessage("");
-    
+
     const email = document.getElementById("email").value;
     setSubmitting(true);
-    $.get("/user/code", {
-      email,
-    })
-      .done(function (response) {
+    try {
+      const result = await get("/user/code", { email });
+      if (result.ok) {
         const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set("target", response.data.target);
+        urlParams.set("target", result.data.data.target);
         window.location = `/reset-password?${urlParams.toString()}`;
-      })
-      .fail(function (response) {
-        if (response.responseJSON.additionalInfo && response.status === 400) {
-          return onFieldError({ response });
+      } else {
+        if (result.error.additionalInfo && result.status === 400) {
+          return onFieldError({ response: { responseJSON: result.error, status: result.status } });
         }
         onSubmitError({ errorText: i18next.t("error.invalid-login") });
-      })
-      .always(function () {
-        setSubmitting(false);
-      });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (!configuration["privilege.can-reset-password"]) {
@@ -78,12 +76,7 @@ export default function GetCode() {
           </a>
         </span>
       </div>
-      <input
-        type="submit"
-        disabled={submitting}
-        className="button"
-        value={submitButtonText}
-      />
+      <input type="submit" disabled={submitting} className="button" value={submitButtonText} />
       <div className="form-error-message">{errorMessage}</div>
     </form>
   );

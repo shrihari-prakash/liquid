@@ -10,6 +10,7 @@ import {
   afterLogin,
   humanReadableToSnakeCase,
 } from "../utils/utils.js";
+import { post } from "../utils/api.js";
 
 export default function Login() {
   const submitButtonText = i18next.t("button.login");
@@ -50,10 +51,10 @@ export default function Login() {
     setErrorMessage(props.errorText);
   };
 
-  function onFieldError({ response, buttonText }) {
-    let errorField = response.responseJSON.additionalInfo.errors[0].path;
+  function onFieldError({ response }) {
+    let errorField = response.error.additionalInfo.errors[0].path;
     errorField = errorField.charAt(0).toUpperCase() + errorField.slice(1);
-    onSubmitError({ errorText: "Invalid " + errorField, buttonText });
+    onSubmitError({ errorText: "Invalid " + errorField });
     return;
   }
 
@@ -81,27 +82,27 @@ export default function Login() {
     } else {
       data.username = username;
     }
-    $.post("/user/login", data)
-      .done(async function (response) {
-        onLogin(response.data);
-      })
-      .fail(function (response) {
-        if (response.responseJSON.error === "RateLimitError") {
+    try {
+      const result = await post("/user/login", data);
+      if (result.ok) {
+        onLogin(result.data.data);
+      } else {
+        if (result.error.error === "RateLimitError") {
           onSubmitError({ errorText: i18next.t("error.too-many-retries") });
           return;
         }
-        if (response.responseJSON.error === "ResourceNotActive") {
+        if (result.error.error === "ResourceNotActive") {
           onSubmitError({ errorText: i18next.t("error.account-not-verified") });
           return;
         }
-        if (response.status === 400 && response.responseJSON.additionalInfo) {
-          return onFieldError({ response });
+        if (result.status === 400 && result.error.additionalInfo) {
+          return onFieldError({ response: result });
         }
         onSubmitError({ errorText: i18next.t("error.invalid-login") });
-      })
-      .always(function () {
-        setSubmitting(false);
-      });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const handleSSOClick = (event) => {
@@ -131,22 +132,20 @@ export default function Login() {
     } catch (e) {
       console.error("Failed to parse authorization params", e);
     }
-    $.ajax({
-      url: "/sso/google/success",
-      type: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({
+    const result = await post(
+      "/sso/google/success",
+      {
         ssoToken: ssoToken,
         userAgent: window.navigator.userAgent,
-      }),
-      success: function () {
-        afterLogin(configuration);
       },
-      error: function () {
-        setIsLoggedIn(false);
-        onSubmitError({ errorText: i18next.t("error.invalid-login") });
-      },
-    });
+      { json: true },
+    );
+    if (result.ok) {
+      afterLogin(configuration);
+    } else {
+      setIsLoggedIn(false);
+      onSubmitError({ errorText: i18next.t("error.invalid-login") });
+    }
   };
 
   if (isLoggedIn) {
