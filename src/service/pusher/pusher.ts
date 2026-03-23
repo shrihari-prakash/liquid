@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Configuration } from "../../singleton/configuration.js";
 import { RabbitMQ } from "../../singleton/rabbitmq.js";
 import { RedisPublisher } from "../../singleton/redis-publisher.js";
+import { WebhookPublisher } from "../../singleton/webhook-publisher.js";
 
 export class PushEvent {
   id = uuidv4();
@@ -20,10 +21,11 @@ export class PushEvent {
 const adapters = {
   RabbitMQ: "rabbitmq",
   Redis: "redis",
+  Webhook: "webhook",
 };
 
 export default class Pusher {
-  queue: typeof RabbitMQ | typeof RedisPublisher | undefined;
+  queue: typeof RabbitMQ | typeof RedisPublisher | typeof WebhookPublisher | undefined;
 
   constructor() {
     if (!Configuration.get("privilege.can-use-push-events")) {
@@ -52,6 +54,14 @@ export default class Pusher {
         }
         this.queue = RedisPublisher;
         break;
+      case adapters.Webhook:
+        if (!Configuration.get("privilege.can-use-webhook-pusher")) {
+          log.warn(
+            "Usage of push events is enabled. However, this requires option `Can Use Webhook Pusher(privilege.can-use-webhook-pusher)` to be true. Events will not be published until you setup Webhook Pusher options.",
+          );
+        }
+        this.queue = WebhookPublisher;
+        break;
     }
   }
 
@@ -71,6 +81,10 @@ export default class Pusher {
       case adapters.Redis:
         await RedisPublisher.publish(event);
         log.debug("Published event to Redis PubSub. %o", event);
+        break;
+      case adapters.Webhook:
+        await WebhookPublisher.publish(event);
+        log.debug("Published event to Webhook. %o", event);
         break;
     }
   }

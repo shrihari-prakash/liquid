@@ -635,6 +635,22 @@
     "relatedOptions": ["privilege.can-use-push-events", "privilege.can-use-rabbitmq"]
   },
   {
+    "name": "pusher.webhook.url",
+    "displayName": "Pusher Webhook URL",
+    "envName": "PUSHER_WEBHOOK_URL",
+    "description": "Webhook URL for the webhook pusher adapter. An HTTP POST request will be made to this URL with the push event object.",
+    "type": "string",
+    "relatedOptions": ["privilege.can-use-webhook-pusher", "system.queue-adapter"]
+  },
+  {
+    "name": "pusher.webhook.secret",
+    "displayName": "Pusher Webhook Secret",
+    "envName": "PUSHER_WEBHOOK_SECRET",
+    "description": "Secret key for generating the HMAC SHA256 signature for the webhook payload. Will be sent via the X-Webhook-Signature header.",
+    "type": "string",
+    "relatedOptions": ["privilege.can-use-webhook-pusher", "system.queue-adapter"]
+  },
+  {
     "name": "cors.allowed-origins",
     "displayName": "Allowed Origins for CORS requests",
     "envName": "CORS_ALLOWED_ORIGINS",
@@ -675,7 +691,16 @@
     "description": "Specifies if the system should publish certain events to RabbitMQ that can be used by external services.",
     "type": "boolean",
     "default": false,
-    "relatedOptions": ["privilege.can-use-rabbitmq"]
+    "relatedOptions": ["privilege.can-use-rabbitmq", "privilege.can-use-webhook-pusher"]
+  },
+  {
+    "name": "privilege.can-use-webhook-pusher",
+    "displayName": "Can Use Webhook Pusher",
+    "envName": "CAN_USE_WEBHOOK_PUSHER",
+    "description": "Specifies whether system can use Webhook Pusher.",
+    "type": "boolean",
+    "default": false,
+    "relatedOptions": ["privilege.can-use-push-events"]
   },
   {
     "name": "privilege.can-use-follow-apis",

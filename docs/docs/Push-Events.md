@@ -60,6 +60,17 @@ Liquid supports two message queue adapters:
 }
 ```
 
+#### Webhook
+
+```json
+{
+  "system.queue-adapter": "webhook",
+  "privilege.can-use-webhook-pusher": true,
+  "pusher.webhook.url": "https://api.your-app.com/liquid-events",
+  "pusher.webhook.secret": "your_secure_secret"
+}
+```
+
 ## Backend Configuration
 
 ### Redis Configuration Options
@@ -171,6 +182,61 @@ For production deployments, configure secure RabbitMQ connections:
 ```json
 {
   "rabbitmq.connectionString": "amqp://liquid_user:strong_password@rabbitmq-server:5672/liquid_vhost"
+}
+```
+
+### Webhook Configuration Options
+
+All Webhook configuration options for Liquid Push Events:
+
+```json
+{
+  "privilege.can-use-webhook-pusher": true,
+  "pusher.webhook.url": "https://api.your-app.com/liquid-events",
+  "pusher.webhook.secret": "your_secure_secret",
+  "webhook.timeout": 5000
+}
+```
+
+**Configuration Details:**
+
+| Option                             | Type    | Default | Description                    |
+| ---------------------------------- | ------- | ------- | ------------------------------ |
+| `privilege.can-use-webhook-pusher` | boolean | `false` | Enables Webhook functionality  |
+| `pusher.webhook.url`               | string  | `""`    | Webhook URL for POST requests  |
+| `pusher.webhook.secret`            | string  | `""`    | Secret key for generating HMAC |
+| `webhook.timeout`                  | number  | `5000`  | Timeout (ms) for the request   |
+
+#### Webhook Verification and Retries
+
+When Liquid sends a webhook event, it uses a standard `POST` request with the `Content-Type: application/json` header. It also includes an `X-Webhook-Signature` header containing an HMAC SHA-256 signature of the raw JSON payload. This signature allows you to verify that the webhook was genuinely sent by your Liquid instance and hasn't been tampered with.
+
+If the webhook request fails or the receiving server responds with a non-2xx HTTP status code, Liquid will automatically retry the request up to 3 times using an exponential backoff strategy (1s, 2s, 4s).
+
+**Verifying the Signature (Node.js Example):**
+
+```javascript
+const crypto = require("crypto");
+
+// Middleware to verify Liquid Webhooks
+function verifyLiquidWebhook(req, res, next) {
+  const signature = req.headers["x-webhook-signature"];
+  const secret = "your_secure_secret"; // Matches pusher.webhook.secret
+
+  // Note: For this to work correctly, you must use the raw string body of the request.
+  // Assuming req.rawBody contains the raw JSON string before parsing.
+  const payloadString = req.rawBody || JSON.stringify(req.body);
+  
+  const expectedSignature = crypto
+    .createHmac("sha256", secret)
+    .update(payloadString)
+    .digest("hex");
+
+  if (signature === expectedSignature) {
+    next(); // Signature is valid
+  } else {
+    res.status(401).send("Invalid signature");
+  }
 }
 ```
 
@@ -467,6 +533,7 @@ consumeEvents();
 | ---------- | -------- | --------------------------------- |
 | Redis      | Optional | Redis Pub/Sub adapter and caching |
 | RabbitMQ   | Optional | RabbitMQ message queue adapter    |
+| Webhook    | Optional | HTTP webhook pusher adapter       |
 
 ### Redis Dependencies
 
@@ -483,6 +550,14 @@ consumeEvents();
 - Ensure `privilege.can-use-rabbitmq` is enabled
 - RabbitMQ connection string must be properly configured
 - Independent message queue system
+
+### Webhook Dependencies
+
+**For Webhook:**
+
+- Ensure `privilege.can-use-webhook-pusher` is enabled
+- A valid `pusher.webhook.url` and `pusher.webhook.secret` must be configured
+- The target server must be able to receive POST requests and return 2xx HTTP codes
 
 :::tip
 
