@@ -46,6 +46,34 @@ To send outbound emails from Liquid, say, for account verification and password 
 - Set **_system.email-adapter_** to `sendgrid`.
 - Set **_sendgrid.api-key_** to your SendGrid API key.
 
+#### Using Webhook
+
+If you have a custom service to handle emails via webhooks, you can configure Liquid to POST email payloads directly to it. The request will include an `X-Webhook-Signature` header containing an HMAC SHA256 signature of the payload for verification.
+
+- Set **_system.email-adapter_** to `webhook`.
+- Set **_webhook.url_** to your webhook endpoint URL.
+- Set **_webhook.secret_** to a secret string used for generating the HMAC signature.
+
+**Webhook Request Format:**
+Liquid will send a `POST` request with a `Content-Type: application/json` header and the `X-Webhook-Signature` header. The JSON body will look like this:
+
+```json
+{
+  "to": "user@example.com",
+  "from": {
+    "name": "Your App Name",
+    "email": "noreply@yourapp.com"
+  },
+  "subject": "Verification Code",
+  "text": "Hello, here is your code...",
+  "html": "<p>Hello, here is your code...</p>",
+  "dynamicTemplateData": {}
+}
+```
+
+**Expected Response:**
+Your webhook endpoint should return a `2xx` HTTP status code (e.g., `200 OK`) to indicate successful receipt. Any non-`2xx` status code will be logged as an error by Liquid.
+
 #### Using Message Queue (Pusher)
 
 If none of the built-in email providers meet your needs, Liquid can put emails in a queue so that another service can consume them and send emails using your preferred custom provider.

@@ -7,6 +7,7 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import * as fs from "fs";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import * as crypto from "crypto";
 
 import { Configuration } from "../../singleton/configuration.js";
 import { Pusher } from "../../singleton/pusher.js";
@@ -26,6 +27,7 @@ const Modes = {
   NODEMAILER: "nodemailer",
   SES: "ses",
   PUSHER: "pusher",
+  WEBHOOK: "webhook",
 };
 
 interface Email {
@@ -61,6 +63,9 @@ export class Mailer {
         break;
       case Modes.PUSHER:
         this.initializePusher();
+        break;
+      case Modes.WEBHOOK:
+        this.initializeWebhook();
         break;
       default:
         log.info("Mailer initialized in PRINT mode.");
@@ -141,6 +146,21 @@ export class Mailer {
     }
   }
 
+  private initializeWebhook() {
+    this.mode = Modes.WEBHOOK;
+    const url = Configuration.get("webhook.url") as string;
+    const secret = Configuration.get("webhook.secret") as string;
+
+    if (!url) {
+      log.warn("Webhook mailer adapter enabled but 'webhook.url' is not configured.");
+    }
+    if (!secret) {
+      log.warn("Webhook mailer adapter enabled but 'webhook.secret' is not configured.");
+    }
+
+    log.info("Webhook email adapter initialized");
+  }
+
   public async send(email: Email) {
     if (!email.from) {
       const name = Configuration.get("system.app-name") as string;
@@ -162,6 +182,9 @@ export class Mailer {
       case Modes.SES:
         await this.sendViaSES(email);
         break;
+      case Modes.WEBHOOK:
+        await this.sendViaWebhook(email);
+        break;
       default:
         this.printEmail(email);
         break;
@@ -181,6 +204,47 @@ export class Mailer {
       log.info("Email published to message queue via Pusher");
     } catch (error) {
       log.error("Error publishing email to Pusher:", error);
+      throw error;
+    }
+  }
+
+  private async sendViaWebhook(email: Email) {
+    const url = Configuration.get("webhook.url") as string;
+    const secret = Configuration.get("webhook.secret") as string;
+    const timeout = (Configuration.get("webhook.timeout") as number) || 5000;
+
+    if (!url || !secret) {
+      log.error("Webhook mailer requires URL and Secret to be configured.");
+      return;
+    }
+
+    const payloadString = JSON.stringify(email);
+    const signature = crypto.createHmac("sha256", secret).update(payloadString).digest("hex");
+
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(() => abortController.abort(), timeout);
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Webhook-Signature": signature,
+        },
+        body: payloadString,
+        signal: abortController.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        log.error("Webhook mailer received non-ok response:", response.status, response.statusText);
+      } else {
+        log.info("Email submitted successfully via Webhook");
+      }
+    } catch (error) {
+      clearTimeout(timeoutId);
+      log.error("Error sending email via Webhook:", error);
       throw error;
     }
   }

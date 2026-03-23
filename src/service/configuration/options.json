@@ -307,10 +307,10 @@
     "name": "system.email-adapter",
     "displayName": "System Email Adapter",
     "envName": "SYSTEM_EMAIL_ADAPTER",
-    "description": "Specifies the adapter to use to send emails to users. Possible values are `nodemailer`, `sendgrid`, 'ses', `print`",
+    "description": "Specifies the adapter to use to send emails to users. Possible values are `nodemailer`, `sendgrid`, `ses`, `pusher`, `webhook`, `print`",
     "type": "string",
     "default": "sendgrid",
-    "relatedOptions": ["nodemailer.*", "sendgrid.*"]
+    "relatedOptions": ["nodemailer.*", "sendgrid.*", "aws.ses.*", "webhook.*"]
   },
   {
     "name": "nodemailer.service-name",
@@ -427,6 +427,31 @@
     "type": "string",
     "default": "liquid@example.com",
     "relatedOptions": ["nodemailer.*", "sendgrid.*", "aws.ses.*", "system.email-adapter"]
+  },
+  {
+    "name": "webhook.url",
+    "displayName": "Webhook URL",
+    "envName": "WEBHOOK_URL",
+    "description": "Webhook URL for the webhook email adapter. An HTTP POST request will be made to this URL with the email object.",
+    "type": "string",
+    "relatedOptions": ["webhook.*", "system.email-adapter"]
+  },
+  {
+    "name": "webhook.secret",
+    "displayName": "Webhook Secret",
+    "envName": "WEBHOOK_SECRET",
+    "description": "Secret key for generating the HMAC SHA256 signature for the webhook payload. Will be sent via the X-Webhook-Signature header.",
+    "type": "string",
+    "relatedOptions": ["webhook.*", "system.email-adapter"]
+  },
+  {
+    "name": "webhook.timeout",
+    "displayName": "Webhook Timeout",
+    "envName": "WEBHOOK_TIMEOUT",
+    "description": "Timeout in milliseconds for the webhook POST requests.",
+    "type": "number",
+    "default": 5000,
+    "relatedOptions": ["webhook.*", "system.email-adapter"]
   },
   {
     "name": "email.verification-template",
