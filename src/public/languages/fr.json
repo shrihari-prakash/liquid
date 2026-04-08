@@ -33,6 +33,8 @@
   "message.consent": "{{app_name}} veut accéder à votre compte. Si vous y consentez, {{app_name}} pourra:",
   "message.consent-warning": "Avant de donner votre consentement, assurez-vous de faire confiance à cette application, car vous pourriez partager des informations sensibles.",
   "message.verification-instructions": "Un code de vérification a été envoyé à votre adresse e-mail.",
+  "message.resend-code-in": "Renvoyer le code dans {{seconds}}s",
+  "message.verification-resent": "Un nouveau code de vérification a été envoyé à votre e-mail.",
   "message.recover-instructions": "Entrez votre adresse e-mail pour récupérer votre compte.",
   "message.reset-password-instructions": "Un code de vérification a été envoyé à votre adresse e-mail.",
   "message.page-not-found": "Cette page est introuvable",
@@ -81,5 +83,8 @@
   "link.create-account": "Créer un compte",
   "link.forgot-password": "Mot de passe oublié?",
   "link.login": "Avoir un compte? Se connecter",
-  "link.login-minimal": "Se connecter"
+  "link.login-minimal": "Se connecter",
+  "link.resend-code": "Renvoyer le code",
+
+  "error.resend-failed": "Impossible de renvoyer l'e-mail de vérification. Veuillez réessayer."
 }

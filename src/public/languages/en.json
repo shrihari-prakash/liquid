@@ -33,6 +33,8 @@
   "message.consent": "{{app_name}} wants access to your account. If you consent to this, {{app_name}} will be able to:",
   "message.consent-warning": "Before you consent, make sure you trust this application as you might be sharing sensitive information.",
   "message.verification-instructions": "A verification code was sent to your email address.",
+  "message.resend-code-in": "Resend code in {{seconds}}s",
+  "message.verification-resent": "A new verification code has been sent to your email.",
   "message.recover-instructions": "Enter your email address to recover your account.",
   "message.reset-password-instructions": "A verification code was sent to your email address.",
   "message.page-not-found": "This page could not be found",
@@ -81,5 +83,8 @@
   "link.create-account": "Create Account",
   "link.forgot-password": "Forgot Password?",
   "link.login": "Have an account? Login",
-  "link.login-minimal": "Login"
+  "link.login-minimal": "Login",
+  "link.resend-code": "Resend Code",
+
+  "error.resend-failed": "Failed to resend the verification email. Please try again."
 }

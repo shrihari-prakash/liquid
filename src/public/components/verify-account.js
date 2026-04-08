@@ -1,6 +1,8 @@
 import { ConfigurationContext } from "../context/configuration.js";
-import { errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
+import { getPlaceholder, useTitle } from "../utils/utils.js";
 import { get } from "../utils/api.js";
+
+const RESEND_COOLDOWN = 30;
 
 export default function VerifyAccount() {
   const submitButtonText = i18next.t("button.verify");
@@ -8,10 +10,18 @@ export default function VerifyAccount() {
   const configuration = React.useContext(ConfigurationContext);
 
   const [errorMessage, setErrorMessage] = React.useState("");
-  // hasError removed
   const [submitting, setSubmitting] = React.useState(false);
+  const [countdown, setCountdown] = React.useState(RESEND_COOLDOWN);
+  const [resendStatus, setResendStatus] = React.useState("");
 
   React.useEffect(() => useTitle(configuration["content.app-name"], i18next.t("title.verify-account")), []);
+
+  // Start countdown on mount
+  React.useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown]);
 
   const onSubmitError = (props) => {
     setErrorMessage(props.errorText);
@@ -30,11 +40,29 @@ export default function VerifyAccount() {
       if (result.ok) {
         window.location = `/login${window.location.search}`;
       } else {
-        onSubmitError({ errorText: "Invalid Code" });
+        onSubmitError({ errorText: i18next.t("error.invalid-code") });
       }
     } finally {
       setSubmitting(false);
     }
+  }
+
+  async function resendCode(event) {
+    event.preventDefault();
+    setResendStatus("");
+    const urlParams = new URLSearchParams(window.location.search);
+    const target = urlParams.get("target");
+    try {
+      const result = await get("/user/resend-verification", { target });
+      if (result.ok) {
+        setResendStatus(i18next.t("message.verification-resent"));
+      } else {
+        setResendStatus(i18next.t("error.resend-failed"));
+      }
+    } catch {
+      setResendStatus(i18next.t("error.resend-failed"));
+    }
+    setCountdown(RESEND_COOLDOWN);
   }
 
   if (!configuration["user.account-creation.require-email-verification"]) {
@@ -68,8 +96,17 @@ export default function VerifyAccount() {
           required
         />
       </div>
-      <div className="page-links"></div>
+      <div className="page-links">
+        {countdown > 0 ? (
+          <span className="resend-countdown">{i18next.t("message.resend-code-in", { seconds: countdown })}</span>
+        ) : (
+          <a href="#" className="page-link" onClick={resendCode}>
+            {i18next.t("link.resend-code")}
+          </a>
+        )}
+      </div>
       <input type="submit" disabled={submitting} className="button" value={submitButtonText} />
+      {resendStatus && <div className="form-success-message">{resendStatus}</div>}
       <div className="form-error-message">{errorMessage}</div>
     </form>
   );

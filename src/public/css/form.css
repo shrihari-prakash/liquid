@@ -109,6 +109,13 @@
   border-radius: var(--form-input-border-radius);
 }
 
+.form-success-message {
+  color: var(--text-color);
+  width: 100%;
+  text-align: center;
+  margin-top: 1rem;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
   transition:
