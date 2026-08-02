@@ -6,6 +6,12 @@ title: "API-Documentation: Delegated"
 
 Usually accessible by `authorization_code` grant. Users typically have permissions to access all these APIs at the time of account creation. All API calls are made on behalf of the user associated with the token.
 
+:::tip
+
+For web applications (React, Vue, Next.js, Node.js), you can use the official **[liquid-js-sdk](https://www.npmjs.com/package/liquid-js-sdk)** package to call all Delegated APIs with zero boilerplate and full TypeScript support (`liquid.user.*`, `liquid.sso.*`, `liquid.roles.list()`, `liquid.system.*`, etc.).
+
+:::
+
 <details>
 <summary>
 ### Create User

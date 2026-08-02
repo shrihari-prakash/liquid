@@ -16,6 +16,12 @@ If you still want to use the admin APIs for some reason, all of them are documen
 
 Restricted to system admins. Super Admin role has access to all these APIs. To provide access to other users, Super Admin needs to explicitly provide permissions using POST `user/admin-api/access` API. Needs an `authorization_code` grant login.
 
+:::tip
+
+For web applications and admin tools, you can use the official **[liquid-js-sdk](https://www.npmjs.com/package/liquid-js-sdk)** package to call all Admin APIs with zero boilerplate and full TypeScript support (`liquid.admin.users.*`, `liquid.admin.oauth.*`, `liquid.admin.roles.*`, `liquid.admin.system.*`).
+
+:::
+
 <details>
 <summary>
 ### Access Provisioning

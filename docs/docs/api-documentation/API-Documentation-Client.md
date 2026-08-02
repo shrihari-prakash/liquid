@@ -6,6 +6,12 @@ title: "API-Documentation: Client"
 
 Accessible by `client_credentials` grant. Usually accessed by other microservices in your system.
 
+:::tip
+
+For Node.js / backend microservices using client credentials, you can use the official **[liquid-js-sdk](https://www.npmjs.com/package/liquid-js-sdk)** package to call all Client APIs with zero boilerplate and full TypeScript support (`liquid.client.users.*`, `liquid.client.roles.*`, `liquid.client.system.*`, `liquid.client.oauth.*`).
+
+:::
+
 <details>
 <summary>
 ### Access Provisioning
