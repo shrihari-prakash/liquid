@@ -8,7 +8,7 @@ Usually accessible by `authorization_code` grant. Users typically have permissio
 
 :::tip
 
-For web applications (React, Vue, Next.js, Node.js), you can use the official **[liquid-js-sdk](https://www.npmjs.com/package/liquid-js-sdk)** package to call all Delegated APIs with zero boilerplate and full TypeScript support (`liquid.delegated.*`, `liquid.sso.*`, `liquid.roles.list()`, `liquid.system.*`).
+For web applications (React, Vue, Next.js, Node.js), you can use the official **[liquid-js-sdk](https://www.npmjs.com/package/liquid-js-sdk)** package to call all Delegated APIs with zero boilerplate and full TypeScript support (`liquid.users.*`, `liquid.sso.*`, `liquid.roles.list()`, `liquid.system.*`).
 
 :::
 
