@@ -34,7 +34,6 @@ Liquid is a Docker-based open-source authentication server that supercharges you
 
 - **[liquid-js-sdk](https://www.npmjs.com/package/liquid-js-sdk):** Universal TypeScript/JavaScript SDK for Browsers & Node.js, providing full type-safe coverage for all Liquid APIs (user, admin, client, oauth, roles, system, health, SSO).
 - **[liquid-node-authenticator](https://www.npmjs.com/package/liquid-node-authenticator):** Express middleware for token authentication and scope verification in Node.js microservices.
-- **[liquid-node-connector](https://www.npmjs.com/package/liquid-node-connector):** Machine-to-machine client credentials connector for backend services.
 
 ## Translation Credits
 

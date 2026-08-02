@@ -72,7 +72,6 @@ Refer to [this section](/Understanding-Access-Control-and-Integrating-with-Other
 
 - **[liquid-js-sdk](https://www.npmjs.com/package/liquid-js-sdk):** Universal TypeScript/JavaScript SDK for web browsers and Node.js with complete type safety across all Liquid APIs (`liquid.user.*`, `liquid.admin.*`, `liquid.client.*`, `liquid.oauth.*`, `liquid.roles.*`, `liquid.system.*`, `liquid.health.*`, `liquid.sso.*`).
 - **[liquid-node-authenticator](https://www.npmjs.com/package/liquid-node-authenticator):** Express middleware for token authentication and scope verification.
-- **[liquid-node-connector](https://www.npmjs.com/package/liquid-node-connector):** Node.js helper for machine-to-machine client credentials.
 
 ## API Documentation
 
