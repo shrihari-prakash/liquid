@@ -68,6 +68,12 @@ The Quickstart script by default runs in "Demo Mode", which means, an applicatio
 ## Connecting Your Backend Service to Liquid Quickstart Instance
 Refer to [this section](/Understanding-Access-Control-and-Integrating-with-Other-Microservices) to find out how to authenticate users connecting to your service using Liquid.
 
+## 📦 Official SDKs & Packages
+
+- **[liquid-js-sdk](https://www.npmjs.com/package/liquid-js-sdk):** Universal TypeScript/JavaScript SDK for web browsers and Node.js with complete type safety across all Liquid APIs (`liquid.user.*`, `liquid.admin.*`, `liquid.client.*`, `liquid.oauth.*`, `liquid.roles.*`, `liquid.system.*`, `liquid.health.*`, `liquid.sso.*`).
+- **[liquid-node-authenticator](https://www.npmjs.com/package/liquid-node-authenticator):** Express middleware for token authentication and scope verification.
+- **[liquid-node-connector](https://www.npmjs.com/package/liquid-node-connector):** Node.js helper for machine-to-machine client credentials.
+
 ## API Documentation
 
 Get started with the APIs [here](/api-documentation/API-Documentation-OAuth-2.0)

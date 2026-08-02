@@ -8,6 +8,12 @@ All standard OAuth APIs use `sake_case` for both request and response parameters
 
 :::
 
+:::tip
+
+For web applications (React, Vue, Next.js, Node.js), you can use the official **[liquid-js-sdk](https://www.npmjs.com/package/liquid-js-sdk)** package to call all Liquid APIs with zero boilerplate and full TypeScript support.
+
+:::
+
 ## Client Authentication
 
 <details>
