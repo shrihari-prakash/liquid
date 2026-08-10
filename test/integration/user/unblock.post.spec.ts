@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import BlockModel from "../../../src/model/mongo/block";
@@ -9,8 +9,8 @@ import MemoryStore from "../store";
 describe("unblock.post", () => {
   it("should test john_doe unblocking rick_asthley", async () => {
     return new Promise<void>((resolve, reject) => {
-      chai
-        .request(app)
+      request
+        .execute(app)
         .post("/user/unblock")
         .set({ Authorization: `Bearer john_doe_access_token` })
         .send({ target: (MemoryStore.users.user2 as any)._id })
@@ -33,8 +33,8 @@ describe("unblock.post", () => {
   });
 
   it("should return error for invalid target", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/unblock")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: "000000" })

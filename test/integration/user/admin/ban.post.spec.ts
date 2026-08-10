@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src/index";
 import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
@@ -10,8 +10,7 @@ describe("admin-api.ban.post", () => {
   before(setupUsers);
 
   it("should ban user", () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .post(`/user/admin-api/ban`)
       .send({
         target: MemoryStore.users.user2._id,
@@ -29,8 +28,7 @@ describe("admin-api.ban.post", () => {
   });
 
   it("should un-ban user", () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .post(`/user/admin-api/ban`)
       .send({
         target: MemoryStore.users.user2._id,

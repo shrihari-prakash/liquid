@@ -1,12 +1,9 @@
-import chai from "chai";
-import chaiHttp from "chai-http";
+import * as chai from "chai";
+import chaiHttp, { request } from "chai-http";
 import "mocha";
 import { MongoMemoryServer } from "mongodb-memory-server";
-const mongod = new MongoMemoryServer({
-  instance: {
-    port: 1111,
-  },
-});
+let mongod: MongoMemoryServer;
+
 import { MongoDB } from "../../src/singleton/mongo-db";
 import ClientModel from "../../src/model/mongo/client";
 import { Logger } from "../../src/singleton/logger";
@@ -32,10 +29,19 @@ Configuration.set("system.app-port", 1111);
 
 exports.mochaHooks = {
   async beforeAll() {
-    await mongod.start();
-    Configuration.set("mongo-db.connection-string", await mongod.getUri());
+    mongod = await MongoMemoryServer.create({
+      instance: {
+        port: 1111,
+      },
+    });
+    Configuration.set("mongo-db.connection-string", mongod.getUri());
     MongoDB.connect();
     await ClientModel.deleteMany({});
     console.log("Setup complete.");
+  },
+  async afterAll() {
+    if (mongod) {
+      await mongod.stop();
+    }
   },
 };

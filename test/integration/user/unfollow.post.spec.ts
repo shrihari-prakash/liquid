@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import UserModel, { UserInterface } from "../../../src/model/mongo/user";
@@ -12,13 +12,13 @@ describe("unfollow.post", () => {
   before(setupUsers);
 
   it("run follow actions", async () => {
-    await chai
-      .request(app)
+    await request
+      .execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer rick_asthley_access_token` })
       .send({ target: (MemoryStore.users.user1 as any)._id });
-    await chai
-      .request(app)
+    await request
+      .execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: (MemoryStore.users.user2 as any)._id });
@@ -30,8 +30,8 @@ describe("unfollow.post", () => {
   });
 
   it("should test john_doe unfollowing rick_asthley", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/unfollow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: (MemoryStore.users.user2 as any)._id });
@@ -48,8 +48,8 @@ describe("unfollow.post", () => {
   });
 
   it("should return error for invalid target", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/unfollow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: "000000" });

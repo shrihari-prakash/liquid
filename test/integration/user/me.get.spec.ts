@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 
@@ -10,8 +10,8 @@ describe("me.get", () => {
   before(setupUsers);
 
   it("should get user john_doe", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .get("/user/me")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then((res) => {
@@ -24,8 +24,8 @@ describe("me.get", () => {
   });
 
   it("should get user rick_asthley", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .get("/user/me")
       .set({ Authorization: `Bearer rick_asthley_access_token` })
       .then((res) => {

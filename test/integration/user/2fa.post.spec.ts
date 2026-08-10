@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import UserModel, { UserInterface } from "../../../src/model/mongo/user";
@@ -11,8 +11,7 @@ describe("2fa.post", () => {
   before(setupUsers);
 
   it("should test john_doe switching on 2FA", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post("/user/2fa")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ state: true });
@@ -25,8 +24,7 @@ describe("2fa.post", () => {
   });
 
   it("should test john_doe switching off 2FA", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post("/user/2fa")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ state: false });

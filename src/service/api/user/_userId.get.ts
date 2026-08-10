@@ -29,7 +29,7 @@ const GET_UserId = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     // The first two parameters reversed because we need to find if the target has blocked the source.
-    const isBlocked = await getBlockStatus(targetId, sourceId, res);
+    const isBlocked = await getBlockStatus(targetId as string, sourceId, res);
     if (isBlocked) return;
     let user = (await UserModel.findOne({ _id: targetId }, UserProjection).exec()) as unknown as UserInterface;
     const followResults = await isFollowing({ sourceId, targets: [user] });

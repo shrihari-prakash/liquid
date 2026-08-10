@@ -1,4 +1,4 @@
-import Pino from "pino";
+import pino from "pino";
 import fs from "fs";
 
 import { Configuration } from "../../singleton/configuration.js";
@@ -10,7 +10,7 @@ export class Logger {
   constructor() {
     // Silent logging in test environment
     if (process.env.NODE_ENV === 'test') {
-      this.logger = Pino.default({ level: 'silent' });
+      this.logger = pino({ level: 'silent' });
       return;
     }
 
@@ -27,7 +27,7 @@ export class Logger {
       streams.push({ level: Configuration.get("system.log-level"), stream: fileStream });
     }
 
-    this.logger = Pino.default({ level: Configuration.get("system.log-level") }, Pino.multistream(streams));
+    this.logger = pino({ level: Configuration.get("system.log-level") }, pino.multistream(streams));
   }
 
   public getLogger(): any {

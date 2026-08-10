@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src";
 import { setupUsers } from "../../utils/records";
@@ -15,8 +15,7 @@ describe("roles.create.post", () => {
       type: "user",
       description: "Test role",
     };
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/roles/admin-api/create`)
       .send(role)
       .set({ Authorization: `Bearer john_doe_access_token` });
@@ -36,7 +35,7 @@ describe("roles.create.post", () => {
       scope: ["*"],
     };
     const res = (
-      await chai.request(app).post(`/roles/admin-api/create`).send(role).set({ Authorization: `Bearer john_doe_access_token` })
+      await request.execute(app).post(`/roles/admin-api/create`).send(role).set({ Authorization: `Bearer john_doe_access_token` })
     );
     chai.expect(res.status).to.eql(200);
     chai.expect(res.body.data.role.scope).to.eql([]);
@@ -51,7 +50,7 @@ describe("roles.create.post", () => {
       scope: ["*"],
     };
     const res = (
-      await chai.request(app).post(`/roles/admin-api/create`).send(role).set({ Authorization: `Bearer john_doe_access_token` })
+      await request.execute(app).post(`/roles/admin-api/create`).send(role).set({ Authorization: `Bearer john_doe_access_token` })
     );
     chai.expect(res.status).to.eql(400);
   });

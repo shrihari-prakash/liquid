@@ -1,13 +1,12 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src";
 import MemoryStore from "../store";
 
 describe("client.get", () => {
   it("should get client details", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .get(`/client`)
       .query({
         id: MemoryStore.client.id,
@@ -21,8 +20,7 @@ describe("client.get", () => {
   });
 
   it("should not get client details for invalid client id", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .get(`/client`)
       .query({
         id: "whatever",

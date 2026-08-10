@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import BlockModel from "../../../src/model/mongo/block";
@@ -13,13 +13,13 @@ describe("block.post", () => {
 
   describe("should test john_doe blocking rick_asthley", () => {
     it("run follow actions", async () => {
-      await chai
-        .request(app)
+      await request
+        .execute(app)
         .post("/user/follow")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send({ target: (MemoryStore.users.user1 as any)._id });
-      await chai
-        .request(app)
+      await request
+        .execute(app)
         .post("/user/follow")
         .set({ Authorization: `Bearer john_doe_access_token` })
         .send({ target: (MemoryStore.users.user2 as any)._id });
@@ -31,8 +31,8 @@ describe("block.post", () => {
     });
 
     it("should block rick_asthley", async () => {
-      const res = await chai
-        .request(app)
+      const res = await request
+        .execute(app)
         .post("/user/block")
         .set({ Authorization: `Bearer john_doe_access_token` })
         .send({ target: (MemoryStore.users.user2 as any)._id });
@@ -51,8 +51,8 @@ describe("block.post", () => {
   });
 
   it("should return error for invalid target", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/block")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: "000000" });

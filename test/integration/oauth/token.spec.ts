@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import { setupUsers } from "../utils/records";
@@ -24,7 +24,7 @@ describe("oauth.token", () => {
 
   it("should test access token flow", async () => {
     await AuthorizationCodeModel.create(authCode);
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "authorization_code",
       code: authCode.authorizationCode,
       client_id: MemoryStore.client.client_id,
@@ -37,7 +37,7 @@ describe("oauth.token", () => {
   });
 
   it("should test access token flow with invalid code", async () => {
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "authorization_code",
       code: "invalid_code",
       client_id: MemoryStore.client.client_id,
@@ -47,7 +47,7 @@ describe("oauth.token", () => {
   });
 
   it("should test access token flow with invalid client id", async () => {
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "authorization_code",
       code: authCode.authorizationCode,
       client_id: "invalid_client_id",
@@ -68,7 +68,7 @@ describe("oauth.token", () => {
 
   it("should test refresh token flow", async () => {
     await TokenModel.create(accessToken);
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "refresh_token",
       refresh_token: accessToken.refreshToken,
       client_id: MemoryStore.client.client_id,
@@ -82,7 +82,7 @@ describe("oauth.token", () => {
 
   it("should test refresh token flow with invalid refresh token", async () => {
     await TokenModel.create(accessToken);
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "refresh_token",
       refresh_token: "invalid_refresh_token",
       client_id: MemoryStore.client.client_id,
@@ -93,7 +93,7 @@ describe("oauth.token", () => {
 
   it("should test refresh token flow with invalid client id", async () => {
     await TokenModel.create(accessToken);
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "refresh_token",
       refresh_token: accessToken.refreshToken,
       client_id: "invalid_client_id",

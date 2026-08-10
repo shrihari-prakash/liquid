@@ -1,7 +1,7 @@
 import { Logger } from "../../singleton/logger.js";
 const log = Logger.getLogger().child({ from: "redis" });
 
-import IORedis from "ioredis";
+import { Redis as RedisClient } from "ioredis";
 import { Configuration } from "../../singleton/configuration.js";
 
 class Redis {
@@ -13,7 +13,7 @@ class Redis {
     }
     const host = Configuration.get("redis.host") as string;
     const port = Configuration.get("redis.port") as number;
-    this.client = new IORedis.default({
+    this.client = new RedisClient({
       port: port,
       host: host,
       username: Configuration.get("redis.username") as string,
@@ -24,7 +24,7 @@ class Redis {
     this.client.on("connect", function () {
       log.info("[%s] Connected to Redis (%s:%s).", serviceName || "default", host, port);
     });
-    this.client.on("error", function (error) {
+    this.client.on("error", function (error: any) {
       log.error("Error connecting to Redis (%o).", error);
     });
   }

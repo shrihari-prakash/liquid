@@ -29,7 +29,7 @@ const GET_Followers = async (req: Request, res: Response): Promise<void> => {
         .lean()
         .exec()) as unknown as UserInterface;
       // The first two parameters reversed because we need to find if the target has blocked the source.
-      const isBlocked = await getBlockStatus(targetId, loggedInUserId, res);
+      const isBlocked = await getBlockStatus(targetId as string, loggedInUserId, res);
       if (isBlocked) return;
       const followResults = await isFollowing({ sourceId: loggedInUserId, targets: [user] });
       if (user.isPrivate && !followResults.results[0]) {

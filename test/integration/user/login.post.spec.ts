@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import { Configuration } from "../../../src/singleton/configuration";
@@ -20,8 +20,9 @@ describe("login.post", () => {
   });
 
   it("should login user john_doe", () => {
-    return chai
-      .request(app)
+    Configuration.set("user.login.record-successful-attempts", false);
+    return request
+      .execute(app)
       .post("/user/login")
       .send({ ...MockData.users.user1, userAgent })
       .then(async (res) => {
@@ -33,8 +34,8 @@ describe("login.post", () => {
 
   it("should record login history user john_doe", () => {
     Configuration.set("user.login.record-successful-attempts", true);
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/login")
       .send({ ...MockData.users.user1, userAgent })
       .then(async (res) => {
@@ -46,8 +47,8 @@ describe("login.post", () => {
   });
 
   it("should not login with wrong credentials", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/login")
       .send({ username: "john_doe", password: "password", userAgent })
       .then((res) => {
@@ -57,8 +58,8 @@ describe("login.post", () => {
 
   it("should record login history user john_doe for failed attempt", () => {
     Configuration.set("user.login.record-failed-attempts", true);
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/login")
       .send({ username: "john_doe", password: "password", userAgent })
       .then(async (res) => {
@@ -71,8 +72,8 @@ describe("login.post", () => {
   });
 
   it("should not login with short username", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/login")
       .send({ username: "a", password: "password", userAgent })
       .then((res) => {
@@ -82,8 +83,8 @@ describe("login.post", () => {
   });
 
   it("should not login with short password", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/login")
       .send({ username: "john_doe", password: "a", userAgent })
       .then((res) => {
@@ -93,8 +94,8 @@ describe("login.post", () => {
   });
 
   it("should not login with long username", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/login")
       .send({ username: "abcdefghijklmnopqrstuvwxyz123456789", password: "password", userAgent })
       .then((res) => {
@@ -104,8 +105,8 @@ describe("login.post", () => {
   });
 
   it("should not login with long password", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/login")
       .send({
         username: "john_doe",
@@ -119,8 +120,8 @@ describe("login.post", () => {
   });
 
   it("should not login with invalid username", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/login")
       .send({ username: { username: { $gt: "" } }, password: "password", userAgent })
       .then((res) => {
@@ -130,8 +131,8 @@ describe("login.post", () => {
   });
 
   it("should not login with invalid password", () => {
-    return chai
-      .request(app)
+    return request
+      .execute(app)
       .post("/user/login")
       .send({ username: "john_doe", password: { password: { $gt: "" } }, userAgent })
       .then((res) => {

@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 
@@ -10,14 +10,12 @@ describe("following.get", () => {
   beforeEach(setupUsers);
 
   it("test get following list", async () => {
-    const followResponse = await chai
-      .request(app)
+    const followResponse = await request.execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: (MemoryStore.users.user2 as any)._id });
     chai.expect(followResponse.status).to.eql(200);
-    const followingResponse = await chai
-      .request(app)
+    const followingResponse = await request.execute(app)
       .get("/user/following")
       .set({ Authorization: `Bearer john_doe_access_token` });
     chai.expect(followingResponse.body.data.records.length).to.be.eq(1);
@@ -27,22 +25,19 @@ describe("following.get", () => {
 
   it("test rick_asthley getting john_doe's following list", async () => {
     // john follows allisson
-    const follow1Response = await chai
-      .request(app)
+    const follow1Response = await request.execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: (MemoryStore.users.user3 as any)._id });
     chai.expect(follow1Response.status).to.eql(200);
     // john follows rick
-    const follow2Response = await chai
-      .request(app)
+    const follow2Response = await request.execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: (MemoryStore.users.user2 as any)._id });
     chai.expect(follow2Response.status).to.eql(200);
     // rick gets john's followers
-    const followingResponse = await chai
-      .request(app)
+    const followingResponse = await request.execute(app)
       .get("/user/" + MemoryStore.users.user1._id + "/following")
       .set({ Authorization: `Bearer rick_asthley_access_token` });
     chai.expect(followingResponse.body.data.records.length).to.be.eq(2);
@@ -52,28 +47,24 @@ describe("following.get", () => {
 
   it("test allisson_brooklyn blocking rick_asthley in john_doe's following list", async () => {
     // allisson blocks rick
-    await chai
-      .request(app)
+    await request.execute(app)
       .post("/user/block")
       .set({ Authorization: `Bearer allisson_brooklyn_access_token` })
       .send({ target: (MemoryStore.users.user2 as any)._id });
     // john follows allisson
-    const follow1Response = await chai
-      .request(app)
+    const follow1Response = await request.execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: (MemoryStore.users.user3 as any)._id });
     chai.expect(follow1Response.status).to.eql(200);
     // john follows rick
-    const follow2Response = await chai
-      .request(app)
+    const follow2Response = await request.execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: (MemoryStore.users.user2 as any)._id });
     chai.expect(follow2Response.status).to.eql(200);
     // rick gets john's followers
-    const followingResponse = await chai
-      .request(app)
+    const followingResponse = await request.execute(app)
       .get("/user/" + MemoryStore.users.user1._id + "/following")
       .set({ Authorization: `Bearer rick_asthley_access_token` });
     chai.expect(followingResponse.body.data.records.length).to.be.eq(1);

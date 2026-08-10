@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src";
 import { Configuration } from "../../../../src/singleton/configuration";
@@ -10,8 +10,7 @@ describe("admin-api.editable-fields.get", () => {
   before(setupUsers);
 
   it("should get proper editable fields", () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .get("/user/admin-api/editable-fields")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .then((res) => {

@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import { Configuration } from "../../../src/singleton/configuration";
@@ -17,18 +17,16 @@ describe("login-history.get", () => {
     await LoginHistoryModel.deleteMany({});
     Configuration.set("user.login.record-successful-attempts", true);
     Configuration.set("user.login.record-failed-attempts", true);
-    await chai.request(app).post("/user/login").send({
+    await request.execute(app).post("/user/login").send({
       username: "john_doe",
       password: "wrongPa$$word",
       userAgent:
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
     });
-    await chai
-      .request(app)
+    await request.execute(app)
       .post("/user/login")
       .send({ ...MockData.users.user1, userAgent });
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .get("/user/login-history")
       .set({ Authorization: `Bearer john_doe_access_token` });
     chai.expect(res.status).to.eql(200);

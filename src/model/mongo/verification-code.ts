@@ -1,4 +1,4 @@
-import mongoose, { ObjectId, Schema, Document } from "mongoose";
+import mongoose, { Types, Schema, Document } from "mongoose";
 import { Configuration } from "../../singleton/configuration.js";
 
 const verificationCodeSchema = {
@@ -38,8 +38,8 @@ schemaInstance.index(
 );
 
 export interface VerificationCodeInterface extends Document {
-  _id: ObjectId;
-  belongsTo: ObjectId;
+  _id: Types.ObjectId;
+  belongsTo: Types.ObjectId;
   verificationMethod: string;
   code: string;
   sessionHash?: string;

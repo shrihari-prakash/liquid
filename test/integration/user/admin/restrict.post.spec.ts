@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src";
 import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
@@ -10,8 +10,7 @@ describe("admin-api.restrict.post", () => {
   before(setupUsers);
 
   it("should restrict user", () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .post(`/user/admin-api/restrict`)
       .send({
         target: MemoryStore.users.user2._id,
@@ -29,8 +28,7 @@ describe("admin-api.restrict.post", () => {
   });
 
   it("should un-restrict user", () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .post(`/user/admin-api/restrict`)
       .send({
         target: MemoryStore.users.user2._id,

@@ -1,7 +1,8 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src";
+import RoleModel from "../../../../src/model/mongo/role";
 import { setupUsers } from "../../utils/records";
 
 describe("roles.delete.delete", () => {
@@ -14,8 +15,8 @@ describe("roles.delete.delete", () => {
       ranking: 1,
       description: "Test role",
     };
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post(`/roles/admin-api/create`)
       .send(role)
       .set({ Authorization: `Bearer john_doe_access_token` });
@@ -30,13 +31,13 @@ describe("roles.delete.delete", () => {
     const role = {
       target: "test",
     };
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .delete(`/roles/admin-api/delete`)
       .send(role)
       .set({ Authorization: `Bearer john_doe_access_token` });
     chai.expect(res.status).to.eql(200);
-    const list = await chai.request(app).get(`/roles/list`).set({ Authorization: `Bearer john_doe_access_token` });
+    const list = await request.execute(app).get(`/roles/list`).set({ Authorization: `Bearer john_doe_access_token` });
     chai.expect(list.body.data.roles.find((r: any) => r.id === role.target)).to.be.undefined;
   });
 });

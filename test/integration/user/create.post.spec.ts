@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import UserModel, { UserInterface } from "../../../src/model/mongo/user";
@@ -19,8 +19,7 @@ describe("create.post", () => {
   });
 
   it("should create user john_doe", () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .post("/user/create")
       .send(MockData.users.user1)
       .then((res) => {
@@ -33,8 +32,7 @@ describe("create.post", () => {
 
     it("should not create user for long username", () => {
       u.username = "abcdefghijklmnopqrstuvwxyz123456789";
-      return chai
-        .request(app)
+      return request.execute(app)
         .post("/user/create")
         .send(u)
         .then((res) => {
@@ -46,8 +44,7 @@ describe("create.post", () => {
 
     it("should not create user for short username", () => {
       u.username = "a";
-      return chai
-        .request(app)
+      return request.execute(app)
         .post("/user/create")
         .send(u)
         .then((res) => {
@@ -57,8 +54,7 @@ describe("create.post", () => {
 
     it("should not create user for invalid username", () => {
       (u as any).username = { username: { $gt: "" } };
-      return chai
-        .request(app)
+      return request.execute(app)
         .post("/user/create")
         .send(u)
         .then((res) => {
@@ -75,8 +71,7 @@ describe("create.post", () => {
 
     it("should not create user for long firstName", () => {
       u.firstName = "abcdefghijklmnopqrstuvwxyz123456789";
-      return chai
-        .request(app)
+      return request.execute(app)
         .post("/user/create")
         .send(u)
         .then((res) => {
@@ -88,8 +83,7 @@ describe("create.post", () => {
 
     it("should not create user for empty firstName", () => {
       u.firstName = "";
-      return chai
-        .request(app)
+      return request.execute(app)
         .post("/user/create")
         .send(u)
         .then((res) => {
@@ -99,8 +93,7 @@ describe("create.post", () => {
 
     it("should not create user for long lastName", () => {
       u.lastName = "abcdefghijklmnopqrstuvwxyz123456789";
-      return chai
-        .request(app)
+      return request.execute(app)
         .post("/user/create")
         .send(u)
         .then((res) => {
@@ -112,8 +105,7 @@ describe("create.post", () => {
 
     it("should not create user for empty lastName", () => {
       u.lastName = "";
-      return chai
-        .request(app)
+      return request.execute(app)
         .post("/user/create")
         .send(u)
         .then((res) => {
@@ -130,8 +122,7 @@ describe("create.post", () => {
 
     it("should not create user for long email", () => {
       u.email = "abcdefghijklmnopqrstuvwxyz123456789abcdefghijklmnopqrstuvwxyz123456789@example.com";
-      return chai
-        .request(app)
+      return request.execute(app)
         .post("/user/create")
         .send(u)
         .then((res) => {
@@ -143,8 +134,7 @@ describe("create.post", () => {
 
     it("should not create user for invalid email", () => {
       u.email = "a";
-      return chai
-        .request(app)
+      return request.execute(app)
         .post("/user/create")
         .send(u)
         .then((res) => {
@@ -158,8 +148,7 @@ describe("create.post", () => {
   it("should verify email for john_doe", async () => {
     const code = (await VerificationCodeModel.findOne({}).exec()) as any;
     codeCache = code;
-    return chai
-      .request(app)
+    return request.execute(app)
       .get("/user/verify-email")
       .query({ target: code.belongsTo.toString(), code: code.code })
       .then((res) => {
@@ -168,8 +157,7 @@ describe("create.post", () => {
   });
 
   it("should NOT verify email for john_doe with same code for the second time", async () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .get("/user/verify-email")
       .query({ target: codeCache.belongsTo.toString(), code: codeCache.code })
       .then((res) => {
@@ -178,8 +166,7 @@ describe("create.post", () => {
   });
 
   it("should not create duplicate account", () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .post("/user/create")
       .send(MockData.users.user1)
       .then((res) => {
@@ -188,8 +175,7 @@ describe("create.post", () => {
   });
 
   it("should create account rick_asthley", async () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .post("/user/create")
       .send(MockData.users.user2)
       .then((res) => {
@@ -216,7 +202,7 @@ describe("create.post", () => {
     it("should create account with proper custom data", async () => {
       const customData = `{"key" : "value"}`;
       Configuration.set("user.account-creation.custom-data.default-value", customData);
-      const res = await chai.request(app).post("/user/create").send(user);
+      const res = await request.execute(app).post("/user/create").send(user);
       chai.expect(res.status).to.eql(201);
       const dbUser = (await UserModel.findOne({ username: user.username })) as unknown as UserInterface;
       chai.expect(dbUser.customData).to.eql(customData);
@@ -225,7 +211,7 @@ describe("create.post", () => {
     it("should create account with {} as custom data for invalid configuration", async () => {
       const customData = `{"key" : invalid`;
       Configuration.set("user.account-creation.custom-data.default-value", customData);
-      const res = await chai.request(app).post("/user/create").send(user);
+      const res = await request.execute(app).post("/user/create").send(user);
       chai.expect(res.status).to.eql(201);
       const dbUser = (await UserModel.findOne({ username: user.username })) as unknown as UserInterface;
       chai.expect(dbUser.customData).to.eql("{}");
@@ -250,11 +236,11 @@ describe("create.post", () => {
       Configuration.set("user.account-creation.preserve-unverified-user-id", true);
       Configuration.set("user.account-creation.require-email-verification", true);
 
-      const firstRes = await chai.request(app).post("/user/create").send(user);
+      const firstRes = await request.execute(app).post("/user/create").send(user);
       chai.expect(firstRes.status).to.eql(201);
       const firstUserId = firstRes.body.data.user._id;
 
-      const secondRes = await chai.request(app).post("/user/create").send(user);
+      const secondRes = await request.execute(app).post("/user/create").send(user);
       chai.expect(secondRes.status).to.eql(201);
       const secondUserId = secondRes.body.data.user._id;
 
@@ -269,11 +255,11 @@ describe("create.post", () => {
       Configuration.set("user.account-creation.preserve-unverified-user-id", false);
       Configuration.set("user.account-creation.require-email-verification", true);
 
-      const firstRes = await chai.request(app).post("/user/create").send(user);
+      const firstRes = await request.execute(app).post("/user/create").send(user);
       chai.expect(firstRes.status).to.eql(201);
       const firstUserId = firstRes.body.data.user._id;
 
-      const secondRes = await chai.request(app).post("/user/create").send(user);
+      const secondRes = await request.execute(app).post("/user/create").send(user);
       chai.expect(secondRes.status).to.eql(201);
       const secondUserId = secondRes.body.data.user._id;
 

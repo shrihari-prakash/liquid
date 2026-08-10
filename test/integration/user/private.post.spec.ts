@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import UserModel, { UserInterface } from "../../../src/model/mongo/user";
@@ -12,8 +12,8 @@ describe("private.post", () => {
 
   it("should test john_doe switching to private account", async () => {
     return new Promise<void>((resolve, reject) => {
-      chai
-        .request(app)
+      request
+        .execute(app)
         .post("/user/private")
         .set({ Authorization: `Bearer john_doe_access_token` })
         .send({ state: true })
@@ -34,8 +34,8 @@ describe("private.post", () => {
 
   it("should test john_doe switching to public account", async () => {
     return new Promise<void>((resolve, reject) => {
-      chai
-        .request(app)
+      request
+        .execute(app)
         .post("/user/private")
         .set({ Authorization: `Bearer john_doe_access_token` })
         .send({ state: false })

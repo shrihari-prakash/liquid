@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src";
 import ClientModel from "../../../../src/model/mongo/client";
@@ -21,8 +21,8 @@ describe("client.post", () => {
       scope: ["client:all"],
       displayName: "Liquid Client",
     };
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` });
@@ -46,8 +46,8 @@ describe("client.post", () => {
       scope: ["client:all"],
       displayName: "Liquid Client",
     };
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` });
@@ -71,8 +71,8 @@ describe("client.post", () => {
       scope: ["user.client.all"],
       displayName: "Liquid Client",
     };
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` });
@@ -91,8 +91,8 @@ describe("client.post", () => {
       scope: ["user.client.all"],
       displayName: "Liquid Client",
     };
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` });
@@ -111,8 +111,8 @@ describe("client.post", () => {
       scope: ["invalid.scope"],
       displayName: "Liquid Client",
     };
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post(`/client/admin-api/create`)
       .send(client)
       .set({ Authorization: `Bearer john_doe_access_token` });

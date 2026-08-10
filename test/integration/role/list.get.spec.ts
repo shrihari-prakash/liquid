@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src";
 import DefaultRoles from "../../../src/service/role/default-roles.json" assert { type: "json" };
@@ -9,7 +9,7 @@ describe("roles.list.get", () => {
   before(setupUsers);
 
   it("should get role list", async () => {
-    const res = await chai.request(app).get(`/roles/list`).set({ Authorization: `Bearer john_doe_access_token` });
+    const res = await request.execute(app).get(`/roles/list`).set({ Authorization: `Bearer john_doe_access_token` });
     chai.expect(res.status).to.eql(200);
     chai.expect(res.body.data.roles.length).to.eql(DefaultRoles.length);
     for (const role of DefaultRoles) {

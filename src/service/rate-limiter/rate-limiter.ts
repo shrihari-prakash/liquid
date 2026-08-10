@@ -39,8 +39,7 @@ if (Configuration.get("privilege.can-use-cache")) {
   for (const key in rateLimiterSettings) {
     rateLimiterSettings[key].store = new RedisStore({
       prefix: `rate_limiter:${key}:`,
-      // @ts-expect-error - Known issue: the `call` function is not present in @types/ioredis
-      sendCommand: (...args: string[]) => Redis.client.call(...args),
+      sendCommand: (...args: any[]) => Redis.client?.call(args[0], ...args.slice(1)) as any,
     });
   }
 }

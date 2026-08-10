@@ -68,7 +68,7 @@ if (Configuration.get("system.stats.enable-request-counting")) {
   log.debug("Request counting enabled.");
   const key = Configuration.get("system.stats.request-count-key") as unknown as string;
   app.set(key, 0);
-  app.use("*", (_, __, next) => {
+  app.use((_, __, next) => {
     app.set(key, app.get(key) + 1);
     next();
   });
@@ -186,7 +186,7 @@ if (Configuration.get("system.use-built-in-static-ui")) {
 }
 // ********** End UI / Static Pages ********** //
 
-app.all("*", function (req, res) {
+app.all(/.*/, function (req, res) {
   const apiPattern = /^(\/user\/|\/system\/|\/oauth\/|\/sso\/|\/roles\/)/;
   if (!apiPattern.test(req.path) && Configuration.get("system.use-built-in-static-ui")) {
     const staticFolder = path.join(__dirname, "public");

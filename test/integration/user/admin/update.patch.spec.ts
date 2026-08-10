@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src/index";
 import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
@@ -17,8 +17,7 @@ describe("admin-api.patch.post", () => {
         lastName: "Ash",
       };
       Configuration.set("admin-api.user.profile.can-edit-peer-data", true);
-      return chai
-        .request(app)
+      return request.execute(app)
         .patch(`/user/admin-api/update`)
         .set({ Authorization: `Bearer john_doe_access_token` })
         .send({
@@ -50,8 +49,7 @@ describe("admin-api.patch.post", () => {
         lastName: "",
       };
       Configuration.set("admin-api.user.profile.can-edit-peer-data", true);
-      return chai
-        .request(app)
+      return request.execute(app)
         .patch(`/user/admin-api/update`)
         .set({ Authorization: `Bearer john_doe_access_token` })
         .send({
@@ -81,8 +79,7 @@ describe("admin-api.patch.post", () => {
       Configuration.set("admin-api.user.profile.editable-fields", ["role"]);
       await UserModel.updateOne({ username: "john_doe" }, { role: "admin" });
       await UserModel.updateOne({ username: "rick_asthley" }, { role: "user" });
-      return chai
-        .request(app)
+      return request.execute(app)
         .patch(`/user/admin-api/update`)
         .set({ Authorization: `Bearer john_doe_access_token` })
         .send({
@@ -109,8 +106,7 @@ describe("admin-api.patch.post", () => {
       Configuration.set("admin-api.user.profile.editable-fields", ["role"]);
       await UserModel.updateOne({ username: "john_doe" }, { role: "admin" });
       await UserModel.updateOne({ username: "rick_asthley" }, { role: "user" });
-      return chai
-        .request(app)
+      return request.execute(app)
         .patch(`/user/admin-api/update`)
         .set({ Authorization: `Bearer john_doe_access_token` })
         .send({

@@ -1,5 +1,6 @@
-import chai, { expect } from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
+const { expect } = chai;
 
 import app from "../../../../src";
 import MemoryStore from "../../store";
@@ -13,8 +14,7 @@ describe("admin-api.access.post", () => {
   before(setupUsers);
 
   it("should provide passed access to users", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/access`)
       .send({
         targets: [MemoryStore.users.user2._id],
@@ -33,8 +33,7 @@ describe("admin-api.access.post", () => {
 
   it("should remove passed access from users", async () => {
     await UserModel.updateOne({ _id: MemoryStore.users.user2._id }, { $set: { scope: ["delegated:profile:write"] } });
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/access`)
       .send({
         targets: [MemoryStore.users.user2._id],
@@ -53,8 +52,7 @@ describe("admin-api.access.post", () => {
 
   it("should replace scope", async () => {
     await UserModel.updateOne({ _id: MemoryStore.users.user2._id }, { $set: { scope: ["delegated:profile:write"] } });
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/access`)
       .send({
         targets: [MemoryStore.users.user2._id],
@@ -71,8 +69,7 @@ describe("admin-api.access.post", () => {
   });
 
   it("should fail for invalid scope", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/access`)
       .send({
         targets: [MemoryStore.users.user2._id],
@@ -89,8 +86,7 @@ describe("admin-api.access.post", () => {
       { accessToken: "john_doe_access_token" },
       { $set: { scope: ["delegated:profile:write"] } }
     );
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/access`)
       .send({
         targets: [MemoryStore.users.user2._id],
@@ -104,8 +100,7 @@ describe("admin-api.access.post", () => {
 
   it("should update for target type client", async () => {
     await TokenModel.updateOne({ accessToken: "john_doe_access_token" }, { $set: { scope: ["*"] } });
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/access`)
       .send({
         targets: [MemoryStore.client._id],
@@ -121,8 +116,7 @@ describe("admin-api.access.post", () => {
 
   it("should update for target type role", async () => {
     await TokenModel.updateOne({ accessToken: "john_doe_access_token" }, { $set: { scope: ["*"] } });
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/access`)
       .send({
         targets: ["admin"],

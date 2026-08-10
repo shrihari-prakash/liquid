@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import UserModel, { UserInterface } from "../../../src/model/mongo/user";
@@ -16,8 +16,8 @@ describe("me.patch", () => {
         firstName: "",
         lastName: "",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -41,8 +41,8 @@ describe("me.patch", () => {
         firstName: "Ric",
         lastName: "Ash",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -66,8 +66,8 @@ describe("me.patch", () => {
         firstName: "Ric",
         lastName: "Ash",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -90,8 +90,8 @@ describe("me.patch", () => {
       const u = {
         username: "rick_asth",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -115,8 +115,8 @@ describe("me.patch", () => {
       const u = {
         username: "r*%&^$ick_ash",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -138,8 +138,8 @@ describe("me.patch", () => {
       const u = {
         username: "rick_asth",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -161,8 +161,8 @@ describe("me.patch", () => {
       const u = {
         email: "rick@example.com",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -186,8 +186,8 @@ describe("me.patch", () => {
       const u = {
         email: "rickexample.com",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -209,8 +209,8 @@ describe("me.patch", () => {
       const u = {
         email: "rick@example.com",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -234,8 +234,8 @@ describe("me.patch", () => {
       const u = {
         password: "newpassword",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -258,8 +258,8 @@ describe("me.patch", () => {
         password: "newpassword",
         currentPassword: "wrongpassword",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -282,8 +282,8 @@ describe("me.patch", () => {
         password: "newpassword",
         currentPassword: MemoryStore.users.user2.password,
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)
@@ -305,8 +305,8 @@ describe("me.patch", () => {
       const u = {
         firstName: "Rick",
       };
-      return chai
-        .request(app)
+      return request
+        .execute(app)
         .patch("/user/me")
         .set({ Authorization: `Bearer rick_asthley_access_token` })
         .send(u)

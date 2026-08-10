@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src/index";
 import UserModel, { UserInterface } from "../../../../src/model/mongo/user";
@@ -11,8 +11,7 @@ describe("admin-api.verify.post", () => {
   before(setupUsers);
 
   it("should verify user", () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .post(`/user/admin-api/verify`)
       .send({
         target: MemoryStore.users.user2._id,
@@ -30,8 +29,7 @@ describe("admin-api.verify.post", () => {
   });
 
   it("should un-verify user", () => {
-    return chai
-      .request(app)
+    return request.execute(app)
       .post(`/user/admin-api/verify`)
       .send({
         target: MemoryStore.users.user2._id,

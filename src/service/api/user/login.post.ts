@@ -38,7 +38,7 @@ const POST_Login = async (req: Request, res: Response): Promise<void> => {
   try {
     if (hasErrors(req, res)) return;
     const { username, email, password } = req.body;
-    const select = ["+password"];
+    const select = "+password";
     const query: any = {};
     if (email) {
       query.$or = [{ email: email }, { sanitizedEmail: sanitizeEmailAddress(email) }];

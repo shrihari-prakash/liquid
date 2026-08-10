@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import { setupUsers } from "../utils/records";
@@ -13,7 +13,7 @@ describe("oauth.client-credentials", () => {
   };
 
   it("should test client credentials flow", async () => {
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "client_credentials",
       client_id: MemoryStore.client.client_id,
       client_secret: MemoryStore.client.client_secret,
@@ -26,7 +26,7 @@ describe("oauth.client-credentials", () => {
   });
 
   it("should test client credentials flow with invalid client id", async () => {
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "client_credentials",
       client_id: "invalid_client_id",
       client_secret: MemoryStore.client.client_secret,
@@ -37,7 +37,7 @@ describe("oauth.client-credentials", () => {
   });
 
   it("should test client credentials flow with invalid client secret", async () => {
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "client_credentials",
       client_id: MemoryStore.client.client_id,
       client_secret: "invalid_secret",
@@ -48,7 +48,7 @@ describe("oauth.client-credentials", () => {
   });
 
   it("should test client credentials flow with invalid scope", async () => {
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "client_credentials",
       client_id: MemoryStore.client.client_id,
       client_secret: MemoryStore.client.client_secret,
@@ -59,7 +59,7 @@ describe("oauth.client-credentials", () => {
   });
 
   it("should test client credentials flow with invalid grant type", async () => {
-    const res = await chai.request(app).post("/oauth/token").set(headers).send({
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "invalid_grant_type",
       client_id: MemoryStore.client.client_id,
       client_secret: MemoryStore.client.client_secret,

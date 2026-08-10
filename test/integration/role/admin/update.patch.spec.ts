@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src";
 import { setupUsers } from "../../utils/records";
@@ -14,8 +14,7 @@ describe("roles.update.patch", () => {
       ranking: 1,
       description: "Test role",
     };
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/roles/admin-api/create`)
       .send(role)
       .set({ Authorization: `Bearer john_doe_access_token` });
@@ -33,8 +32,7 @@ describe("roles.update.patch", () => {
       ranking: 2,
       description: "Test role 2",
     };
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .patch(`/roles/admin-api/update`)
       .send(role)
       .set({ Authorization: `Bearer john_doe_access_token` });
@@ -49,8 +47,7 @@ describe("roles.update.patch", () => {
       target: "test",
       scope: ["admin:all"],
     };
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .patch(`/roles/admin-api/update`)
       .send(role)
       .set({ Authorization: `Bearer john_doe_access_token` });

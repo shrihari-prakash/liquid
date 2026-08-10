@@ -1,11 +1,10 @@
-import chai, { expect } from "chai";
-import chaiHttp from "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
+const { expect } = chai;
 import app from "../../../src/index.js";
 import { setupUsers } from "../utils/records.js";
 import MemoryStore from "../store.js";
 import { Configuration } from "../../../src/singleton/configuration.js";
-
-chai.use(chaiHttp);
 
 describe("User Search Integration", () => {
   before(async () => {
@@ -17,8 +16,8 @@ describe("User Search Integration", () => {
 
   it("should perform quick search", async () => {
     const user = MemoryStore.users.user1;
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({ query: user.username });
@@ -31,8 +30,8 @@ describe("User Search Integration", () => {
 
   it("should perform object query search", async () => {
     const user = MemoryStore.users.user1;
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({ query: { username: user.username } });
@@ -44,8 +43,8 @@ describe("User Search Integration", () => {
 
   it("should perform object query search with operator", async () => {
     const user = MemoryStore.users.user1;
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({ query: { username: { $eq: user.username } } });
@@ -56,8 +55,8 @@ describe("User Search Integration", () => {
   });
 
   it("should fail validation for disallowed field in object query", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({ query: { password: "123" } });
@@ -66,8 +65,8 @@ describe("User Search Integration", () => {
   });
 
   it("should fail validation for disallowed operator in object query", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({ query: { username: { $where: "true" } } });
@@ -77,8 +76,8 @@ describe("User Search Integration", () => {
   it("should perform object query search with $or operator", async () => {
     const user1 = MemoryStore.users.user1;
     const user2 = MemoryStore.users.user2;
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({
@@ -97,8 +96,8 @@ describe("User Search Integration", () => {
 
   it("should perform object query search with $and operator", async () => {
     const user = MemoryStore.users.user1;
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({
@@ -115,8 +114,8 @@ describe("User Search Integration", () => {
   it("should perform object query search with $in operator", async () => {
     const user1 = MemoryStore.users.user1;
     const user2 = MemoryStore.users.user2;
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({
@@ -134,8 +133,8 @@ describe("User Search Integration", () => {
 
   it("should perform object query search with $nin operator", async () => {
     const user1 = MemoryStore.users.user1;
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({
@@ -155,8 +154,8 @@ describe("User Search Integration", () => {
     Configuration.set("user.search.search-fields", [...originalFields, "followerCount"]);
 
     try {
-      const res = await chai
-        .request(app)
+      const res = await request
+        .execute(app)
         .post("/user/search")
         .set("Authorization", `Bearer john_doe_access_token`)
         .send({
@@ -174,8 +173,8 @@ describe("User Search Integration", () => {
   });
   it("should perform object query search with $regex operator", async () => {
     const user = MemoryStore.users.user1;
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({
@@ -192,8 +191,8 @@ describe("User Search Integration", () => {
   it("should perform object query search with nested operators", async () => {
     const user1 = MemoryStore.users.user1;
     const user2 = MemoryStore.users.user2;
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({
@@ -214,8 +213,8 @@ describe("User Search Integration", () => {
     expect(usernames).to.include(user2.username);
   });
   it("should return empty array when no results found", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({
@@ -230,8 +229,8 @@ describe("User Search Integration", () => {
   });
 
   it("should handle special characters in query", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/search")
       .set("Authorization", `Bearer john_doe_access_token`)
       .send({

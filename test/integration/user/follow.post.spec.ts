@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../src/index";
 import FollowModel from "../../../src/model/mongo/follow";
@@ -13,8 +13,8 @@ describe("follow.post", () => {
 
   it("should set status to requested when following a private account", async () => {
     await UserModel.updateOne({ _id: (MemoryStore.users.user2 as any)._id }, { $set: { isPrivate: true } });
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: (MemoryStore.users.user2 as any)._id });
@@ -36,8 +36,8 @@ describe("follow.post", () => {
     const requestObject = await FollowModel.findOne({
       $and: [{ targetId: (MemoryStore.users.user2 as any)._id }, { sourceId: (MemoryStore.users.user1 as any)._id }],
     }).exec();
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .patch("/user/follow-request")
       .set({ Authorization: `Bearer rick_asthley_access_token` })
       .send({ request: (requestObject as any)._id });
@@ -60,8 +60,8 @@ describe("follow.post", () => {
   });
 
   it("should test john_doe following rick_asthley", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: (MemoryStore.users.user2 as any)._id });
@@ -80,8 +80,8 @@ describe("follow.post", () => {
   });
 
   it("should return error for invalid target", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request
+      .execute(app)
       .post("/user/follow")
       .set({ Authorization: `Bearer john_doe_access_token` })
       .send({ target: "000000" });

@@ -1,5 +1,5 @@
-import chai from "chai";
-import "chai-http";
+import * as chai from "chai";
+import { request } from "chai-http";
 
 import app from "../../../../src";
 import { Configuration } from "../../../../src/singleton/configuration";
@@ -14,8 +14,7 @@ describe("admin-api.subscriptions.post", () => {
   it("should add subscription to user", async () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/subscription`)
       .send({
         target: MemoryStore.users.user2._id,
@@ -36,8 +35,7 @@ describe("admin-api.subscriptions.post", () => {
   it("should revert to basic subscription if date is expired", async () => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/subscription`)
       .send({
         target: MemoryStore.users.user2._id,
@@ -48,8 +46,7 @@ describe("admin-api.subscriptions.post", () => {
       .set({ Authorization: `Bearer john_doe_access_token` });
 
     chai.expect(res.status).to.eql(200);
-    const userInfoResponse = await chai
-      .request(app)
+    const userInfoResponse = await request.execute(app)
       .post("/user/admin-api/retrieve-user-info")
       .send({ targets: [MemoryStore.users.user2._id] })
       .set({ Authorization: `Bearer john_doe_access_token` });
@@ -62,8 +59,7 @@ describe("admin-api.subscriptions.post", () => {
   it("should fail for invalid subscription tier", async () => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/subscription`)
       .send({
         target: MemoryStore.users.user2._id,
@@ -78,8 +74,7 @@ describe("admin-api.subscriptions.post", () => {
   it("should fail for invalid state", async () => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .post(`/user/admin-api/subscription`)
       .send({
         target: MemoryStore.users.user2._id,
@@ -92,8 +87,7 @@ describe("admin-api.subscriptions.post", () => {
   });
 
   it("should get subscription tiers", async () => {
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .get("/user/admin-api/subscription-tiers")
       .set({ Authorization: `Bearer john_doe_access_token` });
     const tiers: any = res.body.data.subscriptionTiers;
@@ -106,8 +100,7 @@ describe("admin-api.subscriptions.post", () => {
   it("should get subscription tiers for different option value", async () => {
     Configuration.set("user.subscription.tier-list", "pro,starter,ultra");
     Configuration.set("user.subscription.base-tier", "starter");
-    const res = await chai
-      .request(app)
+    const res = await request.execute(app)
       .get("/user/admin-api/subscription-tiers")
       .set({ Authorization: `Bearer john_doe_access_token` });
     const tiers: any = res.body.data.subscriptionTiers;
