@@ -99,7 +99,7 @@ export class ScopeManager {
     }
     let allowedScopes = entity.scope || [];
     if (entity.role) {
-      allowedScopes = [...allowedScopes, Role.getRoleScopes(entity.role)];
+      allowedScopes = [...allowedScopes, ...Role.getRoleScopes(entity.role)];
     }
     return scopes.every((requestedScope: string) => this.isScopeAllowed(requestedScope, allowedScopes));
   }
