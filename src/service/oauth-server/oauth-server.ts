@@ -15,6 +15,7 @@ class OAuthServer {
       authorizationCodeLifetime: Configuration.get("oauth.authorization-code-lifetime") as number,
       accessTokenLifetime: Configuration.get("oauth.access-token-lifetime") as number,
       refreshTokenLifetime: Configuration.get("oauth.refresh-token-lifetime") as number,
+      requireClientAuthentication: { refresh_token: false },
     });
   }
 }
