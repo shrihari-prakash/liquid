@@ -86,5 +86,6 @@
   "link.login-minimal": "Iniciar sesión",
   "link.resend-code": "Reenviar código",
 
-  "error.resend-failed": "Error al reenviar el correo de verificación. Por favor inténtalo de nuevo."
+  "error.resend-failed": "Error al reenviar el correo de verificación. Por favor inténtalo de nuevo.",
+  "error.pkce-missing-warning": "Faltan los parámetros de autorización PKCE (code_challenge). Inicie sesión directamente desde su aplicación."
 }

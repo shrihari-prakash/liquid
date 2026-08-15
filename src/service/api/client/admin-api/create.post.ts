@@ -12,6 +12,7 @@ import { hasErrors } from "../../../../utils/api.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import { CORS } from "../../../../singleton/cors.js";
 import { Role } from "../../../../singleton/role.js";
+import { OAuthGrant } from "../../../../enum/oauth-grant.js";
 
 export const POST_CreateValidator = [
   body("id")
@@ -19,9 +20,15 @@ export const POST_CreateValidator = [
     .isString()
     .isLength({ min: 8, max: 30 })
     .matches(new RegExp(Configuration.get("client.id-validation-regex"), "i")),
-  body("grants").exists().isArray().isIn(["client_credentials", "authorization_code", "refresh_token", "password"]),
+  body("grants").exists().isArray().isIn(Object.values(OAuthGrant)),
   body("redirectUris").exists().isArray(),
-  body("secret").exists().isString().isLength({ min: 8, max: 256 }),
+  body("isPublic").optional().isBoolean(),
+  body("secret").custom((value, { req }) => {
+    if (!req.body.isPublic && (!value || typeof value !== "string" || value.length < 8 || value.length > 256)) {
+      throw new Error("Secret is required for confidential clients");
+    }
+    return true;
+  }),
   body("role").exists().isString().isIn([Role.SystemRoles.INTERNAL_CLIENT, Role.SystemRoles.EXTERNAL_CLIENT]),
   body("scope").optional().isArray().isIn(Object.keys(ScopeManager.getScopes())),
   body("displayName").exists().isString().isLength({ min: 8, max: 96 }),
@@ -37,11 +44,16 @@ const POST_Create = async (req: Request, res: Response): Promise<void> => {
     if (!ScopeManager.isScopeAllowedForSession(requiredScope, res)) {
       return;
     }
+    const isPublic = Boolean(req.body.isPublic);
+    const grants = isPublic && Array.isArray(req.body.grants)
+      ? req.body.grants.filter((g: string) => g !== OAuthGrant.CLIENT_CREDENTIALS)
+      : req.body.grants;
     const client = {
       id: req.body.id,
-      grants: req.body.grants,
+      grants: grants,
       redirectUris: req.body.redirectUris,
-      secret: req.body.secret,
+      isPublic: isPublic,
+      secret: isPublic ? undefined : req.body.secret,
       role: req.body.role,
       scope: req.body.scope || [],
       displayName: req.body.displayName,

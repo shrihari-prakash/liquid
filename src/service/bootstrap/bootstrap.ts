@@ -8,6 +8,7 @@ import { bcryptConfig } from "../api/user/create.post.js";
 import UserModel from "../../model/mongo/user.js";
 import ClientModel from "../../model/mongo/client.js";
 import { Role } from "../../singleton/role.js";
+import { OAuthGrant } from "../../enum/oauth-grant.js";
 
 export class Bootstrap {
   public verifyAdminConfig() {
@@ -74,12 +75,14 @@ export class Bootstrap {
         return;
       }
       this.verifyClientConfig();
+      const isPublic = Boolean(Configuration.get("system.default-client.is-public"));
       const client = {
         id: Configuration.get("system.default-client.id"),
         redirectUris: Configuration.get("system.default-client.redirect-uris"),
-        secret: Configuration.get("system.default-client.secret"),
+        secret: isPublic ? undefined : Configuration.get("system.default-client.secret"),
+        isPublic: isPublic,
         displayName: Configuration.get("system.default-client.display-name"),
-        grants: ["client_credentials", "authorization_code", "refresh_token"],
+        grants: [OAuthGrant.CLIENT_CREDENTIALS, OAuthGrant.AUTHORIZATION_CODE, OAuthGrant.REFRESH_TOKEN],
         role: "internal_client",
         scope: ["*"],
       };

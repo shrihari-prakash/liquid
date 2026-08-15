@@ -86,5 +86,6 @@
   "link.login-minimal": "Se connecter",
   "link.resend-code": "Renvoyer le code",
 
-  "error.resend-failed": "Impossible de renvoyer l'e-mail de vérification. Veuillez réessayer."
+  "error.resend-failed": "Impossible de renvoyer l'e-mail de vérification. Veuillez réessayer.",
+  "error.pkce-missing-warning": "Les paramètres d'autorisation PKCE (code_challenge) sont manquants. Veuillez vous connecter directement depuis votre application."
 }

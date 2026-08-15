@@ -4,12 +4,7 @@ import { Request as OAuthRequest, Response as OAuthResponse } from "@node-oauth/
 import { Configuration } from "../../../singleton/configuration.js";
 import { statusCodes } from "../../../utils/http-status.js";
 
-const oauthOptions = {
-  requireClientAuthentication: {
-    authorization_code: false,
-    refresh_token: false,
-  },
-};
+const oauthOptions = {};
 
 async function ALL__Token(req: Request, res: Response): Promise<void> {
   try {

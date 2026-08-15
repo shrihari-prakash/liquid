@@ -304,6 +304,14 @@
     "default": false
   },
   {
+    "name": "system.default-client.is-public",
+    "displayName": "System Default Client Is Public",
+    "envName": "SYSTEM_DEFAULT_CLIENT_IS_PUBLIC",
+    "description": "Specifies if the bootstrapped default client is a public client (e.g., SPAs/Mobile apps). Default is true.",
+    "type": "boolean",
+    "default": true
+  },
+  {
     "name": "system.email-adapter",
     "displayName": "System Email Adapter",
     "envName": "SYSTEM_EMAIL_ADAPTER",

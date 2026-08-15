@@ -13,6 +13,7 @@ import { ErrorResponse, SuccessResponse } from "../../../../utils/response.js";
 import { Configuration } from "../../../../singleton/configuration.js";
 import { CORS } from "../../../../singleton/cors.js";
 import { Role } from "../../../../singleton/role.js";
+import { OAuthGrant } from "../../../../enum/oauth-grant.js";
 
 export const PATCH_UpdateValidator = [
   body("target").exists().isString().isLength({ max: 64 }).custom(isValidObjectId),
@@ -21,8 +22,9 @@ export const PATCH_UpdateValidator = [
     .isString()
     .isLength({ min: 8, max: 30 })
     .matches(new RegExp(Configuration.get("client.id-validation-regex"), "i")),
-  body("grants").optional().isArray().isIn(["client_credentials", "authorization_code", "refresh_token", "password"]),
+  body("grants").optional().isArray().isIn(Object.values(OAuthGrant)),
   body("redirectUris").optional().isArray(),
+  body("isPublic").optional().isBoolean(),
   body("secret").optional().isString().isLength({ min: 8, max: 256 }),
   body("role").optional().isString().isIn([Role.SystemRoles.INTERNAL_CLIENT, Role.SystemRoles.EXTERNAL_CLIENT]),
   body("scope").optional().isArray().isIn(Object.keys(ScopeManager.getScopes())),
@@ -59,7 +61,16 @@ const PATCH_Update = async (req: Request, res: Response): Promise<void> => {
       res.status(statusCodes.unauthorized).json(new ErrorResponse(errorMessages.invalidField, { errors }));
       return;
     }
-    await ClientModel.updateOne({ _id: target }, req.body);
+    const isPublicClient = req.body.isPublic ?? client.isPublic;
+    if (isPublicClient && Array.isArray(req.body.grants)) {
+      req.body.grants = req.body.grants.filter((g: string) => g !== OAuthGrant.CLIENT_CREDENTIALS);
+    }
+    if (req.body.isPublic === true) {
+      delete req.body.secret;
+      await ClientModel.updateOne({ _id: target }, { $set: req.body, $unset: { secret: 1 } });
+    } else {
+      await ClientModel.updateOne({ _id: target }, { $set: req.body });
+    }
     log.debug("Client updated successfully.");
     res.status(statusCodes.success).json(new SuccessResponse());
     CORS.scanOrigins();

@@ -9,6 +9,7 @@ import { OAuthServer } from "../../../singleton/oauth-server.js";
 import { statusCodes } from "../../../utils/http-status.js";
 import { Configuration } from "../../../singleton/configuration.js";
 import UserModel from "../../../model/mongo/user.js";
+import ClientModel, { ClientInterface } from "../../../model/mongo/client.js";
 import { isTokenInvalidated } from "../../../utils/session.js";
 
 function validatePKCEParameters(req: Request) {
@@ -43,7 +44,11 @@ function validatePKCEParameters(req: Request) {
 
 async function ALL__Authorize(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    if (Configuration.get("oauth.authorization.require-pkce")) {
+    const clientId = (req.query.client_id || req.body?.client_id) as string;
+    const dbClient = clientId ? ((await ClientModel.findOne({ id: clientId }).lean()) as unknown as ClientInterface) : null;
+    const requirePKCE = Configuration.get("oauth.authorization.require-pkce") || Boolean(dbClient?.isPublic);
+
+    if (requirePKCE) {
       const validation = validatePKCEParameters(req);
       if (!validation.valid) {
         res.status(statusCodes.clientInputError).json({

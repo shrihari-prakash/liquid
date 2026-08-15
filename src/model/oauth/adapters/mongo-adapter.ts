@@ -83,16 +83,17 @@ class MongoAdapter {
 
   async getClient(clientId: string, clientSecret: string) {
     try {
-      let query: any = {};
-      if (clientSecret) {
-        query = {
-          $and: [{ id: clientId }, { secret: clientSecret }],
-        };
-      } else {
-        query = { id: clientId };
+      const dbClient = (await ClientModel.findOne({ id: clientId }).lean()) as unknown as ClientInterface;
+      if (!dbClient) {
+        return null;
       }
-      const dbClient = await ClientModel.findOne(query).lean();
-      return dbClient as unknown as ClientInterface;
+      if (dbClient.isPublic) {
+        return dbClient;
+      }
+      if (!clientSecret || dbClient.secret !== clientSecret) {
+        return null;
+      }
+      return dbClient;
     } catch (err) {
       log.error("Error fetching client.");
       log.error(err);

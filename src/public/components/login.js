@@ -10,7 +10,7 @@ import {
   afterLogin,
   humanReadableToSnakeCase,
 } from "../utils/utils.js";
-import { post } from "../utils/api.js";
+import { get, post } from "../utils/api.js";
 
 export default function Login() {
   const submitButtonText = i18next.t("button.login");
@@ -19,6 +19,7 @@ export default function Login() {
   const theme = React.useContext(ThemeContext);
 
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [pkceWarning, setPkceWarning] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
   const [miniIconLoaded, setMiniIconLoaded] = React.useState(false);
   const [existingSession, setExistingSession] = React.useState(null);
@@ -30,6 +31,23 @@ export default function Login() {
 
   React.useEffect(() => {
     (async () => {
+      const authParams = prepareAuthorizationParams(configuration);
+      const urlParams = new URLSearchParams(window.location.search);
+      const hasCodeChallenge = Boolean(urlParams.get("code_challenge") || urlParams.get("codeChallenge"));
+      if (authParams.client_id) {
+        try {
+          const clientResult = await get(`/client/${authParams.client_id}`);
+          if (clientResult.ok && clientResult.data?.data?.client) {
+            const client = clientResult.data.data.client;
+            const requiresPKCE = Boolean(client.isPublic || configuration["oauth.authorization.require-pkce"]);
+            if (requiresPKCE && !hasCodeChallenge) {
+              setPkceWarning(i18next.t("error.pkce-missing-warning"));
+            }
+          }
+        } catch (e) {
+          console.error("Error fetching client info", e);
+        }
+      }
       if (configuration["privilege.can-use-existing-session-in-login"]) {
         const response = await fetch("/user/session-state");
         if (response.ok) {
@@ -38,7 +56,6 @@ export default function Login() {
           onLogin({});
         }
       }
-      const urlParams = new URLSearchParams(window.location.search);
       const ssoToken = urlParams.get("ssoToken");
       if (ssoToken) {
         setIsLoggedIn(true);
@@ -152,6 +169,36 @@ export default function Login() {
     return (
       <div className="form-loader">
         <div className="spinner"></div>
+      </div>
+    );
+  }
+
+  if (pkceWarning) {
+    return (
+      <div className="form">
+        <div className="noselect">
+          <h3>
+            {configuration[`assets.header-icon-${theme}`] ? (
+              <div className="app-icon-header">
+                <div style={{ display: miniIconLoaded ? "none" : "block" }} className="spinner" />
+                <img
+                  style={{ display: miniIconLoaded ? "block" : "none" }}
+                  onLoad={() => setMiniIconLoaded(true)}
+                  alt={appName}
+                  src={configuration[`assets.header-icon-${theme}`]}
+                />
+              </div>
+            ) : (
+              <strong className="app-name">{appName}</strong>
+            )}
+          </h3>
+          <p className="app-tagline">{configuration["content.app-tagline"]}</p>
+        </div>
+        <div style={{ padding: "1.25rem", margin: "1.5rem 0", backgroundColor: "rgba(239, 68, 68, 0.1)", borderRadius: "8px", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+          <p style={{ color: "#f87171", fontSize: "13px", lineHeight: "1.6", margin: 0, textAlign: "center" }}>
+            {pkceWarning}
+          </p>
+        </div>
       </div>
     );
   }

@@ -381,12 +381,13 @@ describe('MongoAdapter', () => {
   });
 
   describe('getClient', () => {
-    it('should find client with both clientId and clientSecret', async () => {
+    it('should find confidential client with matching clientSecret', async () => {
       const clientId = 'client-id-123';
       const clientSecret = 'client-secret-456';
       const mockClient = {
         id: clientId,
         secret: clientSecret,
+        isPublic: false,
         name: 'Test Client',
         grants: ['authorization_code', 'refresh_token']
       };
@@ -397,27 +398,46 @@ describe('MongoAdapter', () => {
 
       const result = await MongoAdapter.getClient(clientId, clientSecret);
 
-      expect(findOneStub).to.have.been.calledWith({
-        $and: [{ id: clientId }, { secret: clientSecret }]
-      });
+      expect(findOneStub).to.have.been.calledWith({ id: clientId });
       expect(result).to.deep.equal(mockClient);
     });
 
-    it('should find client with only clientId when clientSecret is not provided', async () => {
+    it('should return null for confidential client when clientSecret is not provided or invalid', async () => {
       const clientId = 'client-id-123';
       const mockClient = {
         id: clientId,
+        secret: 'correct-secret',
+        isPublic: false,
         name: 'Test Client',
         grants: ['authorization_code']
       };
 
-      const findOneStub = sandbox.stub(ClientModel, 'findOne').returns({
+      sandbox.stub(ClientModel, 'findOne').returns({
+        lean: () => Promise.resolve(mockClient)
+      } as any);
+
+      const resultNoSecret = await MongoAdapter.getClient(clientId, '');
+      const resultWrongSecret = await MongoAdapter.getClient(clientId, 'wrong-secret');
+
+      expect(resultNoSecret).to.be.null;
+      expect(resultWrongSecret).to.be.null;
+    });
+
+    it('should find public client without clientSecret when isPublic is true', async () => {
+      const clientId = 'public-client-123';
+      const mockClient = {
+        id: clientId,
+        isPublic: true,
+        name: 'Public SPA Client',
+        grants: ['authorization_code']
+      };
+
+      sandbox.stub(ClientModel, 'findOne').returns({
         lean: () => Promise.resolve(mockClient)
       } as any);
 
       const result = await MongoAdapter.getClient(clientId, '');
 
-      expect(findOneStub).to.have.been.calledWith({ id: clientId });
       expect(result).to.deep.equal(mockClient);
     });
 

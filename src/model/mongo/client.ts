@@ -7,6 +7,10 @@ export const clientSchema = {
     unique: true,
   },
   secret: String,
+  isPublic: {
+    type: Boolean,
+    default: false,
+  },
   displayName: String,
   role: String,
   scope: {
@@ -20,7 +24,8 @@ export const clientSchema = {
 
 export interface ClientInterface {
   id: string;
-  secret: string;
+  secret?: string;
+  isPublic?: boolean;
   displayName: string;
   role: string;
   scope: string;

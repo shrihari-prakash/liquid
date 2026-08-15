@@ -74,6 +74,7 @@ Here's a sample `app-config.service.json` file for a very minimal Liquid setup:
 
   "system.default-client.id": "application_client",
   "system.default-client.secret": "super-secure-client-secret",
+  "system.default-client.is-public": true,
   "system.default-client.display-name": "Application Client",
   "system.default-client.redirect-uris": [
     "http://localhost:2000",
@@ -144,11 +145,21 @@ services:
 9. All done ✨, navigating to `host-machine:2000` should render login page. All the APIs are ready to be called from your other services. If the rest of your project is running on Node, you can use the [Liquid Node Authenticator](https://www.npmjs.com/package/liquid-node-authenticator) to authenticate users connecting to your service and also to get client tokens to interact with Liquid client APIs. [Click here for API documentation](/api-documentation/API-Documentation-OAuth-2.0). Also see Sign Up and Login section in the bottom of this document to find how to handle redirects from your app for authentication.
 10. As a general best practice, whenever you launch Liquid, always look for any warnings in the logs. This can help you catch misconfigurations very early before your users notice them.
 
-### Login
+### Login & OAuth 2.0 Authorization Flow
 
-1. To authenticate with liquid, redirect to `/login?redirect={{your_target_uri}}&theme={{light | dark}}` from your app (or you could just visit the login URL) and enter your credentials. Note that the value of redirect parameter must be one of the values configured in `redirectUris` of Setup(2).
-2. If the credentials are correct, the application redirects the control to the url specified in `redirect` parameter with the state and authorization code.
-3. In your application logic, you can use this code in exchange for an access and refresh token using the `authorization_code` grant.
+1. **Initiate Authorization / Login**: Redirect to `/login?redirect={{your_target_uri}}&theme={{light | dark}}` from your app (or visit the login URL) and enter credentials. Note that `redirect` must match one of the URIs configured in `redirectUris`.
+
+2. **Public Clients & PKCE (SPAs / Mobile Apps)**:
+   Public clients cannot store a `client_secret` and must use **[PKCE (Proof Key for Code Exchange - RFC 7636)](https://datatracker.ietf.org/doc/html/rfc7636)** to secure token exchanges against authorization code interception:
+   - **`code_verifier`**: A cryptographically random string (43 to 128 characters, containing `[A-Z]`, `[a-z]`, `[0-9]`, `-`, `.`, `_`, `~`). Store this in client-side memory (`sessionStorage`).
+   - **`code_challenge`**: The URL-safe Base64-encoded SHA-256 hash of the `code_verifier`.
+   - Pass `code_challenge={{challenge}}` and `code_challenge_method=S256` as query parameters when redirecting to `/login` or `/oauth/authorize`.
+   - *For code samples and helper snippets in JavaScript/TypeScript using the Web Crypto API, see [Setting Up PKCE for Public Clients](/api-documentation/API-Documentation-OAuth-2.0#setting-up-pkce-for-public-clients-spas--mobile-apps).*
+
+3. **Exchange Authorization Code**:
+   Once authenticated, Liquid redirects to your callback URL with `code` and `state`. Exchange the code at `POST /oauth/token`:
+   - **Confidential Clients (Backend Apps)**: Present `grant_type=authorization_code`, `code`, `client_id`, `client_secret`, and `redirect_uri`.
+   - **Public Clients (SPAs / Mobile Apps)**: Present `grant_type=authorization_code`, `code`, `client_id`, `code_verifier`, and `redirect_uri` (omitting `client_secret`).
 
 ### To make Liquid production ready, continue to the [Production Guide](/Making-Liquid-Production-Ready)
 

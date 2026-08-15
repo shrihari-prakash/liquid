@@ -22,6 +22,7 @@
   "system.super-admin.last-name": "Demo",
   "system.default-client.id": "application_client",
   "system.default-client.secret": "super-secure-client-secret",
+  "system.default-client.is-public": true,
   "system.default-client.display-name": "Application Client",
   "system.default-client.redirect-uris": ["http://localhost:2000", "http://localhost:2001"]
 }

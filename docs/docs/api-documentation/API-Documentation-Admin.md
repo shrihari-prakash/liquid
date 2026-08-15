@@ -175,7 +175,8 @@ Requires delegated authentication.
 | id           | string                                                                       | ID of the client.                        | Required            |
 | grants       | array[enum(client_credentials, authorization_code, refresh_token, password)] | Grants allowed for the client            | Required            |
 | redirectUris | array                                                                        | Redirect URIs authorized for the client. | Required            |
-| secret       | string                                                                       | The client secret.                       | Required            |
+| isPublic     | boolean                                                                      | Set to `true` for public clients (SPAs/Mobile apps). Defaults to `false`. | Optional |
+| secret       | string                                                                       | The client secret. Required if `isPublic` is `false` or omitted. | Required for confidential clients |
 | role         | enum(internal_client, external_client)                                       | Role of the client.                      | Required            |
 | scope        | array                                                                        | Array of scope                           | Required            |
 | displayName  | string                                                                       | Display name of the client.              | Required            |
@@ -188,6 +189,7 @@ Requires delegated authentication.
     "id": "external_client",
     "grants": ["client_credentials"],
     "redirectUris": ["https://redirect.uri"],
+    "isPublic": false,
     "secret": "super-secure-client-secret",
     "role": "external_client",
     "scope": ["client:profile:read", "client:social:all"],

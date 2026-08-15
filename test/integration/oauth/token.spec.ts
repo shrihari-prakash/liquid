@@ -28,6 +28,7 @@ describe("oauth.token", () => {
       grant_type: "authorization_code",
       code: authCode.authorizationCode,
       client_id: MemoryStore.client.client_id,
+      client_secret: MemoryStore.client.client_secret,
     });
     chai.expect(res.status).to.equal(200);
     chai.expect(res.body).to.have.property("access_token");
@@ -36,11 +37,23 @@ describe("oauth.token", () => {
     chai.expect(res.body).to.have.property("expires_in");
   });
 
+  it("should fail access token flow when client_secret is missing for confidential client", async () => {
+    await AuthorizationCodeModel.create(authCode);
+    const res = await request.execute(app).post("/oauth/token").set(headers).send({
+      grant_type: "authorization_code",
+      code: authCode.authorizationCode,
+      client_id: MemoryStore.client.client_id,
+    });
+    chai.expect(res.status).to.equal(401);
+    chai.expect(res.body).to.have.property("error", "invalid_client");
+  });
+
   it("should test access token flow with invalid code", async () => {
     const res = await request.execute(app).post("/oauth/token").set(headers).send({
       grant_type: "authorization_code",
       code: "invalid_code",
       client_id: MemoryStore.client.client_id,
+      client_secret: MemoryStore.client.client_secret,
     });
     chai.expect(res.status).to.equal(401);
     chai.expect(res.body).to.have.property("error", "invalid_grant");
@@ -51,6 +64,7 @@ describe("oauth.token", () => {
       grant_type: "authorization_code",
       code: authCode.authorizationCode,
       client_id: "invalid_client_id",
+      client_secret: MemoryStore.client.client_secret,
     });
     chai.expect(res.status).to.equal(401);
     chai.expect(res.body).to.have.property("error", "invalid_client");
@@ -72,6 +86,7 @@ describe("oauth.token", () => {
       grant_type: "refresh_token",
       refresh_token: accessToken.refreshToken,
       client_id: MemoryStore.client.client_id,
+      client_secret: MemoryStore.client.client_secret,
     });
     chai.expect(res.status).to.equal(200);
     chai.expect(res.body).to.have.property("access_token");
@@ -86,6 +101,7 @@ describe("oauth.token", () => {
       grant_type: "refresh_token",
       refresh_token: "invalid_refresh_token",
       client_id: MemoryStore.client.client_id,
+      client_secret: MemoryStore.client.client_secret,
     });
     chai.expect(res.status).to.equal(401);
     chai.expect(res.body).to.have.property("error", "invalid_grant");
@@ -97,6 +113,7 @@ describe("oauth.token", () => {
       grant_type: "refresh_token",
       refresh_token: accessToken.refreshToken,
       client_id: "invalid_client_id",
+      client_secret: MemoryStore.client.client_secret,
     });
     chai.expect(res.status).to.equal(401);
     chai.expect(res.body).to.have.property("error", "invalid_client");

@@ -14,6 +14,77 @@ For web applications (React, Vue, Next.js, Node.js), you can use the official **
 
 :::
 
+## Official OAuth 2.0 Specifications & Core Concepts
+
+If you are new to OAuth 2.0, Liquid adheres strictly to official IETF standards and RFC specifications. Below are key references and guides to help you understand the core concepts:
+
+- **[Authorization Code Grant (RFC 6749 § 4.1)](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1)** — Standard authorization flow for web applications and SPAs ([OAuth.net Authorization Code Guide](https://oauth.net/2/grant-types/authorization-code/)).
+- **[Client Credentials Grant (RFC 6749 § 4.4)](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4)** — Machine-to-machine server authentication ([OAuth.net Client Credentials Guide](https://oauth.net/2/grant-types/client-credentials/)).
+- **[PKCE - Proof Key for Code Exchange (RFC 7636)](https://datatracker.ietf.org/doc/html/rfc7636)** — Essential security extension for public clients (SPAs and Mobile apps) ([OAuth.net PKCE Guide](https://oauth.net/2/pkce/)).
+- **[Refresh Token Grant (RFC 6749 § 6)](https://datatracker.ietf.org/doc/html/rfc6749#section-6)** — Token renewal without forcing user re-login ([OAuth.net Refresh Token Guide](https://oauth.net/2/grant-types/refresh-token/)).
+- **[OAuth 2.0 for Browser-Based Apps (IETF BCP)](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps)** — Best Current Practice guidelines for Single Page Applications (SPAs).
+
+---
+
+## Client Types: Confidential vs Public Clients
+
+Liquid supports two types of OAuth 2.0 clients:
+
+1. **Confidential Clients (`isPublic: false`)**: Web applications running on backend servers (Node.js, Go, Python, etc.) capable of keeping a `client_secret` hidden from users.
+   - **Authentication**: Uses [Client Credentials Grant](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4) or [Authorization Code Grant](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1) with `client_secret` during token exchange (`POST /oauth/token`).
+2. **Public Clients (`isPublic: true`)**: Single Page Applications (React, Vue, Angular) or Native/Mobile apps running on user devices where secrets cannot be stored securely.
+   - **Authentication**: Do not use a `client_secret`. Must use **[PKCE (RFC 7636)](https://datatracker.ietf.org/doc/html/rfc7636)** during authorization and token redemption.
+
+---
+
+## Setting Up PKCE for Public Clients (SPAs / Mobile Apps)
+
+PKCE protects public clients against authorization code interception attacks.
+
+### PKCE Flow Summary
+1. **Generate Ephemeral Key Pair**: Generate a cryptographically random `code_verifier` string (43-128 chars) and its SHA-256 hash (`code_challenge`).
+2. **Authorize Request**: Pass `code_challenge` and `code_challenge_method=S256` to `/oauth/authorize`.
+3. **Token Request**: Redeem the authorization code at `/oauth/token` by passing `code_verifier` (without a `client_secret`).
+
+### Example: Generating PKCE in JavaScript (Web Crypto API)
+
+```typescript
+// 1. Generate code_verifier
+function generateCodeVerifier(): string {
+  const array = new Uint8Array(32);
+  window.crypto.getRandomValues(array);
+  return btoa(String.fromCharCode.apply(null, Array.from(array)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+// 2. Derive code_challenge (SHA-256)
+async function generateCodeChallenge(verifier: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(verifier);
+  const digest = await window.crypto.subtle.digest("SHA-256", data);
+  return btoa(String.fromCharCode(...new Uint8Array(digest)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+// Usage before redirecting to /oauth/authorize:
+const verifier = generateCodeVerifier();
+sessionStorage.setItem("pkce_code_verifier", verifier);
+const challenge = await generateCodeChallenge(verifier);
+
+// Redirect to Liquid authorize endpoint:
+const authUrl = `/oauth/authorize?response_type=code` +
+  `&client_id=your_spa_client_id` +
+  `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+  `&code_challenge=${encodeURIComponent(challenge)}` +
+  `&code_challenge_method=S256`;
+```
+
+---
+
 ## Client Authentication
 
 <details>
@@ -164,6 +235,7 @@ Get an authorization code after login.
 
 - If you're using Liquid's built in login and signup UI, you will never need to access this API. Simply redirect to `/login` with the required params and you'll be redirected back to your application with the authorization code and state if everything goes well.
 - You can adjust the validity of the authorization code by changing the option `oauth.authorization-code-lifetime` to the intended number of seconds. By default, the validity is 5 minutes.
+- **PKCE**: For public clients (`isPublic: true`) or when `oauth.authorization.require-pkce` option is `true`, `code_challenge` and `code_challenge_method` are required.
 
 #### URL
 
@@ -171,13 +243,15 @@ Get an authorization code after login.
 
 #### Request Body (Form Data)
 
-| Parameter     | Type   | Description                     | Required / Optional |
-| ------------- | ------ | ------------------------------- | ------------------- |
-| response_type | string | Set to `code`                   | Required            |
-| client_id     | string | Your client ID.                 | Required            |
-| redirect_uri  | string | An authorized redirect URI.     | Required            |
-| state         | string | Application state.              | Required            |
-| scope         | string | Comma separated list of scopes. | Required            |
+| Parameter             | Type   | Description                                                                     | Required / Optional |
+| --------------------- | ------ | ------------------------------------------------------------------------------- | ------------------- |
+| response_type         | string | Set to `code`                                                                   | Required            |
+| client_id             | string | Your client ID.                                                                 | Required            |
+| redirect_uri          | string | An authorized redirect URI.                                                     | Required            |
+| state                 | string | Application state.                                                              | Required            |
+| scope                 | string | Comma separated list of scopes.                                                 | Required            |
+| code_challenge        | string | PKCE code challenge (SHA-256 hash of code_verifier).                            | Required for Public Clients / PKCE |
+| code_challenge_method | string | PKCE code challenge method (`S256` or `plain`).                                 | Required for Public Clients / PKCE |
 
 #### Request Sample (JSON)
 
@@ -187,8 +261,10 @@ Get an authorization code after login.
   "client_id": "application_client",
   "code": "the_code",
   "redirect_uri": "https://my-redirect.uri/path",
-  "state": "xxx-yyy-zzz"
-  "scope": "delegated:all"
+  "state": "xxx-yyy-zzz",
+  "scope": "delegated:all",
+  "code_challenge": "E9Melhvh10-5gq_7BBNW6g3Jy3G2k_85n6_g1j45",
+  "code_challenge_method": "S256"
 }
 ```
 
@@ -209,6 +285,7 @@ Exchange authorization code for an access token.
 
 - You can adjust the validity of the access token by changing the option `oauth.access-token-lifetime` to the intended number of seconds. By default, the validity is 1 hour.
 - You can adjust the validity of the refresh token by changing the option `oauth.refresh-token-lifetime` to the intended number of seconds. By default, the validity is 15 days.
+- **Client Authentication**: Confidential clients must present `client_secret`. Public clients using PKCE must present `code_verifier`.
 
 #### URL
 
@@ -216,13 +293,15 @@ Exchange authorization code for an access token.
 
 #### Request Body (Form Data)
 
-| Parameter    | Type   | Description                     | Required / Optional |
-| ------------ | ------ | ------------------------------- | ------------------- |
-| grant_type   | string | Set to `authorization_code`     | Required            |
-| code         | string | Your authorization code         | Required            |
-| client_id    | string | Your client ID.                 | Required            |
-| redirect_uri | string | An authorized redirect URI.     | Required            |
-| scope        | string | Comma separated list of scopes. | Required            |
+| Parameter     | Type   | Description                                           | Required / Optional |
+| ------------- | ------ | ----------------------------------------------------- | ------------------- |
+| grant_type    | string | Set to `authorization_code`                           | Required            |
+| code          | string | Your authorization code                               | Required            |
+| client_id     | string | Your client ID.                                       | Required            |
+| client_secret | string | Your client secret.                                   | Required for Confidential Clients |
+| code_verifier | string | PKCE code verifier string generated during authorize. | Required for Public Clients / PKCE |
+| redirect_uri  | string | An authorized redirect URI.                           | Required            |
+| scope         | string | Comma separated list of scopes.                       | Required            |
 
 #### Request Sample (JSON)
 
@@ -230,6 +309,7 @@ Exchange authorization code for an access token.
 {
   "grant_type": "authorization_code",
   "client_id": "application_client",
+  "client_secret": "super-secure-client-secret",
   "code": "the_code",
   "redirect_uri": "https://my-redirect.uri/path",
   "scope": "delegated:all"

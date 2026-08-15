@@ -29,7 +29,7 @@ const GET_Client = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     const id = req.params.clientId || req.query.id;
-    const client = (await ClientModel.findOne({ id }, { id: 1, role: 1, displayName: 1, _id: 0 }).lean().exec()) as any;
+    const client = (await ClientModel.findOne({ id }, { id: 1, role: 1, displayName: 1, isPublic: 1, _id: 0 }).lean().exec()) as any;
     res.status(statusCodes.success).json(new SuccessResponse({ client }));
   } catch (err) {
     log.error(err);

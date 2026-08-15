@@ -86,5 +86,6 @@
   "link.login-minimal": "Login",
   "link.resend-code": "Resend Code",
 
-  "error.resend-failed": "Failed to resend the verification email. Please try again."
+  "error.resend-failed": "Failed to resend the verification email. Please try again.",
+  "error.pkce-missing-warning": "PKCE authorization parameters (code_challenge) are missing. Please initiate sign in directly from your application."
 }
