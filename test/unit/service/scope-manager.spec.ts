@@ -48,6 +48,45 @@ describe('ScopeManager Service', () => {
       
       expect(result).to.be.false;
     });
+
+    it('should allow scope if granted via entity.scope even if not in role scopes', () => {
+      sandbox.stub(Role, 'getRoleScopes').returns(['delegated:all'] as any);
+      
+      // Role only grants delegated, but entity explicitly has client:oauth:introspect
+      const entity = { role: 'user', scope: ['delegated:all', 'client:oauth:introspect'] };
+      
+      const result = scopeManager.canRequestScope(['client:oauth:introspect'], entity);
+      
+      expect(result).to.be.true;
+    });
+
+    it('should allow scope if granted via role scopes even if entity.scope does not explicitly list it', () => {
+      // Role grants client:all
+      sandbox.stub(Role, 'getRoleScopes').returns(['client:all'] as any);
+      
+      // Entity only lists delegated:all, but it has the role that grants client:all
+      const entity = { role: 'internal_client', scope: ['delegated:all'] };
+      
+      const result = scopeManager.canRequestScope(['client:oauth:introspect'], entity);
+      
+      expect(result).to.be.true;
+    });
+
+    it('should combine multiple scopes from both role and entity correctly', () => {
+      // Role grants admin:profile:read
+      sandbox.stub(Role, 'getRoleScopes').returns(['admin:profile:read'] as any);
+      
+      // Entity grants client:configuration:read
+      const entity = { role: 'custom_role', scope: ['client:configuration:read'] };
+      
+      // Both scopes should be available
+      expect(scopeManager.canRequestScope(['admin:profile:read'], entity)).to.be.true;
+      expect(scopeManager.canRequestScope(['client:configuration:read'], entity)).to.be.true;
+      expect(scopeManager.canRequestScope(['admin:profile:read', 'client:configuration:read'], entity)).to.be.true;
+      
+      // But not other scopes
+      expect(scopeManager.canRequestScope(['admin:profile:write'], entity)).to.be.false;
+    });
   });
 
   describe('isScopeAllowedForSession', () => {
