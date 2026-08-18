@@ -196,3 +196,28 @@ input[data-autocompleted] {
   transform: translateX(-50%) translateY(10px);
   pointer-events: none;
 }
+
+.otp-container {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.otp-input {
+  width: 100%;
+  max-width: 44px;
+  height: 48px;
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 0;
+  border-radius: var(--form-input-border-radius, 8px);
+  border: 1px solid var(--form-input-border-color, #eaeaea);
+  background-color: var(--background-color, transparent);
+  color: var(--text-color, inherit);
+}
+
+.otp-input:focus {
+  outline: none;
+  border-color: var(--primary-button-color, #000);
+}
