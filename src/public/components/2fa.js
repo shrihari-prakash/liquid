@@ -2,90 +2,70 @@ import { ConfigurationContext } from "../context/configuration.js";
 import { afterLogin, errorTextTimeout, getPlaceholder, useTitle } from "../utils/utils.js";
 import { post } from "../utils/api.js";
 
-const OtpInput = ({ length = 6, id }) => {
-  const [otp, setOtp] = React.useState(new Array(length).fill(""));
-  const inputRefs = React.useRef([]);
+const OtpInput = ({ length = 6, id, autoFocus = true }) => {
+  const [value, setValue] = React.useState("");
+  const [isFocused, setIsFocused] = React.useState(false);
+  const inputRef = React.useRef(null);
 
-  const handleChange = (e, index) => {
-    const value = e.target.value;
-    if (isNaN(value)) return;
-
-    const newOtp = [...otp];
-    // take the last entered character if multiple are somehow entered
-    newOtp[index] = value.substring(value.length - 1);
-    setOtp(newOtp);
-
-    // move to next input if a digit was entered
-    const combinedOtp = newOtp.join("");
-    if (value && index < length - 1) {
-      inputRefs.current[index + 1].focus();
+  React.useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus();
     }
+  }, []);
 
-    // Sync to hidden input for form submission
-    const hiddenInput = document.getElementById(id);
-    if (hiddenInput) {
-      hiddenInput.value = combinedOtp;
-    }
+  const handleChange = (e) => {
+    const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, length);
+    setValue(digitsOnly);
   };
 
-  const handleKeyDown = (e, index) => {
-    if (e.key === "Backspace") {
-      if (!otp[index] && index > 0) {
-        // Move focus to the previous input on backspace if current is empty
-        inputRefs.current[index - 1].focus();
-      }
-    } else if (e.key === "ArrowLeft" && index > 0) {
-      inputRefs.current[index - 1].focus();
-    } else if (e.key === "ArrowRight" && index < length - 1) {
-      inputRefs.current[index + 1].focus();
-    }
-  };
-
-  const handlePaste = (e) => {
-    e.preventDefault();
-    const pasteData = e.clipboardData
-      .getData("text/plain")
-      .slice(0, length)
-      .replace(/[^0-9]/g, "");
-    if (!pasteData) return;
-
-    const newOtp = [...otp];
-    for (let i = 0; i < pasteData.length; i++) {
-      newOtp[i] = pasteData[i];
-    }
-    setOtp(newOtp);
-
-    const hiddenInput = document.getElementById(id);
-    if (hiddenInput) {
-      hiddenInput.value = newOtp.join("");
-    }
-
-    if (pasteData.length > 0) {
-      inputRefs.current[Math.min(pasteData.length, length - 1)].focus();
+  const handleClick = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
   };
 
   return (
-    <div className="otp-container">
-      {otp.map((data, index) => (
-        <input
-          key={index}
-          type="text"
-          inputMode="numeric"
-          autoComplete={index === 0 ? "one-time-code" : "off"}
-          pattern="\d*"
-          maxLength={1}
-          className="otp-input"
-          value={data}
-          onChange={(e) => handleChange(e, index)}
-          onKeyDown={(e) => handleKeyDown(e, index)}
-          onPaste={handlePaste}
-          ref={(ref) => (inputRefs.current[index] = ref)}
-          aria-label={`Digit ${index + 1} of ${length}`}
-          required={!data} // require input if it's empty
-        />
-      ))}
-      <input type="hidden" id={id} required minLength={length} />
+    <div className="otp-wrapper" onClick={handleClick}>
+      <div className="otp-container" aria-hidden="true">
+        {Array.from({ length }).map((_, index) => {
+          const char = value[index] || "";
+          const isActive =
+            isFocused &&
+            (value.length === index ||
+              (value.length === length && index === length - 1));
+
+          return (
+            <div
+              key={index}
+              className={
+                "otp-slot" +
+                (isActive ? " otp-slot-active" : "") +
+                (char ? " otp-slot-filled" : "")
+              }
+            >
+              {char}
+              {isActive && !char && <span className="otp-caret" />}
+            </div>
+          );
+        })}
+      </div>
+      <input
+        ref={inputRef}
+        id={id}
+        name={id}
+        type="text"
+        inputMode="numeric"
+        autoComplete="one-time-code"
+        pattern="[0-9]*"
+        maxLength={length}
+        value={value}
+        onChange={handleChange}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        className="otp-real-input"
+        aria-label="Verification Code"
+        required
+      />
     </div>
   );
 };
@@ -139,7 +119,6 @@ export default function TwoFactorAuthentication() {
         disabled={submitting}
         className="button"
         value={submitButtonText}
-        style={{ marginTop: "24px" }}
       />
       <div className="form-error-message">{errorMessage}</div>
     </form>

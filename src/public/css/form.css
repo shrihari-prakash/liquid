@@ -197,27 +197,61 @@ input[data-autocompleted] {
   pointer-events: none;
 }
 
-.otp-container {
-  display: flex;
-  gap: 8px;
-  justify-content: space-between;
+.otp-wrapper {
+  position: relative;
+  cursor: text;
   margin-top: 8px;
 }
 
-.otp-input {
-  width: 100%;
-  max-width: 44px;
-  height: 48px;
-  text-align: center;
-  font-size: 1.2rem;
-  padding: 0;
-  border-radius: var(--form-input-border-radius, 8px);
-  border: 1px solid var(--form-input-border-color, #eaeaea);
-  background-color: var(--background-color, transparent);
-  color: var(--text-color, inherit);
+.otp-container {
+  display: flex;
+  gap: 8px;
 }
 
-.otp-input:focus {
+.otp-slot {
+  flex: 1;
+  height: calc(1.5em + 0.75rem + 2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  font-weight: 500;
+  border-radius: var(--form-input-border-radius);
+  border: 1px solid var(--form-input-border-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: border-color 0.15s ease;
+  user-select: none;
+}
+
+.otp-slot-active {
+  border-color: var(--primary-button-color);
+}
+
+.otp-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background-color: var(--primary-button-color);
+  animation: otp-blink 1s step-end infinite;
+}
+
+@keyframes otp-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.otp-real-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  font-size: 1rem;
+  border: none;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
   outline: none;
-  border-color: var(--primary-button-color, #000);
 }
