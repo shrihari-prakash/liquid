@@ -313,7 +313,7 @@ export class Mailer {
     await new VerificationCodeModel(code).save();
     const appName = Configuration.get("system.app-name") as string;
     const fullName = `${user.firstName} ${user.lastName}`;
-    const msg: any = { to: user.email, subject: `${appName}: Verify your account` };
+    const msg: any = { to: user.email, subject: `${code.code} is your ${appName} verification code` };
     const templateId = Configuration.get("sendgrid.verification-email-template-id");
     if (templateId) {
       msg.templateId = templateId;
