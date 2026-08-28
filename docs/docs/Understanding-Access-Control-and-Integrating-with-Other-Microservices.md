@@ -39,6 +39,41 @@ As a general best practice, it is preferrable to assign permissions to users sta
 
 You can remove permissions by sending `status` attribute as false.
 
+## Dynamic Scope Lifecycle & Token Refreshing
+
+Liquid provides real-time security guarantees when permissions are modified for active users or roles.
+
+### 1. Scope Revocation & Immediate Invalidation
+
+When an administrator revokes a permission from a user (or updates a role's scopes):
+- Liquid inspects the active access token on every authenticated request and compares its granted scopes against the user's current permissions in the database (`validateAccessTokenScopes`).
+- If any scope present on the token has been revoked, Liquid detects a **negative scope diff** and **immediately rejects the token with `401 Unauthorized`**.
+- This ensures security guarantees take effect in real time without waiting for the access token's lifetime (e.g. 1 hour) to expire.
+
+### 2. Scope Recalculation on Token Refresh
+
+When client applications receive a `401 Unauthorized`, they should automatically use their `refresh_token` to request a new access token via `POST /oauth/token` with `grant_type: "refresh_token"`. Liquid handles scope recalculation based on the client type:
+
+#### Internal Clients (`role: "internal_client"`)
+*Examples: First-party admin panels (like Nitrogen), official web and mobile applications.*
+- **High Trust**: Internal clients are trusted applications that do not require third-party consent prompts.
+- **Dynamic Union**: During a refresh token grant, Liquid recalculates the union of **all** current user scopes and role scopes (`user.scope + role.scope`).
+- **Permission Revocations**: Take effect immediately; the newly issued access token excludes the revoked permissions.
+- **Newly Added Permissions**: Apply automatically on the next token refresh **without requiring the user to log out or re-authenticate**.
+
+#### External Clients (`role: "external_client"`)
+*Examples: Third-party apps, partner integrations.*
+- **Consent Bound**: External apps are strictly bound by the user's explicit consent granted during the OAuth authorization code flow.
+- **Revoked Scopes**: The active token is invalidated immediately; upon refresh, Liquid **prunes** the revoked scope from the token's allowed scope list.
+- **Newly Added Scopes**: Liquid will **not** automatically attach newly granted scopes to an external client's token. The external application must prompt the user through the authorization code flow so the user can review and consent to the new scopes.
+
+### Summary Comparison
+
+| Event | Internal Clients (`internal_client`) | External Clients (`external_client`) |
+|---|---|---|
+| **Scope Revoked** | Token immediately rejected (`401`). Refreshes automatically without the revoked scope. | Token immediately rejected (`401`). Refreshes automatically with the revoked scope pruned. |
+| **Scope Added** | Applies automatically on next token refresh without re-login. | Requires user re-consent via OAuth authorization code flow. |
+
 ## Extending the Scope list
 
 If you have the need to add some additional scopes in the service, which you probably will (for instance, you might want to introduce a scope called `delegated:chat:read` which controls if users can read a chat in your chat microservice), you can do so by passing to Liquid a JSON file that contains the metadata about the new scopes.
