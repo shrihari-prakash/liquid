@@ -135,18 +135,14 @@ const OAuthModel = {
   validateScope: (user: UserInterface, client: ClientInterface, scope: string[]): Promise<string[] | Falsey> => {
     log.debug("Validating scope %s for client %s and user %s.", scope, client.id, user.username);
     return new Promise((resolve) => {
-      const clientHasAccess = ScopeManager.canRequestScope(scope, client);
-      if (!clientHasAccess) {
-        log.debug(
-          "Scope validation for client %s failed due to insufficient access. Requested scope: %s",
-          client.id,
-          scope,
-        );
-        return resolve(false);
-      }
       if (client.id === user.username) {
         // For client credentials grant, there is no notion of user.
-        return resolve(scope);
+        const clientHasAccess = ScopeManager.canRequestScope(scope, client);
+        if (clientHasAccess) {
+          return resolve(scope);
+        } else {
+          return resolve(false);
+        }
       }
       // User flow starts here.
       if (!user.scope) {
@@ -157,13 +153,22 @@ const OAuthModel = {
       // it is okay to return all scopes that a user has access to.
       if (client.role === Role.SystemRoles.INTERNAL_CLIENT) {
         const userRoleScopes = Role.getRoleScopes(user.role);
-        scope = [...user.scope, ...userRoleScopes];
+        scope = Array.from(new Set([...user.scope, ...userRoleScopes]));
         log.debug(
           "Granting all allowed scopes (%s) for user %s due to request from internal client",
           scope,
           user.username,
         );
         return resolve(scope);
+      }
+      const clientHasAccess = ScopeManager.canRequestScope(scope, client);
+      if (!clientHasAccess) {
+        log.debug(
+          "Scope validation for client %s failed due to insufficient access. Requested scope: %s",
+          client.id,
+          scope,
+        );
+        return resolve(false);
       }
       const userHasAccess = ScopeManager.canRequestScope(scope, user);
       if (userHasAccess) {

@@ -6,7 +6,9 @@ import { Configuration } from "../../singleton/configuration.js";
 import { Redis } from "../../singleton/redis.js";
 import UserModel from "../mongo/user.js";
 
-const useTokenCache = Configuration.get("privilege.can-use-cache");
+const useTokenCache = (): boolean => {
+  return Configuration.get("privilege.can-use-cache");
+};
 
 const getPrefixedUserId = (userId: string) => `${RedisPrefixes.USER}${userId}`;
 
@@ -23,12 +25,12 @@ export const flushUserInfoFromRedis = async (userIds: string | string[]) => {
 
 export const getUserInfo = async (userId: string) => {
   let userInfo;
-  if (useTokenCache) {
+  if (useTokenCache()) {
     userInfo = await Redis.get(getPrefixedUserId(userId));
   }
   if (!userInfo) {
     userInfo = await UserModel.findById(userId).lean();
-    if (useTokenCache) {
+    if (useTokenCache()) {
       await Redis.setEx(
         getPrefixedUserId(userId),
         JSON.stringify(userInfo),

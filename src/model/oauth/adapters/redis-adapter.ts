@@ -5,12 +5,9 @@ import { AuthorizationCode, RefreshToken, Token } from "@node-oauth/oauth2-serve
 import { Redis } from "../../../singleton/redis.js";
 import { RedisPrefixes } from "../../../enum/redis.js";
 import { Configuration } from "../../../singleton/configuration.js";
-import { isApplicationClient } from "../utils.js";
+import { isApplicationClient, validateAccessTokenScopes, recalculateRefreshTokenScopes } from "../utils.js";
 import { getUserInfo } from "../cache.js";
 import { isTokenInvalidated } from "../../../utils/session.js";
-import { ScopeManager } from "../../../singleton/scope-manager.js";
-import { isRoleInvalidated } from "../../../utils/role.js";
-import { Role } from "../../../singleton/role.js";
 
 class RedisAdapter {
   getPrefixedToken(token: string) {
@@ -38,34 +35,26 @@ class RedisAdapter {
     return token;
   }
 
-  async checkToken(token: any) {
+  async checkToken(token: any, isRefreshToken = false) {
     if (!token) return null;
-    token = JSON.parse(token);
+    token = typeof token === "string" ? JSON.parse(token) : token;
     if (!isApplicationClient(token.user)) {
       token.user = await getUserInfo(token.user._id);
     }
-    const globalLogoutAt = token.user.globalLogoutAt;
-    const tokenRegisteredAt = token.registeredAt;
-    if (await isRoleInvalidated(token.user.role, tokenRegisteredAt as Date)) {
-      log.debug("Expired token detected. Reason: Role invalidated.");
+    if (!token.user) {
       return null;
     }
+    const globalLogoutAt = token.user.globalLogoutAt;
+    const tokenRegisteredAt = token.registeredAt;
     if (isTokenInvalidated(globalLogoutAt, tokenRegisteredAt)) {
       log.debug("Expired token detected. Reason: Token invalidated.");
       return null;
     }
-    const hasNegativeScopeDiff = token.scope.some((scope: string) => {
-      const roleObject = Role.getRole(token.user.role);
-      const roleScopeAllowed = !ScopeManager.isScopeAllowed(scope, roleObject?.scope || []);
-      const userScopeAllowed = !ScopeManager.isScopeAllowed(scope, token.user.scope);
-      return roleScopeAllowed && userScopeAllowed;
-    });
-    if (hasNegativeScopeDiff) {
-      log.debug(
-        "Some scopes were revoked for user %s since last token grant. Token/Role has been invalidated.",
-        token.user.username,
-      );
-      return null;
+    if (!isRefreshToken) {
+      const isValid = await validateAccessTokenScopes(token, token.user, tokenRegisteredAt as Date);
+      if (!isValid) return null;
+    } else {
+      token.scope = recalculateRefreshTokenScopes(token, token.user, token.client);
     }
     if (token.accessTokenExpiresAt) {
       token.accessTokenExpiresAt = new Date(token.accessTokenExpiresAt);
@@ -79,13 +68,13 @@ class RedisAdapter {
   async getAccessToken(accessToken: string) {
     log.debug("Checking access token: %s", accessToken);
     let cacheToken: any = await Redis.get(this.getPrefixedToken(accessToken));
-    return this.checkToken(cacheToken);
+    return this.checkToken(cacheToken, false);
   }
 
   async getRefreshToken(refreshToken: string): Promise<RefreshToken | null> {
     log.debug("Checking refresh token: %s", refreshToken);
     let cacheToken: any = await Redis.get(this.getPrefixedToken(refreshToken));
-    return this.checkToken(cacheToken);
+    return this.checkToken(cacheToken, true);
   }
 
   async revokeToken(token: RefreshToken) {
