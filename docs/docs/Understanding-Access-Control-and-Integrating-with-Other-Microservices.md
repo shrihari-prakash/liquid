@@ -6,7 +6,7 @@ title: Understanding Access Control and Integrating with other Microservices
 
 Liquid uses a list of permission names (also known as scopes) to determine if a user is authorized to access a specific API / resource. There is a set of default permissions assigned to users at the time of account creation. By default, the scope assigned is `delegated:all`, but it can be changed by setting the option `user.account-creation.default-scope` to a comma separated list of scopes you would like to be assigned for a user at the time of account creation. This does not affect any of the existing accounts. `delegated:all` means the user has access to all user level APIs like follow, unfollow, block, unblock and profile edit, but no access to admin level APIs.
 
-[See list of all scopes available in Liquid](https://github.com/shrihari-prakash/liquid/blob/main/src/service/scope-manager/scopes.json)
+[See list of all scopes available in Liquid in the Scopes Reference](./scopes/Scopes-Reference).
 
 You can assign additional scopes to users than the ones assigned at the time of account creation by using the `/user/admin-api/access` endpoint. You either need to be a super_admin or you need to have access to the scope `admin:profile:access:write` to use this API. Here's a sample request to the endpoint which assigns a user access to some admin APIs:
 

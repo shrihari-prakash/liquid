@@ -1,0 +1,24 @@
+---
+title: Frontend Configuration Options
+sidebar_label: Frontend Options
+description: Comprehensive reference for all static and frontend UI options in Liquid.
+---
+
+import OptionsViewer from '@site/src/components/OptionsViewer';
+import frontendOptions from '../../../src/public/configuration/options.json';
+
+# Frontend Options Reference
+
+This document provides a live reference for all frontend and static UI customization options available in Liquid.
+
+:::info Single Source of Truth
+This page is automatically synced with the codebase schema at [`src/public/configuration/options.json`](https://github.com/shrihari-prakash/liquid/blob/main/src/public/configuration/options.json). Any new option added to the codebase will automatically appear here.
+:::
+
+## Configuration Usage
+
+Frontend options are configured inside `app-config.static.json` (or passed dynamically). They control UI behavior, branding, themes, OAuth defaults, and page cosmetics across login, registration, and user-facing views.
+
+---
+
+<OptionsViewer options={frontendOptions} isBackend={false} />

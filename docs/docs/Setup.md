@@ -40,7 +40,7 @@ Changing Backend options (`app-config.service.json` / `.env` file passed to Liqu
 
 ### Backend
 
-All the available backend options are listed in [this file](https://github.com/shrihari-prakash/liquid/blob/main/src/service/configuration/options.json).
+All the available backend options are listed in the [Backend Options Reference](./configuration/Backend-Options).
 
 To configure options, create a file named `app-config.service.json`. Now copy the `name` field of the option you want to configure to the JSON file and set the intended value.
 
@@ -92,7 +92,7 @@ Here's a sample `app-config.service.json` file for a very minimal Liquid setup:
 
 ### Frontend
 
-All the available options are listed in [this file](https://github.com/shrihari-prakash/liquid/blob/main/src/public/configuration/options.json).
+All the available frontend options are listed in the [Frontend Options Reference](./configuration/Frontend-Options).
 
 When you want to configure an option, you would copy the `name` field of the option and set it in app-config.static.json.
 

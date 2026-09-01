@@ -1,0 +1,26 @@
+---
+title: Backend Configuration Options
+sidebar_label: Backend Options
+description: Comprehensive reference for all backend options, environment variables, and defaults in Liquid.
+---
+
+import OptionsViewer from '@site/src/components/OptionsViewer';
+import backendOptions from '../../../src/service/configuration/options.json';
+
+# Backend Options Reference
+
+This document provides a live reference for all backend configuration options available in Liquid.
+
+:::info Single Source of Truth
+This page is automatically synced with the codebase schema at [`src/service/configuration/options.json`](https://github.com/shrihari-prakash/liquid/blob/main/src/service/configuration/options.json). Any new option added to the codebase will automatically appear here.
+:::
+
+## Configuration Usage
+
+Backend options can be configured either through:
+1. **Environment Variables**: Use the exact `ENV_VAR` name listed below in your `.env` file or container environment.
+2. **Configuration File (`app-config.service.json`)**: Use the exact `option.name` as JSON keys.
+
+---
+
+<OptionsViewer options={backendOptions} isBackend={true} />

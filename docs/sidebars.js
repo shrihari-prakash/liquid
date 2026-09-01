@@ -21,8 +21,17 @@ const sidebars = {
   tutorialSidebar: [
     "Intro",
     "Setup",
+    {
+      type: "category",
+      label: "Configuration",
+      items: [
+        "configuration/Backend-Options",
+        "configuration/Frontend-Options",
+      ],
+    },
     "Making-Liquid-Production-Ready",
     "Understanding-Access-Control-and-Integrating-with-Other-Microservices",
+    "scopes/Scopes-Reference",
     "Push-Events",
     "Debugging-Common-Errors",
     {
