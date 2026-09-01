@@ -9,12 +9,6 @@ import scopes from '../../../src/service/scope-manager/scopes.json';
 
 # Scopes Reference
 
-This document provides a live reference for all built-in system scopes, OAuth permissions, and hierarchy in Liquid.
-
-:::info Single Source of Truth
-This page is automatically synced with the codebase schema at [`src/service/scope-manager/scopes.json`](https://github.com/shrihari-prakash/liquid/blob/main/src/service/scope-manager/scopes.json). Any new scope added to the codebase will automatically appear here.
-:::
-
 ## Scope Hierarchy & Inheritance
 
 - Permissions are organized in a **hierarchical tree**. Granting a parent scope (e.g. `delegated:profile:all`) automatically authorizes all child scopes (such as `delegated:profile:read`, `delegated:profile:write`, `delegated:profile:2fa:all`).
