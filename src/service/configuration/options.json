@@ -1387,7 +1387,16 @@
       "pagination.default-limit",
       "pagination.max-limit",
       "user.account-creation.invites-per-person",
-      "user.account-creation.invite-code-availability-window"
+      "user.account-creation.invite-code-availability-window",
+      "admin-api.user.search.search-fields",
+      "admin-api.user.search.strict-match-fields",
+      "admin-api.privilege.user.search.can-use-id",
+      "admin-api.privilege.user.search.can-use-fullname",
+      "admin-api.user.search-results.limit",
+      "user.search.search-fields",
+      "user.search.strict-match-fields",
+      "privilege.user.search.can-use-id",
+      "privilege.user.search.can-use-fullname"
     ]
   },
   {
